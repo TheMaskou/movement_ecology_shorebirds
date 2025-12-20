@@ -1,0 +1,20 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+/.quarto/
+
+# Quarto output
+.quarto/
+_freeze/
+"qmd/*/files/" 
+
+# Quarto output directories (including data subfolders)
+qmd/*/files/
+qmd/*/data/
+
+# Or more generally ignore all data folders
+data/
+
+

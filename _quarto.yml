@@ -1,0 +1,112 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - index.qmd
+    - qmd/**/*.qmd  # recursively render all .qmd files
+    
+    - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    
+execute:
+  freeze: auto
+  eval: false
+  
+website:
+  title: "Spatial Ecology - Shorebirds"
+  
+  navbar:
+    background: primary
+    search: true
+    
+    logo: logo.png
+    logo-href: "https://www.csrg.site/our-group"
+    
+    left:     
+      - text: "PhD Project"
+        href: qmd/teststart.qmd
+        
+      - sidebar:chapter1
+      - sidebar:chapter2
+      - sidebar:chapter3
+      - sidebar:chapter4
+      - sidebar:chapter5
+      - sidebar:reports
+      
+      - text: "Acknowledgments"
+        href: qmd/testend.qmd
+        
+  # Define multiple sidebars as a LIST
+  sidebar:
+    - id: chapter1
+      title: "Chapter 1"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+        - section: "Data-set"
+          contents:
+            - qmd/chapter_1/ch1_1.qmd
+            - qmd/chapter_1/ch1_2.qmd
+            
+        - section: "Test 2"
+          contents:
+            - qmd/chapter_1/test21.qmd
+            - qmd/chapter_1/test22.qmd
+
+    - id: chapter2
+      title: "Chapter 2"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+        - href: qmd/chapter_2/testch2.qmd
+
+    - id: chapter3
+      title: "Chapter 3"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+        - href: qmd/chapter_3/testch3.qmd
+
+    - id: chapter4
+      title: "Chapter 4"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+        - href: qmd/chapter_4/testch4.qmd
+
+    - id: chapter5
+      title: "Chapter 5"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+        - href: qmd/chapter_5/testch5.qmd
+        
+    - id: reports
+      title: "Publications"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+      - section: "Reports"
+        contents:
+            - qmd/reports/testrep.qmd
+      - section: "Conferences"
+        contents:
+            - qmd/reports/testf1.qmd
+      - section: "Papers"
+        contents:
+            - qmd/reports/testf2.qmd
+
+            
+format:
+  html:
+    theme: [cosmo, brand]
+    css: styles.css
+    toc: true
+
+editor: visual
