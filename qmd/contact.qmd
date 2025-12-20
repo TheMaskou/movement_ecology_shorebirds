@@ -1,0 +1,105 @@
+---
+title: "Get in Touch"
+format: 
+  html:
+    page-layout: article
+    toc: false
+---
+
+::::::::: column-page-inset
+::: {style="text-align: center; margin: 3rem 0 2rem 0;"}
+![Maxime Marini](/picture.jpg){alt="Maxime Marini" style="border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem;"}
+
+<h2 style="margin-bottom: 0.5rem; color: #2c3e50;">
+
+Maxime Marini
+
+</h2>
+
+<p style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 0.5rem;">
+
+PhD Student
+
+</p>
+
+<p style="font-size: 1rem; color: #34495e; font-style: italic;">
+
+Movement and Spatial Ecology of Migratory Shorebirds
+
+</p>
+:::
+
+------------------------------------------------------------------------
+
+## Contact Information
+
+::::: {style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0;"}
+::: {style="background: linear-gradient(135deg, #d4a574 0%, #c89666 100%); color: white; padding: 2rem; border-radius: 8px;"}
+<h4 style="margin-top: 0; color: white; font-size: 1.2rem;">
+
+📧 Email
+
+</h4>
+
+<p style="margin: 0.5rem 0; line-height: 1.6;">
+
+<a href="mailto:maxime.marini@uon.edu.au" style="color: white; text-decoration: underline;">maxime.marini\@uon.edu.au</a>
+
+</p>
+
+<p style="margin: 0.5rem 0; line-height: 1.6;">
+
+<a href="mailto:marini.maxime@hotmail.fr" style="color: white; text-decoration: underline;">marini.maxime\@hotmail.fr</a>
+
+</p>
+:::
+
+::: {style="background: linear-gradient(135deg, #e8b4b8 0%, #d4a5a5 100%); color: white; padding: 2rem; border-radius: 8px;"}
+<h4 style="margin-top: 0; color: white; font-size: 1.2rem;">
+
+📞 Phone
+
+</h4>
+
+<p style="margin: 0.5rem 0; line-height: 1.6;">
+
+<strong>France:</strong> <a href="tel:+33647834042" style="color: white; text-decoration: underline;">+33 (0) 6 47 83 40 42</a>
+
+</p>
+
+<p style="margin: 0.5rem 0; line-height: 1.6;">
+
+<strong>Australia:</strong> <a href="tel:+61493399107" style="color: white; text-decoration: underline;">+61 (0) 493 399 107</a>
+
+</p>
+:::
+:::::
+
+------------------------------------------------------------------------
+
+## Office Location
+
+::: {style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 8px; margin: 2rem 0;"}
+<h4 style="margin-top: 0; color: white; font-size: 1.2rem;">
+
+🏛️ The University of Newcastle
+
+</h4>
+
+<p style="margin: 0.5rem 0; line-height: 1.6;">
+
+Biology Building, Office BLG10<br> University Drive<br> Callaghan NSW 2308<br> Australia
+
+</p>
+:::
+
+------------------------------------------------------------------------
+
+::: {style="text-align: center; margin-top: 3rem; padding: 2rem; background: #ecf0f1; border-radius: 8px;"}
+<p style="color: #7f8c8d; margin: 0;">
+
+Feel free to reach out for collaborations, questions about my research, or general inquiries.
+
+</p>
+:::
+:::::::::
