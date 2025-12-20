@@ -69,6 +69,40 @@ h3 {
 }
 
 
-/* scrolling nav bar*/
 
+/* Make logo taller/wider while maintaining aspect ratio */
+.navbar-brand img,
+.navbar-logo {
+  height: 60px !important;  /* Adjust: 40px=compact, 80px=tall */
+  width: auto !important;
+  max-height: none !important;
+}
+
+/* Ensure navbar accommodates taller logo */
+.navbar {
+  min-height: 70px !important;  /* Match or exceed logo height */
+  padding: 0.5rem 1rem !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 991px) {
+  .navbar-brand img {
+    height: 45px !important;  /* Smaller on phones */
+  }
+  .navbar {
+    min-height: 60px !important;
+  }
+}
+
+/* Make title plain text (no link) */
+.navbar .navbar-brand-text,
+.navbar-title {
+  pointer-events: none !important;  /* Disables clicking */
+  text-decoration: none !important; /* Removes underline */
+}
+
+/* Logo stays clickable on right */
+.navbar-brand a {
+  pointer-events: auto !important;  /* Re-enables logo click */
+}
 

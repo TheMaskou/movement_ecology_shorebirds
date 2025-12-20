@@ -6,14 +6,14 @@ project:
     - qmd/**/*.qmd  # recursively render all .qmd files
     
     - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
     
 execute:
   freeze: auto
   eval: false
   
 website:
-  title: "Spatial Ecology - Shorebirds"
+  title: "Movement Ecology - Shorebirds"
   
   navbar:
     background: primary
@@ -32,9 +32,9 @@ website:
       - sidebar:chapter4
       - sidebar:chapter5
       - sidebar:reports
-      
-      - text: "Acknowledgments"
-        href: qmd/testend.qmd
+
+      - text: "Get in touch"
+        href: qmd/contact.qmd
         
   # Define multiple sidebars as a LIST
   sidebar:
