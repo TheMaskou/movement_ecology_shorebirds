@@ -1,0 +1,53 @@
+---
+title: "Survey effort"
+---
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+**One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?**
+
+Stations may have operated for varying durations or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.
+:::
+
+
+```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+
+library(motus)
+library(dplyr)
+library(here)
+library(DBI)
+library(RSQLite)
+library(forcats) 
+library(lubridate)
+library(bioRad) 
+library(purrr) 
+library(ggplot2)
+library(tidyr)
+library(gt)
+library(gtExtras)
+
+
+# Birds
+data_all <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers info
+recv <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-recv-info\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Spreadsheet
+spreadsheet <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "spreadsheet"),
+    pattern = "-spreadsheet\\.rds$", full.names = TRUE
+  )), 1)) 
+
+```
+
+

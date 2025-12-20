@@ -6,12 +6,11 @@ project:
     - qmd/**/*.qmd  # recursively render all .qmd files
     
     - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-    - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
     
 execute:
   freeze: auto
-  eval: false
-  
+
 website:
   title: "Movement Ecology - Shorebirds"
   
@@ -48,11 +47,12 @@ website:
           contents:
             - qmd/chapter_1/ch1_1.qmd
             - qmd/chapter_1/ch1_2.qmd
+            - qmd/chapter_1/ch1_3.qmd
             
-        - section: "Test 2"
+        - section: "The array"
           contents:
-            - qmd/chapter_1/test21.qmd
-            - qmd/chapter_1/test22.qmd
+            - qmd/chapter_1/ch1_4.qmd
+            - qmd/chapter_1/ch1_5.qmd
 
     - id: chapter2
       title: "Chapter 2"
@@ -108,5 +108,6 @@ format:
     theme: [cosmo, brand]
     css: styles.css
     toc: true
+    include-after-body: _footer.html
 
 editor: visual

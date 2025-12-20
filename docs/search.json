@@ -29,24 +29,6 @@
     ]
   },
   {
-    "objectID": "qmd/chapter_1/test22.html",
-    "href": "qmd/chapter_1/test22.html",
-    "title": "test22",
-    "section": "",
-    "text": "test22 lol\nzzzzzzzzzzzzzzzzzzzzzzzz",
-    "crumbs": [
-      "Test 2",
-      "test22"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Spatial Ecology - Shorebirds",
-    "section": "",
-    "text": "This is a Quarto website. Et oui !\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\nMETTRE LA SPREADSHEET ETHICS"
-  },
-  {
     "objectID": "qmd/chapter_1/test21.html",
     "href": "qmd/chapter_1/test21.html",
     "title": "test21",
@@ -102,25 +84,22 @@
     ]
   },
   {
-    "objectID": "qmd/contact.html",
-    "href": "qmd/contact.html",
-    "title": "Get in Touch",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Spatial Ecology - Shorebirds",
     "section": "",
-    "text": "Maxime Marini\n\n\n\n\nPhD Student\n\n\nMovement and Spatial Ecology of Migratory Shorebirds\n\n\n\n\n\n\n\n\n\nmaxime.marini@uon.edu.au\n\n\nmarini.maxime@hotmail.fr\n\n\n\n\n\nFrance: +33 (0) 6 47 83 40 42\n\n\nAustralia: +61 (0) 493 399 107\n\n\n\n\n\n\n\n\n\n\nBiology Building, Office BLG10 University Drive Callaghan NSW 2308 Australia\n\n\n\n\n\nFeel free to reach out for collaborations, questions about my research, or general inquiries."
+    "text": "This is a Quarto website. Et oui !\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\nMETTRE LA SPREADSHEET ETHICS"
   },
   {
-    "objectID": "qmd/contact.html#contact-information",
-    "href": "qmd/contact.html#contact-information",
-    "title": "Get in Touch",
+    "objectID": "qmd/chapter_1/test22.html",
+    "href": "qmd/chapter_1/test22.html",
+    "title": "test22",
     "section": "",
-    "text": "maxime.marini@uon.edu.au\n\n\nmarini.maxime@hotmail.fr\n\n\n\n\n\nFrance: +33 (0) 6 47 83 40 42\n\n\nAustralia: +61 (0) 493 399 107"
-  },
-  {
-    "objectID": "qmd/contact.html#office-location",
-    "href": "qmd/contact.html#office-location",
-    "title": "Get in Touch",
-    "section": "",
-    "text": "Biology Building, Office BLG10 University Drive Callaghan NSW 2308 Australia\n\n\n\n\n\nFeel free to reach out for collaborations, questions about my research, or general inquiries."
+    "text": "test22 lol\nzzzzzzzzzzzzzzzzzzzzzzzz",
+    "crumbs": [
+      "Test 2",
+      "test22"
+    ]
   },
   {
     "objectID": "qmd/reports/testf2.html",
@@ -139,5 +118,322 @@
     "title": "testend",
     "section": "",
     "text": "THE END"
+  },
+  {
+    "objectID": "qmd/contact.html",
+    "href": "qmd/contact.html",
+    "title": "Get in Touch",
+    "section": "",
+    "text": "Maxime Marini\n\n\nPhD Student\n\n\nMovement and Spatial Ecology of Migratory Shorebirds\n\n\n\n\n\n\n\n📧 Email\nPrimary: maxime.marini@uon.edu.au\nSecondary: marini.maxime@hotmail.fr\n\n\n📞 Phone\nAustralia: +61 (0) 493 399 107\nFrance: +33 (0) 6 47 83 40 42\n\n\n\n\n\n\n\n\n🏛️ The University of Newcastle\nBiology Building, Office BLG10\nUniversity Drive\nCallaghan NSW 2308\nAustralia\n\n\n\n\nFeel free to reach out for collaborations, questions about my research, or general inquiries. And remember I am from Marseille, so let’s take it easy lou tems passo, passo lou ben."
+  },
+  {
+    "objectID": "qmd/contact.html#contact-information",
+    "href": "qmd/contact.html#contact-information",
+    "title": "Get in Touch",
+    "section": "",
+    "text": "📧 Email\nPrimary: maxime.marini@uon.edu.au\nSecondary: marini.maxime@hotmail.fr\n\n\n📞 Phone\nAustralia: +61 (0) 493 399 107\nFrance: +33 (0) 6 47 83 40 42"
+  },
+  {
+    "objectID": "qmd/contact.html#office-location",
+    "href": "qmd/contact.html#office-location",
+    "title": "Get in Touch",
+    "section": "",
+    "text": "🏛️ The University of Newcastle\nBiology Building, Office BLG10\nUniversity Drive\nCallaghan NSW 2308\nAustralia\n\n\n\n\nFeel free to reach out for collaborations, questions about my research, or general inquiries. And remember I am from Marseille, so let’s take it easy lou tems passo, passo lou ben."
+  },
+  {
+    "objectID": "qmd/Untitled.html",
+    "href": "qmd/Untitled.html",
+    "title": "Get in Touch",
+    "section": "",
+    "text": "Maxime Marini\n\n\nPhD Student\n\n\nMovement and Spatial Ecology of Migratory Shorebirds\n\n\n\n\n\n\n\n📧 Email\nPrimary: maxime.marini@uon.edu.au\nSecondary: marini.maxime@hotmail.fr\n\n\n📞 Phone\nAustralia: +61 (0) 493 399 107\nFrance: +33 (0) 6 47 83 40 42\n\n\n\n\n\n\n\n🏛️ The University of Newcastle\nBiology Building, Office BLG10\nUniversity Drive\nCallaghan NSW 2308\nAustralia\n\n\n\nFeel free to reach out for collaborations, questions about my research, or general inquiries."
+  },
+  {
+    "objectID": "qmd/Untitled.html#contact-information",
+    "href": "qmd/Untitled.html#contact-information",
+    "title": "Get in Touch",
+    "section": "",
+    "text": "📧 Email\nPrimary: maxime.marini@uon.edu.au\nSecondary: marini.maxime@hotmail.fr\n\n\n📞 Phone\nAustralia: +61 (0) 493 399 107\nFrance: +33 (0) 6 47 83 40 42"
+  },
+  {
+    "objectID": "qmd/Untitled.html#office-location",
+    "href": "qmd/Untitled.html#office-location",
+    "title": "Get in Touch",
+    "section": "",
+    "text": "🏛️ The University of Newcastle\nBiology Building, Office BLG10\nUniversity Drive\nCallaghan NSW 2308\nAustralia\n\n\n\nFeel free to reach out for collaborations, questions about my research, or general inquiries."
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html",
+    "href": "qmd/chapter_1/ch1_3.html",
+    "title": "Legend",
+    "section": "",
+    "text": "All the way through the analysis of Chapter 1 we will use the same English and Scientific names for species, the same abbreviations, the same names for the stations and the same color codes. Find here on this page clarifications.",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#color-code",
+    "href": "qmd/chapter_1/ch1_3.html#color-code",
+    "title": "Legend",
+    "section": "Color code",
+    "text": "Color code\n\nspecies_colors &lt;- c(\n  \"Bar-tailed Godwit\"      = \"#1B9E77\", \n  \"Far Eastern Curlew\"     = \"#D95F02\",  \n  \"Masked Lapwing\"         = \"#7570B3\", \n  \"Pacific Golden-Plover\"  = \"#E7298A\", \n  \"Pied Stilt\"             = \"#66A61E\", \n  \"Curlew Sandpiper\"       = \"#E6AB02\",\n  \"Red-necked Avocet\"      = \"#A9851D\",\n  \"Whimbrel\"               = \"darkblue\"\n  )\n\nspecies_init_colors &lt;- c(\n  \"BTG\" = \"#1B9E77\",  \n  \"FEC\" = \"#D95F02\", \n  \"ML\"  = \"#7570B3\", \n  \"PGP\" = \"#E7298A\", \n  \"PS\"  = \"#66A61E\", \n  \"CS\"  = \"#E6AB02\",  \n  \"RNA\" = \"#A9851D\",\n  \"WHI\" = \"darkblue\"  \n  )\n\n\n\n\n\nSpecies\n\n\nColor Code\n\n\nColor Swatch\n\n\n\n\n\n\nBar-tailed Godwit\n\n\n#1B9E77\n\n\n\n\n\n\n\n\n\nFar Eastern Curlew\n\n\n#D95F02\n\n\n\n\n\n\n\n\n\nMasked Lapwing\n\n\n#7570B3\n\n\n\n\n\n\n\n\n\nPacific Golden-Plover\n\n\n#E7298A\n\n\n\n\n\n\n\n\n\nPied Stilt\n\n\n#66A61E\n\n\n\n\n\n\n\n\n\nCurlew Sandpiper\n\n\n#E6AB02\n\n\n\n\n\n\n\n\n\nRed-necked Avocet\n\n\n#A9851D\n\n\n\n\n\n\n\n\n\nWhimbrel\n\n\ndarkblue",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#species-initials",
+    "href": "qmd/chapter_1/ch1_3.html#species-initials",
+    "title": "Legend",
+    "section": "Species initials",
+    "text": "Species initials\n\ninit_species &lt;- c(\n  \"BTG\" = \"Bar-tailed Godwit\",  \n  \"FEC\" = \"Far Eastern Curlew\", \n  \"ML\"  = \"Masked Lapwing\", \n  \"PGP\" = \"Pacific Golden-Plover\", \n  \"PS\"  = \"Pied Stilt\", \n  \"CS\"  = \"Curlew Sandpiper\",  \n  \"RNA\" = \"Red-necked Avocet\",\n  \"WHI\" = \"Whimbrel\"  \n  )",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#english-names",
+    "href": "qmd/chapter_1/ch1_3.html#english-names",
+    "title": "Legend",
+    "section": "English names",
+    "text": "English names\n\neng_names &lt;- c(\n  \"Bar-tailed Godwit\"     = \"Limosa lapponica\",\n  \"Far Eastern Curlew\"    = \"Numenius madagascariensis\",\n  \"Masked Lapwing\"        = \"Vanellus miles\",\n  \"Pacific Golden-Plover\" = \"Pluvialis fulva\",\n  \"Pied Stilt\"            = \"Himantopus leucocephalus\",\n  \"Curlew Sandpiper\"      = \"Calidris ferruginea\",\n  \"Red-necked Avocet\"     = \"Recurvirostra novaehollandiae\",\n  \"Whimbrel\"              = \"Numenius phaeopus\"\n  )",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#scientific-names",
+    "href": "qmd/chapter_1/ch1_3.html#scientific-names",
+    "title": "Legend",
+    "section": "Scientific names",
+    "text": "Scientific names\n\nsci_names &lt;- c(\n  \"Limosa lapponica\"              = \"Bar-tailed Godwit\",\n  \"Numenius madagascariensis\"     = \"Far Eastern Curlew\",\n  \"Vanellus miles\"                = \"Masked Lapwing\",\n  \"Pluvialis fulva\"               = \"Pacific Golden-Plover\",\n  \"Himantopus leucocephalus\"      = \"Pied Stilt\",\n  \"Calidris ferruginea\"           = \"Curlew Sandpiper\",\n  \"Recurvirostra novaehollandiae\" = \"Red-necked Avocet\",\n  \"Numenius phaeopus\"             = \"Whimbrel\"\n  )",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#shorebird-class",
+    "href": "qmd/chapter_1/ch1_3.html#shorebird-class",
+    "title": "Legend",
+    "section": "Shorebird class",
+    "text": "Shorebird class\n\nshorebird_class &lt;- c(\n  \"Bar-tailed Godwit\"     = \"migratory\",\n  \"Far Eastern Curlew\"    = \"migratory\",\n  \"Masked Lapwing\"        = \"resident\",\n  \"Pacific Golden-Plover\" = \"migratory\",\n  \"Pied Stilt\"            = \"resident\",\n  \"Curlew Sandpiper\"      = \"migratory\",\n  \"Red-necked Avocet\"     = \"resident\",\n  \"Whimbrel\"              = \"migratory\"\n  )",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#species-information-table",
+    "href": "qmd/chapter_1/ch1_3.html#species-information-table",
+    "title": "Legend",
+    "section": "Species Information Table",
+    "text": "Species Information Table\n\n\n\n\nInitial\n\n\nEnglish Name\n\n\nScientific Name\n\n\nClass\n\n\n\n\n\n\nBTG\n\n\nBar-tailed Godwit\n\n\nLimosa lapponica\n\n\nmigratory\n\n\n\n\nFEC\n\n\nFar Eastern Curlew\n\n\nNumenius madagascariensis\n\n\nmigratory\n\n\n\n\nML\n\n\nMasked Lapwing\n\n\nVanellus miles\n\n\nresident\n\n\n\n\nPGP\n\n\nPacific Golden-Plover\n\n\nPluvialis fulva\n\n\nmigratory\n\n\n\n\nPS\n\n\nPied Stilt\n\n\nHimantopus leucocephalus\n\n\nresident\n\n\n\n\nCS\n\n\nCurlew Sandpiper\n\n\nCalidris ferruginea\n\n\nmigratory\n\n\n\n\nRNA\n\n\nRed-necked Avocet\n\n\nRecurvirostra novaehollandiae\n\n\nresident\n\n\n\n\nWHI\n\n\nWhimbrel\n\n\nNumenius phaeopus\n\n\nmigratory",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_3.html#color-table",
+    "href": "qmd/chapter_1/ch1_3.html#color-table",
+    "title": "Legend",
+    "section": "Color Table",
+    "text": "Color Table\n\n\n\n\nSpecies\n\n\nColor Code\n\n\nColor Swatch\n\n\n\n\n\n\nBar-tailed Godwit\n\n\n#C97C8E\n\n\n\n\n\n\n\n\n\nFar Eastern Curlew\n\n\n#D4AF6A\n\n\n\n\n\n\n\n\n\nMasked Lapwing\n\n\n#A67C52\n\n\n\n\n\n\n\n\n\nPacific Golden-Plover\n\n\n#7A9B6E\n\n\n\n\n\n\n\n\n\nPied Stilt\n\n\n#C36A6A\n\n\n\n\n\n\n\n\n\nCurlew Sandpiper\n\n\n#9B7BA8\n\n\n\n\n\n\n\n\n\nRed-necked Avocet\n\n\n#6B8CA8\n\n\n\n\n\n\n\n\n\nWhimbrel\n\n\n#A8C5D8",
+    "crumbs": [
+      "Data-set",
+      "Legend"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_5.html",
+    "href": "qmd/chapter_1/ch1_5.html",
+    "title": "Survey effort",
+    "section": "",
+    "text": "One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?\nStations may have operated for varying durations or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.",
+    "crumbs": [
+      "The array",
+      "Survey effort"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html",
+    "href": "qmd/chapter_1/ch1_2.html",
+    "title": "Explore",
+    "section": "",
+    "text": "Since 2021, 52 birds belonging to 8 species have been captured, tagged and released.\nYou can find the complete record of the captures here.\nMotus allows you to openly explore the data on the server.\nHowever, it might be useful and more talkative to observe fine and direct movement events from the detections, and to breakdown the data into different groups depending particular point of views and wishes.\nBelow are displayed several tables to explore the data with every tagged bird uniquely identified with a `Band.ID`, also related to a MOTUS tag ID.",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html#motus-table",
+    "href": "qmd/chapter_1/ch1_2.html#motus-table",
+    "title": "Explore",
+    "section": "Motus table",
+    "text": "Motus table\nFind below a our data summarised across species and up to date (last detection 2025-12-17).\n\n\n\n\n\n\n\n\nTable 1. Overview of the shorebird species VHF tracked and monitored over the local automated MOTUS array located in the Hunter estuary.\n\n\nSpecies (En.)\nSpecies (Sci.)\nTagged\nDetected\nFirst day\nLast day\nTotal of days\nDetected days\nNb of sites/days\nTotal of sites\n\n\n\n\nBar-tailed Godwit\nLimosa lapponica\n13\n9\n01-02-2023\n14-11-2025\n120.9 ± 56\n8.4 ± 2.3\n1.6 ± 0.2\n2.3 ± 0.3\n\n\nCurlew Sandpiper\nCalidris ferruginea\n5\n5\n01-11-2025\n17-12-2025\n41.8 ± 4.7\n33.6 ± 3\n2.7 ± 0.2\n5.6 ± 0.2\n\n\nEurasian Whimbrel\nNumenius phaeopus\n2\n2\n01-11-2025\n01-12-2025\n31 ± 0\n9 ± 4\n1.4 ± 0.4\n2.5 ± 0.5\n\n\nPacific Golden-Plover\nPluvialis fulva\n18\n15\n04-03-2023\n04-12-2025\n75.9 ± 15\n38.1 ± 6.3\n1.5 ± 0.1\n5.2 ± 0.5\n\n\nFar Eastern Curlew\nNumenius madagascariensis\n1\n1\n18-03-2023\n23-04-2023\n37 ± 0\n29 ± 0\n1.6 ± 0\n2 ± 0\n\n\nPied Stilt\nHimantopus leucocephalus\n7\n6\n18-03-2023\n09-01-2025\n176.3 ± 103.5\n37 ± 14.7\n1.2 ± 0.1\n2.3 ± 0.6\n\n\nMasked Lapwing\nVanellus miles\n3\n1\n19-12-2021\n24-12-2024\n31 ± 0\n9 ± 0\n1 ± 0\n1 ± 0\n\n\nRed-necked Avocet\nRecurvirostra novaehollandiae\n5\n3\n25-10-2023\n22-11-2023\n21.7 ± 7.3\n21.7 ± 7.3\n2.4 ± 0.1\n5 ± 1\n\n\n\nLegend. Grouped by species, this table summarises the number of shorebird individuals tagged and tracked using MOTUS-VHF technology in the Hunter estuary near Newcastle (NSW, Australia). Birds have been surveyed from the day they have been tagged (First day) to their last detection (Last day), which gives the Total of days. However, detections occurred only on certain days (Detected days). We also looked at the number of sites each species might visit per day (Nb of sites/days) and the Total number of sites the species visited during its whole survey. Dates are in dd-mm-yyyy format. Mean and standard error values are provided(x̄ ± SE, with SE = SD/√n)",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html#captures",
+    "href": "qmd/chapter_1/ch1_2.html#captures",
+    "title": "Explore",
+    "section": "Captures",
+    "text": "Captures\n\nSUMMARY\nBirds are trapped with mist-nets and banded. Blood and Feathers are sampled. Then a Motus tag is glued on the back of individual. Monitored for a while afterwards so we can assure his welfare. It’s finally released once we confirmed the bird is behaving correctly.\nExplore the below tables to get informed on the the number of birds trapped, tagged, and monitored (detected, undetected, retagged or euthanised) since 2021.\n\n\n\n\n\n\n\n\nDETAILS\nWith above a summarised table of the captures and the monitoring, find below the list of the birds that has been trapped, tagged and detected, attached with the details of the capture procedures.",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html#detected",
+    "href": "qmd/chapter_1/ch1_2.html#detected",
+    "title": "Explore",
+    "section": "Detected",
+    "text": "Detected\nThe table displays the five last detections (timeAus) for each birds.",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html#undetected",
+    "href": "qmd/chapter_1/ch1_2.html#undetected",
+    "title": "Explore",
+    "section": "Undetected",
+    "text": "Undetected",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html#retagged",
+    "href": "qmd/chapter_1/ch1_2.html#retagged",
+    "title": "Explore",
+    "section": "Retagged",
+    "text": "Retagged",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_2.html#euthanised",
+    "href": "qmd/chapter_1/ch1_2.html#euthanised",
+    "title": "Explore",
+    "section": "Euthanised",
+    "text": "Euthanised",
+    "crumbs": [
+      "Data-set",
+      "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html",
+    "href": "qmd/chapter_1/ch1_1.html",
+    "title": "Load & Format",
+    "section": "",
+    "text": "Our Motus project aims to better understand movements and habitat preferences for shorebird populations within the local estuaries of the Hunter and Port Stephens. It has a focus on Far Eastern Curlew but additional species are also studied.\n\nMotus Project: Shorebird monitoring in central NSW estuaries\nProject ID: 294\nCitation: Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11\n\nRetrieve the data from Motus server (Accessing detections data - Motus 2025) and load them into your R environment so you can filter and format for further analysis.\nThis page describes:\n\nThe filtering procedures (date, individual ID, receiver names, false positive detections, etc.)\nThe implementation of key variables (tidal and circadian cycles, survey effort from receivers)",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#packages",
+    "href": "qmd/chapter_1/ch1_1.html#packages",
+    "title": "Load & Format",
+    "section": "Packages",
+    "text": "Packages\n\n# install.packages(\"motus\", \n#                  repos = c(birdscanada = 'https://birdscanada.r-universe.dev',\n#                            CRAN = 'https://cloud.r-project.org'))\nlibrary(motus)\nlibrary(dplyr)\nlibrary(here)\nlibrary(DBI)\nlibrary(RSQLite)\nlibrary(forcats) \nlibrary(lubridate)\nlibrary(bioRad) \nlibrary(purrr) \nlibrary(ggplot2) \n\nYou will need the motus package which you can download either online (Installing packages - Motus 2025) or from R.",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#download",
+    "href": "qmd/chapter_1/ch1_1.html#download",
+    "title": "Load & Format",
+    "section": "Download",
+    "text": "Download\n\nNote for authors:\n\nYou will have to separately run this R script that will follow the two next chunks before to continue. Indeed, `tagme( )` will prompt and require username and password that can’t be fed here.\nRun this script to update database only. The procedure is heavy and takes a while to complete (up to 45 min).\n\n\n\n# Global settings\nsetwd(dirname(rstudioapi::getSourceEditorContext()$path)) \nSys.setenv(TZ=\"UTC\") \nproj.num &lt;- 294  \nmotusLogout()\n\nFirst, set general settings as working directory, Time Zone and Motus project number.\nThen, make sure the environment is free from any connection to any other networked project to avoid undesired mistakes.\n\nsql.motus &lt;- tagme(projRecv = proj.num,\n                   new = FALSE, # TRUE overwrites existing file\n                   update = TRUE,\n                   dir = here(\"qmd\", \"chapter_1\",\"data\"))\n\nmetadata(sql.motus, proj.num)\n\nsql.motus &lt;- dbConnect(SQLite(), here::here(\"qmd\", \"chapter_1\", \"data\", \"project-294.motus\"))\n\ndf.alltags &lt;- tbl(sql.motus, \"alltags\") %&gt;%\n  dplyr::collect() %&gt;%\n  as.data.frame() %&gt;%\n    mutate(time = as_datetime(ts),\n         timeAus = as_datetime(ts, tz = \"Australia/Sydney\"),\n         dateAus = as_date(timeAus),\n         year = year(time), \n         doy = yday(time))\n\nRetrieve the data from Motus server to access them in a data-frame format.\nmotus::tagme()gets the data from the online Motus network, the ones part of your project (ie. ID = 294) only. Make sure you set your own directory. A file of type .sql is automatically created.\nIf you already have a .sql file, set new = FALSE and update = TRUE so you are updating your existing file instead of re-downloading the full thing, which can take a while.\nmotus::metadata() downloads the metadata from the online Motus network (receiver information and more).\nmotus::dbConnect() links your .sql to your environment. Avoid to use high memory as .sql is a lazy table and not yet hardly written on your hardware.\nmotus::tbl() extracts all the tags fat into your environment. Then formatted into a classic dataframe.\n\ntail(df.alltags %&gt;% \n       select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv))\n\n                    timeAus        speciesEN motusTagID    tagModel pulseLen\n2962188 2025-12-17 04:10:40 Curlew Sandpiper      99026 NTQB2-4-2-M      2.5\n2962189 2025-12-17 04:11:06 Curlew Sandpiper      99026 NTQB2-4-2-M      2.5\n2962190 2025-12-17 04:28:53 Curlew Sandpiper      99025 NTQB2-4-2-M      2.5\n2962191 2025-12-17 04:29:20 Curlew Sandpiper      99025 NTQB2-4-2-M      2.5\n2962192 2025-12-17 04:29:33 Curlew Sandpiper      99025 NTQB2-4-2-M      2.5\n2962193 2025-12-17 04:29:59 Curlew Sandpiper      99025 NTQB2-4-2-M      2.5\n               recvDeployName            recv\n2962188 Ramsar Road Floodgate SG-E3E4RPI4CED5\n2962189 Ramsar Road Floodgate SG-E3E4RPI4CED5\n2962190 Ramsar Road Floodgate SG-E3E4RPI4CED5\n2962191 Ramsar Road Floodgate SG-E3E4RPI4CED5\n2962192 Ramsar Road Floodgate SG-E3E4RPI4CED5\n2962193 Ramsar Road Floodgate SG-E3E4RPI4CED5\n\n\nAbove, a quick view about the last data uploaded to Motus server, giving you the latest detection taken into account for this workflow.",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#filter",
+    "href": "qmd/chapter_1/ch1_1.html#filter",
+    "title": "Load & Format",
+    "section": "Filter",
+    "text": "Filter\n\nTAGS\n\nWARNING: The values entered within the below filtering R code are depending your own context.\n\nHere are cleaned-out the data recorded from undesired tags and/or receivers depending our local context. So the following has been processed on the raw data.\n\n# Cleaning and correcting tags metadata\ndf.alltags &lt;- df.alltags %&gt;% \n   filter(\n    # test tags\n     motusTagID != c(\"43291\"),\n    # pending, unconfirmed or undeployed tags\n    !motusTagID %in% c(\"43288\", \"43291\", \"43297\", \"43299\",\n                       \"43307\", \"43424\", \"43425\", \"60470\", \n                       \"60579\", \"81123\", \"81136\", \"81137\"),\n    # used for test/validation before tagging bird (remove time before the tagging)\n    !(motusTagID == \"81134\" & time &lt; dmy(\"23-11-2024\")),\n    !(motusTagID == \"60575\" & time &lt; dmy(\"25-10-2023\")) ) %&gt;% \n    # NA species\n     mutate(speciesEN = case_when(\n       is.na(speciesEN) & motusTagID %in% c(\"60470\", \"81121\") ~ \"Red-necked Avocet\",\n       is.na(speciesEN) & motusTagID %in% c(\"81118\") ~ \"Red-necked Avocet\",\n       TRUE ~ speciesEN)) %&gt;%\n  \n  # motusTagID as factor\n  mutate(motusTagID = as.factor(motusTagID))\n\n  \n# Cleaning and correcting receiver metadata\ndf.alltags &lt;- df.alltags %&gt;% \n  filter(\n    # NA\n     !is.na(recvDeployLat),\n    # site not any longer used\n      recvDeployName != c(\"Throsby Creek Test Site\"),\n    # test sensor gnome\n      recv != c(\"SG-C621RPI3E17F\",       \n                \"SG-62A5RPI36710\") ) %&gt;% \n    # Windeyers\n  mutate(recvDeployName = ifelse(is.na(recvDeployName) & recv == \"SG-D5BBRPI3E2F7\",\n                                 \"Windeyers\", \n                                 recvDeployName))\n\nHave been removed:\n\nTest tags\nTags recorded into the Motus project but undeployed;\nPeriod of time where tags were ON but not set on any bird;\nTest SensorGnome;\nSites not any longer used.\n\nHave been modified:\n\nTag’s specieEN information have been changed from NA to different values depending case to case;\nReceiver station’s name recvDeployName has been changed from NA to Windeyers starting from 02/15/2025.\n\nFalse positive:\nLet’s now visualise the quality of our data in term of False Positive and likely wrong detection because of a too low Run Length.\n\n# Checking 'motusFiltered in' tag data\nggplot(df.alltags %&gt;%\n         filter(motusFilter == 1),\n       aes(x = recvDeployName)) +\n  geom_bar(fill = \"steelblue\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +\n  labs(x = \"Motus Station\", y = \"Nb of motusFilter = 1 (good)\") \n\n\n\n\n\n\n\n# Checking 'motusFiltered out' tag data\nggplot(df.alltags %&gt;%\n         filter(motusFilter == 0),\n       aes(x = recvDeployName)) +\n  geom_bar(fill = \"orange\") +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +\n  labs(x = \"Motus Station\", y = \"Nb of motusFilter = 0 (filtered out)\")\n\n\n\n\n\n\n\n# Checking proportion of data quality for each station\nperc &lt;- ggplot(df.alltags %&gt;% \n                 filter(motusFilter %in% c(0, 1)),\n       aes(x = recvDeployName, fill = factor(motusFilter))) +\n  geom_bar(position = \"fill\") + \n  scale_fill_manual(values = c(\"0\" = \"orange\",\n                               \"1\" = \"steelblue\"),\n                    labels = c(\"0 (filtered out)\", \n                               \"1 (good)\"),\n                    name = \"motusFilter\") +\n  theme_minimal() +\n  labs(x = \"Motus Station\",\n       y = \"Proportion\") +\n  scale_y_continuous(labels = scales::percent) +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n# ggpubr::ggexport(perc,\n#                  filename = here(\"figures\", \"motus_filter_perc.jpg\"),\n#                  width = 800, height = 1000)\n\nperc\n\n\n\n\n\n\n\n\nFind in the above table the distribution of the data depending their quality and for each station.\nBlue values are detections considered as True Positive from Motus and orange values as False Positive.\nIndeed, a Motus station might have an interfering noisy radio environment within its vicinity (power line, flight corridor, road proximity, etc.).\nBeing able to flag an abnormal amount of False Positive for one station might be useful at assuming the data are True Positive but considered False Positive because of too much radio noise around.\n\n# False positive\ndf.alltags &lt;- df.alltags %&gt;% \n  filter(motusFilter == 1, # 0 is invalid data\n         runLen &gt;= 3) # value to be further thought\n\nThe False Positive signals are filtered out (i.e. noise coming from external device, or any kind of external radio activity happening within the area) thanks to the pre-made `motusFilter` and the `runLen`.\n\nMotus Filter threshold values is set at 1, based on Motus documentationand our data (see below).\nRun Length threshold value is set at 3 and defines the number of bursts recorded from one tag and received at once: too low amount of bursts are suspected to not be True Positive, therefore not reliable.\n\n\n# Ambiguous  \nclarify(sql.motus) \n\n [1] ambigID    numHits    id1        fullID1    id2        fullID2   \n [7] id3        fullID3    id4        fullID4    id5        fullID5   \n[13] id6        fullID6    motusTagID tsStart    tsEnd     \n&lt;0 rows&gt; (or 0-length row.names)\n\n\nmotus::clarify() checks whether the combination of two tag signals emitting at the mean time could generate the single detection of a third not-existing tag signal, which would also be a False Positive, but also hiding two True Positives. If the table generated by this code has rows resulting, please go to Motus documentation. A table is generated as an output and each rows correspond a case. A table with zero row means none of such a case occurred, so your data are clean.\n\n\nSENSORGNOME\nReceivers data and their meta-information must be filtered and formatted as well.\nIndeed, some receivers might have been swap within the Motus array and along time, therefore the same SensorGnome ID might be used by multiple stations along time, leading to wrong results.\n\nIMPORTANT: Make sure you tracked the history of your receivers to avoid misled results.\n\nHere, we only need to rename the stations accurately and to remove those that are not used any longer.\n\n# Get summary \ndf.recvDeps &lt;- tbl(sql.motus, \"recvDeps\") %&gt;%   \n  collect() %&gt;%   \n  as.data.frame() %&gt;%    \n  mutate(timeStart = as_datetime(tsStart),\n         timeStartAus = as_datetime(tsStart, tz = \"Australia/Sydney\"), \n         timeEnd = as_datetime(tsEnd),\n         timeEndAus = as_datetime(tsEnd, tz = \"Australia/Sydney\"))  \n\n# Rename stations across alltags & receiver data-sets \nstation_rename &lt;- list(\"Barry_Fullerton_cove\"  = \"Fullerton Entrance\", \n                       \"North Swann Pond\" = \"Swan Pond\" ,\n                       \"Ramsar Road Floodgate\" = \"Ramsar Road\",   \n                       \"Milham's Pond\" = \"Milhams Pond\") \n\ndf.recvDeps &lt;- df.recvDeps %&gt;%\n  mutate(name = recode(name, !!!station_rename))\n\ndf.alltags &lt;- df.alltags %&gt;% mutate(name = recode(recvDeployName,\n                                                            !!!station_rename)) \n\n# Filter not used stations as out of the local array \ndf.recvDeps &lt;- df.recvDeps %&gt;% \n  filter(!is.na(latitude),   \n         name != c(\"Throsby Creek Test Site\"),    \n         serno != c(\"SG-C621RPI3E17F\",   # test station\n                    \"SG-62A5RPI36710\") ) # test station",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#survey-time-frame",
+    "href": "qmd/chapter_1/ch1_1.html#survey-time-frame",
+    "title": "Load & Format",
+    "section": "Survey time frame",
+    "text": "Survey time frame\n\ndf.recvDeps &lt;- df.recvDeps %&gt;%   filter(timeStartAus &gt; \"2023-01-31 00:00:00 AEDT\")\n\nFinally, we need to set temporal aspect of the survey effort.\nDay one for our local Motus array to start listening any tag signals is set on the 31st January 2023 - one month before the first day a bird has been caught and tagged (information found into the SharePoint to access the file.).",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#import-band-id",
+    "href": "qmd/chapter_1/ch1_1.html#import-band-id",
+    "title": "Load & Format",
+    "section": "Import band ID",
+    "text": "Import band ID\nAs we might re-trap individuals and re-tag them with a new MOTUS tag, we can’t use the Motus tag ID as unique ID anymore and have to use Band ID which supposes to last on the same bird from banding date to individual’s death. Unfortunately, the Band ID is not imported by MOTUS network at the moment. So, we need to import it from our own record accessible on SharePoint here, download the .csv.\n\n# Load df with date at the beginning \nspreadsheet &lt;- read.csv(here::here( \"qmd\", \"chapter_1\", \"data\", \"spreadsheet\", paste0(Sys.Date(), \"-teams.sheet.csv\"))) %&gt;%   \n  \n  # Keep only the tagged ones \n  filter(Radio.tag. == \"Y\") %&gt;%      \n  \n  # Variable names\n  rename(DateAUS.Trap = \"Date\", \n         motusTagID = \"Motus.tag.ID\", \n         speciesEN = \"Species\") %&gt;%\n  \n  # Value names\n  mutate(speciesEN = case_when(\n    speciesEN == \"Eastern Curlew\" ~ \"Far Eastern Curlew\",\n    speciesEN == \"Black-winged Stilt\" ~ \"Pied Stilt\",\n    speciesEN == \"Pacific Golden Plover\" ~ \"Pacific Golden-Plover\",\n    TRUE ~ speciesEN )) %&gt;% \n  \n  # Format\n  mutate(motusTagID = as.factor(motusTagID),\n         DateAUS.Trap = as.Date(DateAUS.Trap) ) %&gt;%\n  select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())  \n\n# Join unique Band IDs for inconsistent motusTag (same bird re-tagged, etc) \ndf.alltags &lt;- left_join(df.alltags, spreadsheet %&gt;%    \n                        filter(is.na(Euthanised.)) %&gt;%  \n                        select(motusTagID, DateAUS.Trap, Band.ID, Bander), \n                      by = \"motusTagID\")\n\nSo we merged our records with Band ID for each bird to the Motus data, linked with the Motus tag ID. Allowing unique individual IDs.",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#add-key-variables",
+    "href": "qmd/chapter_1/ch1_1.html#add-key-variables",
+    "title": "Load & Format",
+    "section": "Add key variables",
+    "text": "Add key variables\nIt is crucial for our further analysis to add the Tidal and Circadian cycles as variables so we can match each bird detection with a categorical value for a date, a tide (high/low) and a period of the day (night/day).\nTo do so, we must first fetch the tide data.\n\n# Read tide.csv\ntideData &lt;- read.csv(here(\"qmd\", \"chapter_1\", \"data\", \"tides\", \"TideDataNewcastle.csv\"))\n\n# Format date and datetime columns\ntideData$tideDateTimeAus &lt;- ymd_hms(tideData$tideDateTime, tz = \"Australia/Sydney\")\ntideData &lt;- tideData %&gt;% mutate(\n  date = as.POSIXct(date, format = \"%d/%m/%Y\", tz = \"Australia/Sydney\"))\n\n# Classify tides as diurnal or nocturnal\ntideData &lt;- tideData %&gt;% mutate(\n  sunriseNewc = sunrise(date, 151.7833, -32.9167, elev = -0.268, tz = \"Australia/Sydney\", force_tz = TRUE),\n  sunsetNewc = sunset(date, 151.7833, -32.9167, elev = -0.268, tz = \"Australia/Sydney\", force_tz = TRUE),\n  sunriseNewcTime = strftime(sunriseNewc, format = \"%H:%M:%S\", tz = \"Australia/Sydney\"),\n  sunsetNewcTime = strftime(sunsetNewc, format = \"%H:%M:%S\", tz = \"Australia/Sydney\"))\n\n# Define either diurnal or nocturnal \ntideData &lt;- tideData %&gt;% mutate(\n  day_night = case_when(\n    tideDateTimeAus &lt; sunriseNewc ~ \"Nocturnal\",\n    tideDateTimeAus &gt; sunriseNewc & tideDateTimeAus &lt; sunsetNewc ~ \"Diurnal\",\n    tideDateTimeAus &gt; sunsetNewc ~ \"Nocturnal\"))\n\n# Categorise each tide by tidal/diel period\ntideData &lt;- tideData %&gt;% mutate(  \n    tideCategory = case_when(\n      high_low == \"Low\" & day_night == \"Diurnal\" ~ \"Diurnal_Low\",\n      high_low == \"Low\" & day_night == \"Nocturnal\" ~ \"Nocturnal_Low\",\n      high_low == \"High\" & day_night == \"Diurnal\" ~ \"Diurnal_High\",\n      high_low == \"High\" & day_night == \"Nocturnal\" ~ \"Nocturnal_High\") %&gt;% \n      as_factor())\n\n# Add numeric ID to each category, allowing for unique tide bins\ntideData &lt;- tideData %&gt;%\n  group_by(tideCategory) %&gt;% \n  mutate(tideID = paste0(tideCategory, \"_\", row_number())) %&gt;% \n  ungroup()\n\nNote that tide data-set must be extracted from New South Wales government resources and formatted into a .csv file - made for you and directly accessible here.\nAll the Tide categories are set for a unique point in Newcastle, easing the complexity of small scale differences for the tide within the estuary.\nLet’s now add our key variables for each bird detection:\n\nSignal strength\nCircadian period\nTidal period\n\n\n# Load useful functions from Callum Gapes work\ntidalCurve &lt;- readRDS(here::here(\"qmd\", \"chapter_1\", \"data\", \"tides\", \"tidalCurve.rds\"))\ntidalCurveFunc &lt;- splinefun(tideData$tideDateTimeAus, tideData$tideHeight, method = \"natural\")\nget.tideIndex &lt;- function(time){ return(which.min(abs(tideData$tideDateTimeAus-time)))}\n\n# Add key variables\ndf.alltags &lt;- df.alltags  %&gt;%\n  \n  # Positive signal strength (min. = 0) for plotting\n  mutate(sigPositive = sig + abs(min(sig))) %&gt;% \n  \n  # Sunrise/set\n  sunRiseSet(lat = \"recvDeployLat\", \n             lon = \"recvDeployLon\", \n             ts = \"ts\") %&gt;% \n  mutate(sunriseNewc = sunrise(dateAus, 151.7833, -32.9167, elev = -0.268, tz = \"Australia/Sydney\", force_tz = TRUE),\n         sunsetNewc = sunset(dateAus, 151.7833, -32.9167, elev = -0.268, tz = \"Australia/Sydney\", force_tz = TRUE)) %&gt;%\n\n  # Tide\n  mutate(tideHeight = tidalCurveFunc(timeAus),\n         tideIndex = map_dbl(timeAus, get.tideIndex))\n\n  tide_values &lt;- tideData[df.alltags$tideIndex, \n                        c(\"tideDateTimeAus\",\n                          \"high_low\",\n                          \"day_night\",\n                          \"tideCategory\",\n                          \"tideID\",\n                          \"tideHeight\")]\n\n# Factorise the variables\ndf.alltags &lt;- df.alltags %&gt;%\n  mutate(tideDateTimeAus = tide_values$tideDateTimeAus,\n         tideHighLow = as_factor(tide_values$high_low),\n         tideDiel = as_factor(tide_values$day_night),\n         tideCategory = as_factor(tide_values$tideCategory),\n         tideCategoryHeight = tide_values$tideHeight,\n         tideID = as_factor(tide_values$tideID),\n         tideTimeDiff = abs(difftime(timeAus, tideDateTimeAus, units = \"hours\")))",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_1.html#save",
+    "href": "qmd/chapter_1/ch1_1.html#save",
+    "title": "Load & Format",
+    "section": "Save",
+    "text": "Save\n\nNote for authors:\nSome observations (n = 4) in the detections data retrieved from Motus server do hold NA values for speciesEN.\nAs long as we consider it is negligible, these observations are removed.\n\n\n\n              timeAus speciesEN Band.ID markerNumber motusTagID    tagModel\n1 2025-11-04 17:24:53      &lt;NA&gt;      NA         &lt;NA&gt;      98916 NTQB2-6-1-M\n2 2025-11-04 17:25:45      &lt;NA&gt;      NA         &lt;NA&gt;      98916 NTQB2-6-1-M\n3 2025-11-04 17:26:12      &lt;NA&gt;      NA         &lt;NA&gt;      98916 NTQB2-6-1-M\n4 2025-11-04 17:27:04      &lt;NA&gt;      NA         &lt;NA&gt;      98916 NTQB2-6-1-M\n  pulseLen recvDeployName            recv\n1      2.5   Curlew Point SG-61F1RPI3C8AB\n2      2.5   Curlew Point SG-61F1RPI3C8AB\n3      2.5   Curlew Point SG-61F1RPI3C8AB\n4      2.5   Curlew Point SG-61F1RPI3C8AB\n\n\n\n# Bird detection dqtq\nsaveRDS(df.alltags, here::here(\"qmd\", \"chapter_1\", \"data\", \"motus\", paste0(Sys.Date(), \"-data\", \".rds\" )))\n\n# Receiver information\nsaveRDS(df.recvDeps, here::here(\"qmd\", \"chapter_1\", \"data\", \"motus\", paste0(Sys.Date(), \"-recv-info\", \".rds\" )))\n\n# Spreadsheet tracking BandID\nsaveRDS(spreadsheet, here::here(\"qmd\", \"chapter_1\", \"data\", \"spreadsheet\", paste0(Sys.Date(), \"-spreadsheet\", \".rds\" )))\n\n# Tide tables\nsaveRDS(tideData, here(\"qmd\", \"chapter_1\", \"data\", \"tides\", \"tideData.rds\"))\n\nSave your formatted data, now ready for analysis!",
+    "crumbs": [
+      "Data-set",
+      "Load & Format"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_4.html",
+    "href": "qmd/chapter_1/ch1_4.html",
+    "title": "Location & History",
+    "section": "",
+    "text": "Since 2021, our local automated Motus array is sitting both in the Hunter estuary and Port Stephens estuary, with respectively eight and three stations.\nThis page displays a dynamic map where you can explore for each station and its history.\nYou can also openly explore location and a few other aspects on Motus server.\nA Motus station is made of multiple components:\n\nAntenna (either directional or omni-directionnal), to detect any VHF signal\nSensorGnome Receiver, to identify and store VHF signal from a known or unknown tag\nSolar panel + battery (low cycle 12V), to provide electrical power\nMast, to provide supporting structure\n\nNote that you can build any station yourself by simply following the installation guide freely delivered by Motus.\n\n\n\nShinyApp will provide the navigation. On To-Do list and Has To be done…",
+    "crumbs": [
+      "The array",
+      "Location & History"
+    ]
   }
 ]

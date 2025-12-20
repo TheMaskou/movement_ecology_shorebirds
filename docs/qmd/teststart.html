@@ -103,22 +103,26 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-1">    
         <li class="dropdown-header">Data-set</li>
         <li>
-    <a class="dropdown-item" href="../qmd/chapter_1/ch1_1.qmd">
- <span class="dropdown-text"></span></a>
+    <a class="dropdown-item" href="../qmd/chapter_1/ch1_1.html">
+ <span class="dropdown-text">Load &amp; Format</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../qmd/chapter_1/ch1_2.qmd">
- <span class="dropdown-text"></span></a>
+    <a class="dropdown-item" href="../qmd/chapter_1/ch1_2.html">
+ <span class="dropdown-text">Explore</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../qmd/chapter_1/ch1_3.html">
+ <span class="dropdown-text">Legend</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Test 2</li>
+        <li class="dropdown-header">The array</li>
         <li>
-    <a class="dropdown-item" href="../qmd/chapter_1/test21.html">
- <span class="dropdown-text">test21</span></a>
+    <a class="dropdown-item" href="../qmd/chapter_1/ch1_4.html">
+ <span class="dropdown-text">Location &amp; History</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../qmd/chapter_1/test22.html">
- <span class="dropdown-text">test22</span></a>
+    <a class="dropdown-item" href="../qmd/chapter_1/ch1_5.html">
+ <span class="dropdown-text">Survey effort</span></a>
   </li>  
     </ul>
   </li>
@@ -252,6 +256,31 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
+
+
+
+
+<div style="text-align: center; margin-top: 3rem; padding: 1rem; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 0.9rem;">
+
+  This page has been last updated on <span id="render-date"></span>
+
+</div>
+
+
+
+<script>
+
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+
+                  'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const now = new Date();
+
+  const dateStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+
+  document.getElementById('render-date').textContent = dateStr;
+
+</script>
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

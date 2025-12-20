@@ -1,0 +1,160 @@
+---
+title: "Legend"
+---
+
+All the way through the analysis of **Chapter 1** we will use the same English and Scientific names for species, the same abbreviations, the same names for the stations and the same color codes. Find here on this page clarifications.
+
+::: blockquote-yellow
+**Note for authors**:
+Make sure to keep this script up to date as new data are compiled with eventual new species and/or Motus stations.
+:::
+
+```{r color, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+species_colors <- c(
+  "Bar-tailed Godwit"      = "#C97C8E",  
+  "Far Eastern Curlew"     = "#D4AF6A",  
+  "Masked Lapwing"         = "#A67C52",  
+  "Pacific Golden-Plover"  = "#7A9B6E",  
+  "Pied Stilt"             = "#C36A6A",  
+  "Curlew Sandpiper"       = "#9B7BA8",  
+  "Red-necked Avocet"      = "#6B8CA8", 
+  "Whimbrel"               = "#A8C5D8"   
+  )
+
+species_init_colors <- c(
+  "BTG" = "#C97C8E",  
+  "FEC" = "#D4AF6A",  
+  "ML"  = "#A67C52",  
+  "PGP" = "#7A9B6E",  
+  "PS"  = "#C36A6A",  
+  "CS"  = "#9B7BA8",  
+  "RNA" = "#6B8CA8",  
+  "WHI" = "#A8C5D8"   
+  )
+
+```
+
+
+```{r initials, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+init_species <- c(
+  "BTG" = "Bar-tailed Godwit",  
+  "FEC" = "Far Eastern Curlew", 
+  "ML"  = "Masked Lapwing", 
+  "PGP" = "Pacific Golden-Plover", 
+  "PS"  = "Pied Stilt", 
+  "CS"  = "Curlew Sandpiper",  
+  "RNA" = "Red-necked Avocet",
+  "WHI" = "Whimbrel"  
+  )
+```
+
+```{r english, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+eng_names <- c(
+  "Bar-tailed Godwit"     = "Limosa lapponica",
+  "Far Eastern Curlew"    = "Numenius madagascariensis",
+  "Masked Lapwing"        = "Vanellus miles",
+  "Pacific Golden-Plover" = "Pluvialis fulva",
+  "Pied Stilt"            = "Himantopus leucocephalus",
+  "Curlew Sandpiper"      = "Calidris ferruginea",
+  "Red-necked Avocet"     = "Recurvirostra novaehollandiae",
+  "Whimbrel"              = "Numenius phaeopus"
+  )
+```
+
+```{r scientific, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+sci_names <- c(
+  "Limosa lapponica"              = "Bar-tailed Godwit",
+  "Numenius madagascariensis"     = "Far Eastern Curlew",
+  "Vanellus miles"                = "Masked Lapwing",
+  "Pluvialis fulva"               = "Pacific Golden-Plover",
+  "Himantopus leucocephalus"      = "Pied Stilt",
+  "Calidris ferruginea"           = "Curlew Sandpiper",
+  "Recurvirostra novaehollandiae" = "Red-necked Avocet",
+  "Numenius phaeopus"             = "Whimbrel"
+  )
+```
+
+```{r class, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+shorebird_class <- c(
+  "Bar-tailed Godwit"     = "migratory",
+  "Far Eastern Curlew"    = "migratory",
+  "Masked Lapwing"        = "resident",
+  "Pacific Golden-Plover" = "migratory",
+  "Pied Stilt"            = "resident",
+  "Curlew Sandpiper"      = "migratory",
+  "Red-necked Avocet"     = "resident",
+  "Whimbrel"              = "migratory"
+  )
+```
+
+## Color Table
+
+```{r display_colors, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results='asis'}
+library(knitr)
+
+# Create a data frame with species and colors
+color_df <- data.frame(
+  Species = names(species_colors),
+  Color_Code = unname(species_colors),
+  stringsAsFactors = FALSE
+)
+
+cat('<table style="width: 100%; border-collapse: collapse;">\n')
+cat('<thead><tr style="background-color: #f0f0f0;">\n')
+cat('<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Species</th>\n')
+cat('<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Color Code</th>\n')
+cat('<th style="padding: 10px; text-align: center; border: 1px solid #ddd;">Color Swatch</th>\n')
+cat('</tr></thead>\n<tbody>\n')
+
+for(i in 1:nrow(color_df)) {
+  cat('<tr>\n')
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd;">%s</td>\n', color_df$Species[i]))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; font-family: monospace;">%s</td>\n', color_df$Color_Code[i]))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><div style="width: 60px; height: 30px; background-color: %s; border: 1px solid #333; margin: 0 auto; border-radius: 4px;"></div></td>\n', color_df$Color_Code[i]))
+  cat('</tr>\n')
+}
+
+cat('</tbody>\n</table>\n')
+```
+
+## Species Information Table
+```{r species_table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results='asis'}
+library(knitr)
+
+# Create a comprehensive data frame
+species_df <- data.frame(
+  Initial = names(init_species),
+  English_Name = unname(init_species),
+  Scientific_Name = names(sci_names),
+  Class = unname(shorebird_class),
+  stringsAsFactors = FALSE
+)
+
+# Generate HTML table
+cat('<table style="width: 100%; border-collapse: collapse;">\n')
+cat('<thead><tr style="background-color: #f0f0f0;">\n')
+cat('<th style="padding: 10px; text-align: center; border: 1px solid #ddd;">Initial</th>\n')
+cat('<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">English Name</th>\n')
+cat('<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Scientific Name</th>\n')
+cat('<th style="padding: 10px; text-align: center; border: 1px solid #ddd;">Class</th>\n')
+cat('</tr></thead>\n<tbody>\n')
+
+for(i in 1:nrow(species_df)) {
+  # Alternate row colors
+  bg_color <- if(i %% 2 == 0) "#f9f9f9" else "white"
+  
+  # Color code for class
+  class_color <- if(species_df$Class[i] == "migratory") "#E7298A" else "#66A61E"
+  
+  cat(sprintf('<tr style="background-color: %s;">\n', bg_color))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold; font-family: monospace;">%s</td>\n', species_df$Initial[i]))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd;">%s</td>\n', species_df$English_Name[i]))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; font-style: italic;">%s</td>\n', species_df$Scientific_Name[i]))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><span style="background-color: %s; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 600;">%s</span></td>\n', 
+              class_color, species_df$Class[i]))
+  cat('</tr>\n')
+}
+
+cat('</tbody>\n</table>\n')
+```

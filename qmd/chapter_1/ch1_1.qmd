@@ -373,6 +373,7 @@ spreadsheet <- read.csv(here::here( "qmd", "chapter_1", "data", "spreadsheet", p
     speciesEN == "Eastern Curlew" ~ "Far Eastern Curlew",
     speciesEN == "Black-winged Stilt" ~ "Pied Stilt",
     speciesEN == "Pacific Golden Plover" ~ "Pacific Golden-Plover",
+    speciesEN == "Whimbrel" ~ "Eurasian Whimbrel",
     TRUE ~ speciesEN )) %>% 
   
   # Format
