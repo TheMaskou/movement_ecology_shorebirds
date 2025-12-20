@@ -1,0 +1,74 @@
+/* css styles */
+
+/*body {
+  max-width: 950px;
+  width: 90vw;
+  margin-left: auto;
+  margin-right: auto;
+}*/
+
+
+/* band setting */
+
+.blockquote-blue {
+  background-color: #d0e4f7;  
+  border-left: 4px solid #4285f4;
+  padding: 1em;
+  margin: 1em 0;
+  color: #1a3e5a; 
+  border-radius: 4px;
+}
+
+
+.blockquote-red {
+  background-color: #f8d7da; 
+  border-left: 4px solid #dc3545; 
+  padding: 1em;
+  margin: 1em 0;
+  color: #721c24;
+  border-radius: 4px;
+}
+
+
+.blockquote-yellow {
+  background-color: #fff3cd; 
+  border-left: 4px solid #ffc107; 
+  padding: 1em;
+  margin: 1em 0;
+  color: #856404; 
+  border-radius: 4px;
+}
+
+
+/* top bar setting */
+.navbar {
+  background-color: #B24F3A!important; 
+}
+
+/* Color the main page title */
+#title-block-header .quarto-title h1.title {
+  color: #B24F3A !important; 
+}
+
+/* heading level*/
+
+h2 {
+  border-bottom: 1px solid #6c7b8b;  /* Dark grey-blue color */
+  padding-bottom: 8px;               /* Space between text and line */
+  margin-bottom: 1em;                /* Overall spacing adjustment */
+  font-size: 1.6rem;                 /* Slightly smaller: 25.6px base */
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.25rem;                /* Slightly smaller: 20px base */
+  font-weight: 700;                  /* Bold as requested */
+  color: #555555;                    /* Light black */
+  margin-bottom: 0.75em;
+  margin-top: 1.5em;
+}
+
+
+/* scrolling nav bar*/
+
+
