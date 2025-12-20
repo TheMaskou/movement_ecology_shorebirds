@@ -4,6 +4,4 @@ title: "Spatial Ecology - Shorebirds"
 
 This is a Quarto website. Et oui !
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
 METTRE LA SPREADSHEET ETHICS

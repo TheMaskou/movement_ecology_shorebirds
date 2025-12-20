@@ -136,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Chapter 1</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-1">    
-        <li class="dropdown-header">Data-set</li>
+        <li class="dropdown-header">Data</li>
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.html">
  <span class="dropdown-text">Load &amp; Format</span></a>
@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Legend</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">The array</li>
+        <li class="dropdown-header">Motus array</li>
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.html">
  <span class="dropdown-text">Location &amp; History</span></a>
@@ -244,7 +244,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Data-set</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Load &amp; Format</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Data</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Load &amp; Format</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -259,7 +259,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Data-set</span></a>
+ <span class="menu-text">Data</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -288,7 +288,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">The array</span></a>
+ <span class="menu-text">Motus array</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
@@ -335,7 +335,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Data-set</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Load &amp; Format</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Data</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_1.html">Load &amp; Format</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Load &amp; Format</h1>
 </div>
@@ -674,18 +674,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    speciesEN <span class="sc">==</span> <span class="st">"Eastern Curlew"</span> <span class="sc">~</span> <span class="st">"Far Eastern Curlew"</span>,</span>
 <span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    speciesEN <span class="sc">==</span> <span class="st">"Black-winged Stilt"</span> <span class="sc">~</span> <span class="st">"Pied Stilt"</span>,</span>
 <span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    speciesEN <span class="sc">==</span> <span class="st">"Pacific Golden Plover"</span> <span class="sc">~</span> <span class="st">"Pacific Golden-Plover"</span>,</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> speciesEN )) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Format</span></span>
-<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">motusTagID =</span> <span class="fu">as.factor</span>(motusTagID),</span>
-<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">DateAUS.Trap =</span> <span class="fu">as.Date</span>(DateAUS.Trap) ) <span class="sc">%&gt;%</span></span>
-<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, motusTagID, speciesEN, DateAUS.Trap, <span class="fu">everything</span>())  </span>
-<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Join unique Band IDs for inconsistent motusTag (same bird re-tagged, etc) </span></span>
-<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>df.alltags <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df.alltags, spreadsheet <span class="sc">%&gt;%</span>    </span>
-<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">filter</span>(<span class="fu">is.na</span>(Euthanised.)) <span class="sc">%&gt;%</span>  </span>
-<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(motusTagID, DateAUS.Trap, Band.ID, Bander), </span>
-<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>                      <span class="at">by =</span> <span class="st">"motusTagID"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    speciesEN <span class="sc">==</span> <span class="st">"Whimbrel"</span> <span class="sc">~</span> <span class="st">"Eurasian Whimbrel"</span>,</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> speciesEN )) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Format</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">motusTagID =</span> <span class="fu">as.factor</span>(motusTagID),</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">DateAUS.Trap =</span> <span class="fu">as.Date</span>(DateAUS.Trap) ) <span class="sc">%&gt;%</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, motusTagID, speciesEN, DateAUS.Trap, <span class="fu">everything</span>())  </span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Join unique Band IDs for inconsistent motusTag (same bird re-tagged, etc) </span></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>df.alltags <span class="ot">&lt;-</span> <span class="fu">left_join</span>(df.alltags, spreadsheet <span class="sc">%&gt;%</span>    </span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">filter</span>(<span class="fu">is.na</span>(Euthanised.)) <span class="sc">%&gt;%</span>  </span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">select</span>(motusTagID, DateAUS.Trap, Band.ID, Bander), </span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>                      <span class="at">by =</span> <span class="st">"motusTagID"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>So we merged our records with Band ID for each bird to the Motus data, linked with the Motus tag ID. Allowing unique individual IDs.</p>
 </section>
