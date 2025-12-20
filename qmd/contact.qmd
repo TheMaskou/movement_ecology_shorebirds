@@ -8,7 +8,7 @@ format:
 
 ::::::::: column-page-inset
 ::: {style="text-align: center; margin: 3rem 0 2rem 0;"}
-![Maxime Marini](/picture.jpg){alt="Maxime Marini" style="border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem;"}
+![Maxime Marini](/picture.jpg){style="border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem;"}
 
 <h2 style="margin-bottom: 0.5rem; color: #2c3e50;">
 
