@@ -57,11 +57,10 @@ Australia]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: whi
 ------------------------------------------------------------------------
 
 ::: {style="position: relative; text-align: center; margin-top: 3rem; padding: 2rem; background: #ecf0f1; border-radius: 8px; overflow: visible;"}
-[Feel free to reach out for collaborations, questions about my research, or general inquiries.]{style="color: #7f8c8d; margin: 0;"} 
-
+[Feel free to reach out for collaborations, questions about my research, or general inquiries. ]{style="color: #7f8c8d; margin: 0;"}
 [And remember I am from Marseille, so let's take it easy *lou tems passo, passo lou ben.*]{style="color: #7f8c8d; margin: 0;"}
 
-<img src="/material/olive.png" style="position: absolute; bottom: 15px; right: 10px; width: 30%; height: auto; transform: translate(60%, 60%); z-index: 15;" aria-hidden="true">
+<img src="/material/olive.png" style="position: absolute; bottom: 15px; right: 35px; width: 30%; height: auto; transform: translate(60%, 60%); z-index: 15;" aria-hidden="true">
 :::
 ::::::::::::
 
