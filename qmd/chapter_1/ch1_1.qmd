@@ -334,7 +334,7 @@ df.alltags <- df.alltags %>%
 # Filter not used stations as out of the local array 
 df.recvDeps <- df.recvDeps %>% 
   filter(!is.na(latitude),   
-         name != c("Throsby Creek Test Site"),    
+         recvDeployName != c("Throsby Creek Test Site"),    
          serno != c("SG-C621RPI3E17F",   # test station
                     "SG-62A5RPI36710") ) # test station
 
