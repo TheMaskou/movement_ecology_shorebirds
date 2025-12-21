@@ -109,3 +109,20 @@ h3 {
   pointer-events: auto !important;  /* Re-enables logo click */
 }
 
+
+
+
+/* Hyperlink colors */
+a {
+  color: #B24F3A; 
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  color: #8B3A2A; 
+  opacity: 0.8;
+}
+
+a:visited {
+  color: #944030; 
+}
