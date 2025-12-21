@@ -99,30 +99,27 @@ shorebird_class <- c(
 
 ```{r display_colors, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results='asis'}
 library(knitr)
-
 # Create a data frame with species and colors
 color_df <- data.frame(
   Species = names(species_colors),
   Color_Code = unname(species_colors),
   stringsAsFactors = FALSE
 )
-
 cat('<table style="width: 100%; border-collapse: collapse;">\n')
 cat('<thead><tr style="background-color: #f0f0f0;">\n')
 cat('<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Species</th>\n')
 cat('<th style="padding: 10px; text-align: left; border: 1px solid #ddd;">Color Code</th>\n')
 cat('<th style="padding: 10px; text-align: center; border: 1px solid #ddd;">Color Swatch</th>\n')
 cat('</tr></thead>\n<tbody>\n')
-
 for(i in 1:nrow(color_df)) {
   cat('<tr>\n')
-  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd;">%s</td>\n', color_df$Species[i]))
+  cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; font-weight: bold;">%s</td>\n', color_df$Species[i]))
   cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; font-family: monospace;">%s</td>\n', color_df$Color_Code[i]))
   cat(sprintf('<td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><div style="width: 60px; height: 30px; background-color: %s; border: 1px solid #333; margin: 0 auto; border-radius: 4px;"></div></td>\n', color_df$Color_Code[i]))
   cat('</tr>\n')
 }
-
 cat('</tbody>\n</table>\n')
+
 ```
 
 ## Species Information Table

@@ -11,9 +11,9 @@ project:
     - index.qmd
     - qmd/**/*.qmd  # recursively render all .qmd files
     
-    - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-    - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
-    - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
     
 execute:
   freeze: auto
@@ -101,6 +101,7 @@ website:
         - qmd/reports/pub_1.qmd  # us
         - qmd/reports/pub_2.qmd  # ethics + grant reports
         - qmd/reports/pub_3.qmd  # conference + papers
+        - qmd/reports/pub_4.qmd  # milestones
 
             
 format:
