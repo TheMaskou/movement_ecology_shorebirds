@@ -22,7 +22,6 @@ library(lubridate)
 library(tidyr)
 library(purrr)
 
-
 # Birds
 data_all <- readRDS(
   tail(sort(list.files(
@@ -49,13 +48,6 @@ recv.act <- tbl(sql.motus, "activity")  %>%
   mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
          dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
                              tz = "Australia/Sydney")) 
-
-# Source ch1_3 for codex
-knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-            output = tempfile(fileext = ".R"))
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-                   output = tempfile(fileext = ".R"), 
-                   quiet = TRUE))
 
 ```
 
@@ -93,10 +85,9 @@ recv.act <- tbl(sql.motus, "activity")  %>%
          dateAus = as_datetime(as.POSIXct(hourBin* 3600, 
                                           origin = "1970-01-06", 
                                           tz = "UTC"), 
-                               tz = "Australia/Sydney")) 
+                               tz = "Australia/Sydney"))   
 
 ```
-
 
 ```{r 2 check the data,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
@@ -244,7 +235,6 @@ uptime_summary <- recv_hours %>%
 ```{r table survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 library(gt)
 uptime_summary  %>%
-  mutate(Station = recode(Station, !!!station_rename)) %>%
   gt() %>%
   opt_align_table_header(align = "left")  %>%
   tab_style(
@@ -283,7 +273,7 @@ motus_survey_h <- ggplot(recv_hours %>%
 
 ```
 
-::: {.column-body-outset-right}
+::: column-body-outset-right
 ```{r motus_survey_h, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
 motus_survey_h
 ```
@@ -291,7 +281,7 @@ motus_survey_h
 
 Every black dot represent an hour where the station has activity recorded meaning the station is operational, meaning recording radio noise or a specific tag.
 
-```{r 2 day MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
+```{r 2 day MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 # Plot (day detailed)
 recv.status <- recv_hours %>%
@@ -353,7 +343,7 @@ motus_survey_d <- motus_survey_d +
 
 ```
 
-::: {.column-body-outset-right}
+::: column-body-outset-right
 ```{r motus_survey_d, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
 motus_survey_d
 ```
@@ -364,7 +354,7 @@ Solid black lines are when a MOTUS station is operational. To simplify, when a s
 ### STATIONS
 
 ::: panel-tabset
-```{r 2 station MOTUS array survey effort plot, echo = FALSE, eval = FALSE, results = 'asis'}
+```{r 2 station MOTUS array survey effort plot, echo = FALSE, eval = TRUE, results = 'asis'}
 
 # Split the detection data by StationP
 data_split <- split(data_all_plot, data_all_plot$StationP)

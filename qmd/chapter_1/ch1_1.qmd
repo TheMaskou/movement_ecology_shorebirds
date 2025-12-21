@@ -2,6 +2,20 @@
 title: "Load & Format"
 ---
 
+```{r recever names, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+# Source the script into that environment
+temp_env <- new.env()
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
+                   output = tempfile(fileext = ".R"), 
+                   quiet = TRUE),
+       local = temp_env)
+
+# Extract only the station_rename object
+station_rename <- temp_env$station_rename
+rm(temp_env)
+
+```
+
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 Our Motus project aims to better understand movements and habitat preferences for shorebird populations within the local estuaries of the Hunter and Port Stephens. It has a focus on Far Eastern Curlew but additional species are also studied.
 
@@ -298,20 +312,6 @@ Indeed, [some receivers might have been swap within the Motus array and along ti
 
 Here, we only need to rename the stations accurately and to remove those that are not used any longer.
 
-```{r recever names, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-# Source the script into that environment
-temp_env <- new.env()
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-                   output = tempfile(fileext = ".R"), 
-                   quiet = TRUE),
-       local = temp_env)
-
-# Extract only the station_rename object
-station_rename <- temp_env$station_rename
-rm(temp_env)
-
-```
-
 ```{r recever names ex, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 # Correct the recv names (example)
 station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance", 
@@ -320,14 +320,16 @@ station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
 
 ```
 
-```{r filter recv, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r filter recv 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
 # Apply corrections
-df.recvDeps <- df.recvDeps %>%
-  mutate(name = recode(name, !!!station_rename))
+df.recvDeps <- df.recvDeps %>% 
+  mutate(name = recode(name, !!!station_rename)) %>%
+  rename(recvDeployName = "name")
 
-df.alltags <- df.alltags %>% mutate(name = recode(recvDeployName,
-                                                            !!!station_rename)) 
+df.alltags <- df.alltags %>% 
+  mutate(recvDeployName = recode(recvDeployName,
+                                 !!!station_rename))
 
 # Filter not used stations as out of the local array 
 df.recvDeps <- df.recvDeps %>% 
