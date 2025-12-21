@@ -112,17 +112,17 @@ h3 {
 
 
 
-/* Hyperlink colors */
-a {
+/* Hyperlink colors - except navbar */
+body a:not(.navbar a):not(.nav-link) {
   color: #B24F3A; 
   transition: opacity 0.2s ease;
 }
 
-a:hover {
+body a:not(.navbar a):not(.nav-link):hover {
   color: #8B3A2A; 
   opacity: 0.8;
 }
 
-a:visited {
+body a:not(.navbar a):not(.nav-link):visited {
   color: #944030; 
 }
