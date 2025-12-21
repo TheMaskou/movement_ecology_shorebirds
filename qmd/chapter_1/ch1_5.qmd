@@ -2,6 +2,13 @@
 title: "Survey effort"
 ---
 
+```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# Source the script into that environment
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
+                   output = tempfile(fileext = ".R"), 
+                   quiet = TRUE))
+```
+
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 **One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?**
 

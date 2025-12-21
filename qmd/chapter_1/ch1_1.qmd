@@ -2,18 +2,11 @@
 title: "Load & Format"
 ---
 
-```{r recever names, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source the script into that environment
-temp_env <- new.env()
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
-                   quiet = TRUE),
-       local = temp_env)
-
-# Extract only the station_rename object
-station_rename <- temp_env$station_rename
-rm(temp_env)
-
+                   quiet = TRUE))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
