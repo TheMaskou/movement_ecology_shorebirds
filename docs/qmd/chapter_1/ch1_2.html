@@ -103,10 +103,10 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="https://www.csrg.site/our-group" class="navbar-brand navbar-brand-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../logo.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="https://www.csrg.site/our-group">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Movement Ecology - Shorebirds</span>
     </a>
   </div>
@@ -115,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../qmd/teststart.html"> 
 <span class="menu-text">PhD Project</span></a>
@@ -124,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-1" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 1</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-1">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-1">    
         <li class="dropdown-header">Data</li>
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.html">
@@ -154,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-2" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 2</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-2">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-2">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_2/testch2.html">
  <span class="dropdown-text">testch2</span></a>
@@ -165,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-3" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 3</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-3">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-3">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_3/testch3.html">
  <span class="dropdown-text">testch3</span></a>
@@ -176,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-4" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 4</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-4">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-4">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_4/testch4.html">
  <span class="dropdown-text">testch4</span></a>
@@ -187,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-5" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 5</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-5">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-5">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_5/testch5.html">
  <span class="dropdown-text">testch5</span></a>
@@ -198,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-publications" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Publications</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-publications">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-publications">    
         <li class="dropdown-header">Reports</li>
         <li>
     <a class="dropdown-item" href="../../qmd/reports/testrep.html">
@@ -1100,7 +1100,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/themaskou\.github\.io\/movement_ecology_shorebirds\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

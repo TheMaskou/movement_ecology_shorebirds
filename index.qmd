@@ -1,7 +1,73 @@
 ---
-title: "Spatial Ecology - Shorebirds"
+title-block-banner: false
+format:
+  html:
+    css: custom-hero.css
+    include-in-header: custom-scroll.js
 ---
 
-This is a Quarto website. Et oui !
+::: hero-section
+:::
 
-METTRE LA SPREADSHEET ETHICS
+::: {style="color: white; text-align: center; padding: 5rem 2rem; margin-bottom: 3rem; font-family: 'Georgia', serif;"}
+<div style="display: block; margin: 0 auto; max-width: 800px;">
+<h1 style="color: white; font-size: 3.8rem; font-weight: 600; line-height: 1.2; margin: 0; letter-spacing: -0.02em;">Movement & Spatial Ecology of Australian Shorebirds</h1>
+</div>
+:::
+
+
+
+::: {.title-overlay style="background: linear-gradient(135deg, rgba(15,25,55,0.6), rgba(25,45,85,0.6)); color: white; padding: 3rem 2rem; text-align: center; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;"}
+This Research Project is conducted within the [**Center for Conservation Science**](https://www.csrg.site/our-group) by Maxime Marini (PhD candidate), Andrea S. Griffin (Associate Professor) and many other collaborators.
+
+The project aims to better understand spatial and movement ecology of Australian shorebirds, as their behaviours within and across local estuaries of the Hunter and Port Stephens. Trying to address varied questions as where and when do they move? What roles tidal and circadian cycles are playing into these movements? Where and when birds are foraging and/or roosting? Do the species share or segregate their food resources? How much the intertidal areas (mudflats) extents infer demographic trends?
+
+We collected our main data-set thanks to the valuable help of the [**Hunter Birder Observer Club**](https://www.hboc.org.au/) **(HBOC)** of Newcastle, which allowed us to trap and equip birds with a band, a flag marker and a Motus Lotek Nano-tag. Blood and feathers were sampled and other bio-metrics were also taken.
+:::
+
+::::: {.aboriginal-acknowledgement style="color: white; padding: 2.5rem; border-radius: 12px; text-align: center; font-weight: bold; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;"}
+:::: {style="background-color: rgba(0, 0, 0, 0.4); padding: 2rem; border-radius: 8px;"}
+We acknowledge that we are on the traditional lands of the Pambalong clan of the Awabakal nation, as we pay our respect to the Elders past, present and emerging.
+
+We recognise that First Nations sovereignty was never ceded.
+
+This continent always was and always will be Aboriginal Land.
+
+::: {style="text-align: right; font-size: 0.85em; color: #ccc; margin-top: 1rem;"}
+*Photo: © Darleen Cooper - Stronger Together (2021)*
+:::
+::::
+:::::
+
+::::: content-wrapper
+::: {.title-overlay style="background: linear-gradient(135deg, rgba(40,55,35,0.85), rgba(60,75,50,0.85)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;"}
+**📋 SAMPLING LIMITS**
+
+All of the procedures and actions undertaken for the project follow the [**Animal Care and Ethics Committee**](https://www.newcastle.edu.au/research/support/services/animal-ethics/animal-care-and-ethics-committee-acec) **(ACEC)** and [**Work Health Safety**](https://www.newcastle.edu.au/current-staff/working-here/work-health-and-safety/managing-health-and-safety-risks) **(WHS)** protocols from [**The University of Newcastle**](https://www.newcastle.edu.au/) **(UON)**, and are proceed under the Scientific Licence and the Review of Environmental Factors of [**NSW National Parks and Wildlife Services**](https://www.nationalparks.nsw.gov.au/) **(NPWS)**.
+
+Therefore, the project is limited to certain amounts of bird sampling. Navigate the table above to track these boundaries.
+
+<details style="margin-top: 1.5rem;">
+<summary style="color: white; font-weight: bold; cursor: pointer; padding: 0.8rem; background: rgba(255,255,255,0.1); border-radius: 6px; border: none; font-size: 1.1em;"> View Sampling Records</summary>
+<iframe width="100%" height="700" frameborder="0" scrolling="no" style="margin-top: 1rem; border-radius: 8px; display: block;" src="https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc.aspx?sourcedoc={a23e66f0-c551-4ba4-acd0-de0d5e83ca42}&action=embedview&wdAllowInteractivity=False&ActiveCell='Birds%20used'!D33&Item='Birds%20used'!A1%3AH66&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+</details>
+
+<details style="margin-top: 1.5rem;">
+<summary style="color: white; font-weight: bold; cursor: pointer; padding: 0.8rem; background: rgba(255,255,255,0.1); border-radius: 6px; border: none; font-size: 1.1em;"> Access Legal Supportive Documents</summary>
+
+  
+-   *ACEC Protocol - A-2024-400 (Motus tags) - under review for renewal*
+
+-   [ACEC Protocol - A-2021-107 (Blood & Feathers)](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQAInIcy1RUVQYZ-l4pKX_A1ATO5ymKNMm5fTytCW95QBK8?e=j555h4)
+
+-   [WHS Protocol - SRA 77/2019 (Safety)](https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table%2FSP%2D24%2D208%5FAPPROVED%2DRESUBMISSION%2DSRA77%2E2019%5F25%2E07%2E2025%2Epdf&parent=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table)
+
+-   [NPWS Scientific Licence - SL102458](https://uoneduau-my.sharepoint.com/personal/c3541851_uon_edu_au/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fc3541851%5Fuon%5Fedu%5Fau%2FDocuments%2FDocuments%2F6%2DPHD%5FUON%2F10%2DPhD%20admin%2FEthics%2C%20Safety%2C%20Permits%2C%20Licences%2FNational%20Park%20Wildlife%20Services%2FSL102458%5FGriffin%5FUON%5FMigratory%5FShorebird%5FHabitat%5FUsage%5FAmdt%5F2025%2Epdf&parent=%2Fpersonal%2Fc3541851%5Fuon%5Fedu%5Fau%2FDocuments%2FDocuments%2F6%2DPHD%5FUON%2F10%2DPhD%20admin%2FEthics%2C%20Safety%2C%20Permits%2C%20Licences%2FNational%20Park%20Wildlife%20Services&ga=1)
+
+-   NPWS Review of Environmental Factors - REF 20/756925
+
+    -   [Document 1](https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table%2FRevised%5FGRIFFIN%5Fdreview%2Denvironmental%2Dfactors%2Dtemplate%2D170517%5Fv2final%2Epdf&parent=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table)
+    -   [Document 2](https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table%2FDetermination%5FNotice%5Ffor%5FExternal%5FProponents%5FCorries%5FIsland%5FNPWS%5F27%2E10%2E2020%2EPDF&parent=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table)
+</details>
+:::
+:::::

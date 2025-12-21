@@ -6,21 +6,22 @@ format:
     toc: false
 ---
 
-::::::::: column-page-inset
+:::::::::::: column-page-inset
+:::::: {style="text-align: center; margin: 3rem 0 2rem 0;"}
+<img src="/picture.jpg" alt="Maxime Marini" style="width: 335px; height: 385px; object-fit: cover; border-radius: 60%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem; display: block; margin-left: auto; margin-right: auto;"/>
 
-<div style="text-align: center; margin: 3rem 0 2rem 0;">
-  <img src="/picture.jpg" alt="Maxime Marini" style="width: 335px; height: 385px; object-fit: cover; border-radius: 60%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem; display: block; margin-left: auto; margin-right: auto;">
-  
-  <div style="margin-bottom: 0.5rem; color: #001f3f; font-size: 1.75rem; font-weight: 600;">Maxime Marini</div>  
-  
-  <div style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 0.5rem;">PhD Student</div>
-  
-  <div style="font-size: 1rem; color: #34495e; font-style: italic;">Movement and Spatial Ecology of Migratory Shorebirds</div>
-</div>
+::: {style="margin-bottom: 0.5rem; color: #001f3f; font-size: 1.75rem; font-weight: 600;"}
+Maxime Marini
+:::
 
-------------------------------------------------------------------------
+::: {style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 0.5rem;"}
+PhD Student
+:::
 
-## Contact Information
+::: {style="font-size: 1rem; color: #34495e; font-style: italic;"}
+Movement and Spatial Ecology of Migratory Shorebirds
+:::
+::::::
 
 ::::: {style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0;"}
 ::: {style="background: linear-gradient(135deg, #d4a574 0%, #c89666 100%); color: white; padding: 2rem; border-radius: 8px;"}
@@ -40,10 +41,6 @@ format:
 :::
 :::::
 
-------------------------------------------------------------------------
-
-## Office Location
-
 <a href="https://www.google.com/maps/place/32%C2%B053'32.9%22S+151%C2%B041'50.7%22E/@-32.893354,151.6977656,16.25z/data=!4m4!3m3!8m2!3d-32.892478!4d151.69742!5m1!1e4?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block; margin: 2rem 0;">
 
 ::: {style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; border-radius: 8px; margin: 2rem 0;"}
@@ -62,8 +59,7 @@ Australia]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: whi
 ::: {style="text-align: center; margin-top: 3rem; padding: 2rem; background: #ecf0f1; border-radius: 8px;"}
 [Feel free to reach out for collaborations, questions about my research, or general inquiries. And remember I am from Marseille, so let's take it easy *lou tems passo, passo lou ben.*]{style="color: #7f8c8d; margin: 0;"}
 :::
-
-:::::::::
+::::::::::::
 
 <a href="https://www.newcastle.edu.au/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block; margin: 2rem 0;">
 

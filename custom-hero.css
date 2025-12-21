@@ -1,0 +1,85 @@
+
+
+/* Hero background with fade effect */
+.hero-section {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('material/sunset_fullerton.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.aboriginal-acknowledgement {
+  background-image: url('material/aboriginal_art.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+.hero-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, white);
+}
+
+/* Content wrapper with transparent background */
+.content-wrapper {
+  position: relative;
+  margin-top: 60vh;
+  background: transparent;
+  padding: 3rem 0;
+  z-index: 1;
+}
+
+/* Ensure main content area has proper padding */
+#quarto-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Fade hero on scroll */
+body.scrolled .hero-section {
+  opacity: 0.3;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .content-wrapper {
+    margin-top: 40vh;
+    padding: 2rem 1rem;
+  }
+  
+  .hero-section::after {
+    height: 30%;
+  }
+}
+
+/* Enhance link styling in colored boxes */
+a {
+  transition: opacity 0.2s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* Better spacing for content sections */
+.content-wrapper > div {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}

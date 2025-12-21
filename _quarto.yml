@@ -13,15 +13,14 @@ execute:
 
 website:
   title: "Movement Ecology - Shorebirds"
-  
+
   navbar:
     background: primary
     search: true
-    
+
     logo: logo.png
-    logo-href: "https://www.csrg.site/our-group"
-    
-    left:     
+        
+    right:     
       - text: "PhD Project"
         href: qmd/teststart.qmd
         
@@ -109,5 +108,6 @@ format:
     css: styles.css
     toc: true
     include-after-body: _footer.html
+
 
 editor: visual
