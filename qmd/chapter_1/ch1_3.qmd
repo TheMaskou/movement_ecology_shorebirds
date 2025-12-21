@@ -20,25 +20,25 @@ station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
 ```{r color, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 species_colors <- c(
-  "Bar-tailed Godwit"      = "#C97C8E",  
-  "Far Eastern Curlew"     = "#D4AF6A",  
-  "Masked Lapwing"         = "#A67C52",  
-  "Pacific Golden-Plover"  = "#7A9B6E",  
-  "Pied Stilt"             = "#C36A6A",  
-  "Curlew Sandpiper"       = "#9B7BA8",  
-  "Red-necked Avocet"      = "#6B8CA8", 
-  "Eurasian Whimbrel"      = "#A8C5D8"   
-  )
+  "Bar-tailed Godwit"      = "#FF1493",  
+  "Far Eastern Curlew"     = "#FF8C00",  
+  "Masked Lapwing"         = "#32CD32",  
+  "Pacific Golden-Plover"  = "#FFD700",  
+  "Pied Stilt"             = "#00CED1",  
+  "Curlew Sandpiper"       = "#9370DB",  
+  "Red-necked Avocet"      = "#FF4500", 
+  "Eurasian Whimbrel"      = "#1E90FF"   
+)
 
 species_init_colors <- c(
-  "BTG" = "#C97C8E",  
-  "FEC" = "#D4AF6A",  
-  "ML"  = "#A67C52",  
-  "PGP" = "#7A9B6E",  
-  "PS"  = "#C36A6A",  
-  "CS"  = "#9B7BA8",  
-  "RNA" = "#6B8CA8",  
-  "EW"  = "#A8C5D8"   
+  "BTG" = "#FF1493",  
+  "FEC" = "#FF8C00",  
+  "ML"  = "#32CD32",  
+  "PGP" = "#FFD700",  
+  "PS"  = "#00CED1",  
+  "CS"  = "#9370DB",  
+  "RNA" = "#FF4500",  
+  "EW"  = "#1E90FF"   
   )
 
 ```
