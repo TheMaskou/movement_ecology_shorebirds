@@ -97,15 +97,9 @@ website:
       background: light
       collapse-level: 3
       contents:
-      - section: "Reports"
-        contents:
-            - qmd/reports/testrep.qmd
-      - section: "Conferences"
-        contents:
-            - qmd/reports/testf1.qmd
-      - section: "Papers"
-        contents:
-            - qmd/reports/testf2.qmd
+        - qmd/reports/pub_1.qmd  # us
+        - qmd/reports/pub_2.qmd  # ethics + grant reports
+        - qmd/reports/pub_3.qmd  # conference + papers
 
             
 format:
