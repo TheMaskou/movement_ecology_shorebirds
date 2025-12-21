@@ -135,9 +135,9 @@ One issue with Motus data is the number of variables related to IDs (receivers, 
 
 Plus, some of our SensorGnome `serno` and/or Raspberry Pi processor `deviceID` have been swapped around stations to optimise the VHF survey.
 
-For example, when two stations need receiver repairs, we fix the easiest one first and prioritise reinstalling it at the most important station regardless the receiver or Raspberry origin. This sometimes means taking a receiver or Raspberry from one station and moving it to another one, but because Motus attaches this *Raspberry ID* `deviceID` to a *Motus station name* `stationName`, messy error may happen.
+For example, when two stations need receiver repairs, we fix the easiest one first and prioritise reinstalling it at the most important station regardless the receiver or Raspberry origin. This sometimes means taking a receiver or Raspberry from one station and moving it to another one, but because Motus attaches this *Raspberry ID* `deviceID` to a *Motus station name* `recvDeployName`, messy error may happen.
 
-**We must re-associate each `deviceID` with their corresponding `stationName` and at the correct `hourBin`. We first create a unique ID that matches station's name with Raspberry pi that we called `SernoStation`.**
+**We must re-associate each `deviceID` with their corresponding `recvDeployName` and at the correct `hourBin`. We first create a unique ID that matches station's name with Raspberry pi that we called `SernoStation`.**
 
 ```{r  clarifying stations,  message = FALSE, warning = FALSE, eval = TRUE}
 
@@ -145,19 +145,19 @@ For example, when two stations need receiver repairs, we fix the easiest one fir
 recv.act.term <- recv.act %>%
   left_join(recv %>% 
               filter(!is.na(timeEndAus)) %>%
-              select(deviceID, serno, stationName),
+              select(deviceID, serno, recvDeployName),
             "deviceID") %>%
-  filter(!is.na(stationName)) %>%
-  mutate(SernoStation = paste0(stationName, "_", serno))
+  filter(!is.na(recvDeployName)) %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno))
 
 # Sort the still currently running serno
 recv.act.runn <- recv.act %>%
   left_join(recv %>% 
               filter(is.na(timeEndAus)) %>%
-              select(deviceID, serno, stationName),
+              select(deviceID, serno, recvDeployName),
             "deviceID") %>%
-  filter(!is.na(stationName)) %>%
-  mutate(SernoStation = paste0(stationName, "_", serno))
+  filter(!is.na(recvDeployName)) %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno))
 
 # Merging in one data-set to use Station's name further + pick-up the rounded hours
 recv.act <- bind_rows(recv.act.runn, recv.act.term) %>%
@@ -165,7 +165,7 @@ recv.act <- bind_rows(recv.act.runn, recv.act.term) %>%
 
 # Providing helpful variables
 recv <- recv %>%
-  mutate(SernoStation = paste0(stationName, "_", serno),
+  mutate(SernoStation = paste0(recvDeployName, "_", serno),
          lisStart = timeStartAus,
          lisEnd = if_else(
            is.na(timeEndAus), # means the station is still running since the last data downloading
@@ -174,7 +174,7 @@ recv <- recv %>%
 
 ```
 
-We get `recv.act` table with every rows of activity the variables `lisStart` and `lisEnd` that specifies the complete period of time the station `stationName` has been deployed with what `deviceID`.
+We get `recv.act` table with every rows of activity the variables `lisStart` and `lisEnd` that specifies the complete period of time the station `recvDeployName` has been deployed with what `deviceID`.
 
 When a station is still deployed, `lisEnd` = *NA*.
 
@@ -184,7 +184,7 @@ When a station is still deployed, `lisEnd` = *NA*.
 
 # Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites
 recv_hours <- recv %>%
-  select(stationName, deviceID, SernoStation, lisStart, lisEnd) %>%
+  select(recvDeployName, deviceID, SernoStation, lisStart, lisEnd) %>%
   rowwise() %>%
   mutate(hour_dt = list(seq(from = floor_date(lisStart, unit = "hour"),
                             to = floor_date(lisEnd, unit = "hour"),

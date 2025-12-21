@@ -11,9 +11,9 @@ project:
     - index.qmd
     - qmd/**/*.qmd  # recursively render all .qmd files
     
-    # - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
+    - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
+    - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
     
 execute:
   freeze: auto

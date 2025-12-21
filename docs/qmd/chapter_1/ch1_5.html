@@ -138,12 +138,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-1">    
         <li class="dropdown-header">Data</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.html">
- <span class="dropdown-text">Load &amp; Format</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_2.html">
- <span class="dropdown-text">Explore</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_2.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_3.html">
@@ -152,8 +152,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Motus array</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.html">
- <span class="dropdown-text">Location &amp; History</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_5.html">
@@ -239,7 +239,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.html">Motus array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.qmd">Motus array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -262,18 +262,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Load &amp; Format</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Explore</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Legend</span></a>
   </div>
@@ -289,12 +277,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Location &amp; History</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_5.html" class="sidebar-item-text sidebar-link active">
@@ -328,7 +310,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.html">Motus array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.qmd">Motus array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Survey effort</h1>
 </div>
@@ -442,26 +424,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="receiver-id">Receiver ID</h2>
 <p>One issue with Motus data is the number of variables related to IDs (receivers, Raspberry Pi, sites, etc.) and the inconsistent use of names for the same variable across the different tables (i.e.&nbsp;<code>recv$serno</code> = <code>data_all$recv</code>).</p>
 <p>Plus, some of our SensorGnome <code>serno</code> and/or Raspberry Pi processor <code>deviceID</code> have been swapped around stations to optimise the VHF survey.</p>
-<p>For example, when two stations need receiver repairs, we fix the easiest one first and prioritise reinstalling it at the most important station regardless the receiver or Raspberry origin. This sometimes means taking a receiver or Raspberry from one station and moving it to another one, but because Motus attaches this <em>Raspberry ID</em> <code>deviceID</code> to a <em>Motus station name</em> <code>stationName</code>, messy error may happen.</p>
-<p><strong>We must re-associate each <code>deviceID</code> with their corresponding <code>stationName</code> and at the correct <code>hourBin</code>. We first create a unique ID that matches station’s name with Raspberry pi that we called <code>SernoStation</code>.</strong></p>
+<p>For example, when two stations need receiver repairs, we fix the easiest one first and prioritise reinstalling it at the most important station regardless the receiver or Raspberry origin. This sometimes means taking a receiver or Raspberry from one station and moving it to another one, but because Motus attaches this <em>Raspberry ID</em> <code>deviceID</code> to a <em>Motus station name</em> <code>recvDeployName</code>, messy error may happen.</p>
+<p><strong>We must re-associate each <code>deviceID</code> with their corresponding <code>recvDeployName</code> and at the correct <code>hourBin</code>. We first create a unique ID that matches station’s name with Raspberry pi that we called <code>SernoStation</code>.</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the terminated serno (if terminated, ie. one box has been removed from one antenna site, and a date comes along recv$timeEndAus variable)</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>recv.act.term <span class="ot">&lt;-</span> recv.act <span class="sc">%&gt;%</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv <span class="sc">%&gt;%</span> </span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(timeEndAus)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, stationName),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, recvDeployName),</span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"deviceID"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(stationName)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(stationName, <span class="st">"_"</span>, serno))</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(recvDeployName)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(recvDeployName, <span class="st">"_"</span>, serno))</span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the still currently running serno</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>recv.act.runn <span class="ot">&lt;-</span> recv.act <span class="sc">%&gt;%</span></span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv <span class="sc">%&gt;%</span> </span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="fu">is.na</span>(timeEndAus)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, stationName),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, recvDeployName),</span>
 <span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"deviceID"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(stationName)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(stationName, <span class="st">"_"</span>, serno))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(recvDeployName)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(recvDeployName, <span class="st">"_"</span>, serno))</span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Merging in one data-set to use Station's name further + pick-up the rounded hours</span></span>
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>recv.act <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(recv.act.runn, recv.act.term) <span class="sc">%&gt;%</span></span>
@@ -469,14 +451,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Providing helpful variables</span></span>
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>recv <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span></span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(stationName, <span class="st">"_"</span>, serno),</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(recvDeployName, <span class="st">"_"</span>, serno),</span>
 <span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">lisStart =</span> timeStartAus,</span>
 <span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">lisEnd =</span> <span class="fu">if_else</span>(</span>
 <span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>           <span class="fu">is.na</span>(timeEndAus), <span class="co"># means the station is still running since the last data downloading</span></span>
 <span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>           <span class="fu">with_tz</span>(<span class="fu">Sys.time</span>(), <span class="st">"Australia/Sydney"</span>),</span>
 <span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>           <span class="fu">with_tz</span>(<span class="fu">as_datetime</span>(timeEndAus, <span class="at">tz =</span> <span class="st">"UTC"</span>), <span class="st">"Australia/Sydney"</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We get <code>recv.act</code> table with every rows of activity the variables <code>lisStart</code> and <code>lisEnd</code> that specifies the complete period of time the station <code>stationName</code> has been deployed with what <code>deviceID</code>.</p>
+<p>We get <code>recv.act</code> table with every rows of activity the variables <code>lisStart</code> and <code>lisEnd</code> that specifies the complete period of time the station <code>recvDeployName</code> has been deployed with what <code>deviceID</code>.</p>
 <p>When a station is still deployed, <code>lisEnd</code> = <em>NA</em>.</p>
 </section>
 <section id="operational-periods" class="level2">
@@ -484,7 +466,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(stationName, deviceID, SernoStation, lisStart, lisEnd) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(recvDeployName, deviceID, SernoStation, lisStart, lisEnd) <span class="sc">%&gt;%</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">floor_date</span>(lisStart, <span class="at">unit =</span> <span class="st">"hour"</span>),</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">to =</span> <span class="fu">floor_date</span>(lisEnd, <span class="at">unit =</span> <span class="st">"hour"</span>),</span>
@@ -531,23 +513,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="wtnxyqsybz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wtnxyqsybz table {
+<div id="upyyrczisq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#upyyrczisq table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wtnxyqsybz thead, #wtnxyqsybz tbody, #wtnxyqsybz tfoot, #wtnxyqsybz tr, #wtnxyqsybz td, #wtnxyqsybz th {
+#upyyrczisq thead, #upyyrczisq tbody, #upyyrczisq tfoot, #upyyrczisq tr, #upyyrczisq td, #upyyrczisq th {
   border-style: none;
 }
 
-#wtnxyqsybz p {
+#upyyrczisq p {
   margin: 0;
   padding: 0;
 }
 
-#wtnxyqsybz .gt_table {
+#upyyrczisq .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -573,12 +555,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_caption {
+#upyyrczisq .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wtnxyqsybz .gt_title {
+#upyyrczisq .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -590,7 +572,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#wtnxyqsybz .gt_subtitle {
+#upyyrczisq .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -602,7 +584,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#wtnxyqsybz .gt_heading {
+#upyyrczisq .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -614,13 +596,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_bottom_border {
+#upyyrczisq .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_col_headings {
+#upyyrczisq .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -635,7 +617,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_col_heading {
+#upyyrczisq .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -655,7 +637,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#wtnxyqsybz .gt_column_spanner_outer {
+#upyyrczisq .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -667,15 +649,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#wtnxyqsybz .gt_column_spanner_outer:first-child {
+#upyyrczisq .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wtnxyqsybz .gt_column_spanner_outer:last-child {
+#upyyrczisq .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wtnxyqsybz .gt_column_spanner {
+#upyyrczisq .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -687,11 +669,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#wtnxyqsybz .gt_spanner_row {
+#upyyrczisq .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wtnxyqsybz .gt_group_heading {
+#upyyrczisq .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -717,7 +699,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#wtnxyqsybz .gt_empty_group_heading {
+#upyyrczisq .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -732,15 +714,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#wtnxyqsybz .gt_from_md > :first-child {
+#upyyrczisq .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wtnxyqsybz .gt_from_md > :last-child {
+#upyyrczisq .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wtnxyqsybz .gt_row {
+#upyyrczisq .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -759,7 +741,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#wtnxyqsybz .gt_stub {
+#upyyrczisq .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -772,7 +754,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wtnxyqsybz .gt_stub_row_group {
+#upyyrczisq .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -786,15 +768,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#wtnxyqsybz .gt_row_group_first td {
+#upyyrczisq .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wtnxyqsybz .gt_row_group_first th {
+#upyyrczisq .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wtnxyqsybz .gt_summary_row {
+#upyyrczisq .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -804,16 +786,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wtnxyqsybz .gt_first_summary_row {
+#upyyrczisq .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_first_summary_row.thick {
+#upyyrczisq .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wtnxyqsybz .gt_last_summary_row {
+#upyyrczisq .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -823,7 +805,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_grand_summary_row {
+#upyyrczisq .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -833,7 +815,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wtnxyqsybz .gt_first_grand_summary_row {
+#upyyrczisq .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -843,7 +825,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_last_grand_summary_row_top {
+#upyyrczisq .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -853,11 +835,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_striped {
+#upyyrczisq .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wtnxyqsybz .gt_table_body {
+#upyyrczisq .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -866,7 +848,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_footnotes {
+#upyyrczisq .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -880,7 +862,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_footnote {
+#upyyrczisq .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -889,7 +871,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wtnxyqsybz .gt_sourcenotes {
+#upyyrczisq .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -903,7 +885,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#wtnxyqsybz .gt_sourcenote {
+#upyyrczisq .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -911,72 +893,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#wtnxyqsybz .gt_left {
+#upyyrczisq .gt_left {
   text-align: left;
 }
 
-#wtnxyqsybz .gt_center {
+#upyyrczisq .gt_center {
   text-align: center;
 }
 
-#wtnxyqsybz .gt_right {
+#upyyrczisq .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wtnxyqsybz .gt_font_normal {
+#upyyrczisq .gt_font_normal {
   font-weight: normal;
 }
 
-#wtnxyqsybz .gt_font_bold {
+#upyyrczisq .gt_font_bold {
   font-weight: bold;
 }
 
-#wtnxyqsybz .gt_font_italic {
+#upyyrczisq .gt_font_italic {
   font-style: italic;
 }
 
-#wtnxyqsybz .gt_super {
+#upyyrczisq .gt_super {
   font-size: 65%;
 }
 
-#wtnxyqsybz .gt_footnote_marks {
+#upyyrczisq .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wtnxyqsybz .gt_asterisk {
+#upyyrczisq .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wtnxyqsybz .gt_indent_1 {
+#upyyrczisq .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wtnxyqsybz .gt_indent_2 {
+#upyyrczisq .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wtnxyqsybz .gt_indent_3 {
+#upyyrczisq .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wtnxyqsybz .gt_indent_4 {
+#upyyrczisq .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wtnxyqsybz .gt_indent_5 {
+#upyyrczisq .gt_indent_5 {
   text-indent: 25px;
 }
 
-#wtnxyqsybz .katex-display {
+#upyyrczisq .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#wtnxyqsybz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#upyyrczisq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -995,100 +977,100 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_left" headers="Station" style="font-style: italic">North Swann Pond</td>
-<td class="gt_row gt_right" headers="total_hours">24205</td>
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Swan Pond</td>
+<td class="gt_row gt_right" headers="total_hours">24206</td>
 <td class="gt_row gt_right" headers="operational_hours">22211</td>
-<td class="gt_row gt_right" headers="downtime_hours">1994</td>
+<td class="gt_row gt_right" headers="downtime_hours">1995</td>
 <td class="gt_row gt_right" headers="uptime_pct">92</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">19.8</td>
 <td class="gt_row gt_right" headers="surv_time_cover">91.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Corrie Island</td>
-<td class="gt_row gt_right" headers="total_hours">19145</td>
+<td class="gt_row gt_right" headers="total_hours">19146</td>
 <td class="gt_row gt_right" headers="operational_hours">15218</td>
-<td class="gt_row gt_right" headers="downtime_hours">3927</td>
+<td class="gt_row gt_right" headers="downtime_hours">3928</td>
 <td class="gt_row gt_right" headers="uptime_pct">79</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">13.6</td>
 <td class="gt_row gt_right" headers="surv_time_cover">79.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Hexham Swamp</td>
-<td class="gt_row gt_right" headers="total_hours">19995</td>
+<td class="gt_row gt_right" headers="total_hours">19996</td>
 <td class="gt_row gt_right" headers="operational_hours">15068</td>
-<td class="gt_row gt_right" headers="downtime_hours">4927</td>
+<td class="gt_row gt_right" headers="downtime_hours">4928</td>
 <td class="gt_row gt_right" headers="uptime_pct">75</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">13.4</td>
 <td class="gt_row gt_right" headers="surv_time_cover">75.4</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="Station" style="font-style: italic">Ramsar Road Floodgate</td>
-<td class="gt_row gt_right" headers="total_hours">24038</td>
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Ramsar Road</td>
+<td class="gt_row gt_right" headers="total_hours">24039</td>
 <td class="gt_row gt_right" headers="operational_hours">17010</td>
-<td class="gt_row gt_right" headers="downtime_hours">7028</td>
+<td class="gt_row gt_right" headers="downtime_hours">7029</td>
 <td class="gt_row gt_right" headers="uptime_pct">71</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">15.2</td>
 <td class="gt_row gt_right" headers="surv_time_cover">70.8</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="Station" style="font-style: italic">Barry_Fullerton_cove</td>
-<td class="gt_row gt_right" headers="total_hours">23966</td>
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Fullerton Entrance</td>
+<td class="gt_row gt_right" headers="total_hours">23967</td>
 <td class="gt_row gt_right" headers="operational_hours">15300</td>
-<td class="gt_row gt_right" headers="downtime_hours">8666</td>
+<td class="gt_row gt_right" headers="downtime_hours">8667</td>
 <td class="gt_row gt_right" headers="uptime_pct">64</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">13.6</td>
 <td class="gt_row gt_right" headers="surv_time_cover">63.8</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="Station" style="font-style: italic">Milham's Pond</td>
-<td class="gt_row gt_right" headers="total_hours">24157</td>
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Milhams Pond</td>
+<td class="gt_row gt_right" headers="total_hours">24158</td>
 <td class="gt_row gt_right" headers="operational_hours">12428</td>
-<td class="gt_row gt_right" headers="downtime_hours">11729</td>
+<td class="gt_row gt_right" headers="downtime_hours">11730</td>
 <td class="gt_row gt_right" headers="uptime_pct">51</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">11.1</td>
 <td class="gt_row gt_right" headers="surv_time_cover">51.4</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Curlew Point</td>
-<td class="gt_row gt_right" headers="total_hours">19995</td>
+<td class="gt_row gt_right" headers="total_hours">19996</td>
 <td class="gt_row gt_right" headers="operational_hours">9093</td>
-<td class="gt_row gt_right" headers="downtime_hours">10902</td>
+<td class="gt_row gt_right" headers="downtime_hours">10903</td>
 <td class="gt_row gt_right" headers="uptime_pct">45</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">8.1</td>
 <td class="gt_row gt_right" headers="surv_time_cover">45.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Tomago</td>
-<td class="gt_row gt_right" headers="total_hours">19093</td>
+<td class="gt_row gt_right" headers="total_hours">19094</td>
 <td class="gt_row gt_right" headers="operational_hours">5226</td>
-<td class="gt_row gt_right" headers="downtime_hours">13867</td>
+<td class="gt_row gt_right" headers="downtime_hours">13868</td>
 <td class="gt_row gt_right" headers="uptime_pct">27</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">4.7</td>
 <td class="gt_row gt_right" headers="surv_time_cover">27.4</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Windeyers</td>
-<td class="gt_row gt_right" headers="total_hours">8966</td>
+<td class="gt_row gt_right" headers="total_hours">8967</td>
 <td class="gt_row gt_right" headers="operational_hours">262</td>
-<td class="gt_row gt_right" headers="downtime_hours">8704</td>
+<td class="gt_row gt_right" headers="downtime_hours">8705</td>
 <td class="gt_row gt_right" headers="uptime_pct">3</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">0.2</td>
 <td class="gt_row gt_right" headers="surv_time_cover">2.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Davies Point</td>
-<td class="gt_row gt_right" headers="total_hours">19115</td>
+<td class="gt_row gt_right" headers="total_hours">19116</td>
 <td class="gt_row gt_right" headers="operational_hours">441</td>
-<td class="gt_row gt_right" headers="downtime_hours">18674</td>
+<td class="gt_row gt_right" headers="downtime_hours">18675</td>
 <td class="gt_row gt_right" headers="uptime_pct">2</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">0.4</td>
 <td class="gt_row gt_right" headers="surv_time_cover">2.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Dudley Test Site</td>
-<td class="gt_row gt_right" headers="total_hours">2365</td>
+<td class="gt_row gt_right" headers="total_hours">2366</td>
 <td class="gt_row gt_right" headers="operational_hours">0</td>
-<td class="gt_row gt_right" headers="downtime_hours">2365</td>
+<td class="gt_row gt_right" headers="downtime_hours">2366</td>
 <td class="gt_row gt_right" headers="uptime_pct">0</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">0.0</td>
 <td class="gt_row gt_right" headers="surv_time_cover">0.0</td>
@@ -1142,7 +1124,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="stations" class="level3">
 <h3 class="anchored" data-anchor-id="stations">STATIONS</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Curlew Point (8.1%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Hexham Swamp (13.4%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Tomago (4.7%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Windeyers (0.2%)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Curlew Point (8.1%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Fullerton Entrance (13.6%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Hexham Swamp (13.4%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Milhams Pond (11.1%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false">Ramsar Road (15.2%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false">Swan Pond (19.8%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false">Tomago (4.7%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-8" role="tab" aria-controls="tabset-1-8" aria-selected="false">Windeyers (0.2%)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-1.png" class="img-fluid" width="672"></p>
@@ -1155,6 +1137,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
 <p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-4.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-5.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-6.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-1-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-7-tab">
+<p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-7.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-1-8" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-8-tab">
+<p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-8.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
