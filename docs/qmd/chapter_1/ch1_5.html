@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -79,10 +114,10 @@ ul.task-list li input[type="checkbox"] {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a href="https://www.csrg.site/our-group" class="navbar-brand navbar-brand-logo">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../logo.png" alt="" class="navbar-logo">
     </a>
-    <a class="navbar-brand" href="https://www.csrg.site/our-group">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Movement Ecology - Shorebirds</span>
     </a>
   </div>
@@ -91,7 +126,7 @@ ul.task-list li input[type="checkbox"] {
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav navbar-nav-scroll me-auto">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="../../qmd/teststart.html"> 
 <span class="menu-text">PhD Project</span></a>
@@ -100,25 +135,25 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-1" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 1</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-1">    
-        <li class="dropdown-header">Data-set</li>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-1">    
+        <li class="dropdown-header">Data</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.html">
- <span class="dropdown-text">Load &amp; Format</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_2.html">
- <span class="dropdown-text">Explore</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_2.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_3.html">
  <span class="dropdown-text">Legend</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">The array</li>
+        <li class="dropdown-header">Motus array</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.html">
- <span class="dropdown-text">Location &amp; History</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_5.html">
@@ -130,7 +165,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-2" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 2</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-2">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-2">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_2/testch2.html">
  <span class="dropdown-text">testch2</span></a>
@@ -141,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-3" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 3</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-3">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-3">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_3/testch3.html">
  <span class="dropdown-text">testch3</span></a>
@@ -152,7 +187,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-4" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 4</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-4">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-4">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_4/testch4.html">
  <span class="dropdown-text">testch4</span></a>
@@ -163,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-chapter-5" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Chapter 5</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-chapter-5">    
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-5">    
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_5/testch5.html">
  <span class="dropdown-text">testch5</span></a>
@@ -174,23 +209,18 @@ ul.task-list li input[type="checkbox"] {
     <a class="nav-link dropdown-toggle" href="#" id="nav-menu-publications" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Publications</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-publications">    
-        <li class="dropdown-header">Reports</li>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-publications">    
         <li>
-    <a class="dropdown-item" href="../../qmd/reports/testrep.html">
- <span class="dropdown-text">testrep</span></a>
+    <a class="dropdown-item" href="../../qmd/reports/pub_1.html">
+ <span class="dropdown-text">Internal documents</span></a>
   </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Conferences</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/reports/testf1.html">
- <span class="dropdown-text">testf1</span></a>
+    <a class="dropdown-item" href="../../qmd/reports/pub_2.html">
+ <span class="dropdown-text">Ethics &amp; Grants</span></a>
   </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Papers</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/reports/testf2.html">
- <span class="dropdown-text">testf2</span></a>
+    <a class="dropdown-item" href="../../qmd/reports/pub_3.html">
+ <span class="dropdown-text">Scientific</span></a>
   </li>  
     </ul>
   </li>
@@ -209,7 +239,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.html">The array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.qmd">Motus array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -224,24 +254,12 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Data-set</span></a>
+ <span class="menu-text">Data</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Load &amp; Format</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Explore</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_3.html" class="sidebar-item-text sidebar-link">
@@ -253,18 +271,12 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">The array</span></a>
+ <span class="menu-text">Motus array</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Location &amp; History</span></a>
-  </div>
-</li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_5.html" class="sidebar-item-text sidebar-link active">
@@ -278,13 +290,27 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#activity-table" id="toc-activity-table" class="nav-link active" data-scroll-target="#activity-table">Activity table</a></li>
+  <li><a href="#receiver-id" id="toc-receiver-id" class="nav-link" data-scroll-target="#receiver-id">Receiver ID</a></li>
+  <li><a href="#operational-periods" id="toc-operational-periods" class="nav-link" data-scroll-target="#operational-periods">Operational periods</a></li>
+  <li><a href="#survey-effort" id="toc-survey-effort" class="nav-link" data-scroll-target="#survey-effort">Survey effort</a>
+  <ul class="collapse">
+  <li><a href="#statistics" id="toc-statistics" class="nav-link" data-scroll-target="#statistics">STATISTICS</a></li>
+  <li><a href="#the-array" id="toc-the-array" class="nav-link" data-scroll-target="#the-array">THE ARRAY</a></li>
+  <li><a href="#stations" id="toc-stations" class="nav-link" data-scroll-target="#stations">STATIONS</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.html">The array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_4.qmd">Motus array</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_5.html">Survey effort</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Survey effort</h1>
 </div>
@@ -310,12 +336,790 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <div class="callout-body-container">
 <p><strong>One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?</strong></p>
-<p>Stations may have operated for varying durations or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.</p>
+<p>Stations may have operated for varying duration or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.</p>
+<p>To exactly access when a station was operational and when it was not, we used the <code>activity</code> table coming from each station’s receiver. This table records any VHF activity at any time.</p>
+<p><strong><em>Note:</em></strong> <em>The following terms are used interchangeably: (1) receivers, SensorGnome, SG, serno, recv; (2) Raspberry Pi processor, Raspberry, deviceID.</em></p>
 </div>
 </div>
 </div>
+<section id="activity-table" class="level2">
+<h2 class="anchored" data-anchor-id="activity-table">Activity table</h2>
+<div class="blockquote-blue">
+<p><strong>Load your data</strong> in your R environment <em>- see <a href="qmd/ch1_5.qmd">Load &amp; Format &gt; Reproducibility</a></em></p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats) </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Let’s call this famous activity table.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>recv.act <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sql.motus, <span class="st">"activity"</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">deviceID =</span> <span class="st">"motusDeviceID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># keep our deployed antennas only</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(deviceID <span class="sc">%in%</span> <span class="fu">unique</span>(recv<span class="sc">$</span>deviceID)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set the time properly - IMPORTANT</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_datetime</span>(<span class="fu">as.POSIXct</span>(hourBin<span class="sc">*</span> <span class="dv">3600</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">origin =</span> <span class="st">"1970-01-06"</span>, </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">tz =</span> <span class="st">"UTC"</span>)),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">dateAus =</span> <span class="fu">as_datetime</span>(<span class="fu">as.POSIXct</span>(hourBin<span class="sc">*</span> <span class="dv">3600</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">origin =</span> <span class="st">"1970-01-06"</span>, </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">tz =</span> <span class="st">"UTC"</span>), </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                               <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(recv.act)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   batchID deviceID ant hourBin numTags pulseCount numRuns numHits run2 run3
+1 21275568     3596   1  471533       1         20       1       9    0    0
+2 21275568     3596   1  471534       0         46       0      NA    0    0
+3 21275568     3596   1  471535       0         79       0      NA    0    0
+4 21275568     3596   1  471536       0          8       0      NA    0    0
+5 21275568     3596   1  471537       0         23       0      NA    0    0
+6 21275568     3596   1  471538       0          6       0      NA    0    0
+  run4 run5 run6 run7plus numGPSfix                date             dateAus
+1    0    0    0        1        NA 2023-10-22 05:00:00 2023-10-22 16:00:00
+2    0    0    0        0        NA 2023-10-22 06:00:00 2023-10-22 17:00:00
+3    0    0    0        0        NA 2023-10-22 07:00:00 2023-10-22 18:00:00
+4    0    0    0        0        NA 2023-10-22 08:00:00 2023-10-22 19:00:00
+5    0    0    0        0        NA 2023-10-22 09:00:00 2023-10-22 20:00:00
+6    0    0    0        0        NA 2023-10-22 10:00:00 2023-10-22 21:00:00</code></pre>
+</div>
+</div>
+<p><strong>Here above is displayed an overview of the activity table. This object is composed of multiple elements but four are keys:</strong></p>
+<ul>
+<li><code>pulseCount</code>: Quantifies the number of radio pulses measured on each antenna over each hour period <code>hourBin</code> but does not necessary correspond to a known VHF tag detection. It can be any other VHF signal, even simple noise - <a href="https://docs.motus.org/en/stations/station-inspection/up-time-and-detectability#antenna-pulses"><em>documentation</em></a></li>
+<li><code>numTags</code>: Represents the total number of unique tags detected. This, given a context, as typically a specific site, or within a batch, or for a set of detections.</li>
+<li><code>deviceID</code>: Raspberry Pi processor ID. A small electronic part of the receiver that plays the role of an embarked computer.</li>
+<li><code>ant</code>: Port of antenna the <code>activity</code> has been recorded.</li>
+</ul>
+<p><strong>How the data are recorded in this table?</strong></p>
+<p><u><strong>Two cases may occure:</strong></u></p>
+<ul>
+<li><p>When a <strong>station is listening</strong>, the table has either values or <em>NA</em> for <code>pulseCount</code> or/and for <code>numTags</code> variables. For example:</p>
+<ul>
+<li><p>No noise has been recorded but one or several tags have been recorded: <code>pulseCount</code> = 0 or is <em>NA</em> and <code>numTags</code> &gt; 1</p></li>
+<li><p>No tag has been recorded but noise happened: <code>pulseCount</code> &gt; 0 and <code>numTags</code> = 0 or is <em>NA</em></p></li>
+</ul></li>
+<li><p>When a <strong>station is</strong> <strong>not listening</strong>, there is no row at all in the table (no data recorded).</p></li>
+</ul>
+<p><strong>Keep in mind</strong> <strong>we can miss the hours where no tag or noise are happening within the environment BUT the antenna is still operational and being “listening”.</strong> In such a case, let’s further assume than the antenna is not working or listening. Indeed, an environment with “no noise” condition during more than an hour may be extremely rare and very unlikely.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">is.na</span>(recv.act<span class="sc">$</span>pulseCount), recv.act<span class="sc">$</span>numTags) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       
+             0      1      2      3      4      5      6      7
+  FALSE 108638   5127    975    404    193     95     34     17
+  TRUE   12673    122     21      3      1      2      0      0</code></pre>
+</div>
+</div>
+</section>
+<section id="receiver-id" class="level2">
+<h2 class="anchored" data-anchor-id="receiver-id">Receiver ID</h2>
+<p>One issue with Motus data is the number of variables related to IDs (receivers, Raspberry Pi, sites, etc.) and the inconsistent use of names for the same variable across the different tables (i.e.&nbsp;<code>recv$serno</code> = <code>data_all$recv</code>).</p>
+<p>Plus, some of our SensorGnome <code>serno</code> and/or Raspberry Pi processor <code>deviceID</code> have been swapped around stations to optimise the VHF survey.</p>
+<p>For example, when two stations need receiver repairs, we fix the easiest one first and prioritise reinstalling it at the most important station regardless the receiver or Raspberry origin. This sometimes means taking a receiver or Raspberry from one station and moving it to another one, but because Motus attaches this <em>Raspberry ID</em> <code>deviceID</code> to a <em>Motus station name</em> <code>stationName</code>, messy error may happen.</p>
+<p><strong>We must re-associate each <code>deviceID</code> with their corresponding <code>stationName</code> and at the correct <code>hourBin</code>. We first create a unique ID that matches station’s name with Raspberry pi that we called <code>SernoStation</code>.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the terminated serno (if terminated, ie. one box has been removed from one antenna site, and a date comes along recv$timeEndAus variable)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>recv.act.term <span class="ot">&lt;-</span> recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(timeEndAus)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, stationName),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">"deviceID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(stationName)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(stationName, <span class="st">"_"</span>, serno))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the still currently running serno</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>recv.act.runn <span class="ot">&lt;-</span> recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv <span class="sc">%&gt;%</span> </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="fu">is.na</span>(timeEndAus)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, stationName),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"deviceID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(stationName)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(stationName, <span class="st">"_"</span>, serno))</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Merging in one data-set to use Station's name further + pick-up the rounded hours</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>recv.act <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(recv.act.runn, recv.act.term) <span class="sc">%&gt;%</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">floor_date</span>(dateAus, <span class="st">"hour"</span>))</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Providing helpful variables</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>recv <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(stationName, <span class="st">"_"</span>, serno),</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>         <span class="at">lisStart =</span> timeStartAus,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">lisEnd =</span> <span class="fu">if_else</span>(</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>           <span class="fu">is.na</span>(timeEndAus), <span class="co"># means the station is still running since the last data downloading</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>           <span class="fu">with_tz</span>(<span class="fu">Sys.time</span>(), <span class="st">"Australia/Sydney"</span>),</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>           <span class="fu">with_tz</span>(<span class="fu">as_datetime</span>(timeEndAus, <span class="at">tz =</span> <span class="st">"UTC"</span>), <span class="st">"Australia/Sydney"</span>)) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We get <code>recv.act</code> table with every rows of activity the variables <code>lisStart</code> and <code>lisEnd</code> that specifies the complete period of time the station <code>stationName</code> has been deployed with what <code>deviceID</code>.</p>
+<p>When a station is still deployed, <code>lisEnd</code> = <em>NA</em>.</p>
+</section>
+<section id="operational-periods" class="level2">
+<h2 class="anchored" data-anchor-id="operational-periods">Operational periods</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(stationName, deviceID, SernoStation, lisStart, lisEnd) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">floor_date</span>(lisStart, <span class="at">unit =</span> <span class="st">"hour"</span>),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                            <span class="at">to =</span> <span class="fu">floor_date</span>(lisEnd, <span class="at">unit =</span> <span class="st">"hour"</span>),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="st">"hour"</span>)) ) <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(hour_dt)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Giving operational and not-operational hours by joining same sequences from recv.act tbl and adding operational = TRUE when existing values</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">distinct</span>(SernoStation, hour_dt) <span class="sc">%&gt;%</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"SernoStation"</span>, <span class="st">"hour_dt"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(operational), <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Relaying on the Station name on its own only (consistent values through SernoStation var)</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>recv.act<span class="sc">$</span>Station <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_SG-.*"</span>, <span class="st">""</span>, recv.act<span class="sc">$</span>SernoStation)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>recv<span class="sc">$</span>Station <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_SG-.*"</span>, <span class="st">""</span>, recv<span class="sc">$</span>SernoStation)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>recv_hours<span class="sc">$</span>Station <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_SG-.*"</span>, <span class="st">""</span>, recv_hours<span class="sc">$</span>SernoStation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This step runs for each row of each <code>recv</code> and creates one list composed of as many rows of as many hours it is contained within the period [<code>lisStart</code> - <code>lisEnd</code>].</p>
+<p>If <code>lisEnd</code> is <em>NA</em> because the station is still running, the date of today is taken.</p>
+<p>This prepares the <code>recv_hours</code> table where each row is one hour when one station <code>SernoStation</code> is potentially operational and listening.</p>
+<p><strong>Operational hours:</strong> To get the <code>operational</code> hours for each stations, meaning “<em>when a station is actually listening</em>”, we first gave an extra variable to the <code>recv.act</code> table when <code>operational</code> is always TRUE to records only the hours when the station is listening. These rows are the hours where one site is deployed and operational.</p>
+<p><strong>Non-operational hours:</strong> And we join this to the <code>recv</code> table by the shared variable <code>hour_dt</code>, which then will generate <em>NA</em> for the cases <code>recv_hours$hour_dt</code> has no matching values with <code>recv.act$hour_dt</code>. These <em>NA</em> are the hours where one site is deployed, but not operational.</p>
+<p>Finally, for consistency, we make sure that we are using station’s name (<code>Station</code>) regardless the <code>deviceID</code> since this one might have been swapped around (see <em>Receiver ID</em>).</p>
+</section>
+<section id="survey-effort" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="survey-effort">Survey effort</h2>
+<section id="statistics" class="level3">
+<h3 class="anchored" data-anchor-id="statistics">STATISTICS</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>uptime_summary <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Station) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_hours =</span> <span class="fu">n</span>(),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">operational_hours =</span> <span class="fu">sum</span>(operational), </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">downtime_hours =</span> total_hours <span class="sc">-</span> operational_hours, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">uptime_pct =</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> operational_hours <span class="sc">/</span> total_hours), <span class="dv">2</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cont_listening_eff =</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> operational_hours <span class="sc">/</span> <span class="fu">sum</span>(operational_hours), <span class="dv">1</span>), </span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">surv_time_cover =</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> operational_hours <span class="sc">/</span> total_hours, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(uptime_pct)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(<span class="st">"2"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="vdscmjugea" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vdscmjugea table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#vdscmjugea thead, #vdscmjugea tbody, #vdscmjugea tfoot, #vdscmjugea tr, #vdscmjugea td, #vdscmjugea th {
+  border-style: none;
+}
+
+#vdscmjugea p {
+  margin: 0;
+  padding: 0;
+}
+
+#vdscmjugea .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#vdscmjugea .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#vdscmjugea .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#vdscmjugea .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#vdscmjugea .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#vdscmjugea .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#vdscmjugea .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#vdscmjugea .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#vdscmjugea .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#vdscmjugea .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#vdscmjugea .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#vdscmjugea .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#vdscmjugea .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#vdscmjugea .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#vdscmjugea .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vdscmjugea .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#vdscmjugea .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#vdscmjugea .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#vdscmjugea .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vdscmjugea .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#vdscmjugea .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vdscmjugea .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#vdscmjugea .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vdscmjugea .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#vdscmjugea .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#vdscmjugea .gt_left {
+  text-align: left;
+}
+
+#vdscmjugea .gt_center {
+  text-align: center;
+}
+
+#vdscmjugea .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#vdscmjugea .gt_font_normal {
+  font-weight: normal;
+}
+
+#vdscmjugea .gt_font_bold {
+  font-weight: bold;
+}
+
+#vdscmjugea .gt_font_italic {
+  font-style: italic;
+}
+
+#vdscmjugea .gt_super {
+  font-size: 65%;
+}
+
+#vdscmjugea .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#vdscmjugea .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#vdscmjugea .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#vdscmjugea .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#vdscmjugea .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#vdscmjugea .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#vdscmjugea .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#vdscmjugea .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#vdscmjugea div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="Station" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Station</th>
+<th id="total_hours" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">total_hours</th>
+<th id="operational_hours" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">operational_hours</th>
+<th id="downtime_hours" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">downtime_hours</th>
+<th id="uptime_pct" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">uptime_pct</th>
+<th id="cont_listening_eff" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">cont_listening_eff</th>
+<th id="surv_time_cover" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">surv_time_cover</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Swan Pond</td>
+<td class="gt_row gt_right" headers="total_hours">24202</td>
+<td class="gt_row gt_right" headers="operational_hours">22211</td>
+<td class="gt_row gt_right" headers="downtime_hours">1991</td>
+<td class="gt_row gt_right" headers="uptime_pct">92</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">19.8</td>
+<td class="gt_row gt_right" headers="surv_time_cover">91.8</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Corrie Island</td>
+<td class="gt_row gt_right" headers="total_hours">19142</td>
+<td class="gt_row gt_right" headers="operational_hours">15218</td>
+<td class="gt_row gt_right" headers="downtime_hours">3924</td>
+<td class="gt_row gt_right" headers="uptime_pct">80</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">13.6</td>
+<td class="gt_row gt_right" headers="surv_time_cover">79.5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Hexham Swamp</td>
+<td class="gt_row gt_right" headers="total_hours">19992</td>
+<td class="gt_row gt_right" headers="operational_hours">15068</td>
+<td class="gt_row gt_right" headers="downtime_hours">4924</td>
+<td class="gt_row gt_right" headers="uptime_pct">75</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">13.4</td>
+<td class="gt_row gt_right" headers="surv_time_cover">75.4</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Ramsar Road</td>
+<td class="gt_row gt_right" headers="total_hours">24035</td>
+<td class="gt_row gt_right" headers="operational_hours">17009</td>
+<td class="gt_row gt_right" headers="downtime_hours">7026</td>
+<td class="gt_row gt_right" headers="uptime_pct">71</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">15.2</td>
+<td class="gt_row gt_right" headers="surv_time_cover">70.8</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Fullerton Entrance</td>
+<td class="gt_row gt_right" headers="total_hours">23963</td>
+<td class="gt_row gt_right" headers="operational_hours">15300</td>
+<td class="gt_row gt_right" headers="downtime_hours">8663</td>
+<td class="gt_row gt_right" headers="uptime_pct">64</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">13.6</td>
+<td class="gt_row gt_right" headers="surv_time_cover">63.8</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Milhams Pond</td>
+<td class="gt_row gt_right" headers="total_hours">24154</td>
+<td class="gt_row gt_right" headers="operational_hours">12428</td>
+<td class="gt_row gt_right" headers="downtime_hours">11726</td>
+<td class="gt_row gt_right" headers="uptime_pct">51</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">11.1</td>
+<td class="gt_row gt_right" headers="surv_time_cover">51.5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Curlew Point</td>
+<td class="gt_row gt_right" headers="total_hours">19992</td>
+<td class="gt_row gt_right" headers="operational_hours">9093</td>
+<td class="gt_row gt_right" headers="downtime_hours">10899</td>
+<td class="gt_row gt_right" headers="uptime_pct">45</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">8.1</td>
+<td class="gt_row gt_right" headers="surv_time_cover">45.5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Tomago</td>
+<td class="gt_row gt_right" headers="total_hours">19090</td>
+<td class="gt_row gt_right" headers="operational_hours">5226</td>
+<td class="gt_row gt_right" headers="downtime_hours">13864</td>
+<td class="gt_row gt_right" headers="uptime_pct">27</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">4.7</td>
+<td class="gt_row gt_right" headers="surv_time_cover">27.4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Windeyers</td>
+<td class="gt_row gt_right" headers="total_hours">8963</td>
+<td class="gt_row gt_right" headers="operational_hours">262</td>
+<td class="gt_row gt_right" headers="downtime_hours">8701</td>
+<td class="gt_row gt_right" headers="uptime_pct">3</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">0.2</td>
+<td class="gt_row gt_right" headers="surv_time_cover">2.9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Davies Point</td>
+<td class="gt_row gt_right" headers="total_hours">19112</td>
+<td class="gt_row gt_right" headers="operational_hours">441</td>
+<td class="gt_row gt_right" headers="downtime_hours">18671</td>
+<td class="gt_row gt_right" headers="uptime_pct">2</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">0.4</td>
+<td class="gt_row gt_right" headers="surv_time_cover">2.3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Dudley Test Site</td>
+<td class="gt_row gt_right" headers="total_hours">2362</td>
+<td class="gt_row gt_right" headers="operational_hours">0</td>
+<td class="gt_row gt_right" headers="downtime_hours">2362</td>
+<td class="gt_row gt_right" headers="uptime_pct">0</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">0.0</td>
+<td class="gt_row gt_right" headers="surv_time_cover">0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<ul>
+<li><code>total_hours</code>: total of hours for the station being deployed into the field, regardless whether it is working/listening</li>
+<li><code>operational_hours</code>: total of hours for the station being listening, regardless the <code>deviceID</code></li>
+<li><code>downtime_hours</code>: total of hours for the station being NOT listening, regardless the <code>deviceID</code></li>
+<li><code>uptime_pct</code>: per station, percentage of being listening over its <code>total_hours</code></li>
+<li><code>cont_listening_eff</code>: per station, contribution (%) of hours being listening (<code>operational_hour</code>) over the total (sum) of listening period across all the stations</li>
+<li><code>surv_time_cover</code>: per station, temporal coverage (%) of hours being listening (<code>operational_hour</code>) over the period of time the array has been deployed (i.e.&nbsp;from the first day the first deployed station has been listening to the last day the last deployed station has been listening)</li>
+</ul>
+</section>
+<section id="the-array" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="the-array">THE ARRAY</h3>
+<div class="page-columns page-full">
+<div class="cell page-columns page-full">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 15 rows containing missing values or values outside the scale range
+(`geom_segment()`).</code></pre>
+</div>
+<div class="cell-output-display page-columns page-full">
+<div class="page-columns page-full">
+<figure class="figure page-columns page-full">
+<p class="page-columns page-full"><img src="ch1_5_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img column-body-outset-right" style="width:100.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<p>Every black dot represent an hour where the station has activity recorded meaning the station is operational, meaning recording radio noise or a specific tag.</p>
+<div class="column-body-outset">
+
+</div>
+<p>Solid black lines are when a MOTUS station is operational. To simplify, when a station is not operational less than 24 hours, this period is considered as a operational period. Every dot represent at least one detection of one bird within an hour of the operational period. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.1 % to the total operational period for every stations within our local MOTUS array.</p>
+</section>
+<section id="stations" class="level3">
+<h3 class="anchored" data-anchor-id="stations">STATIONS</h3>
+<p><strong><em>Legend:</em></strong> <em>The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is “OFF” and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed</em> 8.1 % <em>at the total operational period for every stations within our local MOTUS array (operational survey effort).</em></p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 

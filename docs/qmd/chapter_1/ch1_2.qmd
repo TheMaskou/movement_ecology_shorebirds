@@ -107,7 +107,7 @@ retag <- spreadsheet %>%
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-Since **2021**, **`r moni$value[moni$variable == "nb_released"]` birds** belonging to **`r length(unique(data_all$speciesEN))` species** have been captured, tagged and released.
+Since 2021, **`r moni$value[moni$variable == "nb_released"]` birds** belonging to **`r length(unique(data_all$speciesEN))` species** have been captured, tagged and released.
 
 **You can find the complete record of the captures [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1765667294608&web=1).**
 
@@ -419,7 +419,7 @@ The table displays **the five last detections** (`timeAus`) for each birds.
 ```{r 1 table 1 indiv , message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 data_indiv <- data_all %>% 
-  select(timeAus, speciesEN, markerNumber, Band.ID, recvDeployName, recv, tideCategory,  DateAUS.Trap) %>%
+  select(timeAus, speciesEN, markerNumber, Band.ID, recvDeployName, recv, tideCategory,  DateAUS.Trap, motusFilter) %>%
   mutate(timeAus = format(timeAus, '%Y-%m-%d %H:%M:%S')) %>%
   group_by(Band.ID) %>%
   arrange(timeAus) %>%

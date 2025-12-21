@@ -11,8 +11,9 @@ project:
     - index.qmd
     - qmd/**/*.qmd  # recursively render all .qmd files
     
-    #- "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-    #- "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
     
 execute:
   freeze: auto
@@ -50,14 +51,14 @@ website:
       contents:
         - section: "Data"
           contents:
-            - qmd/chapter_1/ch1_1.qmd
-            - qmd/chapter_1/ch1_2.qmd
-            - qmd/chapter_1/ch1_3.qmd
+            - qmd/chapter_1/ch1_1.qmd # Load and Format
+            - qmd/chapter_1/ch1_2.qmd # Explore
+            - qmd/chapter_1/ch1_3.qmd # Styles
             
         - section: "Motus array"
           contents:
-            - qmd/chapter_1/ch1_4.qmd
-            - qmd/chapter_1/ch1_5.qmd
+            - qmd/chapter_1/ch1_4.qmd # Location and History
+            - qmd/chapter_1/ch1_5.qmd # Survey effort
 
     - id: chapter2
       title: "Chapter 2"

@@ -5,9 +5,17 @@ title: "Legend"
 All the way through the analysis of **Chapter 1** we will use the same English and Scientific names for species, the same abbreviations, the same names for the stations and the same color codes. Find here on this page clarifications.
 
 ::: blockquote-yellow
-**Note for authors**:
-Make sure to keep this script up to date as new data are compiled with eventual new species and/or Motus stations.
+**Note for authors**: Make sure to keep this script up to date as new data are compiled with eventual new species and/or Motus stations.
 :::
+
+```{r station, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance", 
+                       "North Swann Pond" = "Swan Pond" ,
+                       "Ramsar Road Floodgate" = "Ramsar Road",   
+                       "Milham's Pond" = "Milhams Pond") 
+
+```
 
 ```{r color, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
@@ -19,7 +27,7 @@ species_colors <- c(
   "Pied Stilt"             = "#C36A6A",  
   "Curlew Sandpiper"       = "#9B7BA8",  
   "Red-necked Avocet"      = "#6B8CA8", 
-  "Whimbrel"               = "#A8C5D8"   
+  "Eurasian Whimbrel"      = "#A8C5D8"   
   )
 
 species_init_colors <- c(
@@ -30,11 +38,10 @@ species_init_colors <- c(
   "PS"  = "#C36A6A",  
   "CS"  = "#9B7BA8",  
   "RNA" = "#6B8CA8",  
-  "WHI" = "#A8C5D8"   
+  "EW"  = "#A8C5D8"   
   )
 
 ```
-
 
 ```{r initials, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 init_species <- c(
@@ -45,7 +52,7 @@ init_species <- c(
   "PS"  = "Pied Stilt", 
   "CS"  = "Curlew Sandpiper",  
   "RNA" = "Red-necked Avocet",
-  "WHI" = "Whimbrel"  
+  "EW"  = "Eurasian Whimbrel"  
   )
 ```
 
@@ -58,7 +65,7 @@ eng_names <- c(
   "Pied Stilt"            = "Himantopus leucocephalus",
   "Curlew Sandpiper"      = "Calidris ferruginea",
   "Red-necked Avocet"     = "Recurvirostra novaehollandiae",
-  "Whimbrel"              = "Numenius phaeopus"
+  "Eurasian Whimbrel"     = "Numenius phaeopus"
   )
 ```
 
@@ -71,7 +78,7 @@ sci_names <- c(
   "Himantopus leucocephalus"      = "Pied Stilt",
   "Calidris ferruginea"           = "Curlew Sandpiper",
   "Recurvirostra novaehollandiae" = "Red-necked Avocet",
-  "Numenius phaeopus"             = "Whimbrel"
+  "Numenius phaeopus"             = "Eurasian Whimbrel"
   )
 ```
 
@@ -84,7 +91,7 @@ shorebird_class <- c(
   "Pied Stilt"            = "resident",
   "Curlew Sandpiper"      = "migratory",
   "Red-necked Avocet"     = "resident",
-  "Whimbrel"              = "migratory"
+  "Eurasian Whimbrel"     = "migratory"
   )
 ```
 
@@ -119,6 +126,7 @@ cat('</tbody>\n</table>\n')
 ```
 
 ## Species Information Table
+
 ```{r species_table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results='asis'}
 library(knitr)
 
