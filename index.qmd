@@ -2,7 +2,9 @@
 title-block-banner: false
 format:
   html:
-    css: custom-hero.css
+    css: 
+      - custom-hero.css
+      - styles.css
     include-in-header: custom-scroll.js
 ---
 
