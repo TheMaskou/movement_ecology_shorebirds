@@ -1,6 +1,11 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - custom-hero.css
+    - custom-scroll.js
+    - material/
+  
   render:
     - index.qmd
     - qmd/**/*.qmd  # recursively render all .qmd files
