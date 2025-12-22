@@ -1,5 +1,5 @@
 ---
-title: "Station usage rate"
+title: "Station usage - hours"
 format: html
 ---
 
@@ -10,7 +10,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
                    quiet = TRUE))
 ```
 
-::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+:::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 **This page** (finally!) **describes and summarises where** (*Motus station*) **and when** (*tidal condition*) **the birds were.**
 
 The total amount of **hours** and the **usage rate** are assessed for each individual being detected within the Motus array and across the different tidal conditions such as:
@@ -20,10 +20,12 @@ The total amount of **hours** and the **usage rate** are assessed for each indiv
 -   Nocturnal High Tide
 -   Nocturnal Low Tide
 
-<div style="text-align: right;">
 Plus, globally visualise the **conditions of detection** across the tagged population.
-</div>
+
+::: {style="text-align: right;"}
+*It is surprising to see how much we thought we knew and yet we ignore...*
 :::
+::::
 
 ::: blockquote-blue
 **Load your data** in your R environment *- see [Load & Format \> Reproducibility](qmd/chapter_1/ch1_1.qmd)*
@@ -456,7 +458,7 @@ Now that the *used* and *available* time have been determined for each individua
 
 $$
 \text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
-$$ 
+$$
 
 Some cases may happen where the *time used* was over the *available*. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.\
 <br>
@@ -510,14 +512,11 @@ figure_plot <- left_join(available_bird_recv_time %>%
 
 ```
 
-
 ::: blockquote-yellow
-We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data. 
+We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data.
 :::
 
-
 Now, everything is ready to format the data for plot and to visualise the results for **Usage rate** and **Hourly usage** across the Motus stations of our local array.
-
 
 ```{r tool, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 # Track size sample

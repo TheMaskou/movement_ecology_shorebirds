@@ -354,8 +354,9 @@ table_1_pub %>%
 
 ```
 
-And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage rate \> Detection conditions](qmd/chapter_1/ch1_7.qmd)*.
-```{r explore, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage rate > Detection conditions](qmd/chapter_1/ch1_7.qmd)*.
+
+```{r explore, message = FALSE, results = 'asis', include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 temp_file <- tempfile(fileext = ".R")
 knitr::purl(here("qmd", "chapter_1", "ch1_7.qmd"), output = temp_file, quiet = TRUE)
 source(temp_file)
