@@ -498,7 +498,7 @@
     "href": "qmd/reports/pub_2.html",
     "title": "Ethics & Grants",
     "section": "",
-    "text": "2026_HBOC_report\n2026_OFF_report\n2026_CBOC_report",
+    "text": "2026_HBOC_report - to be done …\n2026_OFF_report - to be done …\n2026_CBOC_report - to be done …",
     "crumbs": [
       "Ethics & Grants"
     ]
@@ -508,7 +508,7 @@
     "href": "qmd/reports/pub_2.html#grants-reports",
     "title": "Ethics & Grants",
     "section": "",
-    "text": "2026_HBOC_report\n2026_OFF_report\n2026_CBOC_report",
+    "text": "2026_HBOC_report - to be done …\n2026_OFF_report - to be done …\n2026_CBOC_report - to be done …",
     "crumbs": [
       "Ethics & Grants"
     ]
@@ -518,7 +518,7 @@
     "href": "qmd/reports/pub_2.html#ethics-reports",
     "title": "Ethics & Grants",
     "section": "Ethics reports",
-    "text": "Ethics reports\n\n2026_ARA-2024-400_progress_report",
+    "text": "Ethics reports\n\n2026_ARA-2024-400_progress_report - to be done …",
     "crumbs": [
       "Ethics & Grants"
     ]
@@ -561,7 +561,7 @@
     "href": "qmd/chapter_1/ch1_5.html#survey-effort",
     "title": "Survey effort",
     "section": "Survey effort",
-    "text": "Survey effort\n\nSTATISTICS\n\nuptime_summary &lt;- recv_hours %&gt;%\n  group_by(Station) %&gt;%\n  summarise(\n    total_hours = n(),\n    operational_hours = sum(operational), \n    downtime_hours = total_hours - operational_hours, \n    uptime_pct = round(100 * operational_hours / total_hours), 2)  %&gt;% \n  mutate(cont_listening_eff = round(100 * operational_hours / sum(operational_hours), 1), \n         surv_time_cover = round(100 * operational_hours / total_hours, 1)) %&gt;%\n  arrange(desc(uptime_pct)) %&gt;%\n  select(-c(\"2\"))\n\n\n\n\n\n\n\n\n\nStation\ntotal_hours\noperational_hours\ndowntime_hours\nuptime_pct\ncont_listening_eff\nsurv_time_cover\n\n\n\n\nSwan Pond\n24216\n22211\n2005\n92\n19.8\n91.7\n\n\nCorrie Island\n19156\n15218\n3938\n79\n13.6\n79.4\n\n\nHexham Swamp\n20006\n15068\n4938\n75\n13.4\n75.3\n\n\nRamsar Road\n24049\n17011\n7038\n71\n15.2\n70.7\n\n\nFullerton Entrance\n23977\n15300\n8677\n64\n13.6\n63.8\n\n\nMilhams Pond\n24168\n12428\n11740\n51\n11.1\n51.4\n\n\nCurlew Point\n20006\n9093\n10913\n45\n8.1\n45.5\n\n\nTomago\n19104\n5226\n13878\n27\n4.7\n27.4\n\n\nWindeyers\n8977\n262\n8715\n3\n0.2\n2.9\n\n\nDavies Point\n19126\n441\n18685\n2\n0.4\n2.3\n\n\nDudley Test Site\n2376\n0\n2376\n0\n0.0\n0.0\n\n\n\n\n\n\n\n\ntotal_hours: total of hours for the station being deployed into the field, regardless whether it is working/listening\noperational_hours: total of hours for the station being listening, regardless the deviceID\ndowntime_hours: total of hours for the station being NOT listening, regardless the deviceID\nuptime_pct: per station, percentage of being listening over its total_hours\ncont_listening_eff: per station, contribution (%) of hours being listening (operational_hour) over the total (sum) of listening period across all the stations\nsurv_time_cover: per station, temporal coverage (%) of hours being listening (operational_hour) over the period of time the array has been deployed (i.e. from the first day the first deployed station has been listening to the last day the last deployed station has been listening)\n\n\n\nTHE ARRAY\n\n\n\nWarning: Removed 15 rows containing missing values or values outside the scale range\n(`geom_segment()`).\n\n\n\n\n\n\n\n\n\n\nEvery black dot represent an hour where the station has activity recorded meaning the station is operational, meaning recording radio noise or a specific tag.\n\n\n\n\n\n\n\n\n\n\n\nSolid black lines are when a MOTUS station is operational. To simplify, when a station is not operational less than 24 hours, this period is considered as a operational period. Every dot represent at least one detection of one bird within an hour of the operational period. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.1 % to the total operational period for every stations within our local MOTUS array.\n\n\nSTATIONS\n\nCurlew Point (8.1%)Fullerton Entrance (13.6%)Hexham Swamp (13.4%)Milhams Pond (11.1%)Ramsar Road (15.2%)Swan Pond (19.8%)Tomago (4.7%)Windeyers (0.2%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLegend: The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is “OFF” and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.1 % at the total operational period for every stations within our local MOTUS array (operational survey effort).",
+    "text": "Survey effort\n\nSTATISTICS\n\nuptime_summary &lt;- recv_hours %&gt;%\n  group_by(Station) %&gt;%\n  summarise(\n    total_hours = n(),\n    operational_hours = sum(operational), \n    downtime_hours = total_hours - operational_hours, \n    uptime_pct = round(100 * operational_hours / total_hours), 2)  %&gt;% \n  mutate(cont_listening_eff = round(100 * operational_hours / sum(operational_hours), 1), \n         surv_time_cover = round(100 * operational_hours / total_hours, 1)) %&gt;%\n  arrange(desc(uptime_pct)) %&gt;%\n  select(-c(\"2\"))\n\n\n\n\n\n\n\n\n\nStation\ntotal_hours\noperational_hours\ndowntime_hours\nuptime_pct\ncont_listening_eff\nsurv_time_cover\n\n\n\n\nSwan Pond\n24225\n22211\n2014\n92\n19.8\n91.7\n\n\nCorrie Island\n19165\n15218\n3947\n79\n13.6\n79.4\n\n\nHexham Swamp\n20015\n15068\n4947\n75\n13.4\n75.3\n\n\nRamsar Road\n24058\n17011\n7047\n71\n15.2\n70.7\n\n\nFullerton Entrance\n23986\n15300\n8686\n64\n13.6\n63.8\n\n\nMilhams Pond\n24177\n12428\n11749\n51\n11.1\n51.4\n\n\nCurlew Point\n20015\n9093\n10922\n45\n8.1\n45.4\n\n\nTomago\n19113\n5226\n13887\n27\n4.7\n27.3\n\n\nWindeyers\n8986\n262\n8724\n3\n0.2\n2.9\n\n\nDavies Point\n19135\n441\n18694\n2\n0.4\n2.3\n\n\nDudley Test Site\n2385\n0\n2385\n0\n0.0\n0.0\n\n\n\n\n\n\n\n\ntotal_hours: total of hours for the station being deployed into the field, regardless whether it is working/listening\noperational_hours: total of hours for the station being listening, regardless the deviceID\ndowntime_hours: total of hours for the station being NOT listening, regardless the deviceID\nuptime_pct: per station, percentage of being listening over its total_hours\ncont_listening_eff: per station, contribution (%) of hours being listening (operational_hour) over the total (sum) of listening period across all the stations\nsurv_time_cover: per station, temporal coverage (%) of hours being listening (operational_hour) over the period of time the array has been deployed (i.e. from the first day the first deployed station has been listening to the last day the last deployed station has been listening)\n\n\n\nTHE ARRAY\n\n\n\nWarning: Removed 15 rows containing missing values or values outside the scale range\n(`geom_segment()`).\n\n\n\n\n\n\n\n\n\n\nEvery black dot represent an hour where the station has activity recorded meaning the station is operational, meaning recording radio noise or a specific tag.\n\n\n\n\n\n\n\n\n\n\n\nSolid black lines are when a MOTUS station is operational. To simplify, when a station is not operational less than 24 hours, this period is considered as a operational period. Every dot represent at least one detection of one bird within an hour of the operational period. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.1 % to the total operational period for every stations within our local MOTUS array.\n\n\nSTATIONS\n\nCurlew Point (8.1%)Fullerton Entrance (13.6%)Hexham Swamp (13.4%)Milhams Pond (11.1%)Ramsar Road (15.2%)Swan Pond (19.8%)Tomago (4.7%)Windeyers (0.2%)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLegend: The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is “OFF” and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.1 % at the total operational period for every stations within our local MOTUS array (operational survey effort).",
     "crumbs": [
       "Motus array",
       "Survey effort"
@@ -586,6 +586,59 @@
     "text": "Milestone 2\nPh.D guide, 2025\nLegacy of Milestone 2, this document further details the aims, objectives, methods, expectations, collaborations of my Ph.D project and unroll the potential Chapters one by one.",
     "crumbs": [
       "Academic"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_6.html",
+    "href": "qmd/chapter_1/ch1_6.html",
+    "title": "Estuary Usage",
+    "section": "",
+    "text": "Birds remain within the same estuaries. Migratory ones during all summer and residents all year around. That’s a statement at species group level. But do the individuals remain within the same estuary or do they fly from one to another?\nTo address this question we’ll quantify how many days a bird has been detected at least once on at least one Motus station in one estuary, and we’ll put this number of days against the total number of day that same bird was detectable. The result will be expressed in percentage.",
+    "crumbs": [
+      "Analysis",
+      "Estuary Usage"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_6.html#variables",
+    "href": "qmd/chapter_1/ch1_6.html#variables",
+    "title": "Estuary Usage",
+    "section": "Variables",
+    "text": "Variables\n\nLoad your data in your R environment - see Load & Format &gt; Reproducibility\n\n\nlibrary(dplyr)\nlibrary(here)\nlibrary(ggplot2)\nlibrary(lubridate)\nlibrary(tidyr)\n\nLet’s count days and detecting stations for each bird.\n\n# Get deployment duration for each tags (in days)\ntag_dep_duration &lt;- data_all %&gt;%\n  group_by(Band.ID) %&gt;%\n  summarise(start_date = min(DateAUS.Trap),\n            end_date = max(dateAus),\n            period_tag_dep_d = 1 + time_length(interval(start = start_date, end = end_date), unit = \"day\"), # +1 to include the trapping day\n            .groups = \"drop\") %&gt;%\n  select(Band.ID, period_tag_dep_d)\n\n# Get number days each tag has been detected at least once in any station\ntag_dep_nb_d &lt;- data_all %&gt;%\n  mutate(dateAus = as.Date(dateAus)) %&gt;%\n  group_by(Band.ID) %&gt;%\n  summarise(days_detect = n_distinct(dateAus), .groups = \"drop\")\n\n# Get number of days one tag has been recorded in &gt;1 station (for each tags)\nmultiple_site_detect &lt;- data_all %&gt;%\n  group_by(Band.ID, dateAus) %&gt;%\n  # Counts per day the number of station one tag has been recorded\n  summarise(distinct_sites = n_distinct(recvDeployName),\n            .groups = \"drop_last\") %&gt;%\n  # Tells if one day one tag has been recorded several sites\n  mutate(multiple_detect = distinct_sites &gt; 1) %&gt;%\n  group_by(Band.ID) %&gt;%\n  summarise(multiple_site_detect = sum(multiple_detect),\n            .groups = \"drop\")\n\nWe generate tag_dep_duration that counts the total of days period_tag_dep_d each bird Band.ID had a tag on and activated. We make tag_dep_nb_d that quantifies the number of days days_detect each bird have been detected at least once in the Motus array.\nSo, we can then compare the first value with the second, and obtain our metric of interest in percentage.\nAdditionally, we quantified in multiple_site_detect the number of days each bird has been detected in multiple stations.",
+    "crumbs": [
+      "Analysis",
+      "Estuary Usage"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_6.html#results",
+    "href": "qmd/chapter_1/ch1_6.html#results",
+    "title": "Estuary Usage",
+    "section": "Results",
+    "text": "Results\n\nINDIVIDUALS\n\n# Get number of day each tag has been recorded /species and /station\ntag_detection_indiv &lt;- data_all %&gt;%\n  group_by(Band.ID, recvDeployName, speciesEN) %&gt;%\n  # to count sp*ID per recv\n  reframe(days_recorded = n_distinct(dateAus)) %&gt;%\n  # flip table to get one column per station\n  pivot_wider(names_from = recvDeployName, \n              values_from = days_recorded,\n              values_fill = 0) %&gt;% # = 0 if NA\n  left_join(multiple_site_detect, by = \"Band.ID\") %&gt;%\n  left_join(tag_dep_nb_d, by = \"Band.ID\") %&gt;%\n  left_join(tag_dep_duration, by = \"Band.ID\") %&gt;%\n  mutate(perc = round((days_detect / period_tag_dep_d) * 100, 1)) # nb of day one tag is recorded once / nb of day the tag is deployed\n\n\n\n\n\n\n\n\n\nBand.ID\nspeciesEN\nCurlew Point\nFullerton Entrance\nMilhams Pond\nRamsar Road\nSwan Pond\nTomago\nHexham Swamp\nWindeyers\nmultiple_site_detect\ndays_detect\nperiod_tag_dep_d\nperc\n\n\n\n\n04281407\nCurlew Sandpiper\n33\n5\n2\n12\n23\n14\n0\n0\n29\n39\n46\n84.8\n\n\n04281408\nCurlew Sandpiper\n21\n13\n3\n1\n19\n15\n0\n0\n20\n22\n23\n95.7\n\n\n04281409\nCurlew Sandpiper\n31\n4\n0\n9\n27\n12\n0\n0\n28\n34\n47\n72.3\n\n\n04281410\nCurlew Sandpiper\n30\n12\n0\n8\n28\n16\n0\n0\n29\n36\n47\n76.6\n\n\n04281420\nCurlew Sandpiper\n33\n8\n1\n15\n29\n15\n0\n0\n32\n37\n46\n80.4\n\n\n06318617\nPacific Golden-Plover\n61\n9\n1\n17\n35\n0\n3\n0\n49\n61\n61\n100.0\n\n\n06318618\nPacific Golden-Plover\n21\n3\n1\n4\n1\n0\n2\n1\n2\n30\n68\n44.1\n\n\n06318619\nPacific Golden-Plover\n15\n0\n0\n2\n2\n0\n1\n0\n4\n15\n15\n100.0\n\n\n06318620\nPacific Golden-Plover\n47\n5\n1\n0\n3\n0\n1\n5\n8\n51\n57\n89.5\n\n\n06318621\nPacific Golden-Plover\n50\n16\n2\n7\n13\n0\n11\n1\n23\n70\n110\n63.6\n\n\n06318624\nPacific Golden-Plover\n17\n31\n12\n7\n17\n0\n32\n3\n34\n58\n84\n69.0\n\n\n06318625\nPacific Golden-Plover\n6\n4\n0\n2\n4\n0\n1\n0\n3\n13\n17\n76.5\n\n\n06318626\nPacific Golden-Plover\n15\n38\n2\n0\n2\n0\n2\n0\n20\n38\n199\n19.1\n\n\n06318627\nPacific Golden-Plover\n21\n21\n2\n2\n3\n0\n3\n1\n20\n22\n187\n11.8\n\n\n06318629\nPacific Golden-Plover\n17\n6\n66\n26\n21\n0\n14\n0\n40\n83\n84\n98.8\n\n\n06318630\nPacific Golden-Plover\n0\n1\n0\n1\n0\n0\n7\n0\n0\n9\n66\n13.6\n\n\n06318633\nPacific Golden-Plover\n16\n1\n0\n0\n1\n1\n0\n0\n1\n18\n34\n52.9\n\n\n06318635\nPacific Golden-Plover\n22\n0\n0\n0\n0\n0\n0\n0\n0\n22\n34\n64.7\n\n\n06318799\nPacific Golden-Plover\n40\n3\n0\n19\n9\n0\n0\n2\n25\n43\n46\n93.5\n\n\n07176824\nBar-tailed Godwit\n3\n1\n0\n0\n0\n1\n0\n0\n1\n3\n3\n100.0\n\n\n07394014\nBar-tailed Godwit\n0\n2\n0\n0\n0\n0\n0\n0\n0\n2\n255\n0.8\n\n\n07394017\nBar-tailed Godwit\n0\n1\n4\n0\n0\n0\n0\n0\n0\n5\n25\n20.0\n\n\n07394018\nBar-tailed Godwit\n0\n3\n0\n0\n0\n0\n0\n0\n0\n3\n34\n8.8\n\n\n07394019\nBar-tailed Godwit\n0\n7\n0\n0\n0\n1\n0\n0\n0\n8\n239\n3.3\n\n\n07394026\nBar-tailed Godwit\n7\n3\n0\n0\n0\n3\n0\n0\n3\n7\n482\n1.5\n\n\n07394027\nBar-tailed Godwit\n11\n5\n0\n0\n0\n11\n0\n0\n11\n11\n11\n100.0\n\n\n07394032\nBar-tailed Godwit\n21\n19\n1\n0\n0\n0\n0\n0\n17\n24\n25\n96.0\n\n\n08295770\nPied Stilt\n1\n0\n0\n58\n48\n0\n0\n0\n39\n68\n664\n10.2\n\n\n08295772\nPied Stilt\n0\n15\n0\n0\n0\n0\n0\n0\n0\n15\n237\n6.3\n\n\n08295773\nPied Stilt\n3\n4\n0\n0\n0\n0\n0\n0\n1\n6\n18\n33.3\n\n\n08295774\nPied Stilt\n1\n27\n2\n11\n13\n0\n0\n0\n13\n39\n43\n90.7\n\n\n08295775\nPied Stilt\n0\n3\n0\n0\n0\n0\n0\n0\n0\n3\n3\n100.0\n\n\n08295776\nPied Stilt\n16\n89\n0\n0\n0\n0\n0\n0\n14\n91\n93\n97.8\n\n\n08295778\nRed-necked Avocet\n2\n6\n0\n0\n0\n7\n0\n0\n6\n7\n7\n100.0\n\n\n08295780\nRed-necked Avocet\n17\n29\n2\n0\n3\n19\n2\n0\n27\n29\n29\n100.0\n\n\n08295781\nRed-necked Avocet\n21\n29\n3\n0\n2\n16\n1\n0\n25\n29\n29\n100.0\n\n\n08295845\nMasked Lapwing\n9\n0\n0\n0\n0\n0\n0\n0\n0\n9\n31\n29.0\n\n\n08345053\nBar-tailed Godwit\n13\n9\n0\n0\n0\n11\n0\n0\n13\n13\n14\n92.9\n\n\n08345054\nEurasian Whimbrel\n5\n9\n0\n0\n0\n9\n0\n0\n9\n13\n31\n41.9\n\n\n08345055\nEurasian Whimbrel\n1\n4\n0\n0\n0\n0\n0\n0\n0\n5\n31\n16.1\n\n\n10118806\nFar Eastern Curlew\n0\n23\n22\n0\n0\n0\n0\n0\n16\n29\n37\n78.4\n\n\n\n\n\n\n\n\nThe above table presents daily detection for each bird and for each Motus station in the local array:\n\nmultiple_site_detect: number of days a bird has been detected in more than one station\ndays_detect: number of days a bird has been detected in at least one station\nperiod_tag_dep_d: total of days a bird was detectable with a tag on and activated\nperc: (days_detect / period_tag_dep_d) x 100\n\n\nVisualise below for each birds the number of days the individual has been detected at least once and in at least one Motus station in the array, against the total of days the bird had a tag on and activated (results in %).\n\n\n\n\n\n\n\n\n\n\n\n\nSPECIES\nBelow are the same results as above, but for each species. So the data has been grouped by species.\n\n\n\n\n\n\n\n\nspeciesEN\nCurlew Point\nFullerton Entrance\nHexham Swamp\nMilhams Pond\nRamsar Road\nSwan Pond\nTomago\nWindeyers\nmultiple_site_detect\ndays_detect\nperiod_tag_dep_d\nperc\n\n\n\n\nBar-tailed Godwit\n46\n45\n0\n5\n0\n0\n22\n0\n43\n61\n1018\n6.0\n\n\nCurlew Sandpiper\n34\n17\n0\n6\n23\n34\n27\n0\n34\n41\n47\n87.2\n\n\nEurasian Whimbrel\n6\n12\n0\n0\n0\n0\n9\n0\n11\n15\n31\n48.4\n\n\nMasked Lapwing\n9\n0\n0\n0\n0\n0\n0\n0\n0\n9\n31\n29.0\n\n\nPacific Golden-Plover\n179\n77\n51\n77\n76\n96\n1\n9\n156\n240\n459\n52.3\n\n\nPied Stilt\n18\n105\n0\n2\n69\n61\n0\n0\n68\n159\n664\n23.9\n\n\nRed-necked Avocet\n24\n29\n3\n4\n0\n5\n21\n0\n29\n29\n29\n100.0\n\n\nFar Eastern Curlew\n0\n23\n0\n22\n0\n0\n0\n0\n16\n29\n37\n78.4\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nggplot(tag_detection_indiv %&gt;%\n         add_count(speciesEN) %&gt;%\n         mutate(species_label = paste0(speciesEN, \" (n = \", n, \")\")),\n       aes(x = reorder(species_label, -perc, FUN = median),\n           y = perc, fill = speciesEN)) +   \n  geom_boxplot(width = 0.8, alpha = 0.7, color = \"black\") +\n  scale_fill_manual(values = species_colors) +\n  theme_minimal() +\n  theme(axis.text.x = element_text(angle = 90, hjust = 1),\n        legend.position = \"none\") +\n  labs(x = \"Species (n = number of individuals)\",\n       y = \"Detection (%)\",\n       title = \"Species detectability across the MOTUS array (Boxplot)\")",
+    "crumbs": [
+      "Analysis",
+      "Estuary Usage"
+    ]
+  },
+  {
+    "objectID": "qmd/reports/pub_3.html#scientific-articles",
+    "href": "qmd/reports/pub_3.html#scientific-articles",
+    "title": "Scientific",
+    "section": "",
+    "text": "Will arrive on due time…",
+    "crumbs": [
+      "Scientific"
+    ]
+  },
+  {
+    "objectID": "qmd/reports/pub_3.html#conferences",
+    "href": "qmd/reports/pub_3.html#conferences",
+    "title": "Scientific",
+    "section": "Conferences",
+    "text": "Conferences\n\n2025_AOC_presentation\n2025_AOC_abstract\n2025_ESA_presentation\n2025_ESA_abstract\n2026_WBF_abstract",
+    "crumbs": [
+      "Scientific"
     ]
   }
 ]
