@@ -551,7 +551,7 @@ window.Quarto = {
 <section id="time-available" class="level3">
 <h3 class="anchored" data-anchor-id="time-available">TIME AVAILABLE</h3>
 <p>Now tide data ready to be processed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.</p>
-<p>Available time for each Motus stations is accessed with <code>activity</code> table: each row is a dated record of noise or a tag detected <em>- see <a href="qmd/chapter_1/ch1_5.qmd">Survey effort &gt; Activity table</a></em>.</p>
+<p>Available time for each Motus stations is accessed with <code>activity</code> table: each row is a dated record of noise or a tag detected <em>- see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#activity-table">Survey effort &gt; Activity table</a></em>.</p>
 <p>We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity, and expand this period in hours.</p>
 <p><br></p>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the terminated serno (if terminated, ie. one box removed from one antenna site, a date comes along)</span></span>
@@ -607,7 +607,7 @@ window.Quarto = {
 <span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>recv_hours<span class="sc">$</span>recvDeployName <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_SG-.*"</span>, <span class="st">""</span>, recv_hours<span class="sc">$</span>SernoStation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 <p>We now how the complete temporal coverage, expanded in hours, for each Motus station.</p>
-<p>However, due to some temporary failures or maintenance <em>(see <a href="qmd/chapter_1/ch1_5.qmd">Survey effort &gt; Operational periods</a>)</em>, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substract these off-hours to the complete temporal coverage.</p>
+<p>However, due to some temporary failures or maintenance <em>(see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#operational-periods">Survey effort &gt; Operational periods</a>)</em>, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substract these off-hours to the complete temporal coverage.</p>
 <p><br></p>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinguish station from mixed recv + Giving operational variable (= TRUE when existing values from act table)</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
@@ -793,23 +793,23 @@ window.Quarto = {
 <br></p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="gebjpvgvph" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#gebjpvgvph table {
+<div id="cryloufbcr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#cryloufbcr table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#gebjpvgvph thead, #gebjpvgvph tbody, #gebjpvgvph tfoot, #gebjpvgvph tr, #gebjpvgvph td, #gebjpvgvph th {
+#cryloufbcr thead, #cryloufbcr tbody, #cryloufbcr tfoot, #cryloufbcr tr, #cryloufbcr td, #cryloufbcr th {
   border-style: none;
 }
 
-#gebjpvgvph p {
+#cryloufbcr p {
   margin: 0;
   padding: 0;
 }
 
-#gebjpvgvph .gt_table {
+#cryloufbcr .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -835,12 +835,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_caption {
+#cryloufbcr .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#gebjpvgvph .gt_title {
+#cryloufbcr .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -852,7 +852,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#gebjpvgvph .gt_subtitle {
+#cryloufbcr .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -864,7 +864,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#gebjpvgvph .gt_heading {
+#cryloufbcr .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -876,13 +876,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_bottom_border {
+#cryloufbcr .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_col_headings {
+#cryloufbcr .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -897,7 +897,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_col_heading {
+#cryloufbcr .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -917,7 +917,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#gebjpvgvph .gt_column_spanner_outer {
+#cryloufbcr .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -929,15 +929,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#gebjpvgvph .gt_column_spanner_outer:first-child {
+#cryloufbcr .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#gebjpvgvph .gt_column_spanner_outer:last-child {
+#cryloufbcr .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#gebjpvgvph .gt_column_spanner {
+#cryloufbcr .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -949,11 +949,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#gebjpvgvph .gt_spanner_row {
+#cryloufbcr .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#gebjpvgvph .gt_group_heading {
+#cryloufbcr .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -979,7 +979,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#gebjpvgvph .gt_empty_group_heading {
+#cryloufbcr .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -994,15 +994,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#gebjpvgvph .gt_from_md > :first-child {
+#cryloufbcr .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#gebjpvgvph .gt_from_md > :last-child {
+#cryloufbcr .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#gebjpvgvph .gt_row {
+#cryloufbcr .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1021,7 +1021,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#gebjpvgvph .gt_stub {
+#cryloufbcr .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1034,7 +1034,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#gebjpvgvph .gt_stub_row_group {
+#cryloufbcr .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1048,15 +1048,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#gebjpvgvph .gt_row_group_first td {
+#cryloufbcr .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#gebjpvgvph .gt_row_group_first th {
+#cryloufbcr .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#gebjpvgvph .gt_summary_row {
+#cryloufbcr .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1066,16 +1066,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#gebjpvgvph .gt_first_summary_row {
+#cryloufbcr .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_first_summary_row.thick {
+#cryloufbcr .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#gebjpvgvph .gt_last_summary_row {
+#cryloufbcr .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1085,7 +1085,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_grand_summary_row {
+#cryloufbcr .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1095,7 +1095,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#gebjpvgvph .gt_first_grand_summary_row {
+#cryloufbcr .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1105,7 +1105,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_last_grand_summary_row_top {
+#cryloufbcr .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1115,11 +1115,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_striped {
+#cryloufbcr .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#gebjpvgvph .gt_table_body {
+#cryloufbcr .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1128,7 +1128,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_footnotes {
+#cryloufbcr .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1142,7 +1142,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_footnote {
+#cryloufbcr .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1151,7 +1151,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#gebjpvgvph .gt_sourcenotes {
+#cryloufbcr .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1165,7 +1165,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#gebjpvgvph .gt_sourcenote {
+#cryloufbcr .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1173,72 +1173,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#gebjpvgvph .gt_left {
+#cryloufbcr .gt_left {
   text-align: left;
 }
 
-#gebjpvgvph .gt_center {
+#cryloufbcr .gt_center {
   text-align: center;
 }
 
-#gebjpvgvph .gt_right {
+#cryloufbcr .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#gebjpvgvph .gt_font_normal {
+#cryloufbcr .gt_font_normal {
   font-weight: normal;
 }
 
-#gebjpvgvph .gt_font_bold {
+#cryloufbcr .gt_font_bold {
   font-weight: bold;
 }
 
-#gebjpvgvph .gt_font_italic {
+#cryloufbcr .gt_font_italic {
   font-style: italic;
 }
 
-#gebjpvgvph .gt_super {
+#cryloufbcr .gt_super {
   font-size: 65%;
 }
 
-#gebjpvgvph .gt_footnote_marks {
+#cryloufbcr .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#gebjpvgvph .gt_asterisk {
+#cryloufbcr .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#gebjpvgvph .gt_indent_1 {
+#cryloufbcr .gt_indent_1 {
   text-indent: 5px;
 }
 
-#gebjpvgvph .gt_indent_2 {
+#cryloufbcr .gt_indent_2 {
   text-indent: 10px;
 }
 
-#gebjpvgvph .gt_indent_3 {
+#cryloufbcr .gt_indent_3 {
   text-indent: 15px;
 }
 
-#gebjpvgvph .gt_indent_4 {
+#cryloufbcr .gt_indent_4 {
   text-indent: 20px;
 }
 
-#gebjpvgvph .gt_indent_5 {
+#cryloufbcr .gt_indent_5 {
   text-indent: 25px;
 }
 
-#gebjpvgvph .katex-display {
+#cryloufbcr .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#gebjpvgvph div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#cryloufbcr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1308,7 +1308,9 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>We removed <strong>n = 4</strong> out of 1251 cases where the <em>time used</em> was over the <em>available</em>.</p>
+<div class="blockquote-yellow">
+<p><strong>Note:</strong> We removed <strong>n = 4</strong> out of 1251 cases where the <em>time used</em> was over the <em>available</em>. Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. <em>- See table above.</em></p>
+</div>
 <p>This limitation is currently ignored and not taken into account into the analysis regarding the general low ratio time used/time available.</p>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>figure_plot <span class="ot">&lt;-</span> <span class="fu">left_join</span>(available_bird_recv_time <span class="sc">%&gt;%</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">group_by</span>(recvDeployName, Band.ID, speciesEN, tideCategory) <span class="sc">%&gt;%</span></span>
@@ -1322,7 +1324,7 @@ window.Quarto = {
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>speciesEN <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Far Eastern Curlew"</span>, <span class="st">"Masked Lapwing"</span>),</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>         rate_use <span class="sc">!=</span> <span class="dv">100</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="blockquote-yellow">
-<p>We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data.</p>
+<p><strong>Note:</strong> We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data.</p>
 </div>
 <p>Now, everything is ready to format the data for plot and to visualise the results for <strong>Usage rate</strong> and <strong>Hourly usage</strong> across the Motus stations of our local array.</p>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Track size sample</span></span>
@@ -1414,7 +1416,7 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><strong>Legend</strong>: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one category from the pairs “high/low” and “nocturnal/diurnal,” showing <em>used time</em> for each species at different MOTUS stations (red boxes). The blue box on the left represents the total <em>available time</em> for the corresponding tide category across individuals. Note that <em>available time</em> is similar across stations as it is based on the general Newcastle tide table, since station-specific tide data is unavailable.</p>
+<p><strong>Legend</strong>: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one tide category from the pairs “high/low” and “nocturnal/diurnal,” showing <em>used time</em> in hours (red boxes) for each species at different Motus stations. The grey boxes represent the total <em>available time</em> for the corresponding tide category and Motus station, across individuals. Note that <em>available time</em> might be relatively similar across stations as it is based on the general Newcastle tide table and is not station-specific.</p>
 </section>
 <section id="used" class="level3">
 <h3 class="anchored" data-anchor-id="used">USED</h3>
@@ -1467,6 +1469,7 @@ window.Quarto = {
 </div>
 <div id="tabset-4-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-4-tab">
 <p><img src="ch1_7_files/figure-html/4 used 4-1.png" class="img-fluid" width="672"></p>
+<p><strong>Legend:</strong> Shorebird movement and spatial ecology vary across species and within the local Motus array in NSW. Each tab displays one tide category from the pairs “high/low” and “nocturnal/diurnal,” showing how many hours each species have been recorded at different Motus stations.</p>
 </div>
 </div>
 </div>
@@ -1477,17 +1480,21 @@ window.Quarto = {
 <p>Visualise here the difference between the total number of hours recorded across the four tidal conditions for each species and for the whole population of tagged shorebirds, “<strong>Total used</strong>”. And see the difference with the “<strong>Usage rate</strong>”, which measures bird detections by the Motus array as a proportion of the total available detection time.</p>
 <section id="population" class="level3">
 <h3 class="anchored" data-anchor-id="population">POPULATION</h3>
-<p><strong>Usage rate</strong></p>
+<p><strong>USAGE RATE</strong></p>
 <p><img src="ch1_7_files/figure-html/global rou-1.png" class="img-fluid" width="672"></p>
-<p><strong>Total used</strong></p>
+<p><strong>Legend</strong>: Find the values of the Usage rate (or rate of use) from the whole tagged shorebirds population detected within the Motus array and for each tide category.</p>
+<p><strong>TOTAL USED</strong></p>
 <p><img src="ch1_7_files/figure-html/global hours-1.png" class="img-fluid" width="672"></p>
+<p><strong>Legend</strong>: Find the total of hours (or total uses) the whole tagged shorebirds population has been recorded within the Motus array and for each tide category.</p>
 </section>
 <section id="species" class="level3">
 <h3 class="anchored" data-anchor-id="species">SPECIES</h3>
-<p><strong>Usage rate</strong></p>
+<p><strong>USAGE RATE</strong></p>
 <p><img src="ch1_7_files/figure-html/sp rou-1.png" class="img-fluid" width="672"></p>
-<p><strong>Total used</strong></p>
+<p><strong>Legend</strong>: Find the values of the Usage rate (or rate of use) across each shorebirds species detected within the Motus array and for each tide category.</p>
+<p><strong>TOTAL USED</strong></p>
 <p><img src="ch1_7_files/figure-html/sp hours-1.png" class="img-fluid" width="672"></p>
+<p><strong>Legend</strong>: Find the total of hours (or total uses) each species has been recorded within the Motus array and for each tide category.</p>
 
 
 </section>
