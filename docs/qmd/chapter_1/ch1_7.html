@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Station Usage rate – Movement Ecology - Shorebirds</title>
+<title>Station usage rate – Movement Ecology - Shorebirds</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -68,6 +103,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -103,12 +167,12 @@ ul.task-list li input[type="checkbox"] {
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-1">    
         <li class="dropdown-header">Data</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.html">
- <span class="dropdown-text">Load &amp; Format</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_1.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_2.html">
- <span class="dropdown-text">Explore</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_2.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_3.html">
@@ -117,22 +181,22 @@ ul.task-list li input[type="checkbox"] {
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Motus array</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.html">
- <span class="dropdown-text">Location &amp; History</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_4.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_5.html">
- <span class="dropdown-text">Survey effort</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_5.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Analysis</li>
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_6.html">
- <span class="dropdown-text">Estuary Usage</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_6.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_7.html">
- <span class="dropdown-text">Station Usage rate</span></a>
+ <span class="dropdown-text">Station usage rate</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_8.html">
@@ -222,7 +286,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_7.html">Station Usage rate</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.qmd">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_7.html">Station usage rate</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -245,18 +309,6 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Load &amp; Format</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Explore</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_3.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Legend</span></a>
   </div>
@@ -272,18 +324,6 @@ ul.task-list li input[type="checkbox"] {
           </a> 
       </div>
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_4.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Location &amp; History</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_5.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Survey effort</span></a>
-  </div>
-</li>
       </ul>
   </li>
         <li class="sidebar-item sidebar-item-section">
@@ -297,14 +337,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Estuary Usage</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_7.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Station Usage rate</span></a>
+ <span class="menu-text">Station usage rate</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -320,15 +354,41 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#pre-requisite" id="toc-pre-requisite" class="nav-link active" data-scroll-target="#pre-requisite">Pre-requisite</a>
+  <ul class="collapse">
+  <li><a href="#tide-variable" id="toc-tide-variable" class="nav-link" data-scroll-target="#tide-variable">TIDE VARIABLE</a></li>
+  <li><a href="#time-available" id="toc-time-available" class="nav-link" data-scroll-target="#time-available">TIME AVAILABLE</a></li>
+  <li><a href="#time-used" id="toc-time-used" class="nav-link" data-scroll-target="#time-used">TIME USED</a></li>
+  </ul></li>
+  <li><a href="#usage-rate" id="toc-usage-rate" class="nav-link" data-scroll-target="#usage-rate">Usage rate</a>
+  <ul class="collapse">
+  <li><a href="#resident-birds" id="toc-resident-birds" class="nav-link" data-scroll-target="#resident-birds">RESIDENT BIRDS</a></li>
+  <li><a href="#migratory-birds" id="toc-migratory-birds" class="nav-link" data-scroll-target="#migratory-birds">MIGRATORY BIRDS</a></li>
+  </ul></li>
+  <li><a href="#hourly-usage" id="toc-hourly-usage" class="nav-link" data-scroll-target="#hourly-usage">Hourly usage</a>
+  <ul class="collapse">
+  <li><a href="#used-vs-available" id="toc-used-vs-available" class="nav-link" data-scroll-target="#used-vs-available">USED vs AVAILABLE</a></li>
+  <li><a href="#used" id="toc-used" class="nav-link" data-scroll-target="#used">USED</a></li>
+  </ul></li>
+  <li><a href="#detection-conditions" id="toc-detection-conditions" class="nav-link" data-scroll-target="#detection-conditions">Detection conditions</a>
+  <ul class="collapse">
+  <li><a href="#population" id="toc-population" class="nav-link" data-scroll-target="#population">POPULATION</a></li>
+  <li><a href="#species" id="toc-species" class="nav-link" data-scroll-target="#species">SPECIES</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_7.html">Station Usage rate</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.qmd">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_7.html">Station usage rate</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Station Usage rate</h1>
+<h1 class="title">Station usage rate</h1>
 </div>
 
 
@@ -345,8 +405,1046 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="callout callout-style-simple callout-none no-icon" style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>This page</strong> (finally!) <strong>describes and summarises where</strong> (<em>Motus station</em>) <strong>and when</strong> (<em>tidal condition</em>) <strong>the birds were.</strong></p>
+<p>The total amount of <strong>hours</strong> and the <strong>usage rate</strong> are assessed for each individual being detected within the Motus array and across the different tidal conditions such as:</p>
+<ul>
+<li><p>Diurnal High Tide</p></li>
+<li><p>Diurnal Low Tide</p></li>
+<li><p>Nocturnal High Tide</p></li>
+<li><p>Nocturnal Low Tide</p></li>
+</ul>
+<p>Plus, globally visualise the <strong>conditions of detection</strong> across the tagged population.</p>
+<p><em>It is surprising to see how much we actually do ignore…</em></p>
+</div>
+</div>
+</div>
+<div class="blockquote-blue">
+<p><strong>Load your data</strong> in your R environment <em>- see <a href="qmd/chapter_1/ch1_1.qmd">Load &amp; Format &gt; Reproducibility</a></em></p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(motus)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats) </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bioRad)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hms)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And <strong>load</strong> your <code>activity</code> table too!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>recv.act <span class="ot">&lt;-</span> <span class="fu">tbl</span>(sql.motus, <span class="st">"activity"</span>)  <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">deviceID =</span> <span class="st">"motusDeviceID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># keep our deployed antennas only</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(deviceID <span class="sc">%in%</span> <span class="fu">unique</span>(recv<span class="sc">$</span>deviceID)) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set the time properly - IMPORTANT</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_datetime</span>(<span class="fu">as.POSIXct</span>(hourBin<span class="sc">*</span> <span class="dv">3600</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">origin =</span> <span class="st">"1970-01-06"</span>, </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">tz =</span> <span class="st">"UTC"</span>)),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">dateAus =</span> <span class="fu">as_datetime</span>(<span class="fu">as.POSIXct</span>(hourBin<span class="sc">*</span> <span class="dv">3600</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">origin =</span> <span class="st">"1970-01-06"</span>, </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">tz =</span> <span class="st">"UTC"</span>), </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                               <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>))   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="pre-requisite" class="level2">
+<h2 class="anchored" data-anchor-id="pre-requisite">Pre-requisite</h2>
+<p>This analysis compares the time available for each tidal category (Diurnal High Tide, Nocturnal High Tide, Diurnal Low Tide and Nocturnal Low tide) with the time each shorebird species spent at Motus stations.</p>
+<p>First, we need to determine the available time for each species group and for each Motus station. Second, we need to calculate the time used for each bird in every species and for each MOTUS stations too.</p>
+<p><u><em>The below procedure breaks down how we assessed:</em></u></p>
+<ul>
+<li><strong>Tide variable</strong></li>
+<li><strong>The time <em>available</em></strong></li>
+<li><strong>The time <em>used</em></strong></li>
+</ul>
+<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
+<p><img src="../../material/available_used_schema.png" alt="Schema 1: Definition of available and used periods across bird individuals and Motus stations" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
+<figcaption style="margin-top: 1em; font-style: italic;">
+<p>Schema: Definition of available and used periods across bird individuals and Motus stations</p>
+</figcaption>
+</figure>
+</div>
+<section id="tide-variable" class="level3">
+<h3 class="anchored" data-anchor-id="tide-variable">TIDE VARIABLE</h3>
+<p>Based on <a href="https://www.bom.gov.au/oceanography/projects/ntc/nsw_tide_tables.shtml">New South Wales Tide Tables</a> we were able to extract and classify the total time for each of the four categories of tide that occurred within the Hunter estuary. Note that one data-set is provided at the estuary scale, therefore, we assume the tide is occurring at the same scale, time, frequency and amplitude across our MOTUS station.</p>
+<p>Tide table informs for Low and High tide peaks. Half of the period between peak <em>n</em> and peak <em>n-1</em> is taken, added to the period between peak <em>n</em> and peak <em>n+1</em>, then expanded in hours for further analysis. The tide associated to peak <em>n</em> defines its variable period (i.e.&nbsp;red lines below is defined as high tide since peak <em>n</em> is a high tide peak).</p>
+<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
+<p><img src="../../material/tide.png" alt="Schema 2: Definition of tide variables (high or low) for one period" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
+<figcaption style="margin-top: 1em; font-style: italic;">
+<p>Schema: Definition of tide variables (high or low) for one period (red line)</p>
+</figcaption>
+</figure>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>tide_data <span class="ot">&lt;-</span> tide_data <span class="sc">%&gt;%</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(tideDateTimeAus) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prev_time =</span> <span class="fu">lag</span>(tideDateTimeAus),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">next_time =</span> <span class="fu">lead</span>(tideDateTimeAus) ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(prev_time) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(next_time)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">duration_h =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(tideDateTimeAus, prev_time, <span class="at">units =</span> <span class="st">"hours"</span>)<span class="sc">/</span><span class="dv">2</span> <span class="sc">+</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">difftime</span>(next_time, tideDateTimeAus, <span class="at">units =</span> <span class="st">"hours"</span>)<span class="sc">/</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sunriseNewc =</span> <span class="fu">sunrise</span>(tideDateTimeAus, <span class="fl">151.7833</span>, <span class="sc">-</span><span class="fl">32.9167</span>, <span class="at">elev =</span> <span class="sc">-</span><span class="fl">0.268</span>, <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>, <span class="at">force_tz =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">sunsetNewc =</span> <span class="fu">sunset</span>(tideDateTimeAus, <span class="fl">151.7833</span>, <span class="sc">-</span><span class="fl">32.9167</span>, <span class="at">elev =</span> <span class="sc">-</span><span class="fl">0.268</span>, <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>, <span class="at">force_tz =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">sunriseNewcTime =</span> <span class="fu">strftime</span>(sunriseNewc, <span class="at">format =</span> <span class="st">"%H:%M:%S"</span>, <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">sunsetNewcTime =</span> <span class="fu">strftime</span>(sunsetNewc, <span class="at">format =</span> <span class="st">"%H:%M:%S"</span>, <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideDiel =</span> <span class="fu">case_when</span>(tideDateTimeAus <span class="sc">&lt;</span> sunriseNewc <span class="sc">~</span> <span class="st">"Nocturnal"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                               tideDateTimeAus <span class="sc">&gt;</span> sunriseNewc <span class="sc">&amp;</span> tideDateTimeAus <span class="sc">&lt;</span> sunsetNewc <span class="sc">~</span> <span class="st">"Diurnal"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                               tideDateTimeAus <span class="sc">&gt;</span> sunsetNewc <span class="sc">~</span> <span class="st">"Nocturnal"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideCategory =</span> <span class="fu">case_when</span>(high_low <span class="sc">==</span> <span class="st">"Low"</span> <span class="sc">&amp;</span> tideDiel <span class="sc">==</span> <span class="st">"Diurnal"</span> <span class="sc">~</span> <span class="st">"Diurnal_Low"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>                                  high_low <span class="sc">==</span> <span class="st">"Low"</span> <span class="sc">&amp;</span> tideDiel <span class="sc">==</span> <span class="st">"Nocturnal"</span> <span class="sc">~</span> <span class="st">"Nocturnal_Low"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>                                  high_low <span class="sc">==</span> <span class="st">"High"</span> <span class="sc">&amp;</span> tideDiel <span class="sc">==</span> <span class="st">"Diurnal"</span> <span class="sc">~</span> <span class="st">"Diurnal_High"</span>,</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>                                  high_low <span class="sc">==</span> <span class="st">"High"</span> <span class="sc">&amp;</span> tideDiel <span class="sc">==</span> <span class="st">"Nocturnal"</span> <span class="sc">~</span> <span class="st">"Nocturnal_High"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as_factor</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">tideHighLow =</span> high_low,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">timeAus =</span> tideDateTimeAus) <span class="sc">%&gt;%</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(timeAus, tideCategory, tideHighLow, tideDiel, duration_h, sunriseNewc, sunsetNewc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="time-available" class="level3">
+<h3 class="anchored" data-anchor-id="time-available">TIME AVAILABLE</h3>
+<p>Now tide data ready to be processed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.</p>
+<p>Available time for each Motus stations is accessed with <code>activity</code> table: each row is a dated record of noise or a tag detected <em>- see <a href="qmd/chapter_1/ch1_5.qmd">Survey effort &gt; Activity table</a></em>.</p>
+<p>We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity, and expand this period in hours.</p>
+<p><br></p>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the terminated serno (if terminated, ie. one box removed from one antenna site, a date comes along)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># but still needed for accessing survey effort as the station is currently running with another serno </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>recv.act.term <span class="ot">&lt;-</span> recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(timeEndAus)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, recvDeployName),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"deviceID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(recvDeployName)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(recvDeployName, <span class="st">"_"</span>, serno))</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort the currently running serno</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>recv.act.runn <span class="ot">&lt;-</span> recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv <span class="sc">%&gt;%</span> </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(<span class="fu">is.na</span>(timeEndAus)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>              <span class="fu">select</span>(deviceID, serno, recvDeployName),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"deviceID"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(recvDeployName)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(recvDeployName, <span class="st">"_"</span>, serno))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Merging in one data-set to use Station's name further + pick-up the rounded hours</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>recv.act <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(recv.act.runn, recv.act.term) <span class="sc">%&gt;%</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">round_date</span>(dateAus, <span class="st">"hour"</span>))</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Providing helpful variables</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>recv <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SernoStation =</span> <span class="fu">paste0</span>(recvDeployName, <span class="st">"_"</span>, serno),</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>         <span class="at">lisStart =</span> timeStartAus,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>         <span class="at">lisEnd =</span> <span class="fu">if_else</span>(</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>           <span class="fu">is.na</span>(timeEndAus), <span class="co"># means the station is still running since the last data downloading</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>           <span class="fu">with_tz</span>(<span class="fu">Sys.time</span>(), <span class="st">"Australia/Sydney"</span>),</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>           <span class="fu">with_tz</span>(<span class="fu">as_datetime</span>(timeEndAus, <span class="at">tz =</span> <span class="st">"UTC"</span>), <span class="st">"Australia/Sydney"</span>)) )</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(recvDeployName, deviceID, SernoStation, lisStart, lisEnd) <span class="sc">%&gt;%</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(SernoStation) <span class="sc">%&gt;%</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">round_date</span>(lisStart, <span class="at">unit =</span> <span class="st">"hour"</span>),</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>                            <span class="at">to =</span> <span class="fu">round_date</span>(lisEnd, <span class="at">unit =</span> <span class="st">"hour"</span>),</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="st">"hour"</span>)) ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(hour_dt)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Simplify station variables (recvDeployName)</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>recv <span class="ot">&lt;-</span> recv <span class="sc">%&gt;%</span> </span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>recvDeployName) </span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>recv<span class="sc">$</span>recvDeployName <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_SG-.*"</span>, <span class="st">""</span>, recv<span class="sc">$</span>SernoStation)</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span> </span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>recvDeployName) </span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>recv_hours<span class="sc">$</span>recvDeployName <span class="ot">&lt;-</span> <span class="fu">sub</span>(<span class="st">"_SG-.*"</span>, <span class="st">""</span>, recv_hours<span class="sc">$</span>SernoStation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br></p>
+<p>We now how the complete temporal coverage, expanded in hours, for each Motus station.</p>
+<p>However, due to some temporary failures or maintenance <em>(see <a href="qmd/chapter_1/ch1_5.qmd">Survey effort &gt; Operational periods</a>)</em>, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substract these off-hours to the complete temporal coverage.</p>
+<p><br></p>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinguish station from mixed recv + Giving operational variable (= TRUE when existing values from act table)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">distinct</span>(recvDeployName, hour_dt) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"recvDeployName"</span>, <span class="st">"hour_dt"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(operational), <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># /!\ Due to unknown error? Have to set this manually</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    recvDeployName <span class="sc">==</span> <span class="st">"Fullerton Entrance"</span> <span class="sc">&amp;</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>      hour_dt <span class="sc">&gt;</span> <span class="fu">as.POSIXct</span>(<span class="st">"2023-04-02"</span>) <span class="sc">&amp;</span> </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>      hour_dt <span class="sc">&lt;</span> <span class="fu">as.POSIXct</span>(<span class="st">"2023-04-05"</span>) <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> operational))</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary table                                                                     </span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>off_runs <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span> </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(recvDeployName, hour_dt) <span class="sc">%&gt;%</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName) <span class="sc">%&gt;%</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">off_run_id =</span> <span class="fu">consecutive_id</span>(operational <span class="sc">==</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(operational <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName, off_run_id) <span class="sc">%&gt;%</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_off =</span> <span class="fu">min</span>(hour_dt),</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_off =</span> <span class="fu">max</span>(hour_dt),</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">tot_off_hours =</span> <span class="fu">n</span>(),</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tot_off_hours <span class="sc">&gt;</span> <span class="dv">24</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Unique recvDeployNames from off_runs</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>recv_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(recv_hours<span class="sc">$</span>recvDeployName)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Split tide_data into a named list with one element per recvDeployName</span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>tide_data_list <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(recv_names)), recv_names)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(name <span class="cf">in</span> recv_names) {</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get off intervals for this recvDeployName</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>  intervals <span class="ot">&lt;-</span> off_runs <span class="sc">%&gt;%</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(start_off, end_off)</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get deployment start and end dates for this recvDeployName</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  deploy <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>      <span class="at">lisStart =</span> <span class="fu">min</span>(lisStart, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>      <span class="at">lisEnd =</span> <span class="fu">max</span>(lisEnd, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter tide_data by deployment period</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>  td <span class="ot">&lt;-</span> tide_data <span class="sc">%&gt;%</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(timeAus <span class="sc">&gt;=</span> deploy<span class="sc">$</span>lisStart <span class="sc">&amp;</span> timeAus <span class="sc">&lt;=</span> deploy<span class="sc">$</span>lisEnd) <span class="sc">%&gt;%</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">recvDeployName =</span> name) </span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(intervals) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Vectorized exclusion of off intervals</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    is_in_off <span class="ot">&lt;-</span> <span class="fu">sapply</span>(td<span class="sc">$</span>timeAus, <span class="cf">function</span>(t) {</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>      <span class="fu">any</span>(t <span class="sc">&gt;=</span> intervals<span class="sc">$</span>start_off <span class="sc">&amp;</span> t <span class="sc">&lt;=</span> intervals<span class="sc">$</span>end_off)</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>    td <span class="ot">&lt;-</span> td[<span class="sc">!</span>is_in_off, ]</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>  tide_data_list[[name]] <span class="ot">&lt;-</span> td</span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>tide_data_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tide_data_list) <span class="sc">%&gt;%</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">round_date</span>(timeAus, <span class="at">unit =</span> <span class="st">"hour"</span>))            <span class="co"># AVAILABLE TIME (tide categories covering same time as recv survey effort) </span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>total_recv_tide_data <span class="ot">&lt;-</span> tide_data_df <span class="sc">%&gt;%</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName) <span class="sc">%&gt;%</span></span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">hour_seq =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="fu">min</span>(hour_dt), <span class="fu">max</span>(hour_dt), <span class="at">by =</span> <span class="st">"hour"</span>)), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(hour_seq) <span class="sc">%&gt;%</span></span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">hour_dt =</span> hour_seq) <span class="sc">%&gt;%</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tide_data_df, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"recvDeployName"</span>, <span class="st">"hour_dt"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(recvDeployName, hour_dt) <span class="sc">%&gt;%</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName) <span class="sc">%&gt;%</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> zoo<span class="sc">::</span><span class="fu">na.locf</span>(.x, <span class="at">na.rm =</span> <span class="cn">FALSE</span>), <span class="at">.names =</span> <span class="st">"{.col}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><br></p>
+<p><strong>Temporal coverage for each station is now reduced to its operational periods</strong>, and ready to be processed.</p>
+<p>We now assign each bird its own available time period, spanning from its tagging date to its last Motus detection, and expanded to hourly resolution too.</p>
+<p><br></p>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the monitored period of each bird</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>period_sp <span class="ot">&lt;-</span> data_all  <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">DateAUS.Trap =</span> <span class="fu">first</span>(DateAUS.Trap), </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">last_dateAus =</span> <span class="fu">max</span>(dateAus),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">speciesEN =</span> speciesEN) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand one row per hours to each individual across its whole period (this is the available time)</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>bird_hours <span class="ot">&lt;-</span> period_sp <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">as.POSIXct</span>(<span class="fu">ymd</span>(DateAUS.Trap), <span class="at">tz =</span> <span class="st">"UTC"</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                            <span class="at">to =</span> <span class="fu">as.POSIXct</span>(last_dateAus, <span class="at">tz =</span> <span class="st">"UTC"</span>),</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="st">"hour"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(hour_dt)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add tide category for each available hours</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>find_closest_tide <span class="ot">&lt;-</span> <span class="cf">function</span>(target_time) {</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate absolute time differences</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  time_diffs <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(tide_data<span class="sc">$</span>timeAus <span class="sc">-</span> target_time, <span class="at">units =</span> <span class="st">"mins"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  closest_idx <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(time_diffs))</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(tide_data<span class="sc">$</span>tideCategory[closest_idx])</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>bird_hours <span class="ot">&lt;-</span> bird_hours <span class="sc">%&gt;%</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideCategory =</span> <span class="fu">sapply</span>(hour_dt, find_closest_tide))</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Duplicate in as many list as many stations</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>recv_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(recv_hours<span class="sc">$</span>recvDeployName)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>bird_data_list <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(recv_names)), recv_names)</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(name <span class="cf">in</span> recv_names) {</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  valid_hours_recv <span class="ot">&lt;-</span> total_recv_tide_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(hour_dt)</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  valid_hours_bird_recv <span class="ot">&lt;-</span> bird_hours <span class="sc">%&gt;%</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(hour_dt <span class="sc">%in%</span> valid_hours_recv)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  valid_hours_bird_recv<span class="sc">$</span>name <span class="ot">&lt;-</span> name</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  bird_data_list[[name]] <span class="ot">&lt;-</span> valid_hours_bird_recv</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>} </span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co"># AVAILABLE TIME (tide categories covering same time as recv survey effort AND birds monitoring period)</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>available_bird_recv_time <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(bird_data_list) <span class="sc">%&gt;%</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">recvDeployName =</span> name) <span class="sc">%&gt;%</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, speciesEN, recvDeployName, tideCategory)  <span class="sc">%&gt;%</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_h =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideDiel =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Diurnal"</span>, tideCategory), <span class="st">"Diurnal"</span>, <span class="st">"Nocturnal"</span>),</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideHighLow =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"High"</span>, tideCategory), <span class="st">"High"</span>, <span class="st">"Low"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="blockquote-blue">
+<p><strong>The <em>available</em> time is now defined for each bird across each Motus station, taking into account the periods where stations where ON only. The <em>available</em> periods are expanded in hours.</strong></p>
+</div>
+</section>
+<section id="time-used" class="level3">
+<h3 class="anchored" data-anchor-id="time-used">TIME USED</h3>
+<p>Let’s now determine the time <em>used</em> for each bird for each Motus station.</p>
+<div class="blockquote-blue">
+<p><strong>The time <em>used</em> is defined by multiplying the number of detections (meaning the number of rows) by the duration of a pulse (pulse interval).</strong> We assume that if an individual is detected by a receiver once, the individual was at least in the station coverage for the duration of the signal pulse. Duration differ depending tag models <em>- see table below</em>.</p>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh;">
+<figure class="figure">
+<p><img src="../../material/pulse_interval.png" alt="Table X: Pulse Interval depending Lotek nanotag models" style="display: block; margin: auto; width: 90vw; max-width: 950px; height: auto;" class="figure-img"></p>
+<figcaption style="text-align: center; margin-top: 0.5em;">
+<p>Pulse Interval depending Lotek nanotag models</p>
+</figcaption>
+</figure>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># USED TIME (amount of time each bird spent during each category of tide and at each station)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Provide the burst interval value depending Lotek-nano tag model (scd)</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>data_bird <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">burst_inter =</span> <span class="fu">ifelse</span>(tagModel <span class="sc">==</span> <span class="st">"NTQB2-6-2"</span>, <span class="fu">dseconds</span>(<span class="fl">7.1</span>), <span class="fu">dseconds</span>(<span class="fl">13.1</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(timeAus, tideCategory, tideHighLow, tideDiel, sunriseNewc, sunsetNewc, </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>         speciesEN, tagModel, recvDeployName, recv,speciesSci, Band.ID, burst_inter)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>used_bird_recv_time <span class="ot">&lt;-</span> data_bird <span class="sc">%&gt;%</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, speciesEN, recvDeployName, tideCategory)  <span class="sc">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_sec =</span> <span class="fu">sum</span>(burst_inter)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">duration_h =</span> <span class="fu">round</span>(duration_sec <span class="sc">/</span> <span class="dv">3600</span>, <span class="dv">0</span>),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideDiel =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Diurnal"</span>, tideCategory), <span class="st">"Diurnal"</span>, <span class="st">"Nocturnal"</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideHighLow =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"High"</span>, tideCategory), <span class="st">"High"</span>, <span class="st">"Low"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(speciesEN, tideCategory, tideDiel, tideHighLow, duration_h, recvDeployName)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="usage-rate" class="level2">
+<h2 class="anchored" data-anchor-id="usage-rate">Usage rate</h2>
+<p>Now that the <em>used</em> and <em>available</em> time have been determined for each individual and for each Motus station, we can relate these two elements together with the <strong>Usage rate</strong> (or rate of use).</p>
+<p><span class="math display">\[
+\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
+\]</span> Some cases may happen where the <em>time used</em> was over the <em>available</em>. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.<br>
+<br></p>
+<div id="mdkvtmmebs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mdkvtmmebs table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mdkvtmmebs thead, #mdkvtmmebs tbody, #mdkvtmmebs tfoot, #mdkvtmmebs tr, #mdkvtmmebs td, #mdkvtmmebs th {
+  border-style: none;
+}
+
+#mdkvtmmebs p {
+  margin: 0;
+  padding: 0;
+}
+
+#mdkvtmmebs .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mdkvtmmebs .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mdkvtmmebs .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mdkvtmmebs .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mdkvtmmebs .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mdkvtmmebs .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mdkvtmmebs .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mdkvtmmebs .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mdkvtmmebs .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mdkvtmmebs .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mdkvtmmebs .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mdkvtmmebs .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mdkvtmmebs .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mdkvtmmebs .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mdkvtmmebs .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mdkvtmmebs .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mdkvtmmebs .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mdkvtmmebs .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mdkvtmmebs .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mdkvtmmebs .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mdkvtmmebs .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mdkvtmmebs .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mdkvtmmebs .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mdkvtmmebs .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mdkvtmmebs .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mdkvtmmebs .gt_left {
+  text-align: left;
+}
+
+#mdkvtmmebs .gt_center {
+  text-align: center;
+}
+
+#mdkvtmmebs .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mdkvtmmebs .gt_font_normal {
+  font-weight: normal;
+}
+
+#mdkvtmmebs .gt_font_bold {
+  font-weight: bold;
+}
+
+#mdkvtmmebs .gt_font_italic {
+  font-style: italic;
+}
+
+#mdkvtmmebs .gt_super {
+  font-size: 65%;
+}
+
+#mdkvtmmebs .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mdkvtmmebs .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mdkvtmmebs .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mdkvtmmebs .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mdkvtmmebs .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mdkvtmmebs .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mdkvtmmebs .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#mdkvtmmebs .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mdkvtmmebs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_col_headings header">
+<th id="available_t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">available_t</th>
+<th id="tideDiel" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">tideDiel</th>
+<th id="tideHighLow" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">tideHighLow</th>
+<th id="used_t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">used_t</th>
+<th id="rate_use" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">rate_use</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row odd">
+<td colspan="5" id="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_right" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low  available_t">347</td>
+<td class="gt_row gt_left" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low  tideDiel">Diurnal</td>
+<td class="gt_row gt_left" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low  tideHighLow">Low</td>
+<td class="gt_row gt_right" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low  used_t">351</td>
+<td class="gt_row gt_right" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_Low  rate_use">101.1527</td>
+</tr>
+<tr class="gt_group_heading_row odd">
+<td colspan="5" id="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_right" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High  available_t">438</td>
+<td class="gt_row gt_left" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High  tideDiel">Diurnal</td>
+<td class="gt_row gt_left" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High  tideHighLow">High</td>
+<td class="gt_row gt_right" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High  used_t">461</td>
+<td class="gt_row gt_right" headers="Curlew Point - 06318617 - Pacific Golden-Plover - Diurnal_High  rate_use">105.2511</td>
+</tr>
+<tr class="gt_group_heading_row odd">
+<td colspan="5" id="Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_right" headers="Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High  available_t">6</td>
+<td class="gt_row gt_left" headers="Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High  tideDiel">Nocturnal</td>
+<td class="gt_row gt_left" headers="Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High  tideHighLow">High</td>
+<td class="gt_row gt_right" headers="Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High  used_t">8</td>
+<td class="gt_row gt_right" headers="Curlew Point - 07176824 - Bar-tailed Godwit - Nocturnal_High  rate_use">133.3333</td>
+</tr>
+<tr class="gt_group_heading_row odd">
+<td colspan="5" id="Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High" class="gt_group_heading" data-quarto-table-cell-role="th" scope="colgroup">Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_right" headers="Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High  available_t">6</td>
+<td class="gt_row gt_left" headers="Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High  tideDiel">Nocturnal</td>
+<td class="gt_row gt_left" headers="Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High  tideHighLow">High</td>
+<td class="gt_row gt_right" headers="Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High  used_t">9</td>
+<td class="gt_row gt_right" headers="Tomago - 07176824 - Bar-tailed Godwit - Nocturnal_High  rate_use">150.0000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+<p>We removed <strong>n = 4</strong> out of 1251 cases where the <em>time used</em> was over the <em>available</em>.</p>
+<p>This limitation is currently ignored and not taken into account into the analysis regarding the general low ratio time used/time available.</p>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>figure_plot <span class="ot">&lt;-</span> <span class="fu">left_join</span>(available_bird_recv_time <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">group_by</span>(recvDeployName, Band.ID, speciesEN, tideCategory) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">rename</span>(<span class="at">available_t =</span> <span class="st">"duration_h"</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                         used_bird_recv_time <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                           <span class="fu">rename</span>(<span class="at">used_t =</span> <span class="st">"duration_h"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate_use =</span> used_t<span class="sc">*</span><span class="dv">100</span><span class="sc">/</span>available_t) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate_use =</span> <span class="fu">ifelse</span>(rate_use <span class="sc">&gt;</span> <span class="dv">100</span>, <span class="dv">100</span>, rate_use)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesType =</span> <span class="fu">factor</span>(shorebird_class[speciesEN], </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>                               <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"migratory"</span>, <span class="st">"resident"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>speciesEN <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Far Eastern Curlew"</span>, <span class="st">"Masked Lapwing"</span>),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>         rate_use <span class="sc">!=</span> <span class="dv">100</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data. <br></p>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Track size sample</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>counts <span class="ot">&lt;-</span> used_bird_recv_time <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>      <span class="fu">group_by</span>(speciesEN) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>      <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n_distinct</span>(Band.ID)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">paste0</span>(speciesEN, <span class="st">" (n = "</span>, n, <span class="st">")"</span>))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>label_vec <span class="ot">&lt;-</span> <span class="fu">setNames</span>(counts<span class="sc">$</span>label, counts<span class="sc">$</span>speciesEN)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tide and species groupings</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tide_levels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Low"</span>, <span class="st">"High"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>species_types <span class="ot">&lt;-</span> <span class="fu">unique</span>(shorebird_class)  </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to generate a plot for a given combination</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>make_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(tide_level, species_type) {</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  data_sub <span class="ot">&lt;-</span> figure_plot <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(tideHighLow <span class="sc">==</span> tide_level) <span class="sc">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">species_class =</span> shorebird_class[speciesEN]) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(species_class <span class="sc">==</span> species_type)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(data_sub,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x    =</span> <span class="fu">factor</span>(recvDeployName, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">unique</span>(recvDeployName))),</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">y    =</span> rate_use,</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">fill =</span> tideDiel)) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> speciesEN,</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">speciesEN =</span> label_vec)) <span class="sc">+</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x     =</span> <span class="st">"Receiver Deployment"</span>,</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>         <span class="at">y     =</span> <span class="st">"Rate of Use (%)"</span>,</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill  =</span> <span class="st">"Tide Diel"</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="fu">paste</span>(<span class="fu">ifelse</span>(species_type <span class="sc">==</span> <span class="st">"migratory"</span>,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>                              <span class="st">"Migratory species"</span>, <span class="st">"Resident species"</span>),</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"during"</span>, tide_level, <span class="st">"tide"</span>)) <span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">50</span>)) <span class="sc">+</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Diurnal"</span> <span class="ot">=</span> <span class="st">"white"</span>, <span class="st">"Nocturnal"</span> <span class="ot">=</span> <span class="st">"darkgrey"</span>)) <span class="sc">+</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate and store all plots in a list</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>plots_used_rate <span class="ot">&lt;-</span> <span class="fu">cross2</span>(tide_levels, species_types) <span class="sc">%&gt;%</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">map</span>(<span class="sc">~</span> <span class="fu">make_plot</span>(.x[[<span class="dv">1</span>]], .x[[<span class="dv">2</span>]]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="resident-birds" class="level3">
+<h3 class="anchored" data-anchor-id="resident-birds">RESIDENT BIRDS</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Low Tide</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><img src="ch1_7_files/figure-html/4 Used rate 1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><img src="ch1_7_files/figure-html/4 Used rate 2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="migratory-birds" class="level3">
+<h3 class="anchored" data-anchor-id="migratory-birds">MIGRATORY BIRDS</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Low Tide</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<p><img src="ch1_7_files/figure-html/4 Used rate 3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<p><img src="ch1_7_files/figure-html/4 Used rate 4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="hourly-usage" class="level2">
+<h2 class="anchored" data-anchor-id="hourly-usage">Hourly usage</h2>
+<section id="used-vs-available" class="level3">
+<h3 class="anchored" data-anchor-id="used-vs-available">USED vs AVAILABLE</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Nocturnal High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Diurnal Low Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false">Diurnal High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false">Nocturnal Low Tide</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<p><img src="ch1_7_files/figure-html/4 1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<p><img src="ch1_7_files/figure-html/4 2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
+<p><img src="ch1_7_files/figure-html/4 3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-3-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-4-tab">
+<p><img src="ch1_7_files/figure-html/4 4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<p><strong>Legend</strong>: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one category from the pairs “high/low” and “nocturnal/diurnal,” showing <em>used time</em> for each species at different MOTUS stations (red boxes). The blue box on the left represents the total <em>available time</em> for the corresponding tide category across individuals. Note that <em>available time</em> is similar across stations as it is based on the general Newcastle tide table, since station-specific tide data is unavailable.</p>
+</section>
+<section id="used" class="level3">
+<h3 class="anchored" data-anchor-id="used">USED</h3>
+<p>Since the size sample at the current date is too low, it might be hard to read in details how much each bird or species spent time (hours) at each Motus station. So here below is displayed the <em>used</em> only for each stations.</p>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot function used ONLY</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>plot_used <span class="ot">&lt;-</span> <span class="cf">function</span>(tide_cat) {</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  data_subset <span class="ot">&lt;-</span> used_bird_recv_time <span class="sc">%&gt;%</span> <span class="fu">filter</span>(tideCategory <span class="sc">==</span> tide_cat)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(data_subset, </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>         <span class="fu">aes</span>(<span class="at">x =</span> recvDeployName, <span class="at">y =</span> duration_h, <span class="at">fill =</span> speciesEN)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">position =</span> <span class="fu">position_dodge2</span>(<span class="at">width =</span> <span class="fl">0.9</span>, <span class="at">preserve =</span> <span class="st">"single"</span>)) <span class="sc">+</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> species_colors, <span class="at">name =</span> <span class="st">"Species"</span>) <span class="sc">+</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> speciesEN, <span class="at">scales =</span> <span class="st">"free_y"</span>, </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>               <span class="at">labeller =</span> <span class="fu">labeller</span>(<span class="at">speciesEN =</span> label_vec)) <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>          <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>          <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>          <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="st">"in"</span>))  <span class="sc">+</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>    <span class="fu">coord_cartesian</span>(<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>)) <span class="sc">+</span> </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Motus stations"</span>,</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">"Detection duration (hours)"</span>,</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Tide Category:"</span>, tide_cat),</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>         <span class="at">fill =</span> <span class="st">"Species"</span>)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Get unique tideCategory levels</span></span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>tide_categories <span class="ot">&lt;-</span> combined_data <span class="sc">%&gt;%</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(tideCategory)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(tideCategory) <span class="sc">%&gt;%</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a list of plots for all tide categories</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>plots_list_used <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map</span>(tide_categories, plot_used)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Nocturnal Low Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Nocturnal High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false">Diurnal High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-4" role="tab" aria-controls="tabset-4-4" aria-selected="false">Diurnal Low Tide</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<p><img src="ch1_7_files/figure-html/4 used 1-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<p><img src="ch1_7_files/figure-html/4 used 2-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<p><img src="ch1_7_files/figure-html/4 used 3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div id="tabset-4-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-4-tab">
+<p><img src="ch1_7_files/figure-html/4 used 4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="detection-conditions" class="level2">
+<h2 class="anchored" data-anchor-id="detection-conditions">Detection conditions</h2>
+<p>Visualise here the difference between the total number of hours recorded across the four tidal conditions for each species and for the whole population of tagged shorebirds, “<strong>Total used</strong>”. And see the difference with the “<strong>Usage rate</strong>”, which measures bird detections by the Motus array as a proportion of the total available detection time.</p>
+<section id="population" class="level3">
+<h3 class="anchored" data-anchor-id="population">POPULATION</h3>
+<p><strong>Usage rate</strong></p>
+<p><img src="ch1_7_files/figure-html/global rou-1.png" class="img-fluid" width="672"></p>
+<p><strong>Total used</strong></p>
+<p><img src="ch1_7_files/figure-html/global hours-1.png" class="img-fluid" width="672"></p>
+</section>
+<section id="species" class="level3">
+<h3 class="anchored" data-anchor-id="species">SPECIES</h3>
+<p><strong>Usage rate</strong></p>
+<p><img src="ch1_7_files/figure-html/sp rou-1.png" class="img-fluid" width="672"></p>
+<p><strong>Total used</strong></p>
+<p><img src="ch1_7_files/figure-html/sp hours-1.png" class="img-fluid" width="672"></p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 

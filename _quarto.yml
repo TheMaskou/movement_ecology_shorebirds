@@ -14,6 +14,9 @@ project:
     # - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
     # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
     # - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_5.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_6.qmd"  # Exclude this specific file
+
     
 execute:
   freeze: auto

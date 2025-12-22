@@ -1,0 +1,421 @@
+---
+title: "Survey effort"
+---
+
+```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# Source the script into that environment
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
+                   output = tempfile(fileext = ".R"), 
+                   quiet = TRUE))
+```
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+**One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?**
+
+Stations may have operated for varying duration or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.
+
+To exactly access when a station was operational and when it was not, we used the `activity` table coming from each station's receiver. This table records any VHF activity at any time.
+
+***Note:*** *The following terms are used interchangeably: (1) receivers, SensorGnome, SG, serno, recv; (2) Raspberry Pi processor, Raspberry, deviceID.*
+:::
+
+```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, , results = 'hide', include = FALSE}
+
+library(dplyr)
+library(here)
+library(forcats) 
+library(ggplot2)
+library(lubridate)
+library(tidyr)
+library(purrr)
+
+# Birds
+data_all <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers info
+recv <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-recv-info\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers activity
+sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
+recv.act <- tbl(sql.motus, "activity")  %>% 
+  collect() %>% 
+  as.data.frame() %>%
+  rename(deviceID = "motusDeviceID") %>%
+  filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only 
+  
+  # Set the time properly - IMPORTANT
+  mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
+         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
+                             tz = "Australia/Sydney")) 
+
+```
+
+## Activity table
+
+::: blockquote-blue
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](qmd/chapter_1/ch1_1.qmd)*
+:::
+
+```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
+
+library(dplyr)
+library(here)
+library(forcats) 
+library(ggplot2)
+library(lubridate)
+library(tidyr)
+library(purrr)
+```
+
+**Let's call this famous activity table.**
+
+```{r load,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
+
+recv.act <- tbl(sql.motus, "activity")  %>% 
+  collect() %>% 
+  as.data.frame() %>%
+  rename(deviceID = "motusDeviceID") %>%
+  # keep our deployed antennas only
+  filter(deviceID %in% unique(recv$deviceID)) %>% 
+  # Set the time properly - IMPORTANT
+  mutate(date = as_datetime(as.POSIXct(hourBin* 3600,
+                                       origin = "1970-01-06", 
+                                       tz = "UTC")),
+         dateAus = as_datetime(as.POSIXct(hourBin* 3600, 
+                                          origin = "1970-01-06", 
+                                          tz = "UTC"), 
+                               tz = "Australia/Sydney"))   
+
+```
+
+```{r 2 check the data,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+
+head(recv.act)
+
+```
+
+**Here above is displayed an overview of the activity table. This object is composed of multiple elements but four are keys:**
+
+-   `pulseCount`: Quantifies the number of radio pulses measured on each antenna over each hour period `hourBin` but does not necessary correspond to a known VHF tag detection. It can be any other VHF signal, even simple noise - [*documentation*](https://docs.motus.org/en/stations/station-inspection/up-time-and-detectability#antenna-pulses)
+-   `numTags`: Represents the total number of unique tags detected. This, given a context, as typically a specific site, or within a batch, or for a set of detections.
+-   `deviceID`: Raspberry Pi processor ID. A small electronic part of the receiver that plays the role of an embarked computer.
+-   `ant`: Port of antenna the `activity` has been recorded.
+
+**How the data are recorded in this table?**
+
+[**Two cases may occur:**]{.underline}
+
+-   When a **station is listening**, the table has either values or *NA* for `pulseCount` or/and for `numTags` variables. For example:
+
+    -   No noise has been recorded but one or several tags have been recorded: `pulseCount` = 0 or is *NA* and `numTags` \> 1
+
+    -   No tag has been recorded but noise happened: `pulseCount` \> 0 and `numTags` = 0 or is *NA*
+
+-   When a **station is** **not listening**, there is no row at all in the table (no data recorded).
+
+**Keep in mind** **we can miss the hours where no tag or noise are happening within the environment BUT the antenna is still operational and being "listening".** In such a case, let's further assume than the antenna is not working or listening. Indeed, an environment with "no noise" condition during more than an hour may be extremely rare and very unlikely.
+
+```{r example,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+
+table(is.na(recv.act$pulseCount), recv.act$numTags) 
+
+```
+
+## Receiver ID
+
+One issue with Motus data is the number of variables related to IDs (receivers, Raspberry Pi, sites, etc.) and the inconsistent use of names for the same variable across the different tables (i.e. `recv$serno` = `data_all$recv`).
+
+Plus, some of our SensorGnome `serno` and/or Raspberry Pi processor `deviceID` have been swapped around stations to optimise the VHF survey.
+
+For example, when two stations need receiver repairs, we fix the easiest one first and prioritise reinstalling it at the most important station regardless the receiver or Raspberry origin. This sometimes means taking a receiver or Raspberry from one station and moving it to another one, but because Motus attaches this *Raspberry ID* `deviceID` to a *Motus station name* `recvDeployName`, messy error may happen.
+
+**We must re-associate each `deviceID` with their corresponding `recvDeployName` and at the correct `hourBin`. We first create a unique ID that matches station's name with Raspberry pi that we called `SernoStation`.**
+
+```{r  clarifying stations,  message = FALSE, warning = FALSE, eval = TRUE}
+
+# Sort the terminated serno (if terminated, ie. one box has been removed from one antenna site, and a date comes along recv$timeEndAus variable)
+recv.act.term <- recv.act %>%
+  left_join(recv %>% 
+              filter(!is.na(timeEndAus)) %>%
+              select(deviceID, serno, recvDeployName),
+            "deviceID") %>%
+  filter(!is.na(recvDeployName)) %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno))
+
+# Sort the still currently running serno
+recv.act.runn <- recv.act %>%
+  left_join(recv %>% 
+              filter(is.na(timeEndAus)) %>%
+              select(deviceID, serno, recvDeployName),
+            "deviceID") %>%
+  filter(!is.na(recvDeployName)) %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno))
+
+# Merging in one data-set to use Station's name further + pick-up the rounded hours
+recv.act <- bind_rows(recv.act.runn, recv.act.term) %>%
+  mutate(hour_dt = floor_date(dateAus, "hour"))
+
+# Providing helpful variables
+recv <- recv %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno),
+         lisStart = timeStartAus,
+         lisEnd = if_else(
+           is.na(timeEndAus), # means the station is still running since the last data downloading
+           with_tz(Sys.time(), "Australia/Sydney"),
+           with_tz(as_datetime(timeEndAus, tz = "UTC"), "Australia/Sydney")) )
+
+```
+
+We get `recv.act` table with every rows of activity the variables `lisStart` and `lisEnd` that specifies the complete period of time the station `recvDeployName` has been deployed with what `deviceID`.
+
+When a station is still deployed, `lisEnd` = *NA*.
+
+## Operational periods
+
+```{r 2 Extracting listening periods,  message = FALSE, warning = FALSE, eval = TRUE}
+
+# Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites
+recv_hours <- recv %>%
+  select(recvDeployName, deviceID, SernoStation, lisStart, lisEnd) %>%
+  rowwise() %>%
+  mutate(hour_dt = list(seq(from = floor_date(lisStart, unit = "hour"),
+                            to = floor_date(lisEnd, unit = "hour"),
+                            by = "hour")) ) %>%
+  unnest(cols = c(hour_dt)) %>%
+  ungroup()
+
+# Giving operational and not-operational hours by joining same sequences from recv.act tbl and adding operational = TRUE when existing values
+recv_hours <- recv_hours %>%
+  left_join(recv.act %>%
+              distinct(SernoStation, hour_dt) %>%
+              mutate(operational = TRUE),
+            by = c("SernoStation", "hour_dt")) %>%
+  mutate(operational = if_else(is.na(operational), FALSE, TRUE))
+
+# Relaying on the Station name on its own only (consistent values through SernoStation var)
+recv.act$Station <- sub("_SG-.*", "", recv.act$SernoStation)
+recv$Station <- sub("_SG-.*", "", recv$SernoStation)
+recv_hours$Station <- sub("_SG-.*", "", recv_hours$SernoStation)
+
+```
+
+This step runs for each row of each `recv` and creates one list composed of as many rows of as many hours it is contained within the period \[`lisStart` - `lisEnd`\].
+
+If `lisEnd` is *NA* because the station is still running, the date of today is taken.
+
+This prepares the `recv_hours` table where each row is one hour when one station `SernoStation` is potentially operational and listening.
+
+**Operational hours:** To get the `operational` hours for each stations, meaning "*when a station is actually listening*", we first gave an extra variable to the `recv.act` table when `operational` is always TRUE to records only the hours when the station is listening. These rows are the hours where one site is deployed and operational.
+
+**Non-operational hours:** And we join this to the `recv` table by the shared variable `hour_dt`, which then will generate *NA* for the cases `recv_hours$hour_dt` has no matching values with `recv.act$hour_dt`. These *NA* are the hours where one site is deployed, but not operational.
+
+Finally, for consistency, we make sure that we are using station's name (`Station`) regardless the `deviceID` since this one might have been swapped around (see *Receiver ID*).
+
+## Survey effort
+
+### STATISTICS
+
+```{r table MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE}
+
+uptime_summary <- recv_hours %>%
+  group_by(Station) %>%
+  summarise(
+    total_hours = n(),
+    operational_hours = sum(operational), 
+    downtime_hours = total_hours - operational_hours, 
+    uptime_pct = round(100 * operational_hours / total_hours), 2)  %>% 
+  mutate(cont_listening_eff = round(100 * operational_hours / sum(operational_hours), 1), 
+         surv_time_cover = round(100 * operational_hours / total_hours, 1)) %>%
+  arrange(desc(uptime_pct)) %>%
+  select(-c("2"))
+
+```
+
+```{r table survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+library(gt)
+uptime_summary  %>%
+  gt() %>%
+  opt_align_table_header(align = "left")  %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels() ) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Station))) 
+
+```
+
+-   `total_hours`: total of hours for the station being deployed into the field, regardless whether it is working/listening
+-   `operational_hours`: total of hours for the station being listening, regardless the `deviceID`
+-   `downtime_hours`: total of hours for the station being NOT listening, regardless the `deviceID`
+-   `uptime_pct`: per station, percentage of being listening over its `total_hours`
+-   `cont_listening_eff`: per station, contribution (%) of hours being listening (`operational_hour`) over the total (sum) of listening period across all the stations
+-   `surv_time_cover`: per station, temporal coverage (%) of hours being listening (`operational_hour`) over the period of time the array has been deployed (i.e. from the first day the first deployed station has been listening to the last day the last deployed station has been listening)
+
+### THE ARRAY
+
+```{r 2 hour MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+motus_survey_h <- ggplot(recv_hours %>% 
+         filter(operational),
+       aes(x = hour_dt, y = factor(Station))) +
+  geom_segment(aes(
+    x = hour_dt,
+    xend = hour_dt + hours(1),
+    y = Station,
+    yend = Station
+  ), color = "black", linewidth = 1) +
+  scale_y_discrete(name = "Receiver Station") +
+  scale_x_datetime(name = "Time") +
+  theme_minimal() +
+  ggtitle("Receiver Operational Periods per hours")
+
+```
+
+::: column-body-outset-right
+```{r motus_survey_h, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
+motus_survey_h
+```
+:::
+
+Every black dot represent an hour where the station has activity recorded meaning the station is operational, meaning recording radio noise or a specific tag.
+
+```{r 2 day MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+# Plot (day detailed)
+recv.status <- recv_hours %>%
+  filter(operational) %>%
+  arrange(Station, hour_dt) %>%
+  group_by(Station) %>%
+  # Calculate gap (in hours) between consecutive operational hours
+  mutate(gap_hours = as.numeric(difftime(hour_dt, lag(hour_dt), units = "hours")),
+         # New run starts if gap > 24h or if first row (NA gap)
+         run_group = cumsum(if_else(is.na(gap_hours) | gap_hours > 24, 1, 0))) %>%
+  group_by(Station, run_group) %>%
+  # Get the start and end datetime per run group
+  summarise(start_hour = min(hour_dt),
+            end_hour = max(hour_dt) + hours(1), # +1 hour to cover full period
+            .groups = "drop") %>%
+  left_join(uptime_summary %>% select(Station, cont_listening_eff), "Station") %>%
+  mutate(StationP = paste0(Station, " (", round(cont_listening_eff, digits = 1), "%)")) 
+
+motus_survey_d <- ggplot(recv.status, aes(y = factor(StationP))) +
+  geom_segment(aes(x = start_hour, xend = end_hour,
+                   yend = factor(StationP)),
+               color = "black", linewidth = 1) +
+  
+  scale_y_discrete(name = "") +
+  scale_x_datetime(name = "Time",
+                   date_breaks = "1 month",
+                   date_labels = "%b",
+                   sec.axis = dup_axis(breaks = seq(from = floor_date(min(recv.status$start_hour),
+                                                                      "year") + months(3),
+                                                    to = floor_date(max(recv.status$end_hour), 
+                                                                    "year") + months(3),
+                                                    by = "1 year"),
+                                       labels = function(x) format(x, "%Y"),
+                                       name = NULL)) +
+  
+  theme_minimal() +
+  theme(axis.text.y.left = element_text(face = "bold", vjust = 0.5, margin = margin(t = 5)),
+        axis.text.x.top = element_text(face = "bold", vjust = 0.5, margin = margin(t = 5)),
+        axis.text.x = element_text(size = 9)) +
+  ggtitle("Receiver Operational Periods per days (contribution % at the survey effort - listening)")
+
+# Adding Birds 
+data_all_plot <- left_join(data_all %>%
+                             select(Band.ID, recv, recvDeployName, timeAus, tideCategory, speciesEN),
+                           recv.status %>% 
+                             rename(recvDeployName = Station) %>%
+                             select(recvDeployName, StationP) %>%
+                             unique(), 
+                           "recvDeployName")
+
+motus_survey_d <- motus_survey_d +
+  geom_point(
+    data = data_all_plot ,
+    aes(x = timeAus,
+        y = factor(StationP), 
+        color = speciesEN),
+    alpha = 0.7, size = 2) +
+  scale_color_manual(name = "Species", values = species_colors)
+
+```
+
+::: column-body-outset-right
+```{r motus_survey_d, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
+motus_survey_d
+```
+:::
+
+Solid black lines are when a MOTUS station is operational. To simplify, when a station is not operational less than 24 hours, this period is considered as a operational period. Every dot represent at least one detection of one bird within an hour of the operational period. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed `r uptime_summary$cont_listening_eff[uptime_summary$Station=="Curlew Point"]` % to the total operational period for every stations within our local MOTUS array.
+
+### STATIONS
+
+::: panel-tabset
+```{r 2 station MOTUS array survey effort plot, echo = FALSE, eval = TRUE, results = 'asis'}
+
+# Split the detection data by StationP
+data_split <- split(data_all_plot, data_all_plot$StationP)
+
+# Make sure your recv.status also has start/end per StationP
+recv_split <- split(recv.status, recv.status$StationP)
+
+# Create a named list of plots, one per station
+plots_per_station <- imap(data_split, ~ {
+  station_data <- .x
+  station_name <- .y
+  effort_data <- recv_split[[station_name]]
+  
+tag_order <- station_data %>%
+    distinct(Band.ID, speciesEN) %>%
+    arrange(speciesEN, Band.ID) %>%
+    pull(Band.ID)
+  
+# Create a factor with levels ordered by speciesEN grouping
+station_data <- station_data %>%
+    mutate(Band.ID_ordered = factor(Band.ID, levels = tag_order))
+
+ggplot() +
+  # Vertical bands for survey effort periods
+  geom_rect(data = effort_data, 
+            aes(xmin = start_hour, xmax = end_hour, ymin = -Inf, ymax = Inf),
+            fill = "grey80", alpha = 0.3) +
+  
+    # Points for detections with ordered Band.ID
+    geom_point(data = station_data,
+               aes(x = timeAus,
+                   y = Band.ID_ordered,
+                   color = speciesEN),
+               alpha = 0.7, linewidth = 2) +
+    scale_color_manual(
+      values = species_colors,
+      name = paste0("Species\n (n = ", n_distinct(station_data$Band.ID_ordered), " indiv. recorded)") ) +
+    scale_y_discrete() +
+    theme_bw() +
+    labs(title = station_name,
+         x = "Time (Aus)",
+         y = "Band.ID") +
+    theme(axis.text.y = element_text(size = 6),
+          plot.title = element_text(hjust = 0.5))
+})
+
+# Now you can print each plot in your Quarto chunk by looping over the list
+  for (station_data in names(plots_per_station)) {
+    cat("\n\n## ", station_data, "\n\n") 
+    print(plots_per_station[[station_data]]) 
+    flush.console() #force immediate output
+  }
+
+```
+:::
+
+***Legend:*** *The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is "OFF" and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed* `r uptime_summary$cont_listening_eff[uptime_summary$Station=="Curlew Point"]` % *at the total operational period for every stations within our local MOTUS array (operational survey effort).*

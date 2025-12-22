@@ -321,6 +321,22 @@ station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
 
 ```
 
+```{r filter recv 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+
+# Apply corrections
+df.recvDeps <- df.recvDeps %>% 
+  mutate(name = recode(name, !!!station_rename)) %>%
+  rename(recvDeployName = "name")
+
+# Filter not used stations as out of the local array 
+df.recvDeps <- df.recvDeps %>% 
+  filter(!is.na(latitude),   
+         recvDeployName != c("Throsby Creek Test Site"),    
+         serno != c("SG-C621RPI3E17F",   # test station
+                    "SG-62A5RPI36710") ) # test station
+
+```
+
 ```{r update T/F, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 # This avoid to treat the complete motus dataset everytime (takes a while)
@@ -350,22 +366,11 @@ if (update == TRUE) {
 
 ```
 
-```{r filter recv 2, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
+```{r tags 2, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
 # Apply corrections
-df.recvDeps <- df.recvDeps %>% 
-  mutate(name = recode(name, !!!station_rename)) %>%
-  rename(recvDeployName = "name")
-
 df.alltags <- df.alltags %>% 
   mutate(recvDeployName = recode(recvDeployName, !!!station_rename))
-
-# Filter not used stations as out of the local array 
-df.recvDeps <- df.recvDeps %>% 
-  filter(!is.na(latitude),   
-         recvDeployName != c("Throsby Creek Test Site"),    
-         serno != c("SG-C621RPI3E17F",   # test station
-                    "SG-62A5RPI36710") ) # test station
 
 ```
 
@@ -454,23 +459,26 @@ To do so, we must first fetch the tide data.
 tideData <- read.csv(here("qmd", "chapter_1", "data", "tides", "TideDataNewcastle.csv"))
 
 # Format date and datetime columns
-tideData$tideDateTimeAus <- ymd_hms(tideData$tideDateTime, tz = "Australia/Sydney")
 tideData <- tideData %>% mutate(
-  date = as.POSIXct(date, format = "%d/%m/%Y", tz = "Australia/Sydney"))
+  date = dmy(date, tz = "Australia/Sydney"),
+  tideDateTimeAus = dmy_hm(tideDateTimeAus, tz = "Australia/Sydney")
+)
 
 # Classify tides as diurnal or nocturnal
 tideData <- tideData %>% mutate(
   sunriseNewc = sunrise(date, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
   sunsetNewc = sunset(date, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
   sunriseNewcTime = strftime(sunriseNewc, format = "%H:%M:%S", tz = "Australia/Sydney"),
-  sunsetNewcTime = strftime(sunsetNewc, format = "%H:%M:%S", tz = "Australia/Sydney"))
+  sunsetNewcTime = strftime(sunsetNewc, format = "%H:%M:%S", tz = "Australia/Sydney")
+)
 
 # Define either diurnal or nocturnal 
 tideData <- tideData %>% mutate(
   day_night = case_when(
-    tideDateTimeAus < sunriseNewc ~ "Nocturnal",
-    tideDateTimeAus > sunriseNewc & tideDateTimeAus < sunsetNewc ~ "Diurnal",
-    tideDateTimeAus > sunsetNewc ~ "Nocturnal"))
+    tideDateTimeAus >= sunriseNewc & tideDateTimeAus <= sunsetNewc ~ "Diurnal",
+    TRUE ~ "Nocturnal"
+  )
+)
 
 # Categorise each tide by tidal/diel period
 tideData <- tideData %>% mutate(  
@@ -550,11 +558,8 @@ df.alltags <- df.alltags %>%
 # If update = T, then combine past and new data and sort with time
 
 if (update == TRUE) {
-
 # Combine updated data to new
-df.alltags <- bind_rows(df.alltags, df.alltags.past) %>%
-  arrange(desc(timeAus))
-
+df.alltags <- bind_rows(df.alltags, df.alltags.past)
   }
 
 ```
@@ -623,7 +628,7 @@ save.image(file = here::here("qmd", "chapter_1", "data", "motus_data.RData"))
 :::: blockquote-red
 **Ready-to-Go**!
 
-To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=rHrZzq) *(a password might be required - maxime.marini\@uon.edu.au)*.
+To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=CcTSqA) *(a password might be required - maxime.marini\@uon.edu.au)*.
 
 Once loaded in your *R environment,* the file will display five objects:
 

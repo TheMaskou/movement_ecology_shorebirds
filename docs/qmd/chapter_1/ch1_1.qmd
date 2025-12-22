@@ -3,10 +3,18 @@ title: "Load & Format"
 ---
 
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
-# Source the script into that environment
+# Source the .qmd that set styles and codex into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
                    quiet = TRUE))
+## _/!\_ ##    
+
+################ First, run the .R script to download last up to date Motus data-set
+update <- TRUE # Second, Chose whether to update new detections from last data.rds (update = TRUE)
+################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\
+
+## _/!\_ ##
+
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -261,7 +269,7 @@ Being able to flag an abnormal amount of False Positive for one station might be
 # False positive
 df.alltags <- df.alltags %>% 
   filter(motusFilter == 1, # 0 is invalid data
-         runLen >= 3) # value to be further thought
+         runLen >= 3) # value might be further thought
 
 
 ```
@@ -320,10 +328,6 @@ df.recvDeps <- df.recvDeps %>%
   mutate(name = recode(name, !!!station_rename)) %>%
   rename(recvDeployName = "name")
 
-df.alltags <- df.alltags %>% 
-  mutate(recvDeployName = recode(recvDeployName,
-                                 !!!station_rename))
-
 # Filter not used stations as out of the local array 
 df.recvDeps <- df.recvDeps %>% 
   filter(!is.na(latitude),   
@@ -333,9 +337,46 @@ df.recvDeps <- df.recvDeps %>%
 
 ```
 
+```{r update T/F, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+# This avoid to treat the complete motus dataset everytime (takes a while)
+# So if update = T, compare last and new data to keep only new ones. Also set the run_analysis = T if new data are != 0 (it may happen when set update = T but there is no new data since last run), this allows the following junks to run with eval = run_analysis. If update = F and you rewrite the whole data set, run_analysis = T per default.
+
+if (update == TRUE) {
+  
+# Load last data
+df.alltags.past <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Keep only new data
+df.alltags <- df.alltags %>%
+  filter(!timeAus %in% df.alltags.past$timeAus)
+
+}
+
+if (update == TRUE) {
+  run_analysis <- nrow(df.alltags) > 0 
+} else {
+  run_analysis <- TRUE
+}
+
+
+```
+
+```{r tags 2, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
+
+# Apply corrections
+df.alltags <- df.alltags %>% 
+  mutate(recvDeployName = recode(recvDeployName, !!!station_rename))
+
+```
+
 ## Survey time frame
 
-```{r 1 final filtering, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r 1 final filtering, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
 df.recvDeps <- df.recvDeps %>%   filter(timeStartAus > "2023-01-31 00:00:00 AEDT")
 
@@ -349,7 +390,7 @@ Day one for our local Motus array to start *listening* any tag signals is set on
 
 As we might re-trap individuals and re-tag them with a new MOTUS tag, we can't use the Motus tag ID as unique ID anymore and have to use Band ID which supposes to last on the same bird from banding date to individual's death. Unfortunately, the Band ID is not imported by MOTUS network at the moment. So, we need to import it from our own record accessible on SharePoint [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/General/SHOREBIRD%20NUMBER%20TRACKING.xlsx?d=wa23e66f0c5514ba4acd0de0d5e83ca42&csf=1&web=1&e=BuGI0w&nav=MTVfe0QyREY1NzZGLUM2RjktNEJFRi1BQThGLTc1M0E3OEFFM0ZERn0), download the .*csv*.
 
-```{r 1 Band ID BIS, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+```{r 1 Band ID BIS, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
 
 # Call and extract last up to date Spreadsheet record (sync your one drive with the TEAMS channel first) 
 tryCatch({
@@ -369,7 +410,7 @@ tryCatch({
 
 ```
 
-```{r 1 Band ID, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r 1 Band ID, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
 
 # Load df with date at the beginning 
@@ -412,29 +453,32 @@ It is crucial for our further analysis to add the **Tidal and Circadian cycles**
 
 To do so, we must first fetch the tide data.
 
-```{r 1 Tide data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r 1 Tide data, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
 # Read tide.csv
 tideData <- read.csv(here("qmd", "chapter_1", "data", "tides", "TideDataNewcastle.csv"))
 
 # Format date and datetime columns
-tideData$tideDateTimeAus <- ymd_hms(tideData$tideDateTime, tz = "Australia/Sydney")
 tideData <- tideData %>% mutate(
-  date = as.POSIXct(date, format = "%d/%m/%Y", tz = "Australia/Sydney"))
+  date = dmy(date, tz = "Australia/Sydney"),
+  tideDateTimeAus = dmy_hm(tideDateTimeAus, tz = "Australia/Sydney")
+)
 
 # Classify tides as diurnal or nocturnal
 tideData <- tideData %>% mutate(
   sunriseNewc = sunrise(date, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
   sunsetNewc = sunset(date, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
   sunriseNewcTime = strftime(sunriseNewc, format = "%H:%M:%S", tz = "Australia/Sydney"),
-  sunsetNewcTime = strftime(sunsetNewc, format = "%H:%M:%S", tz = "Australia/Sydney"))
+  sunsetNewcTime = strftime(sunsetNewc, format = "%H:%M:%S", tz = "Australia/Sydney")
+)
 
 # Define either diurnal or nocturnal 
 tideData <- tideData %>% mutate(
   day_night = case_when(
-    tideDateTimeAus < sunriseNewc ~ "Nocturnal",
-    tideDateTimeAus > sunriseNewc & tideDateTimeAus < sunsetNewc ~ "Diurnal",
-    tideDateTimeAus > sunsetNewc ~ "Nocturnal"))
+    tideDateTimeAus >= sunriseNewc & tideDateTimeAus <= sunsetNewc ~ "Diurnal",
+    TRUE ~ "Nocturnal"
+  )
+)
 
 # Categorise each tide by tidal/diel period
 tideData <- tideData %>% mutate(  
@@ -465,7 +509,7 @@ All the **Tide** categories are set for a unique point in Newcastle, easing the 
 
 -   Tidal period
 
-```{r 1 variable, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r 1 variable, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
 # Load useful functions from Callum Gapes work
 tidalCurve <- readRDS(here::here("qmd", "chapter_1", "data", "tides", "tidalCurve.rds"))
@@ -509,6 +553,17 @@ df.alltags <- df.alltags %>%
 
 ```
 
+```{r update T/F 2, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
+
+# If update = T, then combine past and new data and sort with time
+
+if (update == TRUE) {
+# Combine updated data to new
+df.alltags <- bind_rows(df.alltags, df.alltags.past)
+  }
+
+```
+
 ## Save
 
 ::: blockquote-yellow
@@ -519,7 +574,7 @@ Some observations (**n = `r sum(is.na(df.alltags$speciesEN))`**) in the detectio
 As long as we consider it is negligible, these observations are removed.
 :::
 
-```{r 1 species NA, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+```{r 1 species NA, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
 
 df.alltags %>% 
   filter(is.na(speciesEN)) %>%  
@@ -530,7 +585,20 @@ df.alltags <- df.alltags %>%
 
 ```
 
-```{r 1 save .rds, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r save T/F, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
+
+# Because I don't want to save multiple data.rds every time I render the .qmd, if past and new data are the same, run_analysis = F for next saving chunk. Per default = T.
+
+if (update == TRUE) {
+  # check whether df.alltags.past and df.alltags are same data
+  run_analysis <- nrow(df.alltags) != nrow(df.alltags.past)
+} else {
+  run_analysis <- TRUE
+}
+
+```
+
+```{r 1 save .rds, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
 
 # Bird detection dqtq
@@ -560,7 +628,7 @@ save.image(file = here::here("qmd", "chapter_1", "data", "motus_data.RData"))
 :::: blockquote-red
 **Ready-to-Go**!
 
-To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=rHrZzq) *(a password might be required - maxime.marini\@uon.edu.au)*.
+To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=CcTSqA) *(a password might be required - maxime.marini\@uon.edu.au)*.
 
 Once loaded in your *R environment,* the file will display five objects:
 

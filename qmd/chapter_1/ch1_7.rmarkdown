@@ -844,3 +844,4 @@ explore <- ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 explore
 ```
+
