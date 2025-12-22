@@ -61,7 +61,7 @@ recv.act <- tbl(sql.motus, "activity")  %>%
 ## Activity table
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format \> Reproducibility](qmd/chapter_1/ch1_1.qmd)*
+**Load your data** in your R environment *- see [Load & Format > Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
 :::
 
 ```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
