@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -128,11 +163,11 @@ ul.task-list li input[type="checkbox"] {
         <li class="dropdown-header">Analysis</li>
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_6.html">
- <span class="dropdown-text">Estuary Usage</span></a>
+ <span class="dropdown-text">Estuary usage - days</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_7.html">
- <span class="dropdown-text">Station Usage rate</span></a>
+ <span class="dropdown-text">Station usage - hours</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_8.html">
@@ -298,13 +333,13 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_6.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Estuary Usage</span></a>
+ <span class="menu-text">Estuary usage - days</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Station Usage rate</span></a>
+ <span class="menu-text">Station usage - hours</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -345,6 +380,104 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<div class="callout callout-style-simple callout-none no-icon" style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><em>This is preliminary analysis.</em></p>
+<p><strong>Signal strength</strong> is a metric we get from a tag detection which is likely related to the distance of the tag from a Motus station at the time its detection - <a href="https://motuswts.github.io/motus/articles/signal-strength.html?q=signal%20strenght#basic-plot"><em>see documentation</em></a>.</p>
+<p>Using this metric, we could characterise behaviors such as foraging or roosting activity.</p>
+<ul>
+<li><strong>Foraging:</strong> If we assume that large signal strength variations reflect substantial movement within the Motus station’s coverage area, these variations could be associated with the research of food.</li>
+<li><strong>Roosting:</strong> In contrast, small variations would suggest limited movement, potentially corresponding to the seek for rest.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blockquote-blue">
+<p><strong>Load your data</strong> in your R environment <em>- see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility">Load &amp; Format &gt; Reproducibility</a></em></p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forcats) </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr) </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mean signal strength per individual, site and time categories (HD, HN, LD, LN)</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data_all <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, tideCategory, recvDeployName) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sig_indiv_tideCat =</span> <span class="fu">mean</span>(sigPositive)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()  <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesINIT =</span> <span class="fu">str_split</span>(speciesEN, <span class="st">" "</span>) <span class="sc">%&gt;%</span>            </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">map_chr</span>(<span class="sc">~</span> <span class="fu">str_c</span>(<span class="fu">str_sub</span>(.x, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">collapse =</span> <span class="st">""</span>)) <span class="sc">%&gt;%</span>    </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>           <span class="fu">toupper</span>(),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideCat =</span> <span class="fu">str_split</span>(tideCategory, <span class="st">"_"</span>) <span class="sc">%&gt;%</span>          </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>           <span class="fu">map_chr</span>(<span class="sc">~</span> <span class="fu">str_c</span>(<span class="fu">str_sub</span>(.x, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">collapse =</span> <span class="st">""</span>)) <span class="sc">%&gt;%</span>    </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>           <span class="fu">toupper</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here, we take the relative <strong>signal strength value</strong> <code>sigPositive</code> (a <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables"><em>derivative</em></a> of the raw values <code>sig</code>) to calculate the mean for each individual and per tide category.</p>
+<p>Therefore, we group the means per species and per site to observe how the signal strength varies. To that aim, we need to create a new variable: the average signal strength per individuals <code>sig_indiv_tideCat</code>.</p>
+<p>Then, we can create a list which plots the distribution of the average <em>signal strength</em> <em>variation</em> across species.</p>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One plot per species for better understanding</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plots_list <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(.<span class="sc">$</span>speciesEN) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  purrr<span class="sc">::</span><span class="fu">imap</span>(<span class="sc">~</span> {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    species_full <span class="ot">&lt;-</span> .y  <span class="co"># The split name (full species name)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(.x, <span class="fu">aes</span>(<span class="at">x =</span> tideCat, <span class="at">y =</span> sig_indiv_tideCat, <span class="at">fill =</span> speciesEN)) <span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">facet_wrap</span>(<span class="sc">~</span> recvDeployName) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> species_colors, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">paste0</span>(<span class="st">"Signal Strength variance for "</span>, species_full, <span class="st">" over Motus stations"</span>),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="st">"Tide Category"</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>           <span class="at">y =</span> <span class="st">"Signal Strength variance (RSSI)"</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">"Species"</span>) </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename list elements to initials using the inverse mapping</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(plots_list) <span class="ot">&lt;-</span> <span class="fu">names</span>(species_init_colors)[<span class="fu">match</span>(<span class="fu">names</span>(plots_list), <span class="fu">names</span>(species_colors))]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Bar-tailed Godwit</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Curlew Sandpiper</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Eurasian Whimbrel</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Far Eastern Curlew</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false">Masked Lapwing</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false">Pacific Golden-Plover</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false">Pied Stilt</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-8" role="tab" aria-controls="tabset-1-8" aria-selected="false">Red-necked Avocet</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-1.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-2.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-3.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-4.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-5-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-5.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-6-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-6.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-7" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-7-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-7.png" class="img-fluid" width="960"></p>
+</div>
+<div id="tabset-1-8" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-8-tab">
+<p><img src="ch1_8_files/figure-html/final tabs-8.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+</div>
+<p><strong>Legend</strong>: The average value of the <em>signal strength</em> has been calculated for each individual, so you can see its distribution (boxes on vertical axis) depending the tide condition (horizontal axis) and for each species (tabs).</p>
 
 
 

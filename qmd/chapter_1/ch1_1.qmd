@@ -630,6 +630,10 @@ save.image(file = here::here("qmd", "chapter_1", "data", "motus_data.RData"))
 
 To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=CcTSqA) *(a password might be required - maxime.marini\@uon.edu.au)*.
 
+ **Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
+
+<br>
+
 Once loaded in your *R environment,* the file will display five objects:
 
 -   `sql.motus`: raw motus file from which you can call multiple tables (see [documentation](https://motuswts.github.io/motus/articles/03-accessing-data.html))

@@ -3,3 +3,118 @@ title: "Signal strength"
 format: html
 ---
 
+```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# Source the script into that environment
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
+                   output = tempfile(fileext = ".R"), 
+                   quiet = TRUE))
+```
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+*This is preliminary analysis.*
+
+**Signal strength** is a metric we get from a tag detection which is likely related to the distance of the tag from a Motus station at the time its detection - [*see documentation*](https://motuswts.github.io/motus/articles/signal-strength.html?q=signal%20strenght#basic-plot).
+
+Using this metric, we could characterise behaviors such as foraging or roosting activity.
+
+-   **Foraging:** If we assume that large signal strength variations reflect substantial movement within the Motus station’s coverage area, these variations could be associated with the research of food.
+-   **Roosting:** In contrast, small variations would suggest limited movement, potentially corresponding to the seek for rest.
+:::
+
+::: blockquote-blue
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+:::
+
+```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+library(dplyr)
+library(here)
+library(forcats) 
+library(lubridate)
+library(purrr) 
+library(lubridate)
+library(ggplot2)
+library(stringr)
+```
+
+```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+# Birds
+data_all <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers info
+recv <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-recv-info\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Selecting upon our needs
+data_all <- data_all %>%
+  select(Band.ID, recvDeployName, recv, speciesEN, sig, sigsd, sigPositive, tideCategory, timeAus)
+```
+
+```{r compute variables, echo = TRUE, eval = TRUE}
+# Mean signal strength per individual, site and time categories (HD, HN, LD, LN)
+data_all <- data_all %>%
+  group_by(Band.ID, tideCategory, recvDeployName) %>%
+  mutate(sig_indiv_tideCat = mean(sigPositive)) %>%
+  ungroup()  %>%
+  mutate(speciesINIT = str_split(speciesEN, " ") %>%            
+           map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%    
+           toupper(),
+         tideCat = str_split(tideCategory, "_") %>%          
+           map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%    
+           toupper())
+```
+
+Here, we take the relative **signal strength value** `sigPositive` (a [*derivative*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables) of the raw values `sig`) to calculate the mean for each individual and per tide category.
+
+Therefore, we group the means per species and per site to observe how the signal strength varies. To that aim, we need to create a new variable: the average signal strength per individuals `sig_indiv_tideCat`.
+
+Then, we can create a list which plots the distribution of the average *signal strength* *variation* across species.
+
+```{r plot list, echo = TRUE, eval = TRUE, results = 'asis'}
+# One plot per species for better understanding
+plots_list <- data_all %>%
+  
+  split(.$speciesEN) %>%
+  
+  purrr::imap(~ {
+    
+    species_full <- .y  # The split name (full species name)
+    
+    ggplot(.x, aes(x = tideCat, y = sig_indiv_tideCat, fill = speciesEN)) +
+      geom_boxplot() +
+      facet_wrap(~ recvDeployName) +
+      
+      scale_fill_manual(values = species_colors, guide = "none") +
+      theme_bw() +
+      labs(title = paste0("Signal Strength variance for ", species_full, " over Motus stations"),
+           x = "Tide Category",
+           y = "Signal Strength variance (RSSI)",
+           fill = "Species") 
+    })
+
+# Rename list elements to initials using the inverse mapping
+names(plots_list) <- names(species_init_colors)[match(names(plots_list), names(species_colors))]
+
+```
+
+::: panel-tabset
+
+```{r final tabs, echo = FALSE, eval = TRUE, results = 'asis', fig.width = 10, fig.height = 6}
+# Create tabs dynamically
+for (species_init in names(plots_list)) {
+  species_full <- names(species_colors)[match(species_init, names(species_init_colors))]
+  cat("###", species_full, "\n\n")
+  print(plots_list[[species_init]])
+  cat("\n\n")
+}
+```
+
+:::
+
+**Legend**: The average value of the *signal strength* has been calculated for each individual, so you can see its distribution (boxes on vertical axis) depending the tide condition (horizontal axis) and for each species (tabs).
