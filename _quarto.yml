@@ -34,7 +34,7 @@ website:
         
     right:     
       - text: "PhD Project"
-        href: qmd/teststart.qmd
+        href: qmd/myphd.qmd
         
       - sidebar:chapter1
       - sidebar:chapter2
@@ -77,7 +77,7 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_2/testch2.qmd
+        - href: qmd/chapter_2/ch2_1.qmd
 
     - id: chapter3
       title: "Chapter 3"
@@ -85,7 +85,7 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_3/testch3.qmd
+        - href: qmd/chapter_3/ch3_1.qmd
 
     - id: chapter4
       title: "Chapter 4"
@@ -93,7 +93,7 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_4/testch4.qmd
+        - href: qmd/chapter_4/ch4_1.qmd
 
     - id: chapter5
       title: "Chapter 5"
@@ -101,7 +101,7 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_5/testch5.qmd
+        - href: qmd/chapter_5/ch5_1.qmd
         
     - id: reports
       title: "Publications"
@@ -113,6 +113,7 @@ website:
         - qmd/reports/pub_2.qmd  # ethics + grant reports
         - qmd/reports/pub_3.qmd  # conference + papers
         - qmd/reports/pub_4.qmd  # milestones
+        - qmd/reports/pub_5.qmd  # awards
 
             
 format:

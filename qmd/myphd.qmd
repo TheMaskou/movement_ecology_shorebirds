@@ -1,0 +1,72 @@
+---
+title-block-banner: false
+format:
+  html:
+    css: 
+      - /custom-hero.css
+      - /styles.css
+    include-in-header: 
+    - text: |
+          <script src="/custom-scroll.js"></script>
+---
+
+::: hero-section2
+:::
+
+::: {style="background: linear-gradient(135deg, #d97706 0%, #b91c1c 100%); color: white; padding: 2rem; border-radius: 8px; margin: 2rem 0;"}
+**PROJECT & OBJECTIVES**
+
+Currently a PhD candidate at the Center for Conservation Science, University of Newcastle, I focus on movement and spatial ecology from resident shorebirds and migratory species on their non-breeding ground, in Australia within the Hunter and Port Stephen estuaries. Shorebirds have complex behavioural and ecological needs which remain poorly understood at the level needed to inform regional land management decisions and ground-level protection in Australia.
+
+This Research Project (PhD) intends to understand how local shorebirds use habitats for roosting and foraging, as it is crucial to inform stakeholders and land managers for effective conservation of both resident and migratory species.
+:::
+
+::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
+**Chapter 1: Where the different species of shorebirds forage and roost at night and where do they feed during the day?**
+
+Recent Motus telemetry technology revealed individuals use distinct estuary areas following tidal and circadian cycles, yet detection gaps remain. Continuing and combining VHF and GPS methods will improve sample size and clarify the land-use from shorebirds population.
+:::
+
+::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
+**Chapter 2: Do shorebird species within local estuaries have segregated or overlapping foraging niches?**
+
+Stable isotope analysis (C/N) revealed foraging niche overlap between two threatened migratory species, as first results. However, C4 plant might be undistinguished through this method. Adding sulfur δ34S improves this distinction and traces marine versus terrestrial and benthic versus pelagic sources. Clarifying what vegetation provisions foraging grounds will inform restoration priorities, particularly if invertebrates are included to complete the trophic pathway for shorebirds.
+:::
+
+::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
+**Chapter 3: How the inter-tidal flats evolved along time over Australia and is this evolution threatening migratory shorebirds population?**
+
+Migratory shorebirds depend on inter-tidal flats for foraging. Digital Earth Australia Inter-tidal data (2016-2026) combined with Birdlife Australia datasets enables continental-scale analysis linking habitat evolution to population dynamics, informing coastal management and conservation under sea level rise.
+:::
+
+::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
+**Chapter 4: How native resident shorebirds are exposed to predation risk from cats and foxes at high tide roosts and foraging ground: is there a spatio-temporal overlap in respective home ranges utilisation?**
+
+Invasive feral cats and European red foxes threaten Hunter estuary shorebirds. GPS tracking offers an efficient method to assess individual trajectories, home ranges, and spatial utilisation distribution for both predators and preys. Analysing spatio-temporal overlaps relative to tidal cycles, land-cover, and inter-tidal exposure can quantify predation risk and identify potential refuges for shorebirds.
+:::
+
+::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
+**Chapter 5 (extras): Additional Research Questions**
+
+How red foxes move and use their habitat across and within the local estuaries? Where and when resident shorebirds go inland? What variables drive resident shorebirds habitat selection? What is the preferred diet from migratory shorebirds across the local estuaries, and does a shift exist during overwintering period? Many questions remains and might potentially make the fifth chapter.
+:::
+
+:::: {style="background: linear-gradient(135deg, rgba(120,140,160,0.95), rgba(100,120,140,0.95)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
+**FOUNDERS & COLLABORATORS**
+
+-   The PhD program is a generously donor-funded scholarship from **Ms Margaret Flynn.**
+
+-   The Research Project is funded by many institutions that may also collaborate with us as the Hunter Local Land Services, Hunter Bird Observers Club, Department of Planning and Environment, and National Parks and Wildlife.
+
+::: {style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2rem; margin: 2rem auto 0; padding: 2rem; background: white; border-radius: 50px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); max-width: 1200px;"}
+![](/material/cboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/dccew.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/lls.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/hboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/off.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
+:::
+::::
+
+::: {style="background: linear-gradient(135deg, rgba(40,40,40,0.95), rgba(25,25,25,0.95)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
+**UN MOT**
+
+*I am from France and an curious man interested on movement and spatial ecology of wildlife and population demographics.*
+
+*My attention is caught by animal interactions, behaviours, choices, and I hope to participate at generating useful datasets, easy to read and implement, so it can inform conservation action while considering socio-economic and ecological priorities.*
+:::

@@ -37,7 +37,7 @@ This continent always was and always will be Aboriginal Land.
 ::::
 :::::
 
-::::: content-wrapper
+:::: content-wrapper
 ::: {.title-overlay style="background: linear-gradient(135deg, rgba(40,55,35,0.85), rgba(60,75,50,0.85)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;"}
 **📋 SAMPLING LIMITS**
 
@@ -46,14 +46,27 @@ All of the procedures and actions undertaken for the project follow the [**Anima
 Therefore, the project is limited to certain amounts of bird sampling. Navigate the following documents to track these legal boundaries.
 
 <details style="margin-top: 1.5rem;">
-<summary style="color: white; font-weight: bold; cursor: pointer; padding: 0.8rem; background: rgba(255,255,255,0.1); border-radius: 6px; border: none; font-size: 1.1em;"> View Sampling Records</summary>
-<iframe width="100%" height="700" frameborder="0" scrolling="no" style="margin-top: 1rem; border-radius: 8px; display: block;" src="https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc.aspx?sourcedoc={a23e66f0-c551-4ba4-acd0-de0d5e83ca42}&action=embedview&wdAllowInteractivity=False&ActiveCell='Birds%20used'!D33&Item='Birds%20used'!A1%3AH66&wdHideGridlines=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True"></iframe>
+
+<summary style="color: white; font-weight: bold; cursor: pointer; padding: 0.8rem; background: rgba(255,255,255,0.1); border-radius: 6px; border: none; font-size: 1.1em;">
+
+View Sampling Records
+
+</summary>
+
+<iframe width="100%" height="700" frameborder="0" scrolling="no" style="margin-top: 1rem; border-radius: 8px; display: block;" src="https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc.aspx?sourcedoc={a23e66f0-c551-4ba4-acd0-de0d5e83ca42}&amp;action=embedview&amp;wdAllowInteractivity=False&amp;ActiveCell=&#39;Birds%20used&#39;!D33&amp;Item=&#39;Birds%20used&#39;!A1%3AH66&amp;wdHideGridlines=True&amp;wdDownloadButton=True&amp;wdInConfigurator=True&amp;wdInConfigurator=True">
+
+</iframe>
+
 </details>
 
 <details style="margin-top: 1.5rem;">
-<summary style="color: white; font-weight: bold; cursor: pointer; padding: 0.8rem; background: rgba(255,255,255,0.1); border-radius: 6px; border: none; font-size: 1.1em;"> Access Legal Supportive Documents</summary>
 
-  
+<summary style="color: white; font-weight: bold; cursor: pointer; padding: 0.8rem; background: rgba(255,255,255,0.1); border-radius: 6px; border: none; font-size: 1.1em;">
+
+Access Legal Supportive Documents
+
+</summary>
+
 -   *ACEC Protocol - A-2024-400 (Motus tags) - under review for renewal*
 
 -   [ACEC Protocol - A-2021-107 (Blood & Feathers)](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQAInIcy1RUVQYZ-l4pKX_A1ATO5ymKNMm5fTytCW95QBK8?e=j555h4)
@@ -66,12 +79,11 @@ Therefore, the project is limited to certain amounts of bird sampling. Navigate 
 
     -   [Document 1](https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table%2FRevised%5FGRIFFIN%5Fdreview%2Denvironmental%2Dfactors%2Dtemplate%2D170517%5Fv2final%2Epdf&parent=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table)
     -   [Document 2](https://uonstaff.sharepoint.com/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table%2FDetermination%5FNotice%5Ffor%5FExternal%5FProponents%5FCorries%5FIsland%5FNPWS%5F27%2E10%2E2020%2EPDF&parent=%2Fsites%2FStudentGroupPhD%2DLouiseWilliamsandMatteaTaylor%2FShared%20Documents%2FGeneral%2FEthics%2FDocuments%20connected%20to%20SHOREBIRD%20NUMBER%20TRACKING%20table)
+
 </details>
 :::
-:::::
+::::
 
 ::: {style="text-align: center; margin: auto; max-width: 100%;"}
-<a href="https://www.csrg.site/" target="_blank">
-  <img src="logo.png" alt="CSRG Logo" style="width: 50%; height: auto;">
-</a>
+<a href="https://www.csrg.site/" target="_blank"> <img src="logo.png" alt="CSRG Logo" style="width: 50%; height: auto;"/> </a>
 :::
