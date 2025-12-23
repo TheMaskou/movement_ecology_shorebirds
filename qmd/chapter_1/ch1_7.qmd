@@ -756,8 +756,9 @@ plots_list_used[[3]]
 plots_list_used[[4]]
 ```
 
-**Legend:** Shorebird movement and spatial ecology vary across species and within the local Motus array in NSW. Each tab displays one tide category from the pairs “high/low” and “nocturnal/diurnal,” showing how many hours each species have been recorded at different Motus stations.
 :::
+
+**Legend:** Shorebird movement and spatial ecology vary across species and within the local Motus array in NSW. Each tab displays one tide category from the pairs “high/low” and “nocturnal/diurnal,” showing how many hours each species have been recorded at different Motus stations.
 
 ## Detection conditions
 
