@@ -9,7 +9,7 @@ All the way through the analysis of **Chapter 1** we will use the same English a
 :::
 
 ```{r station, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-
+ 
 station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance", 
                        "North Swann Pond" = "Swan Pond" ,
                        "Ramsar Road Floodgate" = "Ramsar Road",   

@@ -44,7 +44,7 @@ data_all <- readRDS(
     pattern = "-data\\.rds$", full.names = TRUE
   )), 1)) 
 
-# Receivers info
+# Receivers info 
 recv <- readRDS(
   tail(sort(list.files(
     here::here("qmd", "chapter_1", "data", "motus"),
@@ -104,7 +104,6 @@ names(plots_list) <- names(species_init_colors)[match(names(plots_list), names(s
 ```
 
 ::: panel-tabset
-
 ```{r final tabs, echo = FALSE, eval = TRUE, results = 'asis', fig.width = 10, fig.height = 6}
 # Create tabs dynamically
 for (species_init in names(plots_list)) {
@@ -114,7 +113,6 @@ for (species_init in names(plots_list)) {
   cat("\n\n")
 }
 ```
-
 :::
 
 **Legend**: The average value of the *signal strength* has been calculated for each individual, so you can see its distribution (boxes on vertical axis) depending the tide condition (horizontal axis) and for each species (tabs).

@@ -7,7 +7,7 @@ title: "Load & Format"
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
                    quiet = TRUE))
-## _/!\_ ##    
+## _/!\_  ##    
 
 ################ First, run the .R script to download last up to date Motus data-set
 update <- TRUE # Second, Chose whether to update new detections from last data.rds (update = TRUE)
@@ -630,7 +630,7 @@ save.image(file = here::here("qmd", "chapter_1", "data", "motus_data.RData"))
 
 To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=CcTSqA) *(a password might be required - maxime.marini\@uon.edu.au)*.
 
- **Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
+**Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
 
 <br>
 

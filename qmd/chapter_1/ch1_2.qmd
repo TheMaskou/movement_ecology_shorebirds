@@ -4,7 +4,7 @@ format: html
 ---
 
 ```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-
+ 
 
 library(motus)
 library(dplyr)
@@ -354,7 +354,7 @@ table_1_pub %>%
 
 ```
 
-And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours > Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*.
+And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*.
 
 ```{r explore, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 temp_file <- tempfile(fileext = ".R")

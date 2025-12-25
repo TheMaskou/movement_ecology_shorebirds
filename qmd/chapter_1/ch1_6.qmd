@@ -19,12 +19,12 @@ To address this question we'll quantify how many days a bird has been detected a
 ## Variables
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format > Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
 :::
 
 ```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 library(dplyr)
-library(here)
+library(here) 
 library(ggplot2)
 library(lubridate)
 library(tidyr)
