@@ -31,6 +31,21 @@
   transition: opacity 0.3s ease;
 }
 
+.hero-section3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/material/contact.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  z-index: -1;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
 .aboriginal-acknowledgement {
   background-image: url('material/aboriginal_art.jpg');
   background-size: cover;
@@ -50,6 +65,16 @@
 }
 
 .hero-section2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, white);
+}
+
+.hero-section3::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -83,6 +108,11 @@ body.scrolled .hero-section2 {
   opacity: 0.3;
 }
 
+body.scrolled .hero-section3 {
+  opacity: 0.3;
+}
+
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .content-wrapper {
@@ -91,6 +121,28 @@ body.scrolled .hero-section2 {
   }
   
   .hero-section::after {
+    height: 30%;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    margin-top: 40vh;
+    padding: 2rem 1rem;
+  }
+  
+  .hero-section2::after {
+    height: 30%;
+  }
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    margin-top: 40vh;
+    padding: 2rem 1rem;
+  }
+  
+  .hero-section3::after {
     height: 30%;
   }
 }

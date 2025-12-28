@@ -4,27 +4,42 @@ format:
   html:
     page-layout: article
     toc: false
+    css: 
+      - /custom-hero.css
+      - /styles.css
+    include-in-header:
+    - text: |
+          <script src="/custom-scroll.js"></script>
 ---
 
-:::::::::::: column-page-inset
-:::::: {style="text-align: center; margin: 3rem 0 2rem 0;"}
-<img src="/picture.jpg" alt="Maxime Marini" style="width: 335px; height: 385px; object-fit: cover; border-radius: 60%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 1.5rem; display: block; margin-left: auto; margin-right: auto;"/>
+::: hero-section3
+:::
 
+<br> <br><br> <br> 
+
+::::::::::::: column-page-inset
+::::::: {style="text-align: center; margin: 3rem 0 2rem 0;"}
+<img src="/picture.jpg" alt="Maxime Marini" style="width: 335px; height: 385px; object-fit: cover; border-radius: 60%; box-shadow: 0 8px 20px rgba(0,0,0,0.6); margin-bottom: 1.5rem; display: block; margin-left: auto; margin-right: auto;"/>
+
+:::::: {style="background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(250,250,250,0.5)); color: #333; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
 ::: {style="margin-bottom: 0.5rem; color: #001f3f; font-size: 1.75rem; font-weight: 600;"}
 Maxime Marini
 :::
 
-::: {style="font-size: 1.1rem; color: #7f8c8d; margin-bottom: 0.5rem;"}
+::: {style="font-size: 1.1rem; color: #darkgrey; margin-bottom: 0.5rem;"}
 PhD Student
 :::
 
 ::: {style="font-size: 1rem; color: #34495e; font-style: italic;"}
-Movement and Spatial Ecology of Migratory Shorebirds
+**Movement and Spatial Ecology of Migratory Shorebirds**
 :::
 ::::::
+:::::::
+
+<br> <br> <br> <br> <br> <br> <br> <br> <br> 
 
 ::::: {style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 2rem 0;"}
-::: {style="background: linear-gradient(135deg, #d4a574 0%, #c89666 100%); color: white; padding: 2rem; border-radius: 8px;"}
+::: {style="background: linear-gradient(135deg, rgba(228,192,153,0.9) 0%, rgba(217,180,141,0.7) 100%); color: #333; padding: 2rem; border-radius: 8px;"}
 [📧 Email]{style="display: block; margin-top: 0; color: white; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;"}
 
 [**Primary:** [maxime.marini\@uon.edu.au](mailto:maxime.marini@uon.edu.au)]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: white;"}
@@ -32,7 +47,7 @@ Movement and Spatial Ecology of Migratory Shorebirds
 [**Secondary:** [marini.maxime\@hotmail.fr](mailto:marini.maxime@hotmail.fr)]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: white;"}
 :::
 
-::: {style="background: linear-gradient(135deg, #e8b4b8 0%, #d4a5a5 100%); color: white; padding: 2rem; border-radius: 8px;"}
+::: {style="background: linear-gradient(135deg, rgba(243,205,210,0.9) 0%, rgba(228,192,195,0.7) 100%); color: #333; padding: 2rem; border-radius: 8px;"}
 [📞 Phone]{style="display: block; margin-top: 0; color: white; font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem;"}
 
 [**Australia:** [+61 (0) 493 399 107](tel:+61493399107)]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: white;"}
@@ -54,16 +69,19 @@ Australia]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: whi
 
 </a>
 
-------------------------------------------------------------------------
+<br> <br> <br> <br>
 
 ::: {style="position: relative; text-align: center; margin-top: 3rem; padding: 2rem; background: #ecf0f1; border-radius: 8px; overflow: visible;"}
 [**Feel free to reach out for collaborations, questions about my research, or general inquiries.**]{style="color: #7f8c8d; margin: 0;"}
 
-[And remember I am from Marseille, so let's take it easy - *Lou tems passo, passo lou ben.*]{style="color: #7f8c8d; margin: 0;"}
+[I come from The South. A Mountaineer child from the Mediterranean coast. <br> That is something I won't forget. Alors, tranquille and let's take it easy. <br><br> *- Lou tems passo, passo lou ben -*]{style="color: #7f8c8d; margin: 0;"}
 
-<img src="/material/olive.png" style="position: absolute; bottom: 5px; right: 19px; width: 20%; height: auto; transform: translate(50%, 50%) rotate(17.7deg); z-index: 15;" aria-hidden="true"/>
+<img src="/material/olive.png" style="position: absolute; bottom: 45px; right: 295px; width: 12%; height: auto; transform: translate(40%, 40%) rotate(20deg); z-index: 15;" aria-hidden="true"/>
 :::
-::::::::::::
+:::::::::::::
+
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+
 
 <a href="https://www.newcastle.edu.au/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; display: block; margin: 2rem 0;">
 
