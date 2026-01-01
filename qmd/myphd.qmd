@@ -64,7 +64,7 @@ How red foxes move and use their habitat across and within the local estuaries? 
 ::::
 
 ::: {style="background: linear-gradient(135deg, rgba(40,40,40,0.95), rgba(25,25,25,0.95)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
-**JUSTE UN MOT**
+**JUSTE UN MOT...**
 
 *I am from France and a curious man, interested on movement and spatial ecology of wildlife and population demographics.*
 

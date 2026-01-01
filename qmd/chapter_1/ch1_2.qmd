@@ -347,10 +347,20 @@ table_1_pub %>%
     style = cell_text(style = "italic"),
     locations = cells_body(columns = c(species_sci))) %>%
   
+  tab_style(
+    style = cell_text(whitespace = "nowrap"),
+    locations = cells_body(columns = everything())) %>%
+  
+  tab_style(
+    style = cell_text(whitespace = "nowrap"),
+    locations = cells_column_labels(columns = everything())) %>%
+  
   tab_options(
     table.font.size = pct(90),
     heading.title.font.size = px(16),
-    ) 
+    data_row.padding = px(3),  
+    table.width = pct(100)  
+  )
 
 ```
 
@@ -384,7 +394,8 @@ DT::datatable(
     fixedColumns = list(leftColumns = 2)
   ),
   extensions = c('FixedColumns'),
-  caption = 'Overview on birds data'
+  caption = 'Overview on birds data',
+  class = 'nowrap'  
 ) %>%
   DT::formatStyle(
     'variable',
@@ -411,7 +422,8 @@ DT::datatable(
     fixedColumns = list(leftColumns = 2)
   ),
   extensions = c('FixedColumns'),
-  caption = 'Birds detected'
+  caption = 'Birds detected',
+  class = 'nowrap'  
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),
@@ -446,7 +458,8 @@ DT::datatable(
     pageLength = 10,
     fixedColumns = list(leftColumns = 4)),
   extensions = c('FixedColumns'),
-  caption = 'See the five last detections for each tagged birds') %>%
+  caption = 'See the five last detections for each tagged birds',
+  class = 'nowrap'  ) %>%
   DT::formatStyle('Band.ID',
                   fontWeight = 'bold')
 
@@ -464,7 +477,8 @@ DT::datatable(
     fixedColumns = list(leftColumns = 2)
   ),
   extensions = c('FixedColumns'),
-  caption = 'Birds never detected'
+  caption = 'Birds never detected',
+  class = 'nowrap'  
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),
@@ -488,7 +502,8 @@ DT::datatable(
     fixedColumns = list(leftColumns = 2)
   ),
   extensions = c('FixedColumns'),
-  caption = 'Birds re-tagged'
+  caption = 'Birds re-tagged',
+  class = 'nowrap'  
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),
@@ -512,7 +527,8 @@ DT::datatable(
     fixedColumns = list(leftColumns = 2)
   ),
   extensions = c('FixedColumns'),
-  caption = 'Birds euthanised'
+  caption = 'Birds euthanised',
+  class = 'nowrap'  
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),

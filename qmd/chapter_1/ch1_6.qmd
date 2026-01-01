@@ -100,16 +100,37 @@ tag_detection_indiv <- data_all %>%
 ```
 
 ```{r indiv table pub,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-library(gt)
-tag_detection_indiv  %>%
-  gt() %>%
-  opt_align_table_header(align = "left")  %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) %>%
-  tab_style(
-    style = cell_text(style = "italic"),
-    locations = cells_body(columns = c(speciesEN))) 
+# library(gt)
+# tag_detection_indiv  %>%
+#   gt() %>%
+#   opt_align_table_header(align = "left")  %>%
+#   tab_style(
+#     style = cell_text(weight = "bold"),
+#     locations = cells_column_labels() ) %>%
+#   tab_style(
+#     style = cell_text(style = "italic"),
+#     locations = cells_body(columns = c(speciesEN))) 
+
+DT::datatable(
+  tag_detection_indiv,
+  options = list(
+    scrollX = TRUE,
+    pageLength = 10,
+    fixedColumns = list(leftColumns = 3)
+  ),
+  extensions = c('FixedColumns'),
+  caption = 'Details for individuals',
+  class = 'nowrap'  
+) %>%
+  DT::formatStyle(
+    c('Band.ID','speciesEN'),
+    fontWeight = 'bold'
+  ) %>%
+  DT::formatStyle(
+    c('speciesEN'),
+    fontWeight = 'italic',
+    color = '#808080'  
+  )
 
 ```
 

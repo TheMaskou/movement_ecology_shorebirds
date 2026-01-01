@@ -122,6 +122,8 @@ format:
     css: styles.css
     toc: true
     include-after-body: _footer.html
+    date: last-modified  
+    date-format: "D MMMM YYYY" 
 
 
 editor: visual
