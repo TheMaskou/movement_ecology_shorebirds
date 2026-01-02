@@ -551,9 +551,15 @@ df.alltags <- df.alltags %>%
          tideID = as_factor(tide_values$tideID),
          tideTimeDiff = abs(difftime(timeAus, tideDateTimeAus, units = "hours")))
 
+df.alltags <- df.alltags %>% 
+  mutate(Band.ID = as_factor(Band.ID))
+
 ```
 
 ```{r update T/F 2, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
+
+df.alltags.past <- df.alltags.past %>% 
+  mutate(Band.ID = as_factor(Band.ID))
 
 # If update = T, then combine past and new data and sort with time
 

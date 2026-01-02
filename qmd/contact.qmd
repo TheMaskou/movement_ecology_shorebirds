@@ -69,7 +69,7 @@ Australia]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: whi
 
 </a>
 
-<br> <br> <br> <br> <br> 
+<br> <br> <br> <br> <br>
 
 ::: {style="position: relative; text-align: center; margin-top: 3rem; margin-bottom: 2rem; padding: 2rem; padding-bottom: 0.5rem; background: rgba(236, 240, 241, 0.9); border-radius: 8px; overflow: visible;"}
 [**Feel free to reach out for collaborations, questions about my research, or general inquiries.**]{style="color: #7f8c8d; margin: 0;"}

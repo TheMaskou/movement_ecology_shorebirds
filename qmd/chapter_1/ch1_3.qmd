@@ -2,7 +2,7 @@
 title: "Legend"
 ---
 
-All the way through the analysis of **Chapter 1** we will use the same English and Scientific names for species, the same abbreviations, the same names for the stations and the same color codes. Find here on this page clarifications.
+All the way through the analysis of **Chapter 1** we will use the same English and Scientific names for species, the same abbreviations, the same names for the stations and the same color codes. Find here on this page clarifications. 
 
 ::: blockquote-yellow
 **Note for authors**: Make sure to keep this script up to date as new data are compiled with eventual new species and/or Motus stations.
