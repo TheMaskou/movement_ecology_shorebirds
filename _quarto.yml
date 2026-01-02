@@ -11,13 +11,13 @@ project:
     - index.qmd
     - qmd/**/*.qmd  # recursively render all .qmd files
 
-#     - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-#     - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
-#     - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
-#     - "!qmd/chapter_1/ch1_5.qmd"  # Exclude this specific file
-#     - "!qmd/chapter_1/ch1_6.qmd"  # Exclude this specific file
-#     - "!qmd/chapter_1/ch1_7.qmd"  # Exclude this specific file
-#     - "!qmd/chapter_1/ch1_8.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_5.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_6.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_7.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_8.qmd"  # Exclude this specific file
 
     
 execute:
@@ -122,8 +122,6 @@ format:
     css: styles.css
     toc: true
     include-after-body: _footer.html
-    date: last-modified  
-    date-format: "D MMMM YYYY" 
 
 
 editor: visual

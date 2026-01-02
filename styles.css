@@ -126,3 +126,19 @@ body a:not(.navbar a):not(.nav-link):hover {
 body a:not(.navbar a):not(.nav-link):visited {
   color: #944030; 
 }
+
+
+/* For fadede edges on images */
+.faded-image {
+  display: block;
+  margin: auto;
+  width: 90vw;
+  max-width: 950px;
+  height: auto;
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent),
+              linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  mask-composite: intersect;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent),
+                      linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-composite: source-in;
+}

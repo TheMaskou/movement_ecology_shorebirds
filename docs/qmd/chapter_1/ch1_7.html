@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-01-02">
 
 <title>Station usage - hours – Movement Ecology - Shorebirds</title>
 <style>
@@ -74,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-ecbc5e25d10ec7bd3053ead792612b73.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-2d177a82d714c9464aaccea8bd708225.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -418,24 +419,12 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_7.html">Station usage - hours</a></li></ol></nav><h1 class="title display-7">Station usage - hours</h1></header>
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_7.html">Station usage - hours</a></li></ol></nav>
-<div class="quarto-title">
-<h1 class="title">Station usage - hours</h1>
-</div>
+<header id="title-block-header">
 
 
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
+<p class="date">2 January 2026</p>
 </header>
 
 
@@ -790,30 +779,32 @@ window.Quarto = {
 <section id="usage-rate" class="level2">
 <h2 class="anchored" data-anchor-id="usage-rate">Usage rate</h2>
 <p>Now that the <em>used</em> and <em>available</em> time have been determined for each individual and for each Motus station, we can relate these two elements together with the <strong>Usage rate</strong> (or rate of use).</p>
+<div style="overflow-x: auto; width: 100%;">
 <p><span class="math display">\[
 \text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
 \]</span></p>
+</div>
 <p>Some cases may happen where the <em>time used</em> was over the <em>available</em>. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.<br>
 <br></p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="sobiyasonk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#sobiyasonk table {
+<div id="lwseblzvoa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lwseblzvoa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#sobiyasonk thead, #sobiyasonk tbody, #sobiyasonk tfoot, #sobiyasonk tr, #sobiyasonk td, #sobiyasonk th {
+#lwseblzvoa thead, #lwseblzvoa tbody, #lwseblzvoa tfoot, #lwseblzvoa tr, #lwseblzvoa td, #lwseblzvoa th {
   border-style: none;
 }
 
-#sobiyasonk p {
+#lwseblzvoa p {
   margin: 0;
   padding: 0;
 }
 
-#sobiyasonk .gt_table {
+#lwseblzvoa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -839,12 +830,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_caption {
+#lwseblzvoa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#sobiyasonk .gt_title {
+#lwseblzvoa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -856,7 +847,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#sobiyasonk .gt_subtitle {
+#lwseblzvoa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -868,7 +859,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#sobiyasonk .gt_heading {
+#lwseblzvoa .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -880,13 +871,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_bottom_border {
+#lwseblzvoa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_col_headings {
+#lwseblzvoa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -901,7 +892,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_col_heading {
+#lwseblzvoa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -921,7 +912,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#sobiyasonk .gt_column_spanner_outer {
+#lwseblzvoa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -933,15 +924,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#sobiyasonk .gt_column_spanner_outer:first-child {
+#lwseblzvoa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#sobiyasonk .gt_column_spanner_outer:last-child {
+#lwseblzvoa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#sobiyasonk .gt_column_spanner {
+#lwseblzvoa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -953,11 +944,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#sobiyasonk .gt_spanner_row {
+#lwseblzvoa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#sobiyasonk .gt_group_heading {
+#lwseblzvoa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -983,7 +974,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#sobiyasonk .gt_empty_group_heading {
+#lwseblzvoa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -998,15 +989,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#sobiyasonk .gt_from_md > :first-child {
+#lwseblzvoa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#sobiyasonk .gt_from_md > :last-child {
+#lwseblzvoa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#sobiyasonk .gt_row {
+#lwseblzvoa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1025,7 +1016,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#sobiyasonk .gt_stub {
+#lwseblzvoa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1038,7 +1029,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#sobiyasonk .gt_stub_row_group {
+#lwseblzvoa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1052,15 +1043,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#sobiyasonk .gt_row_group_first td {
+#lwseblzvoa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#sobiyasonk .gt_row_group_first th {
+#lwseblzvoa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#sobiyasonk .gt_summary_row {
+#lwseblzvoa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1070,16 +1061,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#sobiyasonk .gt_first_summary_row {
+#lwseblzvoa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_first_summary_row.thick {
+#lwseblzvoa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#sobiyasonk .gt_last_summary_row {
+#lwseblzvoa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1089,7 +1080,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_grand_summary_row {
+#lwseblzvoa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1099,7 +1090,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#sobiyasonk .gt_first_grand_summary_row {
+#lwseblzvoa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1109,7 +1100,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_last_grand_summary_row_top {
+#lwseblzvoa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1119,11 +1110,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_striped {
+#lwseblzvoa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#sobiyasonk .gt_table_body {
+#lwseblzvoa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1132,7 +1123,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_footnotes {
+#lwseblzvoa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1146,7 +1137,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_footnote {
+#lwseblzvoa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1155,7 +1146,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#sobiyasonk .gt_sourcenotes {
+#lwseblzvoa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1169,7 +1160,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#sobiyasonk .gt_sourcenote {
+#lwseblzvoa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1177,72 +1168,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#sobiyasonk .gt_left {
+#lwseblzvoa .gt_left {
   text-align: left;
 }
 
-#sobiyasonk .gt_center {
+#lwseblzvoa .gt_center {
   text-align: center;
 }
 
-#sobiyasonk .gt_right {
+#lwseblzvoa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#sobiyasonk .gt_font_normal {
+#lwseblzvoa .gt_font_normal {
   font-weight: normal;
 }
 
-#sobiyasonk .gt_font_bold {
+#lwseblzvoa .gt_font_bold {
   font-weight: bold;
 }
 
-#sobiyasonk .gt_font_italic {
+#lwseblzvoa .gt_font_italic {
   font-style: italic;
 }
 
-#sobiyasonk .gt_super {
+#lwseblzvoa .gt_super {
   font-size: 65%;
 }
 
-#sobiyasonk .gt_footnote_marks {
+#lwseblzvoa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#sobiyasonk .gt_asterisk {
+#lwseblzvoa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#sobiyasonk .gt_indent_1 {
+#lwseblzvoa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#sobiyasonk .gt_indent_2 {
+#lwseblzvoa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#sobiyasonk .gt_indent_3 {
+#lwseblzvoa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#sobiyasonk .gt_indent_4 {
+#lwseblzvoa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#sobiyasonk .gt_indent_5 {
+#lwseblzvoa .gt_indent_5 {
   text-indent: 25px;
 }
 
-#sobiyasonk .katex-display {
+#lwseblzvoa .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#sobiyasonk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lwseblzvoa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1511,7 +1502,7 @@ window.Quarto = {
 
 <div style="text-align: center; margin-top: 3rem; padding: 1rem; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 0.9rem;">
 
-  This page has been last updated on <span id="render-date"></span>
+  This page has been last updated on  <span id="render-date">$date$</span>
 
 </div>
 

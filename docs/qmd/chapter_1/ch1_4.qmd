@@ -22,4 +22,6 @@ A Motus station is made of multiple components:
 Note that you can build any station yourself by simply following the [installation guide](https://docs.motus.org/en/stations/station-installation) freely delivered by Motus.
 :::
 
+![](/material/array.png){fig-align="center" width="100%"}
+
 ShinyApp will provide the navigation. On To-Do list and Has To be done...

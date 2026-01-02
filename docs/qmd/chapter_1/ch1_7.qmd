@@ -456,9 +456,12 @@ used_bird_recv_time <- data_bird %>%
 
 Now that the *used* and *available* time have been determined for each individual and for each Motus station, we can relate these two elements together with the **Usage rate** (or rate of use).
 
+<div style="overflow-x: auto; width: 100%;">
 $$
 \text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
 $$
+</div>
+
 
 Some cases may happen where the *time used* was over the *available*. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.\
 <br>
@@ -755,7 +758,6 @@ plots_list_used[[3]]
 
 plots_list_used[[4]]
 ```
-
 :::
 
 **Legend:** Shorebird movement and spatial ecology vary across species and within the local Motus array in NSW. Each tab displays one tide category from the pairs “high/low” and “nocturnal/diurnal,” showing how many hours each species have been recorded at different Motus stations.

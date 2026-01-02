@@ -115,33 +115,27 @@ body.scrolled .hero-section3 {
 
 /* Mobile responsive */
 @media (max-width: 768px) {
+  /* Disable fixed attachment on mobile */
+  .hero-section,
+  .hero-section2,
+  .hero-section3 {
+    background-attachment: scroll;
+    background-size: cover;
+    background-position: center center;
+  }
+  
+  .aboriginal-acknowledgement {
+    background-size: cover;
+    background-position: center center;
+  }
+  
   .content-wrapper {
     margin-top: 40vh;
     padding: 2rem 1rem;
   }
   
-  .hero-section::after {
-    height: 30%;
-  }
-}
-
-@media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 40vh;
-    padding: 2rem 1rem;
-  }
-  
-  .hero-section2::after {
-    height: 30%;
-  }
-}
-
-@media (max-width: 768px) {
-  .content-wrapper {
-    margin-top: 40vh;
-    padding: 2rem 1rem;
-  }
-  
+  .hero-section::after,
+  .hero-section2::after,
   .hero-section3::after {
     height: 30%;
   }

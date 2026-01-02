@@ -4,3 +4,5 @@ format: html
 ---
 
 *Coming soon to cinemas...*
+
+<img src="../../material/cinema.png" style="display: block; margin: auto; width: 70vw; max-width: 600px; height: auto; border-radius: 50%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); -webkit-mask-image: radial-gradient(circle, black 35%, transparent 50%); mask-image: radial-gradient(ellipse 100% 80%, black 45%, transparent 50%);"/>
