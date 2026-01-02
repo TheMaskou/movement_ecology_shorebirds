@@ -636,7 +636,7 @@
     "href": "qmd/reports/pub_3.html#conferences",
     "title": "Scientific",
     "section": "Conferences",
-    "text": "Conferences\n\n2025_AOC_presentation\n2025_AOC_abstract\n2025_ESA_presentation\n2025_ESA_abstract\n2026_WBF_abstract",
+    "text": "Conferences\n\nChapter 1 - Motus\n\n2025_AOC_presentation\n2025_AOC_abstract\n2025_ESA_presentation\n2025_ESA_abstract\n2026_WBF_abstract",
     "crumbs": [
       "Scientific"
     ]
@@ -822,5 +822,16 @@
     "title": "Movement Ecology - Shorebirds",
     "section": "Project & Objectives",
     "text": "Project & Objectives\nCurrently a PhD candidate at the Center for Conservation Science, University of Newcastle, I focus on movement and spatial ecology from resident shorebirds and migratory species on their non-breeding ground, in Australia within the Hunter and Port Stephen estuaries. Shorebirds have complex behavioural and ecological needs which remain poorly understood at the level needed to inform regional land management decisions and ground-level protection in Australia.\nThis Research Project (PhD) intends to understand how local shorebirds use habitats for roosting and foraging, as it is crucial to inform stakeholders and land managers for effective conservation of both resident and migratory species."
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_9.html",
+    "href": "qmd/chapter_1/ch1_9.html",
+    "title": "Results",
+    "section": "",
+    "text": "Find all the results in Publications &gt; Scientific.",
+    "crumbs": [
+      "Results",
+      "Results"
+    ]
   }
 ]

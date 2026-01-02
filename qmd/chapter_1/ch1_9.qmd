@@ -1,0 +1,8 @@
+---
+title: "Results"
+format: html
+---
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+Find all the **results** in [*Publications \> Scientific*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/reports/pub_3.html).
+:::
