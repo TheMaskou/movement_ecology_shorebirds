@@ -17,7 +17,7 @@ The total amount of **hours** and the **usage rate** are assessed for each indiv
 
 -   Diurnal High Tide
 -   Diurnal Low Tide
--   Nocturnal High Tide 
+-   Nocturnal High Tide
 -   Nocturnal Low Tide
 
 Plus, globally visualise the **conditions of detection** across the tagged population.
@@ -566,6 +566,12 @@ make_plot <- function(tide_level, species_type) {
 # Generate and store all plots in a list
 plots_used_rate <- cross2(tide_levels, species_types) %>%
   purrr::map(~ make_plot(.x[[1]], .x[[2]]))
+
+```
+
+```{r if publi Used rate X, message = FALSE,  warning = FALSE, echo = FALSE, eval = FALSE, results = 'asis'}
+
+figure_plot <- figure_plot %>% filter(!speciesEN %in% c('Eurasian Whimbrel', 'Curlew Sandpiper'))
 
 ```
 
