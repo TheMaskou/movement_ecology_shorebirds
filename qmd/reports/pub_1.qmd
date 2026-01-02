@@ -8,3 +8,4 @@ format: html
 -   [Basics_for_Motus_Array\_&\_Tags, 2025](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQC0S_P_l1ENSK_RHL_2PhpxAahaHAgEHkv0UgN3ezw8ejE?e=n6lHst)
 
     *Handy protocol that describe how to connect to your SG receivers with a local Wi-Fi or GSM network, so you can check current time tag detections, but also download raw data from your receivers. How to activate/deactivate a Lotek nano-tags. Tips on tracker model decision related to ratio bird weight/tag weight so you remain under the 3% of individual body mass for equipment.*
+    
