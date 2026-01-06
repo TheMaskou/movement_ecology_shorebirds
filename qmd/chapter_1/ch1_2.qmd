@@ -356,7 +356,7 @@ table_1_pub %>%
     locations = cells_column_labels(columns = everything())) %>%
   
   tab_options(
-    table.font.size = pct(90),
+    table.font.size = px(16),
     heading.title.font.size = px(16),
     data_row.padding = px(3),  
     table.width = pct(100)  
@@ -364,7 +364,9 @@ table_1_pub %>%
 
 ```
 
-And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*.
+<br> <br>
+
+And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*. <br>
 
 ```{r explore, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 temp_file <- tempfile(fileext = ".R")
@@ -375,6 +377,8 @@ source(temp_file)
 ```{r explore 2, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 explore
 ```
+
+<br>
 
 ## Captures
 

@@ -11,7 +11,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-Birds remain within the same estuaries. Migratory ones during all summer and residents all year around. That's a statement at species group level. **But do the individuals remain within the same estuary or do they fly from one to another?** 
+Birds remain within the same estuaries. Migratory ones during all summer and residents all year around. That's a statement at species group level. **But do the individuals remain within the same estuary or do they fly from one to another?**
 
 To address this question we'll quantify how many days a bird has been detected at least once on at least one Motus station in one estuary, and we'll put this number of days against the total number of day that same bird was detectable. The result will be expressed in percentage.
 :::
@@ -236,7 +236,7 @@ ggplot(tag_detection %>%
   geom_col(width = 0.8, alpha = 0.7, color = "black") +
   scale_fill_manual(values = species_colors) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "none") +
   labs(x = "Species",
        y = "Detection (%)",
@@ -253,10 +253,42 @@ ggplot(tag_detection_indiv %>%
   geom_boxplot(width = 0.8, alpha = 0.7, color = "black") +
   scale_fill_manual(values = species_colors) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "none") +
   labs(x = "Species (n = number of individuals)",
        y = "Detection (%)",
        title = "Species detectability across the MOTUS array (Boxplot)")
+
+```
+
+```{r 3 species plot value table, echo = TRUE, eval = TRUE}
+detection_table <- tag_detection_indiv %>%
+  add_count(speciesEN) %>%
+  mutate(Species = speciesEN) %>%
+  group_by(Species, speciesEN) %>%
+  summarise(
+    n_individuals = n(),
+    min = round(min(perc, na.rm = TRUE), 1),
+    q1 = round(quantile(perc, 0.25, na.rm = TRUE),1),
+    median = round(median(perc, na.rm = TRUE),1),
+    q3 = round(quantile(perc, 0.75, na.rm = TRUE),1),
+    max = round(max(perc, na.rm = TRUE),1),
+    mean = round(mean(perc, na.rm = TRUE),1),
+    sd = round(sd(perc, na.rm = TRUE),1),
+    .groups = 'drop'
+  ) %>%
+  arrange(desc(median)) %>%
+  select(-speciesEN)
+
+library(gt)
+detection_table  %>%
+  gt() %>%
+  opt_align_table_header(align = "left")  %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels() ) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) 
 
 ```

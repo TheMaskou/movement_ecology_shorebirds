@@ -575,6 +575,41 @@ figure_plot <- figure_plot %>% filter(!speciesEN %in% c('Eurasian Whimbrel', 'Cu
 
 ```
 
+```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+# General function to provide one table with stats values
+make_summary_table <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  summary_table <- data_sub %>%
+    group_by(speciesEN, recvDeployName, tideDiel) %>%
+    summarise(
+      n_individual = n(),
+      min = round(min(rate_use, na.rm = TRUE), 1),
+      q1 = round(quantile(rate_use, 0.25, na.rm = TRUE),1),
+      median = round(median(rate_use, na.rm = TRUE),1),
+      q3 = round(quantile(rate_use, 0.75, na.rm = TRUE),1),
+      max = round(max(rate_use, na.rm = TRUE),1),
+      mean = round(mean(rate_use, na.rm = TRUE),1),
+      sd = round(sd(rate_use, na.rm = TRUE),1),
+      .groups = 'drop'
+    ) %>%
+    arrange(speciesEN, recvDeployName, tideDiel) %>%
+    rename(Species = "speciesEN", Station = "recvDeployName", condition = "tideDiel")
+  
+  return(summary_table)
+}
+
+# One table per conditions
+high_migratory <- make_summary_table("High", "migratory")
+high_resident <- make_summary_table("High", "resident")
+low_migratory <- make_summary_table("Low", "migratory")
+low_resident <- make_summary_table("Low", "resident")
+```
+
 ### RESIDENT BIRDS
 
 ::: panel-tabset
@@ -584,11 +619,53 @@ figure_plot <- figure_plot %>% filter(!speciesEN %in% c('Eurasian Whimbrel', 'Cu
 plots_used_rate[[4]]
 ```
 
+```{r 4 Used rate table, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+library(gt)
+high_resident  %>%
+  gt() %>%
+  tab_header(title = "Statistics - High Tide Resident Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+
 ##### Low Tide
 
 ```{r 4 Used rate 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 plots_used_rate[[3]]
+```
+
+```{r 4 Used rate table 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+library(gt)
+low_resident  %>%
+  gt() %>%
+  tab_header(title = "Statistics - Low Tide Resident Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
 ```
 :::
 
@@ -601,11 +678,53 @@ plots_used_rate[[3]]
 plots_used_rate[[2]]
 ```
 
+```{r 4 Used rate table 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+library(gt)
+high_migratory  %>%
+  gt() %>%
+  tab_header(title = "Statistics - High Tide Migratory Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+
 ##### Low Tide
 
 ```{r 4 Used rate 4, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 plots_used_rate[[1]]
+```
+
+```{r 4 Used rate table 5, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+library(gt)
+low_migratory  %>%
+  gt() %>%
+  tab_header(title = "Statistics - Low Tide Migratory Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
 ```
 :::
 
