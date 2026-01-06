@@ -10,11 +10,11 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-**One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?** 
+**One key element we must address in our study is to define when and for how long each Motus station in our array was operational and thus able to detect VHF-tagged birds?**
 
 Stations may have operated for varying duration or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.
 
-To exactly access when a station was operational and when it was not, we used the `activity` table coming from each station's receiver. This table records any VHF activity at any time.
+To exactly access when a station was operational and when it was not, we used the `activity` table coming from each station's receiver. This table records any VHF activity at any time. 
 
 ***Note:*** *The following terms are used interchangeably: (1) receivers, SensorGnome, SG, serno, recv; (2) Raspberry Pi processor, Raspberry, deviceID.*
 :::

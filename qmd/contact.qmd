@@ -74,7 +74,7 @@ Australia]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: whi
 ::: {style="position: relative; text-align: center; margin-top: 3rem; margin-bottom: 2rem; padding: 2rem; padding-bottom: 0.5rem; background: rgba(236, 240, 241, 0.9); border-radius: 8px; overflow: visible;"}
 [**Feel free to reach out for collaborations, questions about my research, or general inquiries.**]{style="color: #7f8c8d; margin: 0;"}
 
-[A Mountaineer child from the Mediterranean coast. My lands are The South. <br> Alors, tranquille (let's take it easy). <br><br> *- Lou tems passo, passo lou ben -* <br> <img src="/material/olive.png" style="width: 6em; height: auto; vertical-align: baseline; margin-left: 0.3em;" aria-hidden="true"/>]{style="color: #7f8c8d; margin: 0;"}
+[A Mountaineer child from the Mediterranean coast. My lands are The South.  <br> Alors, tranquille (let's take it easy). <br><br> *- Lou tems passo, passo lou ben -* <br> <img src="/material/olive.png" style="width: 6em; height: auto; vertical-align: baseline; margin-left: 0.3em;" aria-hidden="true"/>]{style="color: #7f8c8d; margin: 0;"}
 :::
 :::::::::::::
 

@@ -13,7 +13,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 Birds remain within the same estuaries. Migratory ones during all summer and residents all year around. That's a statement at species group level. **But do the individuals remain within the same estuary or do they fly from one to another?**
 
-To address this question we'll quantify how many days a bird has been detected at least once on at least one Motus station in one estuary, and we'll put this number of days against the total number of day that same bird was detectable. The result will be expressed in percentage.
+To address this question we'll quantify how many days a bird has been detected at least once on at least one Motus station in one estuary, and we'll put this number of days against the total number of day that same bird was detectable. The result will be expressed in percentage. 
 :::
 
 ## Variables

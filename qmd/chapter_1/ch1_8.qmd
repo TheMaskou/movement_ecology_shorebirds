@@ -13,7 +13,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 *This is preliminary analysis.*
 
-**Signal strength** is a metric we get from a tag detection which is likely related to the distance of the tag from a Motus station at the time its detection - [*see documentation*](https://motuswts.github.io/motus/articles/signal-strength.html?q=signal%20strenght#basic-plot). 
+**Signal strength** is a metric we get from a tag detection which is likely related to the distance of the tag from a Motus station at the time its detection - [*see documentation*](https://motuswts.github.io/motus/articles/signal-strength.html?q=signal%20strenght#basic-plot).
 
 Using this metric, we could characterise behaviors such as foraging or roosting activity.
 

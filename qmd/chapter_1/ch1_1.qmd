@@ -14,7 +14,6 @@ update <- TRUE # Second, Chose whether to update new detections from last data.r
 ################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\
 
 ## _/!\_ ##
-
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
