@@ -141,14 +141,12 @@ n_undetect <- data_all %>%
 
 # Nb of individual never detected
 n_detect <- data_all %>%
-  distinct(speciesEN) %>% # to force including all values of species                        
-  left_join(spreadsheet %>%
-              filter(is.na(Euthanised.),
-                     Band.ID %in% unique(data_all$Band.ID)) %>%
-              group_by(speciesEN) %>%
-              summarise(n_detect = n(), .groups = "drop"),
-            by = "speciesEN") %>%
-  mutate(n_detect = ifelse(is.na(n_detect), 0, n_detect))
+  filter(Band.ID %in% (spreadsheet %>% 
+                       filter(is.na(Euthanised.)) %>% 
+                       pull(Band.ID))) %>%
+  distinct(speciesEN, Band.ID) %>%
+  count(speciesEN, name = "n_detect")
+
 
 # Nb of individual re-tagged
 n_retagged <- data_all %>%
