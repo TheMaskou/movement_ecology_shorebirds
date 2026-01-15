@@ -119,7 +119,7 @@ Below are displayed several tables to explore the data with every tagged bird un
 
 ## Motus table
 
-**Find below a our data summarised across species and up to date** (last detection `r max(data_all$dateAus)`)**.**
+**Find below our data summarised across species and up to date** (last detection `r max(data_all$dateAus)`)**.**
 
 ```{r 1 table 1 pop , message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
