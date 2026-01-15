@@ -12,3 +12,7 @@ format: html
 -   [Motus_tag_specs_and_species_list, 2025](https://docs.google.com/spreadsheets/d/1snJpWUXllw9LFXxo-GxCXkQ45V_f5z_WSXP79ntncRA/edit?pli=1&gid=0#gid=0)
 
     *See what Motus Lotek tag you can use depending the species of shorebird you aim to equip. Find also a dynamic table for pricing.*
+
+-   [Trapping_records](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385)
+
+    Keep tracking the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding)
