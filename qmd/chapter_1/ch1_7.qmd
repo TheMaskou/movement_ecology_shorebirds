@@ -13,7 +13,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 :::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 **This page** (finally!) **describes and summarises where** (*Motus station*) **and when** (*tidal condition*) **the birds were.**
 
-The total amount of **hours** and the **usage rate** are assessed for each individual being detected within the Motus array and across the different tidal conditions such as: 
+The total amount of **hours** and the **usage rate** are assessed for each individual being detected within the Motus array and across the different tidal conditions such as:
 
 -   Diurnal High Tide
 -   Diurnal Low Tide
@@ -537,18 +537,74 @@ label_vec <- setNames(counts$label, counts$speciesEN)
 tide_levels <- c("Low", "High")
 species_types <- unique(shorebird_class)  
 
-# Function to generate a plot for a given combination
-make_plot <- function(tide_level, species_type) {
+# Function to generate a plot with boxe displayed ONLY IF MORE THAN TWO VALUES > 0
+make_plot <- function(tide_level, species_type, min_n_nonzero = 2) {
   data_sub <- figure_plot %>%
     filter(tideHighLow == tide_level) %>%
     mutate(species_class = shorebird_class[speciesEN]) %>%
-    filter(species_class == species_type)
+    filter(species_class == species_type) %>%
+    group_by(recvDeployName, tideDiel) %>%
+    mutate(n_nonzero = sum(rate_use > 0),
+           n_samples = n()) %>%
+    ungroup()
   
-  ggplot(data_sub,
-    aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
-        y    = rate_use,
-        fill = tideDiel)) +
-    geom_boxplot() +
+  p <- ggplot(data_sub,
+              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
+                  y    = rate_use,
+                  fill = tideDiel))
+  
+  # Only add boxplot if there are enough non-zero values in each group
+  data_for_boxplot <- data_sub %>%
+    filter(n_nonzero >= min_n_nonzero)
+  
+  # Create fake data for missing tideDiel categories to maintain boxplot spacing
+  all_combinations <- expand.grid(
+    recvDeployName = unique(data_sub$recvDeployName),
+    tideDiel = c("Diurnal", "Nocturnal"),
+    speciesEN = unique(data_sub$speciesEN),
+    stringsAsFactors = FALSE
+  )
+  
+  existing_combinations <- data_for_boxplot %>%
+    distinct(recvDeployName, tideDiel, speciesEN)
+  
+  missing_combinations <- all_combinations %>%
+    anti_join(existing_combinations, by = c("recvDeployName", "tideDiel", "speciesEN"))
+  
+  # Create transparent fake data
+  if (nrow(missing_combinations) > 0) {
+    fake_data <- missing_combinations %>%
+      mutate(rate_use = 0,
+             n_nonzero = 0,
+             n_samples = 0,
+             is_fake = TRUE)
+    
+    data_for_boxplot <- data_for_boxplot %>%
+      mutate(is_fake = FALSE) %>%
+      bind_rows(fake_data)
+  } else {
+    data_for_boxplot <- data_for_boxplot %>%
+      mutate(is_fake = FALSE)
+  }
+  
+  if (nrow(data_for_boxplot) > 0) {
+    p <- p + geom_boxplot(data = data_for_boxplot,
+                          aes(alpha = ifelse(is_fake, 0, 1)),
+                          outlier.shape = NA,
+                          varwidth = FALSE,
+                          position = position_dodge(width = 0.8, preserve = "single")) +
+      scale_alpha_identity()
+  }
+  
+  # Always show individual points for ALL data
+  p <- p +
+    geom_point(aes(shape = tideDiel, fill = tideDiel),
+                                     position = position_dodge(width = 0.8),
+                                     alpha = 1, size = 1.5,
+                                     show.legend = FALSE) +
+         scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+         scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "black")) +
+    
     facet_wrap(~ speciesEN,
                labeller = labeller(speciesEN = label_vec)) +
     labs(x     = "Receiver Deployment",
@@ -561,6 +617,8 @@ make_plot <- function(tide_level, species_type) {
     theme_minimal() +
     scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  return(p)
 }
 
 # Generate and store all plots in a list
@@ -982,3 +1040,115 @@ explore
 ```
 
 **Legend**: Find the total of hours (or total uses) each species has been recorded within the Motus array and for each tide category.
+
+
+
+
+
+
+
+
+```{r figure, message = FALSE,  warning = FALSE, echo = FALSE, eval = FALSE, results = 'asis'}
+make_plot <- function(species_name, recv_order, min_n_nonzero = 2) {
+  data_sub <- figure_plot %>%
+    filter(speciesEN == species_name) %>%
+    group_by(recvDeployName, tideDiel, tideHighLow) %>%
+    mutate(n_nonzero = sum(rate_use > 0),
+           n_samples = n()) %>%
+    ungroup()
+  
+  p <- ggplot(data_sub,
+              aes(x    = factor(recvDeployName, levels = recv_order),
+                  y    = rate_use,
+                  fill = tideDiel))
+  
+  # Only add boxplot if there are enough non-zero values in each group
+  data_for_boxplot <- data_sub %>%
+    filter(n_nonzero >= min_n_nonzero)
+  
+  # Identify recvDeployName × tideHighLow combinations that have at least some data
+  locations_with_data <- data_for_boxplot %>%
+    group_by(recvDeployName, tideHighLow) %>%
+    summarise(has_data = n() > 0, .groups = "drop") %>%
+    filter(has_data)
+  
+  # Create fake data only for tideDiel categories that are missing 
+  # BUT only for locations that have at least some data
+  all_combinations <- locations_with_data %>%
+    select(recvDeployName, tideHighLow) %>%
+    cross_join(data.frame(tideDiel = c("Diurnal", "Nocturnal")))
+  
+  existing_combinations <- data_for_boxplot %>%
+    distinct(recvDeployName, tideDiel, tideHighLow)
+  
+  missing_combinations <- all_combinations %>%
+    anti_join(existing_combinations, by = c("recvDeployName", "tideDiel", "tideHighLow"))
+  
+  # Create transparent fake data
+  if (nrow(missing_combinations) > 0) {
+    fake_data <- missing_combinations %>%
+      mutate(rate_use = 0,
+             n_nonzero = 0,
+             n_samples = 0,
+             is_fake = TRUE,
+             speciesEN = species_name)
+    
+    data_for_boxplot <- data_for_boxplot %>%
+      mutate(is_fake = FALSE) %>%
+      bind_rows(fake_data)
+  } else {
+    data_for_boxplot <- data_for_boxplot %>%
+      mutate(is_fake = FALSE)
+  }
+  
+  if (nrow(data_for_boxplot) > 0) {
+    p <- p + geom_boxplot(data = data_for_boxplot,
+                          aes(alpha = ifelse(is_fake, 0, 1)),
+                          outlier.shape = NA,
+                          varwidth = FALSE,
+                          position = position_dodge(width = 0.8, preserve = "single")) +
+      scale_alpha_identity()
+  }
+  
+  # Always show individual points for ALL data
+  p <- p +
+    geom_point(aes(shape = tideDiel, fill = tideDiel),
+               position = position_dodge(width = 0.8),
+               alpha = 1, size = 1.5,
+               show.legend = TRUE) +
+    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+    scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
+    scale_x_discrete(drop = FALSE) +  # This keeps all factor levels even if no data
+    
+    facet_wrap(~ tideHighLow, ncol = 2) +
+    labs(x     = "Receiver Deployment",
+         y     = "Rate of Use (%)",
+         fill  = "Tide Diel",
+         shape = "Tide Diel",
+         title = label_vec[species_name]) +
+    coord_cartesian(ylim = c(0, 50)) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "bottom")
+  
+  return(p)
+}
+
+# Define the order of recvDeployName once for all plots
+recv_deploy_order <- sort(unique(figure_plot$recvDeployName))
+
+# Get unique species names
+species_list <- unique(figure_plot$speciesEN)
+
+# Create one plot per species with consistent recv order
+plots_used_rate <- purrr::map(species_list, ~ make_plot(.x, recv_order = recv_deploy_order))
+
+# Name the list elements for easy access
+names(plots_used_rate) <- species_list
+
+# View individual plots
+plots_used_rate[[1]] #PGP
+plots_used_rate[[2]] #BTG
+plots_used_rate[[3]] #PS
+plots_used_rate[[4]] #RNA
+```
