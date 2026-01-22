@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-01-06">
 
 <title>myphd – Movement Ecology - Shorebirds</title>
 <style>
@@ -239,9 +240,30 @@ ul.task-list li input[type="checkbox"] {
         
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+</div>
 
 
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-01-06</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <div class="hero-section2">
@@ -291,13 +313,9 @@ ul.task-list li input[type="checkbox"] {
 
 
 </main> <!-- /main -->
-
-
-
-
 <div style="text-align: center; margin-top: 3rem; padding: 1rem; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 0.9rem;">
 
-  This page has been last updated on  <span id="render-date">$date$</span>
+  This page has been last updated on <span id="render-date"></span>
 
 </div>
 
@@ -309,11 +327,33 @@ ul.task-list li input[type="checkbox"] {
 
                   'July', 'August', 'September', 'October', 'November', 'December'];
 
-  const now = new Date();
+  
 
-  const dateStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  // Try to get the date from the document's lastModified or meta tags
 
-  document.getElementById('render-date').textContent = dateStr;
+  let dateString = document.querySelector('meta[name="dcterms.date"]')?.content || 
+
+                   document.querySelector('meta[property="article:modified_time"]')?.content ||
+
+                   document.lastModified;
+
+  
+
+  const lastModified = new Date(dateString);
+
+  
+
+  if (!isNaN(lastModified.getTime())) {
+
+    const dateStr = lastModified.getDate() + ' ' + months[lastModified.getMonth()] + ' ' + lastModified.getFullYear();
+
+    document.getElementById('render-date').textContent = dateStr;
+
+  } else {
+
+    document.getElementById('render-date').textContent = 'Unknown';
+
+  }
 
 </script>
 <script id="quarto-html-after-body" type="application/javascript">

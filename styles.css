@@ -142,3 +142,20 @@ body a:not(.navbar a):not(.nav-link):visited {
                       linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
   -webkit-mask-composite: source-in;
 }
+
+
+
+/* TO UPDATE THE DATE IN FOOTER HTML*/
+/* Hide the default Quarto date display */
+.quarto-title-meta {
+  display: none !important;
+}
+
+/* Or if you want to hide only the date but keep other metadata */
+.quarto-title-meta-contents:has(#title-block-header-date) {
+  display: none !important;
+}
+
+#title-block-header .quarto-title-meta {
+  display: none !important;
+}
