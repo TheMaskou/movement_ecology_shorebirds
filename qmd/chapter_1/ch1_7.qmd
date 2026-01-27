@@ -1041,13 +1041,6 @@ explore
 
 **Legend**: Find the total of hours (or total uses) each species has been recorded within the Motus array and for each tide category.
 
-
-
-
-
-
-
-
 ```{r figure, message = FALSE,  warning = FALSE, echo = FALSE, eval = FALSE, results = 'asis'}
 make_plot <- function(species_name, recv_order, min_n_nonzero = 2) {
   data_sub <- figure_plot %>%

@@ -67,9 +67,10 @@ website:
             
         - section: "Analysis"
           contents:
-            - qmd/chapter_1/ch1_6.qmd # Estuary Usage
-            - qmd/chapter_1/ch1_7.qmd # Station Usage rate
-            - qmd/chapter_1/ch1_8.qmd # Signal strength
+            - qmd/chapter_1/ch1_6.qmd  # Estuary Usage
+            - qmd/chapter_1/ch1_7.qmd  # Station Usage rate
+            - qmd/chapter_1/ch1_8.qmd  # Signal strength
+            - qmd/chapter_1/ch1_10.qmd # Shannon indix
             
         - section: "Results"
           contents:

@@ -1,0 +1,175 @@
+---
+title: "Jensen-Shannon indix"
+format: html
+---
+
+```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# Source the script into that environment
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
+                   output = tempfile(fileext = ".R"), 
+                   quiet = TRUE))
+```
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+We can inform site usage for each species with its individual variation (i.e., average number of site used per species, average rate of use for a site and depending on tidal condition). However, we must provide a simple metric to read so we can compare the site fidelity value between species. And we must clarify whether birds within the same species use their sites similarly.
+
+Grouped per species, this page aims to quantify the following:
+
+-   **Site fidelity** - Evenness equivalence- *Shannon*
+
+    How much birds part of same species use the same sites along time? For example, if species A uses in average five sites a day, are the birds of the species A individually using the five same sites in a consistent manner along time? Is a bird using the same five sites always, or can he change a site every day, still daily using five sites.\
+    *How even individuals are between each others in term of number of sites used? Do individuals have similar entropy?*
+
+-   **Site composition** - Composition difference - *Jensen-Shannon*
+
+    Once knowing whether a bird is loyal to his sites, we want to know which ones is he loyal to? This particular step might increase complexity with the amount of birds monitored. The Jensen-Shannon value quantifies the composition difference of site used among individuals of a same species. So it informs how many sites a bird is using in comparison to another bird, and whether they are different of another bird.\
+    *How much the composition of site used differs between individuals? Do they use different sites?*
+:::
+
+::: blockquote-blue
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+:::
+
+```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+library(motus)
+library(dplyr)
+library(here)
+library(ggplot2)
+library(tidyr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(scales)
+library(vegan)  
+library(philentropy) 
+library(gridExtra)
+```
+
+```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+# Birds
+data_all <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers info
+recv <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-recv-info\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Tide
+tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
+
+# Receivers activity
+sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
+recv.act <- tbl(sql.motus, "activity")  %>% 
+  collect() %>% 
+  as.data.frame() %>%
+  rename(deviceID = "motusDeviceID") %>%
+  filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only 
+  
+  # Set the time properly - IMPORTANT
+  mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
+         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
+                             tz = "Australia/Sydney")) 
+
+```
+
+## Format
+
+```{r format, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+data_all1 <- data_all
+
+data_all <- data_all %>% 
+  select(speciesEN, Band.ID, dateAus, recvDeployName, DateAUS.Trap, tideCategory)
+
+```
+
+## Shannon
+
+**Shannon entropy** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication) ;[ Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article)) is used to quantify the diversity of an individual's site use: A lower entropy goes with more concentrated use (higher site fidelity to few sites) and a higher entropy matches a more dispersed use (lower site fidelity, using many sites equally).
+
+First, we need to set a few functions to consistently operate the all the data at once. Computing first
+
+```{r shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+# Build Shannon function (entropy, H)
+calculate_shannon_entropy <- function(counts) {
+  # Remove zeros
+  counts <- counts[counts > 0]
+  # Calculate proportions
+  proportions <- counts / sum(counts)
+  # Calculate Shannon entropy
+  # H = -sum(p_i * ln(p_i))
+  entropy <- -sum(proportions * log(proportions))
+  return(entropy)
+}
+
+# Build Shannon Diversity function (effective number of equally-used sites, exp(H))
+shannon_diversity <- function(entropy) {
+  return(exp(entropy))
+}
+
+# Shannon function
+calculate_individual_entropy <- function(data, tide_filter = NULL) {
+  
+  # Filter by tide category if specified
+  if (!is.null(tide_filter)) {
+    data <- data %>% filter(tideCategory == tide_filter)
+  }
+  
+  # Calculate entropy for each individual
+  entropy_results <- data %>%
+    group_by(speciesEN, Band.ID) %>%
+    summarise(
+      n_detections = n(),
+      n_sites = n_distinct(recvDeployName),
+      .groups = "drop"
+    ) %>%
+    rowwise() %>%
+    mutate(
+      # Get site use distribution for this individual
+      site_counts = list({
+        ind_data <- data %>% 
+          filter(Band.ID == .data$Band.ID) %>%
+          group_by(recvDeployName) %>%
+          summarise(count = n(), .groups = "drop") %>%
+          pull(count)
+        ind_data
+      }),
+      # Calculate Shannon entropy
+      shannon_entropy = calculate_shannon_entropy(site_counts),
+      # Calculate effective number of sites (exp(H))
+      effective_n_sites = shannon_diversity(shannon_entropy),
+      # Calculate evenness (J = H / ln(S))
+      pielou_evenness = shannon_entropy / log(n_sites)
+    ) %>%
+    select(-site_counts) %>%
+    ungroup()
+  
+  # Add tide category label if filtered
+  if (!is.null(tide_filter)) {
+    entropy_results <- entropy_results %>%
+      mutate(tideCategory = tide_filter)
+  } else {
+    entropy_results <- entropy_results %>%
+      mutate(tideCategory = "All")
+  }
+  
+  return(entropy_results)
+}
+```
+
+::: {style="overflow-x: auto; width: 100%;"}
+$$
+\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
+$$
+:::
+
+## Jensen-Shannon
+
+```{r jensen-shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+
+```
