@@ -11,7 +11,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 
 ################ First, run the .R script to download last up to date Motus data-set
 update <- TRUE # Second, Chose whether to update new detections from last data.rds (update = TRUE)
-################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\
+################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\ 
 
 ## _/!\_ ##
 ```

@@ -2,6 +2,7 @@
 title: "Survey effort"
 ---
 
+
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
@@ -14,7 +15,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 
 Stations may have operated for varying duration or during different time periods, making raw detection counts inherently biased and non-comparable. By quantifying the survey effort (total operational time) for each station, we can standardise the results across stations and allow statistically valid comparisons, ensuring that observed differences reflect true ecological patterns rather than artifacts of unequal sampling effort.
 
-To exactly access when a station was operational and when it was not, we used the `activity` table coming from each station's receiver. This table records any VHF activity at any time. 
+To exactly access when a station was operational and when it was not, we used the `activity` table coming from each station's receiver. This table records any VHF activity at any time.
 
 ***Note:*** *The following terms are used interchangeably: (1) receivers, SensorGnome, SG, serno, recv; (2) Raspberry Pi processor, Raspberry, deviceID.*
 :::

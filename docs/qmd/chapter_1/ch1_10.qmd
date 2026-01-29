@@ -90,7 +90,7 @@ data_all <- data_all %>%
 
 ## Shannon
 
-**Shannon entropy** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication) ;[Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article)) is used to quantify the diversity of an individual's site use: A lower entropy goes with more concentrated use (higher site fidelity to few sites) and a higher entropy matches a more dispersed use (lower site fidelity, using many sites equally).
+**Shannon entropy** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication) ;[ Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article)) is used to quantify the diversity of an individual's site use: A lower entropy goes with more concentrated use (higher site fidelity to few sites) and a higher entropy matches a more dispersed use (lower site fidelity, using many sites equally).
 
 First, we need to set a few functions to consistently operate the all the data at once. Computing first
 
