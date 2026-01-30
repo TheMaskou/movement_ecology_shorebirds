@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="dcterms.date" content="2026-01-30">
 
 <title>Signal strength – Movement Ecology - Shorebirds</title>
 <style>
@@ -172,6 +173,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_8.html">
  <span class="dropdown-text">Signal strength</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_10.qmd">
+ <span class="dropdown-text"></span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Results</li>
@@ -398,6 +403,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="quarto-title-meta">
 
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-01-30</p>
+    </div>
+  </div>
   
     
   </div>
@@ -509,13 +520,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 </main> <!-- /main -->
-
-
-
-
 <div style="text-align: center; margin-top: 3rem; padding: 1rem; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 0.9rem;">
 
-  This page has been last updated on  <span id="render-date">$date$</span>
+  This page has been last updated on <span id="render-date"></span>
 
 </div>
 
@@ -527,11 +534,33 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
                   'July', 'August', 'September', 'October', 'November', 'December'];
 
-  const now = new Date();
+  
 
-  const dateStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+  // Try to get the date from the document's lastModified or meta tags
 
-  document.getElementById('render-date').textContent = dateStr;
+  let dateString = document.querySelector('meta[name="dcterms.date"]')?.content || 
+
+                   document.querySelector('meta[property="article:modified_time"]')?.content ||
+
+                   document.lastModified;
+
+  
+
+  const lastModified = new Date(dateString);
+
+  
+
+  if (!isNaN(lastModified.getTime())) {
+
+    const dateStr = lastModified.getDate() + ' ' + months[lastModified.getMonth()] + ' ' + lastModified.getFullYear();
+
+    document.getElementById('render-date').textContent = dateStr;
+
+  } else {
+
+    document.getElementById('render-date').textContent = 'Unknown';
+
+  }
 
 </script>
 <script id="quarto-html-after-body" type="application/javascript">

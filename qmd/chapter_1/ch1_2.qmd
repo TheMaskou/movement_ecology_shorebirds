@@ -3,11 +3,10 @@ title: "Explore"
 format: html
 ---
 
-
 ```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
  
 library(motus) 
-library(dplyr)
+library(dplyr) 
 library(here)
 library(DBI)
 library(RSQLite)
@@ -50,7 +49,7 @@ spreadsheet <- readRDS(
 nb_undetect <- spreadsheet %>% 
   filter(is.na(Euthanised.)) %>%
   distinct(Band.ID) %>%
-  filter(!Band.ID %in% unique(data_all$Band.ID))
+  filter(!Band.ID %in% unique(data_all$Band.ID)) 
 
 # Band.IDs in spreadsheet and in data_all (tagged + released and detected)
 nb_detect <- spreadsheet %>% 

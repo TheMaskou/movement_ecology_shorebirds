@@ -11,7 +11,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-We can inform site usage for each species with its individual variation (i.e., average number of site used per species, average rate of use for a site and depending on tidal condition). However, we must provide a simple metric to read so we can compare the site fidelity value between species. And we must clarify whether birds within the same species use their sites similarly.
+We can inform site usage for each species with its individual variation (i.e., average number of site used per species, average rate of use for a site and depending on tidal condition). However, we must provide a simple metric to read so we can compare the site fidelity value between species. And we must clarify whether birds within the same species use their sites similarly. 
 
 Grouped per species, this page aims to quantify the following:
 
