@@ -1,0 +1,4107 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Site use: Entropy, Eveness &amp; Composition</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="ch1_10_files/libs/clipboard/clipboard.min.js"></script>
+<script src="ch1_10_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="ch1_10_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="ch1_10_files/libs/quarto-html/popper.min.js"></script>
+<script src="ch1_10_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="ch1_10_files/libs/quarto-html/anchor.min.js"></script>
+<link href="ch1_10_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="ch1_10_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="ch1_10_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="ch1_10_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="ch1_10_files/libs/bootstrap/bootstrap-bb462d781dde1847d9e3ccf7736099dd.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Site use: Entropy, Eveness &amp; Composition</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="callout callout-style-simple callout-none no-icon" style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>We can inform site usage for each species with its individual variation (i.e., average number of site used per species, average rate of use for a site and depending on tidal condition). However, we must provide a simple metric to read so we can compare the site fidelity value between species. And we must clarify whether birds within the same species use their sites similarly.</p>
+<p>Grouped per species, this page aims to quantify the following:</p>
+<ul>
+<li><p><strong>Site fidelity</strong> - Evenness equivalence- <em>Shannon</em></p>
+<p>How much birds part of same species use the same sites along time? For example, if species A uses in average five sites a day, are the birds of the species A individually using the five same sites in a consistent manner along time? Is a bird using the same five sites always, or can he change a site every day, still daily using five sites.<br>
+<em>How evenly does this bird distribute its time/detections across different sites?</em> <em>Do individuals have similar entropy (H)?</em> <em>How specialised vs.&nbsp;generalised are individuals in their site use?</em></p></li>
+<li><p><strong>Site composition</strong> - Composition difference - <em>Jensen-Shannon</em></p>
+<p>Once knowing whether a bird is loyal to his sites, we want to know which ones is he loyal to? This particular step might increase complexity with the amount of birds monitored. The Jensen-Shannon value quantifies the composition difference of site used among individuals of a same species. So it informs how many sites a bird is using in comparison to another bird, and whether they are different of another bird.<br>
+<em>How much the composition of site used differs between individuals? Do they use different sites?</em> <em>Are individuals within a species using sites similarly or differently?</em></p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="blockquote-blue">
+<p><strong>Load your data</strong> in your R environment <em>- see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility">Load &amp; Format &gt; Reproducibility</a></em></p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(motus)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)  </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(philentropy) </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="shannon" class="level2">
+<h2 class="anchored" data-anchor-id="shannon">Shannon</h2>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p><strong>Shannon entropy (H)</strong> (<a href="https://scholar.google.com/scholar_lookup?hl=en&amp;publication_year=1949&amp;journal=The+mathematical+theory+of+communication&amp;author=C.+E.+Shannon&amp;author=W.+Weaver&amp;title=The+mathematical+theory+of+communication">Shannon and Weaver -1949</a> ;<a href="https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&amp;utm_medium=article">Lou Jost - 2006</a>) is used to quantify the diversity of an individual’s site use. It measures the <strong>dispersion</strong> of an individual’s site use pattern to answers: <em>How evenly does this bird distribute its time/detections across different sites?</em></p>
+<div style="overflow-x: auto; width: 100%;">
+<p><span class="math display">\[
+\text{H}   =    -Σ(p_i × ln(p_i))
+\]</span> <span class="math display">\[
+\text{where } p_i \text{ is the proportion of detections at site } i
+\]</span></p>
+</div>
+</section>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">Interpretation</h3>
+<p>A lower entropy goes with more concentrated use (higher site fidelity to few sites) and a higher entropy matches a more dispersed use (lower site fidelity, using many sites equally).</p>
+<p><strong>Low Entropy (e.g., H &lt; 1.0)</strong><br>
+- Individual is highly specialized<br>
+- Uses only a few sites, or uses one site predominantly<br>
+- High site fidelity to specific locations<br>
+- Low unpredictability: we can predict where the bird will be</p>
+<p><strong>High Entropy (e.g., H &gt; 2.0)</strong><br>
+- Individual is generalized<br>
+- Uses many sites relatively equally<br>
+- Low site fidelity to any particular location<br>
+- High unpredictability: harder to predict where the bird will be</p>
+<p><strong>Effective Number of Sites (exp(H))</strong><br>
+This transforms entropy into an interpretable number: the “effective number of equally-used sites”</p>
+<p>Example: - If H = 1.61, then exp(1.61) ≈ 5 effective sites - Interpretation: The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution)</p>
+<p><strong>Pielou’s Evenness (J = H / ln(S))</strong><br>
+Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites used by that individual:<br>
+- J close to 1: Individual uses all sites equally<br>
+- J close to 0: Individual uses sites very unequally (dominates few sites)</p>
+<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
+<p><img src="../../material/exempleshannon.png" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
+<figcaption style="margin-top: 1em; font-style: italic;">
+<p>Table: Summary of the entropy values with examples.</p>
+</figcaption>
+</figure>
+</div>
+<p>First, we define a all-in-one function to consistently computing shannon entropy.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calculate Shannon entropy</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>calculate_shannon <span class="ot">&lt;-</span> <span class="cf">function</span>(proportions) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove zero proportions (shouldn't be any, but safety check)</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> proportions[proportions <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate Shannon entropy: H = -sum(p * ln(p))</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  H <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">sum</span>(p <span class="sc">*</span> <span class="fu">log</span>(p))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(H)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we can proceed. Starting with simply counting the number of detection an individual has recorded in each stations, then extracting the proportions to finally calculate the entropy (H).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate entropy metrics for each Band.ID</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>entropy_results <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove any NA values in Band.ID or recvSiteName</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Band.ID), <span class="sc">!</span><span class="fu">is.na</span>(recvDeployName)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Count detections per bird per site</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(speciesEN, Band.ID, recvDeployName) <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">detections =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate proportions for each bird</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(speciesEN, Band.ID) <span class="sc">%&gt;%</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_detections =</span> <span class="fu">sum</span>(detections),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion =</span> detections <span class="sc">/</span> total_detections</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate metrics for each bird</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">S =</span> <span class="fu">n</span>(),                                    <span class="co"># Number of sites used</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">H =</span> <span class="fu">round</span>(<span class="fu">calculate_shannon</span>(proportion), <span class="dv">2</span>),          <span class="co"># Shannon entropy</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">J =</span> <span class="fu">round</span>(H <span class="sc">/</span> <span class="fu">log</span>(S), <span class="dv">2</span>),                             <span class="co"># Pielou's evenness</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_detections =</span> <span class="fu">first</span>(total_detections), <span class="co"># Total detections for reference</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add effective number of sites (exp(H))</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">exp_H =</span> <span class="fu">exp</span>(H)  <span class="co"># Effective number of equally-used sites</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Arrange by Band.ID</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(speciesEN, Band.ID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="results" class="level3">
+<h3 class="anchored" data-anchor-id="results">Results</h3>
+<div class="cell">
+<div class="cell-output-display">
+<div id="pbqvzujvqc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pbqvzujvqc table {
+  font-family: 'Times New Roman', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#pbqvzujvqc thead, #pbqvzujvqc tbody, #pbqvzujvqc tfoot, #pbqvzujvqc tr, #pbqvzujvqc td, #pbqvzujvqc th {
+  border-style: none;
+}
+
+#pbqvzujvqc p {
+  margin: 0;
+  padding: 0;
+}
+
+#pbqvzujvqc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#pbqvzujvqc .gt_title {
+  color: #333333;
+  font-size: 16px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#pbqvzujvqc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#pbqvzujvqc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#pbqvzujvqc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#pbqvzujvqc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#pbqvzujvqc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#pbqvzujvqc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#pbqvzujvqc .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#pbqvzujvqc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#pbqvzujvqc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#pbqvzujvqc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#pbqvzujvqc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#pbqvzujvqc .gt_row {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#pbqvzujvqc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbqvzujvqc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#pbqvzujvqc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#pbqvzujvqc .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#pbqvzujvqc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbqvzujvqc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#pbqvzujvqc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbqvzujvqc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#pbqvzujvqc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbqvzujvqc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#pbqvzujvqc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#pbqvzujvqc .gt_left {
+  text-align: left;
+}
+
+#pbqvzujvqc .gt_center {
+  text-align: center;
+}
+
+#pbqvzujvqc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#pbqvzujvqc .gt_font_normal {
+  font-weight: normal;
+}
+
+#pbqvzujvqc .gt_font_bold {
+  font-weight: bold;
+}
+
+#pbqvzujvqc .gt_font_italic {
+  font-style: italic;
+}
+
+#pbqvzujvqc .gt_super {
+  font-size: 65%;
+}
+
+#pbqvzujvqc .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#pbqvzujvqc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#pbqvzujvqc .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#pbqvzujvqc .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#pbqvzujvqc .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#pbqvzujvqc .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#pbqvzujvqc .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#pbqvzujvqc .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#pbqvzujvqc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<th colspan="16" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>Table 2.</strong> Shannon entropy metrics for site use patterns of shorebird species in the Hunter estuary.</th>
+</tr>
+<tr class="gt_col_headings gt_spanner_row even">
+<th rowspan="2" id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Species (En.)</th>
+<th colspan="2" id="Sample" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Sample
+</div></th>
+<th colspan="3" id="Number of Sites (S)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Number of Sites (S)
+</div></th>
+<th colspan="4" id="Shannon Entropy (H)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Shannon Entropy (H)
+</div></th>
+<th colspan="3" id="Pielou's Evenness (J)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Pielou's Evenness (J)
+</div></th>
+<th colspan="3" id="Effective Sites [exp(H)]" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Effective Sites [exp(H)]
+</div></th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="n_individuals" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">N individuals</th>
+<th id="total_detections" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Total detections</th>
+<th id="median_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median S</th>
+<th id="mean_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean S</th>
+<th id="sd_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD S</th>
+<th id="median_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median H</th>
+<th id="mean_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean H</th>
+<th id="sd_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD H</th>
+<th id="CV_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">CV H (%)</th>
+<th id="median_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median J</th>
+<th id="mean_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean J</th>
+<th id="sd_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD J</th>
+<th id="median_exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median exp(H)</th>
+<th id="mean_exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean exp(H)</th>
+<th id="sd_exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD exp(H)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Bar-tailed Godwit</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">9</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">132,188</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">3.00</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">2.33</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">0.87</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.58</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.43</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">0.33</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">76.4</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.60</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.57</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">0.28</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.79</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.60</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">0.49</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Curlew Sandpiper</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">5</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">276,960</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">6.00</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">5.60</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">0.55</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.10</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.11</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">0.02</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">21.3</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.06</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.07</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">0.01</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.11</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.12</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">0.03</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Eurasian Whimbrel</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">2</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">5,978</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">2.50</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">2.50</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">0.71</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.45</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.45</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">0.51</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">113.1</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.43</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.44</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">0.43</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.67</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.67</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">0.82</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Far Eastern Curlew</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">1</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">72,053</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">2.00</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">2.00</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.04</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.04</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.06</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.06</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.04</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.04</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Masked Lapwing</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">1</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">99</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">1.00</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">1.00</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.00</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.00</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">NaN</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.00</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.00</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">NA</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Pacific Golden-Plover</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">14</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">1,281,139</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">5.50</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">5.21</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">1.76</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.09</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.23</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">0.27</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">115.4</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.09</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.14</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">0.15</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.10</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.31</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">0.38</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Pied Stilt</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">6</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">883,921</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">2.00</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">2.33</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">1.51</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.25</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.30</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">0.36</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">121.0</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.36</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.40</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">0.15</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">1.29</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">1.43</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">0.61</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Red-necked Avocet</td>
+<td class="gt_row gt_right" headers="n_individuals" style="white-space: nowrap">3</td>
+<td class="gt_row gt_right" headers="total_detections" style="white-space: nowrap">110,210</td>
+<td class="gt_row gt_right" headers="median_S" style="white-space: nowrap">6.00</td>
+<td class="gt_row gt_right" headers="mean_S" style="white-space: nowrap">5.00</td>
+<td class="gt_row gt_right" headers="sd_S" style="white-space: nowrap">1.73</td>
+<td class="gt_row gt_right" headers="median_H" style="white-space: nowrap">0.85</td>
+<td class="gt_row gt_right" headers="mean_H" style="white-space: nowrap">0.88</td>
+<td class="gt_row gt_right" headers="sd_H" style="white-space: nowrap">0.06</td>
+<td class="gt_row gt_right" headers="CV_H" style="white-space: nowrap">6.5</td>
+<td class="gt_row gt_right" headers="median_J" style="white-space: nowrap">0.53</td>
+<td class="gt_row gt_right" headers="mean_J" style="white-space: nowrap">0.59</td>
+<td class="gt_row gt_right" headers="sd_J" style="white-space: nowrap">0.16</td>
+<td class="gt_row gt_right" headers="median_exp_H" style="white-space: nowrap">2.34</td>
+<td class="gt_row gt_right" headers="mean_exp_H" style="white-space: nowrap">2.42</td>
+<td class="gt_row gt_right" headers="sd_exp_H" style="white-space: nowrap">0.14</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="16" class="gt_footnote"><strong>Legend.</strong> Grouped by species, this table summarises site fidelity metrics using Shannon entropy analysis. <strong>n_individuals</strong>: number of tagged individuals; <strong>S</strong>: number of unique sites used; <strong>H</strong>: Shannon entropy (dispersion of site use, higher = more generalised); <strong>J</strong>: Pielou’s evenness (0-1, higher = more even site use); <strong>exp(H)</strong>: effective number of equally-used sites; <strong>CV_H</strong>: coefficient of variation in H (% individual variation within species); <strong>total_detections</strong>: total number of detections across all individuals. Mean and standard deviation values are provided (x̄ ± SD). Median values represent the central tendency across individuals within each species.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data for plotting</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>entropy_for_plot <span class="ot">&lt;-</span> entropy_results <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(speciesEN, Band.ID, S, H, J, exp_H) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(S, H, J, exp_H),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"metric"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span> ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( <span class="at">metric =</span> <span class="fu">factor</span>(metric, </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"S"</span>, <span class="st">"H"</span>, <span class="st">"J"</span>, <span class="st">"exp_H"</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"S (Number of Sites)"</span>, </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"H (Shannon Entropy)"</span>, </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"J (Pielou's Evenness)"</span>, </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"exp(H) (Effective Sites)"</span>)))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the boxplot</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(entropy_for_plot, <span class="fu">aes</span>(<span class="at">x =</span> speciesEN, <span class="at">y =</span> value, <span class="at">fill =</span> speciesEN)) <span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">alpha =</span> <span class="fl">0.3</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> metric, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> species_colors) <span class="sc">+</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Shannon Entropy Metrics by Species"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Distribution of site use patterns across individuals"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Species"</span>,</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Value"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Species"</span>) <span class="sc">+</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,  </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_10_files/figure-html/shannon%204-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">S table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">H table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">J table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">exp(H) table</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div id="mbphzqlzsk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#mbphzqlzsk table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#mbphzqlzsk thead, #mbphzqlzsk tbody, #mbphzqlzsk tfoot, #mbphzqlzsk tr, #mbphzqlzsk td, #mbphzqlzsk th {
+  border-style: none;
+}
+
+#mbphzqlzsk p {
+  margin: 0;
+  padding: 0;
+}
+
+#mbphzqlzsk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#mbphzqlzsk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#mbphzqlzsk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#mbphzqlzsk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#mbphzqlzsk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#mbphzqlzsk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#mbphzqlzsk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#mbphzqlzsk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#mbphzqlzsk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#mbphzqlzsk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#mbphzqlzsk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#mbphzqlzsk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#mbphzqlzsk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#mbphzqlzsk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#mbphzqlzsk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mbphzqlzsk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#mbphzqlzsk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#mbphzqlzsk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#mbphzqlzsk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mbphzqlzsk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#mbphzqlzsk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mbphzqlzsk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#mbphzqlzsk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mbphzqlzsk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#mbphzqlzsk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mbphzqlzsk .gt_left {
+  text-align: left;
+}
+
+#mbphzqlzsk .gt_center {
+  text-align: center;
+}
+
+#mbphzqlzsk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#mbphzqlzsk .gt_font_normal {
+  font-weight: normal;
+}
+
+#mbphzqlzsk .gt_font_bold {
+  font-weight: bold;
+}
+
+#mbphzqlzsk .gt_font_italic {
+  font-style: italic;
+}
+
+#mbphzqlzsk .gt_super {
+  font-size: 65%;
+}
+
+#mbphzqlzsk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#mbphzqlzsk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#mbphzqlzsk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#mbphzqlzsk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#mbphzqlzsk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#mbphzqlzsk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#mbphzqlzsk .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#mbphzqlzsk .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#mbphzqlzsk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>S - Number of Sites Used</strong></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Species</th>
+<th id="Band.ID" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Band ID</th>
+<th id="S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">S</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7176824</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394014</td>
+<td class="gt_row gt_right" headers="S">1</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394017</td>
+<td class="gt_row gt_right" headers="S">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394018</td>
+<td class="gt_row gt_right" headers="S">1</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394019</td>
+<td class="gt_row gt_right" headers="S">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394026</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394027</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394032</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">8345053</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281407</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281408</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281409</td>
+<td class="gt_row gt_right" headers="S">5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281410</td>
+<td class="gt_row gt_right" headers="S">5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281420</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345054</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345055</td>
+<td class="gt_row gt_right" headers="S">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Far Eastern Curlew</td>
+<td class="gt_row gt_center" headers="Band.ID">10118806</td>
+<td class="gt_row gt_right" headers="S">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Masked Lapwing</td>
+<td class="gt_row gt_center" headers="Band.ID">8295845</td>
+<td class="gt_row gt_right" headers="S">1</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318617</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318618</td>
+<td class="gt_row gt_right" headers="S">7</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318619</td>
+<td class="gt_row gt_right" headers="S">4</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318620</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318621</td>
+<td class="gt_row gt_right" headers="S">7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318624</td>
+<td class="gt_row gt_right" headers="S">7</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318625</td>
+<td class="gt_row gt_right" headers="S">5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318626</td>
+<td class="gt_row gt_right" headers="S">5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318627</td>
+<td class="gt_row gt_right" headers="S">7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318629</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318630</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318633</td>
+<td class="gt_row gt_right" headers="S">4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318635</td>
+<td class="gt_row gt_right" headers="S">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318799</td>
+<td class="gt_row gt_right" headers="S">5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295770</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295772</td>
+<td class="gt_row gt_right" headers="S">1</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295773</td>
+<td class="gt_row gt_right" headers="S">2</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295774</td>
+<td class="gt_row gt_right" headers="S">5</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295775</td>
+<td class="gt_row gt_right" headers="S">1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295776</td>
+<td class="gt_row gt_right" headers="S">2</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295778</td>
+<td class="gt_row gt_right" headers="S">3</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295780</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295781</td>
+<td class="gt_row gt_right" headers="S">6</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="evmjcbsbdk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#evmjcbsbdk table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#evmjcbsbdk thead, #evmjcbsbdk tbody, #evmjcbsbdk tfoot, #evmjcbsbdk tr, #evmjcbsbdk td, #evmjcbsbdk th {
+  border-style: none;
+}
+
+#evmjcbsbdk p {
+  margin: 0;
+  padding: 0;
+}
+
+#evmjcbsbdk .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#evmjcbsbdk .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#evmjcbsbdk .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#evmjcbsbdk .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#evmjcbsbdk .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#evmjcbsbdk .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#evmjcbsbdk .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#evmjcbsbdk .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#evmjcbsbdk .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#evmjcbsbdk .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#evmjcbsbdk .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#evmjcbsbdk .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#evmjcbsbdk .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#evmjcbsbdk .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#evmjcbsbdk .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#evmjcbsbdk .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#evmjcbsbdk .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#evmjcbsbdk .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#evmjcbsbdk .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#evmjcbsbdk .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#evmjcbsbdk .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#evmjcbsbdk .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#evmjcbsbdk .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#evmjcbsbdk .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#evmjcbsbdk .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#evmjcbsbdk .gt_left {
+  text-align: left;
+}
+
+#evmjcbsbdk .gt_center {
+  text-align: center;
+}
+
+#evmjcbsbdk .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#evmjcbsbdk .gt_font_normal {
+  font-weight: normal;
+}
+
+#evmjcbsbdk .gt_font_bold {
+  font-weight: bold;
+}
+
+#evmjcbsbdk .gt_font_italic {
+  font-style: italic;
+}
+
+#evmjcbsbdk .gt_super {
+  font-size: 65%;
+}
+
+#evmjcbsbdk .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#evmjcbsbdk .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#evmjcbsbdk .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#evmjcbsbdk .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#evmjcbsbdk .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#evmjcbsbdk .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#evmjcbsbdk .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#evmjcbsbdk .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#evmjcbsbdk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>H - Shannon Entropy</strong></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Species</th>
+<th id="Band.ID" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Band ID</th>
+<th id="H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">H</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7176824</td>
+<td class="gt_row gt_right" headers="H">0.58</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394014</td>
+<td class="gt_row gt_right" headers="H">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394017</td>
+<td class="gt_row gt_right" headers="H">0.69</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394018</td>
+<td class="gt_row gt_right" headers="H">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394019</td>
+<td class="gt_row gt_right" headers="H">0.26</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394026</td>
+<td class="gt_row gt_right" headers="H">0.66</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394027</td>
+<td class="gt_row gt_right" headers="H">0.79</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394032</td>
+<td class="gt_row gt_right" headers="H">0.13</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">8345053</td>
+<td class="gt_row gt_right" headers="H">0.72</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281407</td>
+<td class="gt_row gt_right" headers="H">0.10</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281408</td>
+<td class="gt_row gt_right" headers="H">0.15</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281409</td>
+<td class="gt_row gt_right" headers="H">0.09</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281410</td>
+<td class="gt_row gt_right" headers="H">0.10</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281420</td>
+<td class="gt_row gt_right" headers="H">0.12</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345054</td>
+<td class="gt_row gt_right" headers="H">0.81</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345055</td>
+<td class="gt_row gt_right" headers="H">0.09</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Far Eastern Curlew</td>
+<td class="gt_row gt_center" headers="Band.ID">10118806</td>
+<td class="gt_row gt_right" headers="H">0.04</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Masked Lapwing</td>
+<td class="gt_row gt_center" headers="Band.ID">8295845</td>
+<td class="gt_row gt_right" headers="H">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318617</td>
+<td class="gt_row gt_right" headers="H">0.02</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318618</td>
+<td class="gt_row gt_right" headers="H">0.04</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318619</td>
+<td class="gt_row gt_right" headers="H">0.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318620</td>
+<td class="gt_row gt_right" headers="H">0.03</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318621</td>
+<td class="gt_row gt_right" headers="H">0.55</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318624</td>
+<td class="gt_row gt_right" headers="H">0.73</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318625</td>
+<td class="gt_row gt_right" headers="H">0.52</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318626</td>
+<td class="gt_row gt_right" headers="H">0.20</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318627</td>
+<td class="gt_row gt_right" headers="H">0.32</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318629</td>
+<td class="gt_row gt_right" headers="H">0.66</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318630</td>
+<td class="gt_row gt_right" headers="H">0.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318633</td>
+<td class="gt_row gt_right" headers="H">0.04</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318635</td>
+<td class="gt_row gt_right" headers="H">0.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318799</td>
+<td class="gt_row gt_right" headers="H">0.14</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295770</td>
+<td class="gt_row gt_right" headers="H">0.29</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295772</td>
+<td class="gt_row gt_right" headers="H">0.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295773</td>
+<td class="gt_row gt_right" headers="H">0.30</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295774</td>
+<td class="gt_row gt_right" headers="H">0.97</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295775</td>
+<td class="gt_row gt_right" headers="H">0.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295776</td>
+<td class="gt_row gt_right" headers="H">0.21</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295778</td>
+<td class="gt_row gt_right" headers="H">0.85</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295780</td>
+<td class="gt_row gt_right" headers="H">0.95</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295781</td>
+<td class="gt_row gt_right" headers="H">0.85</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
+<div id="iajyrllyhh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#iajyrllyhh table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#iajyrllyhh thead, #iajyrllyhh tbody, #iajyrllyhh tfoot, #iajyrllyhh tr, #iajyrllyhh td, #iajyrllyhh th {
+  border-style: none;
+}
+
+#iajyrllyhh p {
+  margin: 0;
+  padding: 0;
+}
+
+#iajyrllyhh .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#iajyrllyhh .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#iajyrllyhh .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#iajyrllyhh .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#iajyrllyhh .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#iajyrllyhh .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#iajyrllyhh .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#iajyrllyhh .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#iajyrllyhh .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#iajyrllyhh .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#iajyrllyhh .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#iajyrllyhh .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#iajyrllyhh .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#iajyrllyhh .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#iajyrllyhh .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iajyrllyhh .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#iajyrllyhh .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#iajyrllyhh .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#iajyrllyhh .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iajyrllyhh .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#iajyrllyhh .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iajyrllyhh .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#iajyrllyhh .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iajyrllyhh .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#iajyrllyhh .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#iajyrllyhh .gt_left {
+  text-align: left;
+}
+
+#iajyrllyhh .gt_center {
+  text-align: center;
+}
+
+#iajyrllyhh .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#iajyrllyhh .gt_font_normal {
+  font-weight: normal;
+}
+
+#iajyrllyhh .gt_font_bold {
+  font-weight: bold;
+}
+
+#iajyrllyhh .gt_font_italic {
+  font-style: italic;
+}
+
+#iajyrllyhh .gt_super {
+  font-size: 65%;
+}
+
+#iajyrllyhh .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#iajyrllyhh .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#iajyrllyhh .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#iajyrllyhh .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#iajyrllyhh .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#iajyrllyhh .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#iajyrllyhh .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#iajyrllyhh .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#iajyrllyhh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>J - Pielou’s Evenness</strong></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Species</th>
+<th id="Band.ID" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Band ID</th>
+<th id="J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">J</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7176824</td>
+<td class="gt_row gt_right" headers="J">0.53</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394014</td>
+<td class="gt_row gt_right" headers="J">NaN</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394017</td>
+<td class="gt_row gt_right" headers="J">1.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394018</td>
+<td class="gt_row gt_right" headers="J">NaN</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394019</td>
+<td class="gt_row gt_right" headers="J">0.38</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394026</td>
+<td class="gt_row gt_right" headers="J">0.60</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394027</td>
+<td class="gt_row gt_right" headers="J">0.72</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394032</td>
+<td class="gt_row gt_right" headers="J">0.12</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">8345053</td>
+<td class="gt_row gt_right" headers="J">0.66</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281407</td>
+<td class="gt_row gt_right" headers="J">0.06</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281408</td>
+<td class="gt_row gt_right" headers="J">0.08</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281409</td>
+<td class="gt_row gt_right" headers="J">0.06</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281410</td>
+<td class="gt_row gt_right" headers="J">0.06</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281420</td>
+<td class="gt_row gt_right" headers="J">0.07</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345054</td>
+<td class="gt_row gt_right" headers="J">0.74</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345055</td>
+<td class="gt_row gt_right" headers="J">0.13</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Far Eastern Curlew</td>
+<td class="gt_row gt_center" headers="Band.ID">10118806</td>
+<td class="gt_row gt_right" headers="J">0.06</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Masked Lapwing</td>
+<td class="gt_row gt_center" headers="Band.ID">8295845</td>
+<td class="gt_row gt_right" headers="J">NaN</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318617</td>
+<td class="gt_row gt_right" headers="J">0.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318618</td>
+<td class="gt_row gt_right" headers="J">0.02</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318619</td>
+<td class="gt_row gt_right" headers="J">0.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318620</td>
+<td class="gt_row gt_right" headers="J">0.02</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318621</td>
+<td class="gt_row gt_right" headers="J">0.28</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318624</td>
+<td class="gt_row gt_right" headers="J">0.38</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318625</td>
+<td class="gt_row gt_right" headers="J">0.32</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318626</td>
+<td class="gt_row gt_right" headers="J">0.12</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318627</td>
+<td class="gt_row gt_right" headers="J">0.16</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318629</td>
+<td class="gt_row gt_right" headers="J">0.37</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318630</td>
+<td class="gt_row gt_right" headers="J">0.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318633</td>
+<td class="gt_row gt_right" headers="J">0.03</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318635</td>
+<td class="gt_row gt_right" headers="J">NaN</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318799</td>
+<td class="gt_row gt_right" headers="J">0.09</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295770</td>
+<td class="gt_row gt_right" headers="J">0.26</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295772</td>
+<td class="gt_row gt_right" headers="J">NaN</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295773</td>
+<td class="gt_row gt_right" headers="J">0.43</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295774</td>
+<td class="gt_row gt_right" headers="J">0.60</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295775</td>
+<td class="gt_row gt_right" headers="J">NaN</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295776</td>
+<td class="gt_row gt_right" headers="J">0.30</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295778</td>
+<td class="gt_row gt_right" headers="J">0.77</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295780</td>
+<td class="gt_row gt_right" headers="J">0.53</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295781</td>
+<td class="gt_row gt_right" headers="J">0.47</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
+<div id="atlvjrjawp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#atlvjrjawp table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#atlvjrjawp thead, #atlvjrjawp tbody, #atlvjrjawp tfoot, #atlvjrjawp tr, #atlvjrjawp td, #atlvjrjawp th {
+  border-style: none;
+}
+
+#atlvjrjawp p {
+  margin: 0;
+  padding: 0;
+}
+
+#atlvjrjawp .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#atlvjrjawp .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#atlvjrjawp .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#atlvjrjawp .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#atlvjrjawp .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#atlvjrjawp .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#atlvjrjawp .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#atlvjrjawp .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#atlvjrjawp .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#atlvjrjawp .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#atlvjrjawp .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#atlvjrjawp .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#atlvjrjawp .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#atlvjrjawp .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#atlvjrjawp .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#atlvjrjawp .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#atlvjrjawp .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#atlvjrjawp .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#atlvjrjawp .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#atlvjrjawp .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#atlvjrjawp .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#atlvjrjawp .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#atlvjrjawp .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#atlvjrjawp .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#atlvjrjawp .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#atlvjrjawp .gt_left {
+  text-align: left;
+}
+
+#atlvjrjawp .gt_center {
+  text-align: center;
+}
+
+#atlvjrjawp .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#atlvjrjawp .gt_font_normal {
+  font-weight: normal;
+}
+
+#atlvjrjawp .gt_font_bold {
+  font-weight: bold;
+}
+
+#atlvjrjawp .gt_font_italic {
+  font-style: italic;
+}
+
+#atlvjrjawp .gt_super {
+  font-size: 65%;
+}
+
+#atlvjrjawp .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#atlvjrjawp .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#atlvjrjawp .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#atlvjrjawp .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#atlvjrjawp .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#atlvjrjawp .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#atlvjrjawp .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#atlvjrjawp .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#atlvjrjawp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="3" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>exp(H) - Effective Number of Sites</strong></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Species</th>
+<th id="Band.ID" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Band ID</th>
+<th id="exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">exp(H)</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7176824</td>
+<td class="gt_row gt_right" headers="exp_H">1.79</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394014</td>
+<td class="gt_row gt_right" headers="exp_H">1.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394017</td>
+<td class="gt_row gt_right" headers="exp_H">1.99</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394018</td>
+<td class="gt_row gt_right" headers="exp_H">1.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394019</td>
+<td class="gt_row gt_right" headers="exp_H">1.30</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394026</td>
+<td class="gt_row gt_right" headers="exp_H">1.93</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394027</td>
+<td class="gt_row gt_right" headers="exp_H">2.20</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">7394032</td>
+<td class="gt_row gt_right" headers="exp_H">1.14</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_center" headers="Band.ID">8345053</td>
+<td class="gt_row gt_right" headers="exp_H">2.05</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281407</td>
+<td class="gt_row gt_right" headers="exp_H">1.11</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281408</td>
+<td class="gt_row gt_right" headers="exp_H">1.16</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281409</td>
+<td class="gt_row gt_right" headers="exp_H">1.09</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281410</td>
+<td class="gt_row gt_right" headers="exp_H">1.11</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_center" headers="Band.ID">4281420</td>
+<td class="gt_row gt_right" headers="exp_H">1.13</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345054</td>
+<td class="gt_row gt_right" headers="exp_H">2.25</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Eurasian Whimbrel</td>
+<td class="gt_row gt_center" headers="Band.ID">8345055</td>
+<td class="gt_row gt_right" headers="exp_H">1.09</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Far Eastern Curlew</td>
+<td class="gt_row gt_center" headers="Band.ID">10118806</td>
+<td class="gt_row gt_right" headers="exp_H">1.04</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Masked Lapwing</td>
+<td class="gt_row gt_center" headers="Band.ID">8295845</td>
+<td class="gt_row gt_right" headers="exp_H">1.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318617</td>
+<td class="gt_row gt_right" headers="exp_H">1.02</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318618</td>
+<td class="gt_row gt_right" headers="exp_H">1.04</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318619</td>
+<td class="gt_row gt_right" headers="exp_H">1.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318620</td>
+<td class="gt_row gt_right" headers="exp_H">1.03</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318621</td>
+<td class="gt_row gt_right" headers="exp_H">1.73</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318624</td>
+<td class="gt_row gt_right" headers="exp_H">2.08</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318625</td>
+<td class="gt_row gt_right" headers="exp_H">1.68</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318626</td>
+<td class="gt_row gt_right" headers="exp_H">1.22</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318627</td>
+<td class="gt_row gt_right" headers="exp_H">1.38</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318629</td>
+<td class="gt_row gt_right" headers="exp_H">1.93</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318630</td>
+<td class="gt_row gt_right" headers="exp_H">1.01</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318633</td>
+<td class="gt_row gt_right" headers="exp_H">1.04</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318635</td>
+<td class="gt_row gt_right" headers="exp_H">1.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_center" headers="Band.ID">6318799</td>
+<td class="gt_row gt_right" headers="exp_H">1.15</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295770</td>
+<td class="gt_row gt_right" headers="exp_H">1.34</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295772</td>
+<td class="gt_row gt_right" headers="exp_H">1.00</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295773</td>
+<td class="gt_row gt_right" headers="exp_H">1.35</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295774</td>
+<td class="gt_row gt_right" headers="exp_H">2.64</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295775</td>
+<td class="gt_row gt_right" headers="exp_H">1.00</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_center" headers="Band.ID">8295776</td>
+<td class="gt_row gt_right" headers="exp_H">1.23</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295778</td>
+<td class="gt_row gt_right" headers="exp_H">2.34</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295780</td>
+<td class="gt_row gt_right" headers="exp_H">2.59</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_center" headers="Band.ID">8295781</td>
+<td class="gt_row gt_right" headers="exp_H">2.34</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="jensen-shannon" class="level2">
+<h2 class="anchored" data-anchor-id="jensen-shannon">Jensen-Shannon</h2>
+<section id="definition-1" class="level3">
+<h3 class="anchored" data-anchor-id="definition-1">Definition</h3>
+<div style="overflow-x: auto; width: 100%;">
+<p><span class="math display">\[
+\text{H}   =    -Σ(p_i × ln(p_i))
+\]</span> <span class="math display">\[
+\text{where } p_i \text{ is the proportion of detections at site } i
+\]</span></p>
+</div>
+</section>
+<section id="interpretation-1" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-1">Interpretation</h3>
+</section>
+<section id="effective-number-of-sites-exph" class="level3">
+<h3 class="anchored" data-anchor-id="effective-number-of-sites-exph">Effective Number of Sites (exp(H))</h3>
+</section>
+<section id="pielous-evenness-j-h-lns" class="level3">
+<h3 class="anchored" data-anchor-id="pielous-evenness-j-h-lns">Pielou’s Evenness (J = H / ln(S))</h3>
+</section>
+<section id="comparing-individuals-within-species" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-individuals-within-species">Comparing Individuals Within Species:</h3>
+</section>
+<section id="statistical-tests" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-tests">Statistical Tests:</h3>
+<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
+<p><img src="../../material/exemplejensen.png" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
+<figcaption style="margin-top: 1em; font-style: italic;">
+<p>Table: Summary of the entropy values with exemples.</p>
+</figcaption>
+</figure>
+</div>
+<p>First,</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

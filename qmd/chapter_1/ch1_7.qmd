@@ -137,7 +137,7 @@ Tide table informs for Low and High tide peaks. Half of the period between peak 
 ::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
 <figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
 
-<img src="../../material/tide.png" alt="Schema 2: Definition of tide variables (high or low) for one period" style="width: 100%; height: auto; display: block;"/>
+<img src="../../material/tide.png" style="width: 100%; height: auto; display: block;"/>
 
 <figcaption style="margin-top: 1em; font-style: italic;">
 
