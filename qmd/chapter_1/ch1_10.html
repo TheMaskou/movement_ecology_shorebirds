@@ -161,7 +161,8 @@ window.Quarto = {
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vegan)  </span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(philentropy) </span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gt)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="shannon" class="level2">
 <h2 class="anchored" data-anchor-id="shannon">Shannon</h2>
@@ -191,17 +192,16 @@ window.Quarto = {
 - High unpredictability: harder to predict where the bird will be</p>
 <p><strong>Effective Number of Sites (exp(H))</strong><br>
 This transforms entropy into an interpretable number: the “effective number of equally-used sites”</p>
-<p>Example: - If H = 1.61, then exp(1.61) ≈ 5 effective sites - Interpretation: The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution)</p>
+<p>Example: - If H = 1.61, then exp(1.61) ≈ 5 effective sites<br>
+- Interpretation: The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution)</p>
 <p><strong>Pielou’s Evenness (J = H / ln(S))</strong><br>
 Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites used by that individual:<br>
 - J close to 1: Individual uses all sites equally<br>
 - J close to 0: Individual uses sites very unequally (dominates few sites)</p>
-<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
-<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
-<p><img src="../../material/exempleshannon.png" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
-<figcaption style="margin-top: 1em; font-style: italic;">
-<p>Table: Summary of the entropy values with examples.</p>
-</figcaption>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../../material/exempleshannon.png" class="img-fluid figure-img"></p>
+<figcaption>Shannon entropy example</figcaption>
 </figure>
 </div>
 <p>First, we define a all-in-one function to consistently computing shannon entropy.</p>
@@ -215,7 +215,10 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(H)</span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then we can proceed. Starting with simply counting the number of detection an individual has recorded in each stations, then extracting the proportions to finally calculate the entropy (H).</p>
+</section>
+<section id="general-results" class="level3">
+<h3 class="anchored" data-anchor-id="general-results">General results</h3>
+<p>Now we can proceed. Starting with counting the number of detection an individual has recorded in each stations, then extracting the proportions to finally calculate the entropy (H).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate entropy metrics for each Band.ID</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>entropy_results <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
@@ -250,28 +253,25 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
 <span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Arrange by Band.ID</span></span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(speciesEN, Band.ID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="results" class="level3">
-<h3 class="anchored" data-anchor-id="results">Results</h3>
 <div class="cell">
 <div class="cell-output-display">
-<div id="pbqvzujvqc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pbqvzujvqc table {
+<div id="lukwibvtme" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lukwibvtme table {
   font-family: 'Times New Roman', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pbqvzujvqc thead, #pbqvzujvqc tbody, #pbqvzujvqc tfoot, #pbqvzujvqc tr, #pbqvzujvqc td, #pbqvzujvqc th {
+#lukwibvtme thead, #lukwibvtme tbody, #lukwibvtme tfoot, #lukwibvtme tr, #lukwibvtme td, #lukwibvtme th {
   border-style: none;
 }
 
-#pbqvzujvqc p {
+#lukwibvtme p {
   margin: 0;
   padding: 0;
 }
 
-#pbqvzujvqc .gt_table {
+#lukwibvtme .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -297,12 +297,12 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-left-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_caption {
+#lukwibvtme .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pbqvzujvqc .gt_title {
+#lukwibvtme .gt_title {
   color: #333333;
   font-size: 16px;
   font-weight: initial;
@@ -314,7 +314,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-bottom-width: 0;
 }
 
-#pbqvzujvqc .gt_subtitle {
+#lukwibvtme .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -326,7 +326,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-top-width: 0;
 }
 
-#pbqvzujvqc .gt_heading {
+#lukwibvtme .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -338,13 +338,13 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-right-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_bottom_border {
+#lukwibvtme .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_col_headings {
+#lukwibvtme .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -359,7 +359,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-right-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_col_heading {
+#lukwibvtme .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -379,7 +379,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   overflow-x: hidden;
 }
 
-#pbqvzujvqc .gt_column_spanner_outer {
+#lukwibvtme .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -391,15 +391,15 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   padding-right: 4px;
 }
 
-#pbqvzujvqc .gt_column_spanner_outer:first-child {
+#lukwibvtme .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pbqvzujvqc .gt_column_spanner_outer:last-child {
+#lukwibvtme .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pbqvzujvqc .gt_column_spanner {
+#lukwibvtme .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -411,11 +411,11 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   width: 100%;
 }
 
-#pbqvzujvqc .gt_spanner_row {
+#lukwibvtme .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pbqvzujvqc .gt_group_heading {
+#lukwibvtme .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -441,7 +441,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   text-align: left;
 }
 
-#pbqvzujvqc .gt_empty_group_heading {
+#lukwibvtme .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -456,15 +456,15 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   vertical-align: middle;
 }
 
-#pbqvzujvqc .gt_from_md > :first-child {
+#lukwibvtme .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pbqvzujvqc .gt_from_md > :last-child {
+#lukwibvtme .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pbqvzujvqc .gt_row {
+#lukwibvtme .gt_row {
   padding-top: 3px;
   padding-bottom: 3px;
   padding-left: 5px;
@@ -483,7 +483,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   overflow-x: hidden;
 }
 
-#pbqvzujvqc .gt_stub {
+#lukwibvtme .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -496,7 +496,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   padding-right: 5px;
 }
 
-#pbqvzujvqc .gt_stub_row_group {
+#lukwibvtme .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -510,15 +510,15 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   vertical-align: top;
 }
 
-#pbqvzujvqc .gt_row_group_first td {
+#lukwibvtme .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pbqvzujvqc .gt_row_group_first th {
+#lukwibvtme .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pbqvzujvqc .gt_summary_row {
+#lukwibvtme .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -528,16 +528,16 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   padding-right: 5px;
 }
 
-#pbqvzujvqc .gt_first_summary_row {
+#lukwibvtme .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_first_summary_row.thick {
+#lukwibvtme .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pbqvzujvqc .gt_last_summary_row {
+#lukwibvtme .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -547,7 +547,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-bottom-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_grand_summary_row {
+#lukwibvtme .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -557,7 +557,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   padding-right: 5px;
 }
 
-#pbqvzujvqc .gt_first_grand_summary_row {
+#lukwibvtme .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -567,7 +567,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-top-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_last_grand_summary_row_top {
+#lukwibvtme .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -577,11 +577,11 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-bottom-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_striped {
+#lukwibvtme .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pbqvzujvqc .gt_table_body {
+#lukwibvtme .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -590,7 +590,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-bottom-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_footnotes {
+#lukwibvtme .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -604,7 +604,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-right-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_footnote {
+#lukwibvtme .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -613,7 +613,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   padding-right: 5px;
 }
 
-#pbqvzujvqc .gt_sourcenotes {
+#lukwibvtme .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -627,7 +627,7 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   border-right-color: #D3D3D3;
 }
 
-#pbqvzujvqc .gt_sourcenote {
+#lukwibvtme .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -635,72 +635,72 @@ Evenness ranges from 0 to 1, where <strong>S</strong> = total number of sites us
   padding-right: 5px;
 }
 
-#pbqvzujvqc .gt_left {
+#lukwibvtme .gt_left {
   text-align: left;
 }
 
-#pbqvzujvqc .gt_center {
+#lukwibvtme .gt_center {
   text-align: center;
 }
 
-#pbqvzujvqc .gt_right {
+#lukwibvtme .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pbqvzujvqc .gt_font_normal {
+#lukwibvtme .gt_font_normal {
   font-weight: normal;
 }
 
-#pbqvzujvqc .gt_font_bold {
+#lukwibvtme .gt_font_bold {
   font-weight: bold;
 }
 
-#pbqvzujvqc .gt_font_italic {
+#lukwibvtme .gt_font_italic {
   font-style: italic;
 }
 
-#pbqvzujvqc .gt_super {
+#lukwibvtme .gt_super {
   font-size: 65%;
 }
 
-#pbqvzujvqc .gt_footnote_marks {
+#lukwibvtme .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pbqvzujvqc .gt_asterisk {
+#lukwibvtme .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pbqvzujvqc .gt_indent_1 {
+#lukwibvtme .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pbqvzujvqc .gt_indent_2 {
+#lukwibvtme .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pbqvzujvqc .gt_indent_3 {
+#lukwibvtme .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pbqvzujvqc .gt_indent_4 {
+#lukwibvtme .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pbqvzujvqc .gt_indent_5 {
+#lukwibvtme .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pbqvzujvqc .katex-display {
+#lukwibvtme .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pbqvzujvqc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lukwibvtme div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -965,23 +965,23 @@ Effective Sites [exp(H)]
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">S table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">H table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false" href="">J table</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false" href="">exp(H) table</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<div id="mbphzqlzsk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mbphzqlzsk table {
+<div id="drqyovcnmj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#drqyovcnmj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mbphzqlzsk thead, #mbphzqlzsk tbody, #mbphzqlzsk tfoot, #mbphzqlzsk tr, #mbphzqlzsk td, #mbphzqlzsk th {
+#drqyovcnmj thead, #drqyovcnmj tbody, #drqyovcnmj tfoot, #drqyovcnmj tr, #drqyovcnmj td, #drqyovcnmj th {
   border-style: none;
 }
 
-#mbphzqlzsk p {
+#drqyovcnmj p {
   margin: 0;
   padding: 0;
 }
 
-#mbphzqlzsk .gt_table {
+#drqyovcnmj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1007,12 +1007,12 @@ Effective Sites [exp(H)]
   border-left-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_caption {
+#drqyovcnmj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mbphzqlzsk .gt_title {
+#drqyovcnmj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1024,7 +1024,7 @@ Effective Sites [exp(H)]
   border-bottom-width: 0;
 }
 
-#mbphzqlzsk .gt_subtitle {
+#drqyovcnmj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1036,7 +1036,7 @@ Effective Sites [exp(H)]
   border-top-width: 0;
 }
 
-#mbphzqlzsk .gt_heading {
+#drqyovcnmj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1048,13 +1048,13 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_bottom_border {
+#drqyovcnmj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_col_headings {
+#drqyovcnmj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1069,7 +1069,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_col_heading {
+#drqyovcnmj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1089,7 +1089,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#mbphzqlzsk .gt_column_spanner_outer {
+#drqyovcnmj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1101,15 +1101,15 @@ Effective Sites [exp(H)]
   padding-right: 4px;
 }
 
-#mbphzqlzsk .gt_column_spanner_outer:first-child {
+#drqyovcnmj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mbphzqlzsk .gt_column_spanner_outer:last-child {
+#drqyovcnmj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mbphzqlzsk .gt_column_spanner {
+#drqyovcnmj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1121,11 +1121,11 @@ Effective Sites [exp(H)]
   width: 100%;
 }
 
-#mbphzqlzsk .gt_spanner_row {
+#drqyovcnmj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mbphzqlzsk .gt_group_heading {
+#drqyovcnmj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1151,7 +1151,7 @@ Effective Sites [exp(H)]
   text-align: left;
 }
 
-#mbphzqlzsk .gt_empty_group_heading {
+#drqyovcnmj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1166,15 +1166,15 @@ Effective Sites [exp(H)]
   vertical-align: middle;
 }
 
-#mbphzqlzsk .gt_from_md > :first-child {
+#drqyovcnmj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mbphzqlzsk .gt_from_md > :last-child {
+#drqyovcnmj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mbphzqlzsk .gt_row {
+#drqyovcnmj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1193,7 +1193,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#mbphzqlzsk .gt_stub {
+#drqyovcnmj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1206,7 +1206,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#mbphzqlzsk .gt_stub_row_group {
+#drqyovcnmj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1220,15 +1220,15 @@ Effective Sites [exp(H)]
   vertical-align: top;
 }
 
-#mbphzqlzsk .gt_row_group_first td {
+#drqyovcnmj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mbphzqlzsk .gt_row_group_first th {
+#drqyovcnmj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mbphzqlzsk .gt_summary_row {
+#drqyovcnmj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1238,16 +1238,16 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#mbphzqlzsk .gt_first_summary_row {
+#drqyovcnmj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_first_summary_row.thick {
+#drqyovcnmj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mbphzqlzsk .gt_last_summary_row {
+#drqyovcnmj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1257,7 +1257,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_grand_summary_row {
+#drqyovcnmj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1267,7 +1267,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#mbphzqlzsk .gt_first_grand_summary_row {
+#drqyovcnmj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1277,7 +1277,7 @@ Effective Sites [exp(H)]
   border-top-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_last_grand_summary_row_top {
+#drqyovcnmj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1287,11 +1287,11 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_striped {
+#drqyovcnmj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mbphzqlzsk .gt_table_body {
+#drqyovcnmj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1300,7 +1300,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_footnotes {
+#drqyovcnmj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1314,7 +1314,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_footnote {
+#drqyovcnmj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1323,7 +1323,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#mbphzqlzsk .gt_sourcenotes {
+#drqyovcnmj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1337,7 +1337,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#mbphzqlzsk .gt_sourcenote {
+#drqyovcnmj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1345,72 +1345,72 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#mbphzqlzsk .gt_left {
+#drqyovcnmj .gt_left {
   text-align: left;
 }
 
-#mbphzqlzsk .gt_center {
+#drqyovcnmj .gt_center {
   text-align: center;
 }
 
-#mbphzqlzsk .gt_right {
+#drqyovcnmj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mbphzqlzsk .gt_font_normal {
+#drqyovcnmj .gt_font_normal {
   font-weight: normal;
 }
 
-#mbphzqlzsk .gt_font_bold {
+#drqyovcnmj .gt_font_bold {
   font-weight: bold;
 }
 
-#mbphzqlzsk .gt_font_italic {
+#drqyovcnmj .gt_font_italic {
   font-style: italic;
 }
 
-#mbphzqlzsk .gt_super {
+#drqyovcnmj .gt_super {
   font-size: 65%;
 }
 
-#mbphzqlzsk .gt_footnote_marks {
+#drqyovcnmj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mbphzqlzsk .gt_asterisk {
+#drqyovcnmj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mbphzqlzsk .gt_indent_1 {
+#drqyovcnmj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mbphzqlzsk .gt_indent_2 {
+#drqyovcnmj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mbphzqlzsk .gt_indent_3 {
+#drqyovcnmj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mbphzqlzsk .gt_indent_4 {
+#drqyovcnmj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mbphzqlzsk .gt_indent_5 {
+#drqyovcnmj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mbphzqlzsk .katex-display {
+#drqyovcnmj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mbphzqlzsk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#drqyovcnmj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1638,23 +1638,23 @@ Effective Sites [exp(H)]
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div id="evmjcbsbdk" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#evmjcbsbdk table {
+<div id="ywaggouxeh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ywaggouxeh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#evmjcbsbdk thead, #evmjcbsbdk tbody, #evmjcbsbdk tfoot, #evmjcbsbdk tr, #evmjcbsbdk td, #evmjcbsbdk th {
+#ywaggouxeh thead, #ywaggouxeh tbody, #ywaggouxeh tfoot, #ywaggouxeh tr, #ywaggouxeh td, #ywaggouxeh th {
   border-style: none;
 }
 
-#evmjcbsbdk p {
+#ywaggouxeh p {
   margin: 0;
   padding: 0;
 }
 
-#evmjcbsbdk .gt_table {
+#ywaggouxeh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1680,12 +1680,12 @@ Effective Sites [exp(H)]
   border-left-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_caption {
+#ywaggouxeh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#evmjcbsbdk .gt_title {
+#ywaggouxeh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1697,7 +1697,7 @@ Effective Sites [exp(H)]
   border-bottom-width: 0;
 }
 
-#evmjcbsbdk .gt_subtitle {
+#ywaggouxeh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1709,7 +1709,7 @@ Effective Sites [exp(H)]
   border-top-width: 0;
 }
 
-#evmjcbsbdk .gt_heading {
+#ywaggouxeh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1721,13 +1721,13 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_bottom_border {
+#ywaggouxeh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_col_headings {
+#ywaggouxeh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1742,7 +1742,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_col_heading {
+#ywaggouxeh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1762,7 +1762,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#evmjcbsbdk .gt_column_spanner_outer {
+#ywaggouxeh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1774,15 +1774,15 @@ Effective Sites [exp(H)]
   padding-right: 4px;
 }
 
-#evmjcbsbdk .gt_column_spanner_outer:first-child {
+#ywaggouxeh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#evmjcbsbdk .gt_column_spanner_outer:last-child {
+#ywaggouxeh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#evmjcbsbdk .gt_column_spanner {
+#ywaggouxeh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1794,11 +1794,11 @@ Effective Sites [exp(H)]
   width: 100%;
 }
 
-#evmjcbsbdk .gt_spanner_row {
+#ywaggouxeh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#evmjcbsbdk .gt_group_heading {
+#ywaggouxeh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1824,7 +1824,7 @@ Effective Sites [exp(H)]
   text-align: left;
 }
 
-#evmjcbsbdk .gt_empty_group_heading {
+#ywaggouxeh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1839,15 +1839,15 @@ Effective Sites [exp(H)]
   vertical-align: middle;
 }
 
-#evmjcbsbdk .gt_from_md > :first-child {
+#ywaggouxeh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#evmjcbsbdk .gt_from_md > :last-child {
+#ywaggouxeh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#evmjcbsbdk .gt_row {
+#ywaggouxeh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1866,7 +1866,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#evmjcbsbdk .gt_stub {
+#ywaggouxeh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1879,7 +1879,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#evmjcbsbdk .gt_stub_row_group {
+#ywaggouxeh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1893,15 +1893,15 @@ Effective Sites [exp(H)]
   vertical-align: top;
 }
 
-#evmjcbsbdk .gt_row_group_first td {
+#ywaggouxeh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#evmjcbsbdk .gt_row_group_first th {
+#ywaggouxeh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#evmjcbsbdk .gt_summary_row {
+#ywaggouxeh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1911,16 +1911,16 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#evmjcbsbdk .gt_first_summary_row {
+#ywaggouxeh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_first_summary_row.thick {
+#ywaggouxeh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#evmjcbsbdk .gt_last_summary_row {
+#ywaggouxeh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1930,7 +1930,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_grand_summary_row {
+#ywaggouxeh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1940,7 +1940,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#evmjcbsbdk .gt_first_grand_summary_row {
+#ywaggouxeh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1950,7 +1950,7 @@ Effective Sites [exp(H)]
   border-top-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_last_grand_summary_row_top {
+#ywaggouxeh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1960,11 +1960,11 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_striped {
+#ywaggouxeh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#evmjcbsbdk .gt_table_body {
+#ywaggouxeh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1973,7 +1973,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_footnotes {
+#ywaggouxeh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1987,7 +1987,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_footnote {
+#ywaggouxeh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1996,7 +1996,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#evmjcbsbdk .gt_sourcenotes {
+#ywaggouxeh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2010,7 +2010,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#evmjcbsbdk .gt_sourcenote {
+#ywaggouxeh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2018,72 +2018,72 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#evmjcbsbdk .gt_left {
+#ywaggouxeh .gt_left {
   text-align: left;
 }
 
-#evmjcbsbdk .gt_center {
+#ywaggouxeh .gt_center {
   text-align: center;
 }
 
-#evmjcbsbdk .gt_right {
+#ywaggouxeh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#evmjcbsbdk .gt_font_normal {
+#ywaggouxeh .gt_font_normal {
   font-weight: normal;
 }
 
-#evmjcbsbdk .gt_font_bold {
+#ywaggouxeh .gt_font_bold {
   font-weight: bold;
 }
 
-#evmjcbsbdk .gt_font_italic {
+#ywaggouxeh .gt_font_italic {
   font-style: italic;
 }
 
-#evmjcbsbdk .gt_super {
+#ywaggouxeh .gt_super {
   font-size: 65%;
 }
 
-#evmjcbsbdk .gt_footnote_marks {
+#ywaggouxeh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#evmjcbsbdk .gt_asterisk {
+#ywaggouxeh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#evmjcbsbdk .gt_indent_1 {
+#ywaggouxeh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#evmjcbsbdk .gt_indent_2 {
+#ywaggouxeh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#evmjcbsbdk .gt_indent_3 {
+#ywaggouxeh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#evmjcbsbdk .gt_indent_4 {
+#ywaggouxeh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#evmjcbsbdk .gt_indent_5 {
+#ywaggouxeh .gt_indent_5 {
   text-indent: 25px;
 }
 
-#evmjcbsbdk .katex-display {
+#ywaggouxeh .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#evmjcbsbdk div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ywaggouxeh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2311,23 +2311,23 @@ Effective Sites [exp(H)]
 </div>
 </div>
 <div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<div id="iajyrllyhh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#iajyrllyhh table {
+<div id="uqkgyhblmy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uqkgyhblmy table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iajyrllyhh thead, #iajyrllyhh tbody, #iajyrllyhh tfoot, #iajyrllyhh tr, #iajyrllyhh td, #iajyrllyhh th {
+#uqkgyhblmy thead, #uqkgyhblmy tbody, #uqkgyhblmy tfoot, #uqkgyhblmy tr, #uqkgyhblmy td, #uqkgyhblmy th {
   border-style: none;
 }
 
-#iajyrllyhh p {
+#uqkgyhblmy p {
   margin: 0;
   padding: 0;
 }
 
-#iajyrllyhh .gt_table {
+#uqkgyhblmy .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2353,12 +2353,12 @@ Effective Sites [exp(H)]
   border-left-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_caption {
+#uqkgyhblmy .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iajyrllyhh .gt_title {
+#uqkgyhblmy .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2370,7 +2370,7 @@ Effective Sites [exp(H)]
   border-bottom-width: 0;
 }
 
-#iajyrllyhh .gt_subtitle {
+#uqkgyhblmy .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2382,7 +2382,7 @@ Effective Sites [exp(H)]
   border-top-width: 0;
 }
 
-#iajyrllyhh .gt_heading {
+#uqkgyhblmy .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -2394,13 +2394,13 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_bottom_border {
+#uqkgyhblmy .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_col_headings {
+#uqkgyhblmy .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2415,7 +2415,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_col_heading {
+#uqkgyhblmy .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2435,7 +2435,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#iajyrllyhh .gt_column_spanner_outer {
+#uqkgyhblmy .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2447,15 +2447,15 @@ Effective Sites [exp(H)]
   padding-right: 4px;
 }
 
-#iajyrllyhh .gt_column_spanner_outer:first-child {
+#uqkgyhblmy .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iajyrllyhh .gt_column_spanner_outer:last-child {
+#uqkgyhblmy .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iajyrllyhh .gt_column_spanner {
+#uqkgyhblmy .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2467,11 +2467,11 @@ Effective Sites [exp(H)]
   width: 100%;
 }
 
-#iajyrllyhh .gt_spanner_row {
+#uqkgyhblmy .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iajyrllyhh .gt_group_heading {
+#uqkgyhblmy .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2497,7 +2497,7 @@ Effective Sites [exp(H)]
   text-align: left;
 }
 
-#iajyrllyhh .gt_empty_group_heading {
+#uqkgyhblmy .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2512,15 +2512,15 @@ Effective Sites [exp(H)]
   vertical-align: middle;
 }
 
-#iajyrllyhh .gt_from_md > :first-child {
+#uqkgyhblmy .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iajyrllyhh .gt_from_md > :last-child {
+#uqkgyhblmy .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iajyrllyhh .gt_row {
+#uqkgyhblmy .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2539,7 +2539,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#iajyrllyhh .gt_stub {
+#uqkgyhblmy .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2552,7 +2552,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#iajyrllyhh .gt_stub_row_group {
+#uqkgyhblmy .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2566,15 +2566,15 @@ Effective Sites [exp(H)]
   vertical-align: top;
 }
 
-#iajyrllyhh .gt_row_group_first td {
+#uqkgyhblmy .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iajyrllyhh .gt_row_group_first th {
+#uqkgyhblmy .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iajyrllyhh .gt_summary_row {
+#uqkgyhblmy .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2584,16 +2584,16 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#iajyrllyhh .gt_first_summary_row {
+#uqkgyhblmy .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_first_summary_row.thick {
+#uqkgyhblmy .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iajyrllyhh .gt_last_summary_row {
+#uqkgyhblmy .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2603,7 +2603,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_grand_summary_row {
+#uqkgyhblmy .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2613,7 +2613,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#iajyrllyhh .gt_first_grand_summary_row {
+#uqkgyhblmy .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2623,7 +2623,7 @@ Effective Sites [exp(H)]
   border-top-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_last_grand_summary_row_top {
+#uqkgyhblmy .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2633,11 +2633,11 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_striped {
+#uqkgyhblmy .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#iajyrllyhh .gt_table_body {
+#uqkgyhblmy .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2646,7 +2646,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_footnotes {
+#uqkgyhblmy .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2660,7 +2660,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_footnote {
+#uqkgyhblmy .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2669,7 +2669,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#iajyrllyhh .gt_sourcenotes {
+#uqkgyhblmy .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2683,7 +2683,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#iajyrllyhh .gt_sourcenote {
+#uqkgyhblmy .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2691,72 +2691,72 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#iajyrllyhh .gt_left {
+#uqkgyhblmy .gt_left {
   text-align: left;
 }
 
-#iajyrllyhh .gt_center {
+#uqkgyhblmy .gt_center {
   text-align: center;
 }
 
-#iajyrllyhh .gt_right {
+#uqkgyhblmy .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iajyrllyhh .gt_font_normal {
+#uqkgyhblmy .gt_font_normal {
   font-weight: normal;
 }
 
-#iajyrllyhh .gt_font_bold {
+#uqkgyhblmy .gt_font_bold {
   font-weight: bold;
 }
 
-#iajyrllyhh .gt_font_italic {
+#uqkgyhblmy .gt_font_italic {
   font-style: italic;
 }
 
-#iajyrllyhh .gt_super {
+#uqkgyhblmy .gt_super {
   font-size: 65%;
 }
 
-#iajyrllyhh .gt_footnote_marks {
+#uqkgyhblmy .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iajyrllyhh .gt_asterisk {
+#uqkgyhblmy .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iajyrllyhh .gt_indent_1 {
+#uqkgyhblmy .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iajyrllyhh .gt_indent_2 {
+#uqkgyhblmy .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iajyrllyhh .gt_indent_3 {
+#uqkgyhblmy .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iajyrllyhh .gt_indent_4 {
+#uqkgyhblmy .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iajyrllyhh .gt_indent_5 {
+#uqkgyhblmy .gt_indent_5 {
   text-indent: 25px;
 }
 
-#iajyrllyhh .katex-display {
+#uqkgyhblmy .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#iajyrllyhh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#uqkgyhblmy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2984,23 +2984,23 @@ Effective Sites [exp(H)]
 </div>
 </div>
 <div id="tabset-1-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-4-tab">
-<div id="atlvjrjawp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#atlvjrjawp table {
+<div id="jppphctrly" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jppphctrly table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#atlvjrjawp thead, #atlvjrjawp tbody, #atlvjrjawp tfoot, #atlvjrjawp tr, #atlvjrjawp td, #atlvjrjawp th {
+#jppphctrly thead, #jppphctrly tbody, #jppphctrly tfoot, #jppphctrly tr, #jppphctrly td, #jppphctrly th {
   border-style: none;
 }
 
-#atlvjrjawp p {
+#jppphctrly p {
   margin: 0;
   padding: 0;
 }
 
-#atlvjrjawp .gt_table {
+#jppphctrly .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3026,12 +3026,12 @@ Effective Sites [exp(H)]
   border-left-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_caption {
+#jppphctrly .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#atlvjrjawp .gt_title {
+#jppphctrly .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3043,7 +3043,7 @@ Effective Sites [exp(H)]
   border-bottom-width: 0;
 }
 
-#atlvjrjawp .gt_subtitle {
+#jppphctrly .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3055,7 +3055,7 @@ Effective Sites [exp(H)]
   border-top-width: 0;
 }
 
-#atlvjrjawp .gt_heading {
+#jppphctrly .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -3067,13 +3067,13 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_bottom_border {
+#jppphctrly .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_col_headings {
+#jppphctrly .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3088,7 +3088,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_col_heading {
+#jppphctrly .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3108,7 +3108,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#atlvjrjawp .gt_column_spanner_outer {
+#jppphctrly .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3120,15 +3120,15 @@ Effective Sites [exp(H)]
   padding-right: 4px;
 }
 
-#atlvjrjawp .gt_column_spanner_outer:first-child {
+#jppphctrly .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#atlvjrjawp .gt_column_spanner_outer:last-child {
+#jppphctrly .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#atlvjrjawp .gt_column_spanner {
+#jppphctrly .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3140,11 +3140,11 @@ Effective Sites [exp(H)]
   width: 100%;
 }
 
-#atlvjrjawp .gt_spanner_row {
+#jppphctrly .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#atlvjrjawp .gt_group_heading {
+#jppphctrly .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3170,7 +3170,7 @@ Effective Sites [exp(H)]
   text-align: left;
 }
 
-#atlvjrjawp .gt_empty_group_heading {
+#jppphctrly .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3185,15 +3185,15 @@ Effective Sites [exp(H)]
   vertical-align: middle;
 }
 
-#atlvjrjawp .gt_from_md > :first-child {
+#jppphctrly .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#atlvjrjawp .gt_from_md > :last-child {
+#jppphctrly .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#atlvjrjawp .gt_row {
+#jppphctrly .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3212,7 +3212,7 @@ Effective Sites [exp(H)]
   overflow-x: hidden;
 }
 
-#atlvjrjawp .gt_stub {
+#jppphctrly .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3225,7 +3225,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#atlvjrjawp .gt_stub_row_group {
+#jppphctrly .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3239,15 +3239,15 @@ Effective Sites [exp(H)]
   vertical-align: top;
 }
 
-#atlvjrjawp .gt_row_group_first td {
+#jppphctrly .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#atlvjrjawp .gt_row_group_first th {
+#jppphctrly .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#atlvjrjawp .gt_summary_row {
+#jppphctrly .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3257,16 +3257,16 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#atlvjrjawp .gt_first_summary_row {
+#jppphctrly .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_first_summary_row.thick {
+#jppphctrly .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#atlvjrjawp .gt_last_summary_row {
+#jppphctrly .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3276,7 +3276,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_grand_summary_row {
+#jppphctrly .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3286,7 +3286,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#atlvjrjawp .gt_first_grand_summary_row {
+#jppphctrly .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3296,7 +3296,7 @@ Effective Sites [exp(H)]
   border-top-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_last_grand_summary_row_top {
+#jppphctrly .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3306,11 +3306,11 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_striped {
+#jppphctrly .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#atlvjrjawp .gt_table_body {
+#jppphctrly .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3319,7 +3319,7 @@ Effective Sites [exp(H)]
   border-bottom-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_footnotes {
+#jppphctrly .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3333,7 +3333,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_footnote {
+#jppphctrly .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3342,7 +3342,7 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#atlvjrjawp .gt_sourcenotes {
+#jppphctrly .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3356,7 +3356,7 @@ Effective Sites [exp(H)]
   border-right-color: #D3D3D3;
 }
 
-#atlvjrjawp .gt_sourcenote {
+#jppphctrly .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3364,72 +3364,72 @@ Effective Sites [exp(H)]
   padding-right: 5px;
 }
 
-#atlvjrjawp .gt_left {
+#jppphctrly .gt_left {
   text-align: left;
 }
 
-#atlvjrjawp .gt_center {
+#jppphctrly .gt_center {
   text-align: center;
 }
 
-#atlvjrjawp .gt_right {
+#jppphctrly .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#atlvjrjawp .gt_font_normal {
+#jppphctrly .gt_font_normal {
   font-weight: normal;
 }
 
-#atlvjrjawp .gt_font_bold {
+#jppphctrly .gt_font_bold {
   font-weight: bold;
 }
 
-#atlvjrjawp .gt_font_italic {
+#jppphctrly .gt_font_italic {
   font-style: italic;
 }
 
-#atlvjrjawp .gt_super {
+#jppphctrly .gt_super {
   font-size: 65%;
 }
 
-#atlvjrjawp .gt_footnote_marks {
+#jppphctrly .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#atlvjrjawp .gt_asterisk {
+#jppphctrly .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#atlvjrjawp .gt_indent_1 {
+#jppphctrly .gt_indent_1 {
   text-indent: 5px;
 }
 
-#atlvjrjawp .gt_indent_2 {
+#jppphctrly .gt_indent_2 {
   text-indent: 10px;
 }
 
-#atlvjrjawp .gt_indent_3 {
+#jppphctrly .gt_indent_3 {
   text-indent: 15px;
 }
 
-#atlvjrjawp .gt_indent_4 {
+#jppphctrly .gt_indent_4 {
   text-indent: 20px;
 }
 
-#atlvjrjawp .gt_indent_5 {
+#jppphctrly .gt_indent_5 {
   text-indent: 25px;
 }
 
-#atlvjrjawp .katex-display {
+#jppphctrly .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#atlvjrjawp div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jppphctrly div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3658,6 +3658,2664 @@ Effective Sites [exp(H)]
 </div>
 </div>
 </div>
+<section id="statistical-tests" class="level4">
+<h4 class="anchored" data-anchor-id="statistical-tests">Statistical Tests</h4>
+<p><strong>Kruskal-Wallis test</strong> compares entropy across species and across individual within species.<br>
+<strong>χ² </strong> is provided as the test statistic to inform about the variance of the ranks among groups. The higher is the value, the more groups are different from each other.<br>
+Significance is also informed.</p>
+<p>Test 1: Compares H, J, and S across all species: <strong>Are species different from each other?</strong></p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="smxwcyocze" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#smxwcyocze table {
+  font-family: 'Times New Roman', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#smxwcyocze thead, #smxwcyocze tbody, #smxwcyocze tfoot, #smxwcyocze tr, #smxwcyocze td, #smxwcyocze th {
+  border-style: none;
+}
+
+#smxwcyocze p {
+  margin: 0;
+  padding: 0;
+}
+
+#smxwcyocze .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#smxwcyocze .gt_title {
+  color: #333333;
+  font-size: 16px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#smxwcyocze .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#smxwcyocze .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#smxwcyocze .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#smxwcyocze .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#smxwcyocze .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#smxwcyocze .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#smxwcyocze .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#smxwcyocze .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#smxwcyocze .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#smxwcyocze .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#smxwcyocze .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#smxwcyocze .gt_row {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#smxwcyocze .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#smxwcyocze .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#smxwcyocze .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#smxwcyocze .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#smxwcyocze .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#smxwcyocze .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#smxwcyocze .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#smxwcyocze .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#smxwcyocze .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#smxwcyocze .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#smxwcyocze .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#smxwcyocze .gt_left {
+  text-align: left;
+}
+
+#smxwcyocze .gt_center {
+  text-align: center;
+}
+
+#smxwcyocze .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#smxwcyocze .gt_font_normal {
+  font-weight: normal;
+}
+
+#smxwcyocze .gt_font_bold {
+  font-weight: bold;
+}
+
+#smxwcyocze .gt_font_italic {
+  font-style: italic;
+}
+
+#smxwcyocze .gt_super {
+  font-size: 65%;
+}
+
+#smxwcyocze .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#smxwcyocze .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#smxwcyocze .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#smxwcyocze .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#smxwcyocze .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#smxwcyocze .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#smxwcyocze .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#smxwcyocze .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#smxwcyocze div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="5" class="gt_heading gt_title gt_font_normal"><strong>Kruskal-Wallis Test Results</strong></th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Comparing Shannon entropy metrics across species</th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="Metric" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Metric</th>
+<th id="Chi_squared" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">χ²</th>
+<th id="df" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">df</th>
+<th id="p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p-value</th>
+<th id="Significance" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Sig.</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="Metric">H (Shannon Entropy)</td>
+<td class="gt_row gt_right" headers="Chi_squared">11.627</td>
+<td class="gt_row gt_right" headers="df">7</td>
+<td class="gt_row gt_right" headers="p_value">1.135&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Significance">ns</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Metric" style="background-color: #90EE90">J (Pielou's Evenness)</td>
+<td class="gt_row gt_right" headers="Chi_squared" style="background-color: #90EE90">20.718</td>
+<td class="gt_row gt_right" headers="df" style="background-color: #90EE90">6</td>
+<td class="gt_row gt_right" headers="p_value" style="background-color: #90EE90">2.062&nbsp;×&nbsp;10<sup>−3</sup></td>
+<td class="gt_row gt_left" headers="Significance" style="font-weight: bold; background-color: #90EE90">**</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Metric" style="background-color: #90EE90">S (Number of Sites)</td>
+<td class="gt_row gt_right" headers="Chi_squared" style="background-color: #90EE90">23.230</td>
+<td class="gt_row gt_right" headers="df" style="background-color: #90EE90">7</td>
+<td class="gt_row gt_right" headers="p_value" style="background-color: #90EE90">1.554&nbsp;×&nbsp;10<sup>−3</sup></td>
+<td class="gt_row gt_left" headers="Significance" style="font-weight: bold; background-color: #90EE90">**</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="5" class="gt_footnote"><strong>Significance codes:</strong> *** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05, ns = not significant (p ≥ 0.05). Green highlighting indicates significant differences among species.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<p>Test 2: Compares H and J across individuals within each species : <strong>within a species, are individuals different from each other?</strong></p>
+<div class="blockquote-yellow">
+<p>Note: To proceed, we removed every species group having a size sample inferior of two. Since it is a comparison test.</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="hidlktbnqq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#hidlktbnqq table {
+  font-family: 'Times New Roman', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#hidlktbnqq thead, #hidlktbnqq tbody, #hidlktbnqq tfoot, #hidlktbnqq tr, #hidlktbnqq td, #hidlktbnqq th {
+  border-style: none;
+}
+
+#hidlktbnqq p {
+  margin: 0;
+  padding: 0;
+}
+
+#hidlktbnqq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#hidlktbnqq .gt_title {
+  color: #333333;
+  font-size: 16px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hidlktbnqq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hidlktbnqq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hidlktbnqq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hidlktbnqq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hidlktbnqq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hidlktbnqq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hidlktbnqq .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#hidlktbnqq .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#hidlktbnqq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hidlktbnqq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hidlktbnqq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hidlktbnqq .gt_row {
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hidlktbnqq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hidlktbnqq .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#hidlktbnqq .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#hidlktbnqq .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#hidlktbnqq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hidlktbnqq .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#hidlktbnqq .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hidlktbnqq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hidlktbnqq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hidlktbnqq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hidlktbnqq .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hidlktbnqq .gt_left {
+  text-align: left;
+}
+
+#hidlktbnqq .gt_center {
+  text-align: center;
+}
+
+#hidlktbnqq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hidlktbnqq .gt_font_normal {
+  font-weight: normal;
+}
+
+#hidlktbnqq .gt_font_bold {
+  font-weight: bold;
+}
+
+#hidlktbnqq .gt_font_italic {
+  font-style: italic;
+}
+
+#hidlktbnqq .gt_super {
+  font-size: 65%;
+}
+
+#hidlktbnqq .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#hidlktbnqq .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#hidlktbnqq .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#hidlktbnqq .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#hidlktbnqq .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#hidlktbnqq .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#hidlktbnqq .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#hidlktbnqq .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#hidlktbnqq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<th colspan="14" class="gt_heading gt_title gt_font_normal"><strong>Kruskal-Wallis Test Results Within Species</strong></th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="14" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Comparing entropy metrics across individuals within each species</th>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Species</th>
+<th rowspan="2" id="n_individuals" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">N</th>
+<th colspan="4" id="H (Shannon Entropy)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+H (Shannon Entropy)
+</div></th>
+<th colspan="4" id="J (Pielou's Evenness)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+J (Pielou's Evenness)
+</div></th>
+<th colspan="4" id="S (Number of Sites)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+S (Number of Sites)
+</div></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="Chi_sq_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">χ²</th>
+<th id="df_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">df</th>
+<th id="p_value_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p-value</th>
+<th id="Sig_H" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Sig.</th>
+<th id="Chi_sq_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">χ²</th>
+<th id="df_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">df</th>
+<th id="p_value_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p-value</th>
+<th id="Sig_J" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Sig.</th>
+<th id="Chi_sq_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">χ²</th>
+<th id="df_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">df</th>
+<th id="p_value_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">p-value</th>
+<th id="Sig_S" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold" scope="col">Sig.</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Bar-tailed Godwit</td>
+<td class="gt_row gt_right" headers="n_individuals">9</td>
+<td class="gt_row gt_right" headers="Chi_sq_H">8.000</td>
+<td class="gt_row gt_right" headers="df_H">8</td>
+<td class="gt_row gt_right" headers="p_value_H">4.335&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_H">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_J">6.000</td>
+<td class="gt_row gt_right" headers="df_J">6</td>
+<td class="gt_row gt_right" headers="p_value_J">4.232&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_J">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_S">8.000</td>
+<td class="gt_row gt_right" headers="df_S">8</td>
+<td class="gt_row gt_right" headers="p_value_S">4.335&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_S">ns</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Curlew Sandpiper</td>
+<td class="gt_row gt_right" headers="n_individuals">5</td>
+<td class="gt_row gt_right" headers="Chi_sq_H">4.000</td>
+<td class="gt_row gt_right" headers="df_H">4</td>
+<td class="gt_row gt_right" headers="p_value_H">4.060&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_H">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_J">4.000</td>
+<td class="gt_row gt_right" headers="df_J">4</td>
+<td class="gt_row gt_right" headers="p_value_J">4.060&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_J">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_S">4.000</td>
+<td class="gt_row gt_right" headers="df_S">4</td>
+<td class="gt_row gt_right" headers="p_value_S">4.060&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_S">ns</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Pacific Golden-Plover</td>
+<td class="gt_row gt_right" headers="n_individuals">14</td>
+<td class="gt_row gt_right" headers="Chi_sq_H">13.000</td>
+<td class="gt_row gt_right" headers="df_H">13</td>
+<td class="gt_row gt_right" headers="p_value_H">4.478&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_H">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_J">12.000</td>
+<td class="gt_row gt_right" headers="df_J">12</td>
+<td class="gt_row gt_right" headers="p_value_J">4.457&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_J">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_S">13.000</td>
+<td class="gt_row gt_right" headers="df_S">13</td>
+<td class="gt_row gt_right" headers="p_value_S">4.478&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_S">ns</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN">Pied Stilt</td>
+<td class="gt_row gt_right" headers="n_individuals">6</td>
+<td class="gt_row gt_right" headers="Chi_sq_H">5.000</td>
+<td class="gt_row gt_right" headers="df_H">5</td>
+<td class="gt_row gt_right" headers="p_value_H">4.159&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_H">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_J">3.000</td>
+<td class="gt_row gt_right" headers="df_J">3</td>
+<td class="gt_row gt_right" headers="p_value_J">3.916&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_J">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_S">5.000</td>
+<td class="gt_row gt_right" headers="df_S">5</td>
+<td class="gt_row gt_right" headers="p_value_S">4.159&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_S">ns</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN">Red-necked Avocet</td>
+<td class="gt_row gt_right" headers="n_individuals">3</td>
+<td class="gt_row gt_right" headers="Chi_sq_H">2.000</td>
+<td class="gt_row gt_right" headers="df_H">2</td>
+<td class="gt_row gt_right" headers="p_value_H">3.679&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_H">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_J">2.000</td>
+<td class="gt_row gt_right" headers="df_J">2</td>
+<td class="gt_row gt_right" headers="p_value_J">3.679&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_J">ns</td>
+<td class="gt_row gt_right" headers="Chi_sq_S">2.000</td>
+<td class="gt_row gt_right" headers="df_S">2</td>
+<td class="gt_row gt_right" headers="p_value_S">3.679&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="Sig_S">ns</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="14" class="gt_footnote"><strong>Significance codes:</strong> *** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05, ns = not significant (p ≥ 0.05). <strong>N</strong> = number of individuals. Green/blue/yellow highlighting indicates significant differences among individuals within that species. Only species with ≥3 individuals are included (minimum requirement for Kruskal-Wallis test).</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="tidal-dependant-results" class="level3">
+<h3 class="anchored" data-anchor-id="tidal-dependant-results">Tidal dependant results</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate entropy metrics for each Band.ID</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>entropy_results_tide <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove any NA values in Band.ID or recvSiteName</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(Band.ID), <span class="sc">!</span><span class="fu">is.na</span>(recvDeployName)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Count detections per bird per site</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(speciesEN, Band.ID, recvDeployName, tideHighLow) <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">detections =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate proportions for each bird</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(speciesEN, Band.ID, tideHighLow) <span class="sc">%&gt;%</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_detections =</span> <span class="fu">sum</span>(detections),</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">proportion =</span> detections <span class="sc">/</span> total_detections</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Calculate metrics for each bird</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">S =</span> <span class="fu">n</span>(),                                              <span class="co"># Number of sites used</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">H =</span> <span class="fu">round</span>(<span class="fu">calculate_shannon</span>(proportion), <span class="dv">2</span>),          <span class="co"># Shannon entropy</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">J =</span> <span class="fu">round</span>(H <span class="sc">/</span> <span class="fu">log</span>(S), <span class="dv">2</span>),                             <span class="co"># Pielou's evenness</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_detections =</span> <span class="fu">first</span>(total_detections),           <span class="co"># Total detections for reference</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add effective number of sites (exp(H))</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">exp_H =</span> <span class="fu">exp</span>(H)  <span class="co"># Effective number of equally-used sites</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Arrange by Band.ID</span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(speciesEN, Band.ID, tideHighLow)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare data</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>entropy_for_plot_tide <span class="ot">&lt;-</span> entropy_results_tide <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(speciesEN, tideHighLow, Band.ID, S, H, J, exp_H) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(S, H, J, exp_H),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="st">"metric"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">values_to =</span> <span class="st">"value"</span> ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>( </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">metric =</span> <span class="fu">factor</span>(metric, </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"S"</span>, <span class="st">"H"</span>, <span class="st">"J"</span>, <span class="st">"exp_H"</span>),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"S (Number of Sites)"</span>, </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"H (Shannon Entropy)"</span>, </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"J (Pielou's Evenness)"</span>, </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                             <span class="st">"exp(H) (Effective Sites)"</span>)) )</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute t-tets</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>tide_tests <span class="ot">&lt;-</span> entropy_for_plot_tide <span class="sc">%&gt;%</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(speciesEN, metric) <span class="sc">%&gt;%</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_high =</span> <span class="fu">sum</span>(tideHighLow <span class="sc">==</span> <span class="st">"High"</span>),</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_low =</span> <span class="fu">sum</span>(tideHighLow <span class="sc">==</span> <span class="st">"Low"</span>),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Use t-test if n &gt;= 3 in both groups, otherwise skip</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">p_value =</span> <span class="cf">if</span>(n_high <span class="sc">&gt;=</span> <span class="dv">3</span> <span class="sc">&amp;</span> n_low <span class="sc">&gt;=</span> <span class="dv">3</span>) {</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">t.test</span>(value <span class="sc">~</span> tideHighLow)<span class="sc">$</span>p.value</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NA</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">test_used =</span> <span class="cf">if</span>(n_high <span class="sc">&gt;=</span> <span class="dv">3</span> <span class="sc">&amp;</span> n_low <span class="sc">&gt;=</span> <span class="dv">3</span>) <span class="st">"t-test"</span> <span class="cf">else</span> <span class="st">"insufficient data"</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">significance =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>      <span class="fu">is.na</span>(p_value) <span class="sc">~</span> <span class="st">""</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>      p_value <span class="sc">&lt;</span> <span class="fl">0.001</span> <span class="sc">~</span> <span class="st">"***"</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>      p_value <span class="sc">&lt;</span> <span class="fl">0.01</span> <span class="sc">~</span> <span class="st">"**"</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>      p_value <span class="sc">&lt;</span> <span class="fl">0.05</span> <span class="sc">~</span> <span class="st">"*"</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"ns"</span>  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Before to display and visualise result, we built a t-test which compares entropy values between low and high tides for each species.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the boxplot with tide shown side-by-side</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(entropy_for_plot_tide, <span class="fu">aes</span>(<span class="at">x =</span> speciesEN, <span class="at">y =</span> value, <span class="at">fill =</span> speciesEN, <span class="at">alpha =</span> tideHighLow)) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">interaction</span>(speciesEN, tideHighLow)), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.8</span>), </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">outlier.shape =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">interaction</span>(speciesEN, tideHighLow)),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>           <span class="at">position =</span> <span class="fu">position_jitterdodge</span>(<span class="at">jitter.width =</span> <span class="fl">0.1</span>, <span class="at">dodge.width =</span> <span class="fl">0.8</span>), </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>           <span class="at">size =</span> <span class="fl">1.1</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> metric, <span class="at">scales =</span> <span class="st">"free_y"</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> species_colors) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_alpha_manual</span>( <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"High"</span> <span class="ot">=</span> <span class="fl">1.0</span>, <span class="st">"Low"</span> <span class="ot">=</span> <span class="fl">0.2</span>)) <span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add significance brackets</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>(</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">group =</span> tideHighLow),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">method =</span> <span class="st">"t.test"</span>,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="st">"p.signif"</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">hide.ns =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">bracket.size =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Shannon Entropy Metrics by Species and Tide"</span>,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Distribution of site use patterns across individuals (High tide: solid, Low tide: transparent)</span><span class="sc">\n</span><span class="st">Significance: * p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001"</span>,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Species"</span>,</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Value"</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Species"</span>) <span class="sc">+</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">size =</span> <span class="dv">11</span>),</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid.major.x =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_10_files/figure-html/shannon%20tide%204-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="ijzbrbaujm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ijzbrbaujm table {
+  font-family: 'Times New Roman', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ijzbrbaujm thead, #ijzbrbaujm tbody, #ijzbrbaujm tfoot, #ijzbrbaujm tr, #ijzbrbaujm td, #ijzbrbaujm th {
+  border-style: none;
+}
+
+#ijzbrbaujm p {
+  margin: 0;
+  padding: 0;
+}
+
+#ijzbrbaujm .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ijzbrbaujm .gt_title {
+  color: #333333;
+  font-size: 16px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ijzbrbaujm .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ijzbrbaujm .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ijzbrbaujm .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ijzbrbaujm .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ijzbrbaujm .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ijzbrbaujm .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ijzbrbaujm .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ijzbrbaujm .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ijzbrbaujm .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ijzbrbaujm .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ijzbrbaujm .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ijzbrbaujm .gt_row {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ijzbrbaujm .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijzbrbaujm .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ijzbrbaujm .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ijzbrbaujm .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ijzbrbaujm .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijzbrbaujm .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ijzbrbaujm .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijzbrbaujm .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ijzbrbaujm .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijzbrbaujm .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ijzbrbaujm .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijzbrbaujm .gt_left {
+  text-align: left;
+}
+
+#ijzbrbaujm .gt_center {
+  text-align: center;
+}
+
+#ijzbrbaujm .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ijzbrbaujm .gt_font_normal {
+  font-weight: normal;
+}
+
+#ijzbrbaujm .gt_font_bold {
+  font-weight: bold;
+}
+
+#ijzbrbaujm .gt_font_italic {
+  font-style: italic;
+}
+
+#ijzbrbaujm .gt_super {
+  font-size: 65%;
+}
+
+#ijzbrbaujm .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ijzbrbaujm .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ijzbrbaujm .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ijzbrbaujm .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ijzbrbaujm .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ijzbrbaujm .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ijzbrbaujm .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ijzbrbaujm .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ijzbrbaujm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<th colspan="9" class="gt_heading gt_title gt_font_normal"><strong>T-test Results: High vs Low Tide Comparison</strong></th>
+</tr>
+<tr class="gt_heading even">
+<th colspan="9" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Comparing entropy metrics between tide states within each species</th>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="speciesEN" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Species</th>
+<th colspan="2" id="S (Number of Sites)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+S (Number of Sites)
+</div></th>
+<th colspan="2" id="H (Shannon Entropy)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+H (Shannon Entropy)
+</div></th>
+<th colspan="2" id="J (Pielou's Evenness)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+J (Pielou's Evenness)
+</div></th>
+<th colspan="2" id="exp(H) (Effective Sites)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+exp(H) (Effective Sites)
+</div></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="S-(Number-of-Sites)_p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">p-value</th>
+<th id="S-(Number-of-Sites)_significance" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Sig.</th>
+<th id="H-(Shannon-Entropy)_p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">p-value</th>
+<th id="H-(Shannon-Entropy)_significance" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Sig.</th>
+<th id="J-(Pielou's-Evenness)_p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">p-value</th>
+<th id="J-(Pielou's-Evenness)_significance" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Sig.</th>
+<th id="exp(H)-(Effective-Sites)_p_value" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">p-value</th>
+<th id="exp(H)-(Effective-Sites)_significance" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Sig.</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Bar-tailed Godwit</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">7.856&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">6.656&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">2.343&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">6.795&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Curlew Sandpiper</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">1.000</td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">6.651&nbsp;×&nbsp;10<sup>−2</sup></td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">7.876&nbsp;×&nbsp;10<sup>−2</sup></td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">7.286&nbsp;×&nbsp;10<sup>−2</sup></td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Eurasian Whimbrel</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap"></td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Far Eastern Curlew</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap"></td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Masked Lapwing</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap"></td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">NA</td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap"></td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Pacific Golden-Plover</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">4.766&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">8.166&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">6.635&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">7.352&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Pied Stilt</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">1.000</td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">7.621&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">5.024&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">9.254&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="speciesEN" style="white-space: nowrap">Red-necked Avocet</td>
+<td class="gt_row gt_right" headers="S (Number of Sites)_p_value" style="white-space: nowrap">5.185&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="S (Number of Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="H (Shannon Entropy)_p_value" style="white-space: nowrap">1.327&nbsp;×&nbsp;10<sup>−1</sup></td>
+<td class="gt_row gt_left" headers="H (Shannon Entropy)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="J (Pielou's Evenness)_p_value" style="white-space: nowrap">7.433&nbsp;×&nbsp;10<sup>−2</sup></td>
+<td class="gt_row gt_left" headers="J (Pielou's Evenness)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+<td class="gt_row gt_right" headers="exp(H) (Effective Sites)_p_value" style="white-space: nowrap">7.774&nbsp;×&nbsp;10<sup>−2</sup></td>
+<td class="gt_row gt_left" headers="exp(H) (Effective Sites)_significance" style="font-weight: bold; white-space: nowrap">ns</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="9" class="gt_footnote"><strong>Significance codes:</strong> *** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05, ns = not significant. T-tests compare mean values between High and Low tide for each species-metric combination. Green highlighting indicates significant differences (p &lt; 0.05).</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="bbloxdzxqy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#bbloxdzxqy table {
+  font-family: 'Times New Roman', system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#bbloxdzxqy thead, #bbloxdzxqy tbody, #bbloxdzxqy tfoot, #bbloxdzxqy tr, #bbloxdzxqy td, #bbloxdzxqy th {
+  border-style: none;
+}
+
+#bbloxdzxqy p {
+  margin: 0;
+  padding: 0;
+}
+
+#bbloxdzxqy .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 13px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 100%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#bbloxdzxqy .gt_title {
+  color: #333333;
+  font-size: 16px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#bbloxdzxqy .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#bbloxdzxqy .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#bbloxdzxqy .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#bbloxdzxqy .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#bbloxdzxqy .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#bbloxdzxqy .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#bbloxdzxqy .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#bbloxdzxqy .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#bbloxdzxqy .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: bold;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#bbloxdzxqy .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#bbloxdzxqy .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#bbloxdzxqy .gt_row {
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#bbloxdzxqy .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bbloxdzxqy .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#bbloxdzxqy .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#bbloxdzxqy .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#bbloxdzxqy .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bbloxdzxqy .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#bbloxdzxqy .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bbloxdzxqy .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#bbloxdzxqy .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bbloxdzxqy .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#bbloxdzxqy .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#bbloxdzxqy .gt_left {
+  text-align: left;
+}
+
+#bbloxdzxqy .gt_center {
+  text-align: center;
+}
+
+#bbloxdzxqy .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#bbloxdzxqy .gt_font_normal {
+  font-weight: normal;
+}
+
+#bbloxdzxqy .gt_font_bold {
+  font-weight: bold;
+}
+
+#bbloxdzxqy .gt_font_italic {
+  font-style: italic;
+}
+
+#bbloxdzxqy .gt_super {
+  font-size: 65%;
+}
+
+#bbloxdzxqy .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#bbloxdzxqy .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#bbloxdzxqy .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#bbloxdzxqy .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#bbloxdzxqy .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#bbloxdzxqy .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#bbloxdzxqy .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#bbloxdzxqy .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#bbloxdzxqy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="gt_heading header">
+<th colspan="16" class="gt_heading gt_title gt_font_normal gt_bottom_border"><strong>Table 2.</strong> Shannon entropy metrics for site use patterns of shorebird species by tide state in the Hunter estuary.</th>
+</tr>
+<tr class="gt_col_headings gt_spanner_row even">
+<th rowspan="2" id="tideHighLow" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Tide</th>
+<th colspan="2" id="Sample" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Sample
+</div></th>
+<th colspan="3" id="Number of Sites (S)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Number of Sites (S)
+</div></th>
+<th colspan="4" id="Shannon Entropy (H)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Shannon Entropy (H)
+</div></th>
+<th colspan="3" id="Pielou's Evenness (J)" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Pielou's Evenness (J)
+</div></th>
+<th colspan="3" id="Effective Sites [exp(H)]" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Effective Sites [exp(H)]
+</div></th>
+</tr>
+<tr class="gt_col_headings header">
+<th id="n_individuals" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">N indiv.</th>
+<th id="total_detections" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Total det.</th>
+<th id="median_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median</th>
+<th id="mean_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean</th>
+<th id="sd_S" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD</th>
+<th id="median_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median</th>
+<th id="mean_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean</th>
+<th id="sd_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD</th>
+<th id="CV_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">CV (%)</th>
+<th id="median_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median</th>
+<th id="mean_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean</th>
+<th id="sd_J" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD</th>
+<th id="median_exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Median</th>
+<th id="mean_exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">Mean</th>
+<th id="sd_exp_H" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" style="font-weight: bold; white-space: nowrap" scope="col">SD</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="gt_group_heading_row odd">
+<td colspan="16" id="Red-necked Avocet" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Red-necked Avocet</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_center" headers="Red-necked Avocet  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">3</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  total_detections" style="white-space: nowrap; background-color: #F0F8FF">26,612</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_S" style="white-space: nowrap; background-color: #F0F8FF">5.00</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_S" style="white-space: nowrap; background-color: #F0F8FF">4.00</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_S" style="white-space: nowrap; background-color: #F0F8FF">1.73</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.60</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.47</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_H" style="white-space: nowrap; background-color: #F0F8FF">0.33</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  CV_H" style="white-space: nowrap; background-color: #F0F8FF">70.9</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.37</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.31</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_J" style="white-space: nowrap; background-color: #F0F8FF">0.16</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.82</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.65</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">0.49</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Red-necked Avocet  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">3</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  total_detections" style="white-space: nowrap; background-color: #FFF8DC">83,598</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_S" style="white-space: nowrap; background-color: #FFF8DC">6.00</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_S" style="white-space: nowrap; background-color: #FFF8DC">5.00</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_S" style="white-space: nowrap; background-color: #FFF8DC">1.73</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.91</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.93</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_H" style="white-space: nowrap; background-color: #FFF8DC">0.07</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  CV_H" style="white-space: nowrap; background-color: #FFF8DC">7.2</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.56</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.62</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_J" style="white-space: nowrap; background-color: #FFF8DC">0.15</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">2.48</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">2.53</td>
+<td class="gt_row gt_right" headers="Red-necked Avocet  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">0.17</td>
+</tr>
+<tr class="gt_group_heading_row even">
+<td colspan="16" id="Pied Stilt" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Pied Stilt</td>
+</tr>
+<tr class="gt_row_group_first odd">
+<td class="gt_row gt_center" headers="Pied Stilt  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Pied Stilt  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">6</td>
+<td class="gt_row gt_right" headers="Pied Stilt  total_detections" style="white-space: nowrap; background-color: #F0F8FF">391,507</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_S" style="white-space: nowrap; background-color: #F0F8FF">1.50</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_S" style="white-space: nowrap; background-color: #F0F8FF">2.17</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_S" style="white-space: nowrap; background-color: #F0F8FF">1.60</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.04</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.24</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_H" style="white-space: nowrap; background-color: #F0F8FF">0.43</td>
+<td class="gt_row gt_right" headers="Pied Stilt  CV_H" style="white-space: nowrap; background-color: #F0F8FF">177.3</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.25</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.35</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_J" style="white-space: nowrap; background-color: #F0F8FF">0.29</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.04</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.39</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">0.77</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Pied Stilt  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Pied Stilt  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">6</td>
+<td class="gt_row gt_right" headers="Pied Stilt  total_detections" style="white-space: nowrap; background-color: #FFF8DC">492,414</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_S" style="white-space: nowrap; background-color: #FFF8DC">2.00</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_S" style="white-space: nowrap; background-color: #FFF8DC">2.17</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_S" style="white-space: nowrap; background-color: #FFF8DC">1.47</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.28</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.31</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_H" style="white-space: nowrap; background-color: #FFF8DC">0.33</td>
+<td class="gt_row gt_right" headers="Pied Stilt  CV_H" style="white-space: nowrap; background-color: #FFF8DC">106.2</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.48</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.48</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_J" style="white-space: nowrap; background-color: #FFF8DC">0.08</td>
+<td class="gt_row gt_right" headers="Pied Stilt  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.33</td>
+<td class="gt_row gt_right" headers="Pied Stilt  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.43</td>
+<td class="gt_row gt_right" headers="Pied Stilt  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">0.53</td>
+</tr>
+<tr class="gt_group_heading_row odd">
+<td colspan="16" id="Pacific Golden-Plover" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Pacific Golden-Plover</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_center" headers="Pacific Golden-Plover  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">14</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  total_detections" style="white-space: nowrap; background-color: #F0F8FF">647,268</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_S" style="white-space: nowrap; background-color: #F0F8FF">5.00</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_S" style="white-space: nowrap; background-color: #F0F8FF">4.79</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_S" style="white-space: nowrap; background-color: #F0F8FF">1.89</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.08</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.23</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_H" style="white-space: nowrap; background-color: #F0F8FF">0.26</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  CV_H" style="white-space: nowrap; background-color: #F0F8FF">113.6</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.06</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.14</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_J" style="white-space: nowrap; background-color: #F0F8FF">0.14</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.08</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.30</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">0.37</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Pacific Golden-Plover  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">14</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  total_detections" style="white-space: nowrap; background-color: #FFF8DC">633,871</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_S" style="white-space: nowrap; background-color: #FFF8DC">4.50</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_S" style="white-space: nowrap; background-color: #FFF8DC">4.29</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_S" style="white-space: nowrap; background-color: #FFF8DC">1.77</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.12</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.26</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_H" style="white-space: nowrap; background-color: #FFF8DC">0.32</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  CV_H" style="white-space: nowrap; background-color: #FFF8DC">122.6</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.11</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.17</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_J" style="white-space: nowrap; background-color: #FFF8DC">0.20</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.13</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.36</td>
+<td class="gt_row gt_right" headers="Pacific Golden-Plover  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">0.48</td>
+</tr>
+<tr class="gt_group_heading_row even">
+<td colspan="16" id="Masked Lapwing" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Masked Lapwing</td>
+</tr>
+<tr class="gt_row_group_first odd">
+<td class="gt_row gt_center" headers="Masked Lapwing  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">1</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  total_detections" style="white-space: nowrap; background-color: #F0F8FF">77</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_S" style="white-space: nowrap; background-color: #F0F8FF">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_S" style="white-space: nowrap; background-color: #F0F8FF">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_S" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_H" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  CV_H" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_J" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_J" style="white-space: nowrap; background-color: #F0F8FF">NaN</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_J" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Masked Lapwing  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">1</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  total_detections" style="white-space: nowrap; background-color: #FFF8DC">22</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_S" style="white-space: nowrap; background-color: #FFF8DC">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_S" style="white-space: nowrap; background-color: #FFF8DC">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_S" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_H" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  CV_H" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_J" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_J" style="white-space: nowrap; background-color: #FFF8DC">NaN</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_J" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.00</td>
+<td class="gt_row gt_right" headers="Masked Lapwing  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+</tr>
+<tr class="gt_group_heading_row odd">
+<td colspan="16" id="Far Eastern Curlew" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Far Eastern Curlew</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_center" headers="Far Eastern Curlew  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">1</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  total_detections" style="white-space: nowrap; background-color: #F0F8FF">51,270</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_S" style="white-space: nowrap; background-color: #F0F8FF">2.00</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_S" style="white-space: nowrap; background-color: #F0F8FF">2.00</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_S" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.04</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.04</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_H" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  CV_H" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.06</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.06</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_J" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.04</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.04</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Far Eastern Curlew  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">1</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  total_detections" style="white-space: nowrap; background-color: #FFF8DC">20,783</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_S" style="white-space: nowrap; background-color: #FFF8DC">2.00</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_S" style="white-space: nowrap; background-color: #FFF8DC">2.00</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_S" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.06</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.06</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_H" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  CV_H" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.09</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.09</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_J" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.06</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.06</td>
+<td class="gt_row gt_right" headers="Far Eastern Curlew  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">NA</td>
+</tr>
+<tr class="gt_group_heading_row even">
+<td colspan="16" id="Eurasian Whimbrel" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Eurasian Whimbrel</td>
+</tr>
+<tr class="gt_row_group_first odd">
+<td class="gt_row gt_center" headers="Eurasian Whimbrel  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">2</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  total_detections" style="white-space: nowrap; background-color: #F0F8FF">997</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_S" style="white-space: nowrap; background-color: #F0F8FF">2.00</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_S" style="white-space: nowrap; background-color: #F0F8FF">2.00</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_S" style="white-space: nowrap; background-color: #F0F8FF">1.41</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.46</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.46</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_H" style="white-space: nowrap; background-color: #F0F8FF">0.65</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  CV_H" style="white-space: nowrap; background-color: #F0F8FF">141.4</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.84</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.84</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_J" style="white-space: nowrap; background-color: #F0F8FF">NA</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.75</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.75</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.07</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Eurasian Whimbrel  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">2</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  total_detections" style="white-space: nowrap; background-color: #FFF8DC">4,981</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_S" style="white-space: nowrap; background-color: #FFF8DC">2.50</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_S" style="white-space: nowrap; background-color: #FFF8DC">2.50</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_S" style="white-space: nowrap; background-color: #FFF8DC">0.71</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.32</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.32</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_H" style="white-space: nowrap; background-color: #FFF8DC">0.30</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  CV_H" style="white-space: nowrap; background-color: #FFF8DC">96.5</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.31</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.31</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_J" style="white-space: nowrap; background-color: #FFF8DC">0.24</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.40</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.40</td>
+<td class="gt_row gt_right" headers="Eurasian Whimbrel  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">0.42</td>
+</tr>
+<tr class="gt_group_heading_row odd">
+<td colspan="16" id="Curlew Sandpiper" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Curlew Sandpiper</td>
+</tr>
+<tr class="gt_row_group_first even">
+<td class="gt_row gt_center" headers="Curlew Sandpiper  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">5</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  total_detections" style="white-space: nowrap; background-color: #F0F8FF">130,120</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_S" style="white-space: nowrap; background-color: #F0F8FF">5.00</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_S" style="white-space: nowrap; background-color: #F0F8FF">5.20</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_S" style="white-space: nowrap; background-color: #F0F8FF">0.45</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.13</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.13</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_H" style="white-space: nowrap; background-color: #F0F8FF">0.05</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  CV_H" style="white-space: nowrap; background-color: #F0F8FF">33.6</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.08</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.08</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_J" style="white-space: nowrap; background-color: #F0F8FF">0.03</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.14</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.14</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">0.05</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="Curlew Sandpiper  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">5</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  total_detections" style="white-space: nowrap; background-color: #FFF8DC">146,840</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_S" style="white-space: nowrap; background-color: #FFF8DC">5.00</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_S" style="white-space: nowrap; background-color: #FFF8DC">5.20</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_S" style="white-space: nowrap; background-color: #FFF8DC">0.45</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.09</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.08</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_H" style="white-space: nowrap; background-color: #FFF8DC">0.01</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  CV_H" style="white-space: nowrap; background-color: #FFF8DC">16.0</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.06</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.05</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_J" style="white-space: nowrap; background-color: #FFF8DC">0.01</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.09</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.09</td>
+<td class="gt_row gt_right" headers="Curlew Sandpiper  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">0.01</td>
+</tr>
+<tr class="gt_group_heading_row even">
+<td colspan="16" id="Bar-tailed Godwit" class="gt_group_heading" data-quarto-table-cell-role="th" style="font-weight: bold" scope="colgroup">Bar-tailed Godwit</td>
+</tr>
+<tr class="gt_row_group_first odd">
+<td class="gt_row gt_center" headers="Bar-tailed Godwit  tideHighLow" style="white-space: nowrap; background-color: #F0F8FF">Low</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  n_individuals" style="white-space: nowrap; background-color: #F0F8FF">8</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  total_detections" style="white-space: nowrap; background-color: #F0F8FF">20,558</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_S" style="white-space: nowrap; background-color: #F0F8FF">2.50</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_S" style="white-space: nowrap; background-color: #F0F8FF">2.25</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_S" style="white-space: nowrap; background-color: #F0F8FF">0.89</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_H" style="white-space: nowrap; background-color: #F0F8FF">0.60</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_H" style="white-space: nowrap; background-color: #F0F8FF">0.47</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_H" style="white-space: nowrap; background-color: #F0F8FF">0.32</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  CV_H" style="white-space: nowrap; background-color: #F0F8FF">67.1</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_J" style="white-space: nowrap; background-color: #F0F8FF">0.69</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_J" style="white-space: nowrap; background-color: #F0F8FF">0.69</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_J" style="white-space: nowrap; background-color: #F0F8FF">0.24</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.82</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_exp_H" style="white-space: nowrap; background-color: #F0F8FF">1.67</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_exp_H" style="white-space: nowrap; background-color: #F0F8FF">0.47</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center" headers="Bar-tailed Godwit  tideHighLow" style="white-space: nowrap; background-color: #FFF8DC">High</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  n_individuals" style="white-space: nowrap; background-color: #FFF8DC">8</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  total_detections" style="white-space: nowrap; background-color: #FFF8DC">111,630</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_S" style="white-space: nowrap; background-color: #FFF8DC">3.00</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_S" style="white-space: nowrap; background-color: #FFF8DC">2.38</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_S" style="white-space: nowrap; background-color: #FFF8DC">0.92</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_H" style="white-space: nowrap; background-color: #FFF8DC">0.46</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_H" style="white-space: nowrap; background-color: #FFF8DC">0.40</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_H" style="white-space: nowrap; background-color: #FFF8DC">0.34</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  CV_H" style="white-space: nowrap; background-color: #FFF8DC">85.3</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_J" style="white-space: nowrap; background-color: #FFF8DC">0.58</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_J" style="white-space: nowrap; background-color: #FFF8DC">0.52</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_J" style="white-space: nowrap; background-color: #FFF8DC">0.24</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  median_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.60</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  mean_exp_H" style="white-space: nowrap; background-color: #FFF8DC">1.57</td>
+<td class="gt_row gt_right" headers="Bar-tailed Godwit  sd_exp_H" style="white-space: nowrap; background-color: #FFF8DC">0.51</td>
+</tr>
+</tbody><tfoot class="gt_footnotes">
+<tr class="odd">
+<td colspan="16" class="gt_footnote"><strong>Legend.</strong> Grouped by species and tide state (Low/High), this table summarises site fidelity metrics using Shannon entropy analysis. <strong>tideHighLow</strong>: tide state during detections (Low or High tide); <strong>n_individuals</strong>: number of tagged individuals; <strong>S</strong>: number of unique sites used; <strong>H</strong>: Shannon entropy (dispersion of site use, higher = more generalised); <strong>J</strong>: Pielou’s evenness (0-1, higher = more even site use); <strong>exp(H)</strong>: effective number of equally-used sites; <strong>CV_H</strong>: coefficient of variation in H (% individual variation within species); <strong>total_detections</strong>: total number of detections across all individuals. Mean and standard deviation values are provided (x̄ ± SD). Median values represent the central tendency across individuals within each species.</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="jensen-shannon" class="level2">
@@ -3684,8 +6342,8 @@ Effective Sites [exp(H)]
 <section id="comparing-individuals-within-species" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-individuals-within-species">Comparing Individuals Within Species:</h3>
 </section>
-<section id="statistical-tests" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-tests">Statistical Tests:</h3>
+<section id="statistical-tests-1" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-tests-1">Statistical Tests:</h3>
 <div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
 <figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
 <p><img src="../../material/exemplejensen.png" style="width: 100%; height: auto; display: block;" class="figure-img"></p>

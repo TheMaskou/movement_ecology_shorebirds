@@ -112,19 +112,7 @@ Evenness ranges from 0 to 1, where **S** = total number of sites used by that in
 - J close to 0: Individual uses sites very unequally (dominates few sites)  
 
 
-::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
-<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
-
-<img src="../../material/exempleshannon.png" style="width: 100%; height: auto; display: block;"/>
-
-<figcaption style="margin-top: 1em; font-style: italic;">
-
-Table: Summary of the entropy values with examples.
-
-</figcaption>
-
-</figure>
-:::
+![Shannon entropy example](../../material/exempleshannon.png)
 
 First, we define a all-in-one function to consistently computing shannon entropy.
 
@@ -501,7 +489,7 @@ kruskal_summary %>%
 
 Test 2: Compares H and J across individuals within each species : **within a species, are individuals different from each other?**    
 
-:::.blockquote-yellow
+::: blockquote-yellow
 Note: To proceed, we removed every species group having a size sample inferior of two. Since it is a comparison test.
 :::
 
@@ -722,147 +710,6 @@ species_entropy_summary_tide <- entropy_results_tide %>%
   ) %>%
   arrange(speciesEN)
 
-
-# Result table with tideHighLow grouping
-species_entropy_summary_tide %>%
-  gt() %>%
-  
-  tab_header(
-    title = md("**Table 2.** Shannon entropy metrics for site use patterns of shorebird species by tide state in the Hunter estuary.")) %>%
-  opt_align_table_header(align = "left") %>%
-  
-  tab_footnote(
-    footnote = md("**Legend.** Grouped by species and tide state (Low/High), this table summarises site fidelity metrics using Shannon entropy analysis. **tideHighLow**: tide state during detections (Low or High tide); **n_individuals**: number of tagged individuals; **S**: number of unique sites used; **H**: Shannon entropy (dispersion of site use, higher = more generalised); **J**: Pielou's evenness (0-1, higher = more even site use); **exp(H)**: effective number of equally-used sites; **CV_H**: coefficient of variation in H (% individual variation within species); **total_detections**: total number of detections across all individuals. Mean and standard deviation values are provided (x̄ ± SD). Median values represent the central tendency across individuals within each species."))  %>%
-  opt_table_font(font = "Times New Roman") %>%
-  
-  cols_label(
-    speciesEN = "Species",
-    tideHighLow = "Tide",
-    n_individuals = "N indiv.",
-    median_S = "Median",
-    mean_S = "Mean",
-    sd_S = "SD",
-    median_H = "Median",
-    mean_H = "Mean",
-    sd_H = "SD",
-    CV_H = "CV (%)",
-    median_J = "Median",
-    mean_J = "Mean",
-    sd_J = "SD",
-    median_exp_H = "Median",
-    mean_exp_H = "Mean",
-    sd_exp_H = "SD",
-    total_detections = "Total det." ) %>%
-  
-  tab_spanner(
-    label = "Sample",
-    columns = c(n_individuals, total_detections)) %>%
-  
-  tab_spanner(
-    label = "Number of Sites (S)",
-    columns = c(median_S, mean_S, sd_S) ) %>%
-  
-  tab_spanner(
-    label = "Shannon Entropy (H)",
-    columns = c(median_H, mean_H, sd_H, CV_H) ) %>%
-  
-  tab_spanner(
-    label = "Pielou's Evenness (J)",
-    columns = c(median_J, mean_J, sd_J) ) %>%
-  
-  tab_spanner(
-    label = "Effective Sites [exp(H)]",
-    columns = c(median_exp_H, mean_exp_H, sd_exp_H) ) %>%
-  
-  # Row grouping by species
-  tab_row_group(
-    label = "Bar-tailed Godwit",
-    rows = speciesEN == "Bar-tailed Godwit"
-  ) %>%
-  tab_row_group(
-    label = "Curlew Sandpiper",
-    rows = speciesEN == "Curlew Sandpiper"
-  ) %>%
-  tab_row_group(
-    label = "Eurasian Whimbrel",
-    rows = speciesEN == "Eurasian Whimbrel"
-  ) %>%
-  tab_row_group(
-    label = "Far Eastern Curlew",
-    rows = speciesEN == "Far Eastern Curlew"
-  ) %>%
-  tab_row_group(
-    label = "Masked Lapwing",
-    rows = speciesEN == "Masked Lapwing"
-  ) %>%
-  tab_row_group(
-    label = "Pacific Golden-Plover",
-    rows = speciesEN == "Pacific Golden-Plover"
-  ) %>%
-  tab_row_group(
-    label = "Pied Stilt",
-    rows = speciesEN == "Pied Stilt"
-  ) %>%
-  tab_row_group(
-    label = "Red-necked Avocet",
-    rows = speciesEN == "Red-necked Avocet"
-  ) %>%
-  
-  # Hide the speciesEN column since it's now in row groups
-  cols_hide(columns = speciesEN) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_row_groups() ) %>%
-  
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_body(columns = everything()) ) %>%
-  
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_column_labels(columns = everything()) ) %>%
-  
-  # Alternate row colors by tide within each species
-  tab_style(
-    style = cell_fill(color = "#F0F8FF"),
-    locations = cells_body(rows = tideHighLow == "Low")
-  ) %>%
-  
-  tab_style(
-    style = cell_fill(color = "#FFF8DC"),
-    locations = cells_body(rows = tideHighLow == "High")
-  ) %>%
-  
-  fmt_number(
-    columns = c(mean_S, sd_S, mean_H, sd_H, mean_J, sd_J, mean_exp_H, sd_exp_H),
-    decimals = 2) %>%
-  
-  fmt_number(
-    columns = c(median_S, median_H, median_J, median_exp_H),
-    decimals = 2) %>%
-  
-  fmt_number(
-    columns = CV_H,
-    decimals = 1) %>%
-  
-  fmt_number(
-    columns = total_detections,
-    decimals = 0,
-    use_seps = TRUE ) %>%
-  
-  tab_options(
-    table.font.size = px(13),
-    heading.title.font.size = px(16),
-    data_row.padding = px(3),  
-    table.width = pct(100),
-    row_group.font.weight = "bold"
-  )
-
 ```
 
 ```{r shannon tide 3, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
@@ -906,7 +753,7 @@ tide_tests <- entropy_for_plot_tide %>%
 ```
   
   
-Before to display and visualise result, we build a t-test which will compare entropy values between low tide and high tide for each species.  
+Before to display and visualise result, we built a t-test which compares entropy values between low and high tides for each species.  
 
 
 ```{r shannon tide 4, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
@@ -1054,6 +901,151 @@ tide_tests %>%
     table.width = pct(100)
   )
 ```
+
+
+```{r shannon tide 6, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+
+# Result table with tideHighLow grouping
+species_entropy_summary_tide %>%
+  gt() %>%
+  
+  tab_header(
+    title = md("**Table 2.** Shannon entropy metrics for site use patterns of shorebird species by tide state in the Hunter estuary.")) %>%
+  opt_align_table_header(align = "left") %>%
+  
+  tab_footnote(
+    footnote = md("**Legend.** Grouped by species and tide state (Low/High), this table summarises site fidelity metrics using Shannon entropy analysis. **tideHighLow**: tide state during detections (Low or High tide); **n_individuals**: number of tagged individuals; **S**: number of unique sites used; **H**: Shannon entropy (dispersion of site use, higher = more generalised); **J**: Pielou's evenness (0-1, higher = more even site use); **exp(H)**: effective number of equally-used sites; **CV_H**: coefficient of variation in H (% individual variation within species); **total_detections**: total number of detections across all individuals. Mean and standard deviation values are provided (x̄ ± SD). Median values represent the central tendency across individuals within each species."))  %>%
+  opt_table_font(font = "Times New Roman") %>%
+  
+  cols_label(
+    speciesEN = "Species",
+    tideHighLow = "Tide",
+    n_individuals = "N indiv.",
+    median_S = "Median",
+    mean_S = "Mean",
+    sd_S = "SD",
+    median_H = "Median",
+    mean_H = "Mean",
+    sd_H = "SD",
+    CV_H = "CV (%)",
+    median_J = "Median",
+    mean_J = "Mean",
+    sd_J = "SD",
+    median_exp_H = "Median",
+    mean_exp_H = "Mean",
+    sd_exp_H = "SD",
+    total_detections = "Total det." ) %>%
+  
+  tab_spanner(
+    label = "Sample",
+    columns = c(n_individuals, total_detections)) %>%
+  
+  tab_spanner(
+    label = "Number of Sites (S)",
+    columns = c(median_S, mean_S, sd_S) ) %>%
+  
+  tab_spanner(
+    label = "Shannon Entropy (H)",
+    columns = c(median_H, mean_H, sd_H, CV_H) ) %>%
+  
+  tab_spanner(
+    label = "Pielou's Evenness (J)",
+    columns = c(median_J, mean_J, sd_J) ) %>%
+  
+  tab_spanner(
+    label = "Effective Sites [exp(H)]",
+    columns = c(median_exp_H, mean_exp_H, sd_exp_H) ) %>%
+  
+  # Row grouping by species
+  tab_row_group(
+    label = "Bar-tailed Godwit",
+    rows = speciesEN == "Bar-tailed Godwit"
+  ) %>%
+  tab_row_group(
+    label = "Curlew Sandpiper",
+    rows = speciesEN == "Curlew Sandpiper"
+  ) %>%
+  tab_row_group(
+    label = "Eurasian Whimbrel",
+    rows = speciesEN == "Eurasian Whimbrel"
+  ) %>%
+  tab_row_group(
+    label = "Far Eastern Curlew",
+    rows = speciesEN == "Far Eastern Curlew"
+  ) %>%
+  tab_row_group(
+    label = "Masked Lapwing",
+    rows = speciesEN == "Masked Lapwing"
+  ) %>%
+  tab_row_group(
+    label = "Pacific Golden-Plover",
+    rows = speciesEN == "Pacific Golden-Plover"
+  ) %>%
+  tab_row_group(
+    label = "Pied Stilt",
+    rows = speciesEN == "Pied Stilt"
+  ) %>%
+  tab_row_group(
+    label = "Red-necked Avocet",
+    rows = speciesEN == "Red-necked Avocet"
+  ) %>%
+  
+  # Hide the speciesEN column since it's now in row groups
+  cols_hide(columns = speciesEN) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels() ) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_row_groups() ) %>%
+  
+  tab_style(
+    style = cell_text(whitespace = "nowrap"),
+    locations = cells_body(columns = everything()) ) %>%
+  
+  tab_style(
+    style = cell_text(whitespace = "nowrap"),
+    locations = cells_column_labels(columns = everything()) ) %>%
+  
+  # Alternate row colors by tide within each species
+  tab_style(
+    style = cell_fill(color = "#F0F8FF"),
+    locations = cells_body(rows = tideHighLow == "Low")
+  ) %>%
+  
+  tab_style(
+    style = cell_fill(color = "#FFF8DC"),
+    locations = cells_body(rows = tideHighLow == "High")
+  ) %>%
+  
+  fmt_number(
+    columns = c(mean_S, sd_S, mean_H, sd_H, mean_J, sd_J, mean_exp_H, sd_exp_H),
+    decimals = 2) %>%
+  
+  fmt_number(
+    columns = c(median_S, median_H, median_J, median_exp_H),
+    decimals = 2) %>%
+  
+  fmt_number(
+    columns = CV_H,
+    decimals = 1) %>%
+  
+  fmt_number(
+    columns = total_detections,
+    decimals = 0,
+    use_seps = TRUE ) %>%
+  
+  tab_options(
+    table.font.size = px(13),
+    heading.title.font.size = px(16),
+    data_row.padding = px(3),  
+    table.width = pct(100),
+    row_group.font.weight = "bold"
+  )
+```
+
 
 ## Jensen-Shannon
 
