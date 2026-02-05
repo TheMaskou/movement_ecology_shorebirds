@@ -70,7 +70,7 @@ recv <- readRDS(
 
 ### Definition  
 
-**Shannon entropy (H)** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication) ;[Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article)) is used to quantify the diversity of an individual's site use. It measures the **dispersion** of an individual's site use pattern to answers: *How evenly does this bird distribute its time/detections across different sites?*  
+**Shannon entropy (H)** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication); [MacArthur * 1965](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer) ;[Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article)) is employed when a large collection has a number of sites known -Type B collection ([Pielou - 1966](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130))-, to quantify the diversity of an individual's site use. It measures the **dispersion** of an individual's site use pattern to answers: *How evenly does this bird distribute its time/detections across different sites?*  
   
 
 ::: {style="overflow-x: auto; width: 100%;"}
@@ -87,26 +87,29 @@ $$
 
 A lower entropy goes with more concentrated use (higher site fidelity to few sites) and a higher entropy matches a more dispersed use (lower site fidelity, using many sites equally).
 
-**Low Entropy (e.g., H < 1.0)**  
+**Low Entropy (e.g., H < 1.0)**  [Shannon and Weaver - 1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication)  
 - Individual is highly specialized  
 - Uses only a few sites, or uses one site predominantly  
 - High site fidelity to specific locations  
 - Low unpredictability: we can predict where the bird will be  
 
-**High Entropy (e.g., H > 2.0)**    
+**High Entropy (e.g., H > 2.0)**  [Shannon and Weaver - 1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication)   
 - Individual is generalized  
 - Uses many sites relatively equally  
 - Low site fidelity to any particular location  
 - High unpredictability: harder to predict where the bird will be  
+
+**The coefficient of Variation***  [Martin & Grey - 1971](https://www.jstor.org/stable/2093089?origin=crossref)
+The coefficient of variation, which is a measure of dispersion (SD, σ) divided by the appropriate measure of central tendency (mean, μ) that we'll express in percentage (5).
   
-**Effective Number of Sites (exp(H))**    
+**Effective Number of Sites (exp(H))**  [MacArthur - 1965](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer)  
 This transforms entropy into an interpretable number: the "effective number of equally-used sites"
 
 Example:
 - If H = 1.61, then exp(1.61) ≈ 5 effective sites   
 - Interpretation: The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution)  
 
-**Pielou's Evenness (J = H / ln(S))**  
+**Pielou's Evenness (J = H / ln(S))**  [Pielou - 1966](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130)  
 Evenness ranges from 0 to 1, where **S** = total number of sites used by that individual:  
 - J close to 1: Individual uses all sites equally  
 - J close to 0: Individual uses sites very unequally (dominates few sites)  
@@ -116,7 +119,7 @@ Evenness ranges from 0 to 1, where **S** = total number of sites used by that in
 
 First, we define a all-in-one function to consistently computing shannon entropy.
 
-```{r shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+```{r shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 # Function to calculate Shannon entropy
 calculate_shannon <- function(proportions) {
   # Remove zero proportions (shouldn't be any, but safety check)
@@ -149,22 +152,19 @@ entropy_results <- data_all %>%
   group_by(speciesEN, Band.ID) %>%
   mutate(
     total_detections = sum(detections),
-    proportion = detections / total_detections
-  ) %>%
+    proportion = detections / total_detections) %>%
   
   # Calculate metrics for each bird
   summarise(
     S = n(),                                    # Number of sites used
-    H = round(calculate_shannon(proportion), 2),          # Shannon entropy
-    J = round(H / log(S), 2),                             # Pielou's evenness
+    H = round(calculate_shannon(proportion), 2),# Shannon entropy
+    J = round(H / log(S), 2),                   # Pielou's evenness
     total_detections = first(total_detections), # Total detections for reference
-    .groups = "drop"
-  ) %>%
+    .groups = "drop") %>%
   
-  # Add effective number of sites (exp(H))
+  # Add effective number of equally-used sites
   mutate(
-    exp_H = exp(H)  # Effective number of equally-used sites
-  ) %>%
+    exp_H = exp(H)) %>% 
   
   # Arrange by Band.ID
   arrange(speciesEN, Band.ID)
@@ -174,8 +174,10 @@ entropy_results <- data_all %>%
 ```{r shannon 3, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 # Species-level summary from entropy_results
 species_entropy_summary <- entropy_results %>%
+  
   group_by(speciesEN) %>%
   summarise(
+    
     n_individuals = n(),
     
     # S (Number of sites) statistics
@@ -202,13 +204,13 @@ species_entropy_summary <- entropy_results %>%
     # Total detections across all individuals
     total_detections = sum(total_detections, na.rm = TRUE),
     
-    .groups = "drop"
-  ) %>%
+    .groups = "drop") %>%
   arrange(speciesEN)
 
 
 # Result table
 species_entropy_summary %>%
+  
   gt() %>%
   
   tab_header(
@@ -240,19 +242,15 @@ species_entropy_summary %>%
   tab_spanner(
     label = "Sample",
     columns = c(n_individuals, total_detections)) %>%
-  
   tab_spanner(
     label = "Number of Sites (S)",
     columns = c(median_S, mean_S, sd_S) ) %>%
-  
   tab_spanner(
     label = "Shannon Entropy (H)",
     columns = c(median_H, mean_H, sd_H, CV_H) ) %>%
-  
   tab_spanner(
     label = "Pielou's Evenness (J)",
     columns = c(median_J, mean_J, sd_J) ) %>%
-  
   tab_spanner(
     label = "Effective Sites [exp(H)]",
     columns = c(median_exp_H, mean_exp_H, sd_exp_H) ) %>%
@@ -260,11 +258,9 @@ species_entropy_summary %>%
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_column_labels() ) %>%
-  
   tab_style(
     style = cell_text(whitespace = "nowrap"),
     locations = cells_body(columns = everything()) ) %>%
-  
   tab_style(
     style = cell_text(whitespace = "nowrap"),
     locations = cells_column_labels(columns = everything()) ) %>%
@@ -272,15 +268,12 @@ species_entropy_summary %>%
   fmt_number(
     columns = c(mean_S, sd_S, mean_H, sd_H, mean_J, sd_J, mean_exp_H, sd_exp_H),
     decimals = 2) %>%
-  
   fmt_number(
     columns = c(median_S, median_H, median_J, median_exp_H),
     decimals = 2) %>%
-  
   fmt_number(
     columns = CV_H,
     decimals = 1) %>%
-  
   fmt_number(
     columns = total_detections,
     decimals = 0,
@@ -327,7 +320,9 @@ ggplot(entropy_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
     strip.text = element_text(face = "bold", size = 11),
     legend.position = "none",  
     panel.grid.major.x = element_blank())
+
 ```
+
 ```{r shannon 5, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = FALSE}
 
 # S table
@@ -423,66 +418,61 @@ kruskal_summary <- data.frame(
          kruskal_species_S$parameter),
   p_value = c(kruskal_species_H$p.value,
               kruskal_species_J$p.value,
-              kruskal_species_S$p.value)
-) %>%
+              kruskal_species_S$p.value)) %>%
+  
   mutate(
     Significance = case_when(
       p_value < 0.001 ~ "***",
       p_value < 0.01 ~ "**",
       p_value < 0.05 ~ "*",
-      TRUE ~ "ns"
-    )
-  )
+      TRUE ~ "ns" ))
 
 # Create the gt table
 kruskal_summary %>%
   gt() %>%
   tab_header(
     title = md("**Kruskal-Wallis Test Results**"),
-    subtitle = "Comparing Shannon entropy metrics across species"
-  ) %>%
+    subtitle = "Comparing Shannon entropy metrics across species" ) %>%
+  
   cols_label(
     Metric = "Metric",
     Chi_squared = "χ²",
     df = "df",
     p_value = "p-value",
-    Significance = "Sig."
-  ) %>%
+    Significance = "Sig." ) %>%
+  
   fmt_number(
     columns = Chi_squared,
-    decimals = 3
-  ) %>%
+    decimals = 3) %>%
+  
   fmt_scientific(
     columns = p_value,
-    decimals = 3
-  ) %>%
+    decimals = 3) %>%
+  
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_body(
       columns = Significance,
-      rows = p_value < 0.05
-    )
-  ) %>%
+      rows = p_value < 0.05 )) %>%
+  
   tab_style(
     style = cell_fill(color = "lightgreen"),
     locations = cells_body(
-      rows = p_value < 0.05
-    )
-  ) %>%
+      rows = p_value < 0.05 )) %>%
+  
   tab_footnote(
-    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). Green highlighting indicates significant differences among species.")
-  ) %>%
+    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). Green highlighting indicates significant differences among species.") ) %>%
+  
   tab_style(
     style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  ) %>%
+    locations = cells_column_labels() ) %>%
+  
   opt_table_font(font = "Times New Roman") %>%
   tab_options(
     table.font.size = px(14),
     heading.title.font.size = px(16),
     data_row.padding = px(5),
-    table.width = pct(100)
-  )
+    table.width = pct(100))
 
 ```
 
@@ -550,11 +540,13 @@ kruskal_within_species <- species_with_multiple_birds %>%
 
 # Create the gt table
 kruskal_within_species %>%
+  
   gt() %>%
+  
   tab_header(
     title = md("**Kruskal-Wallis Test Results Within Species**"),
-    subtitle = "Comparing entropy metrics across individuals within each species"
-  ) %>%
+    subtitle = "Comparing entropy metrics across individuals within each species") %>%
+  
   cols_label(
     speciesEN = "Species",
     n_individuals = "N",
@@ -569,70 +561,62 @@ kruskal_within_species %>%
     Chi_sq_S = "χ²",
     df_S = "df",
     p_value_S = "p-value",
-    Sig_S = "Sig."
-  ) %>%
+    Sig_S = "Sig.") %>%
+  
   tab_spanner(
     label = "H (Shannon Entropy)",
-    columns = c(Chi_sq_H, df_H, p_value_H, Sig_H)
-  ) %>%
+    columns = c(Chi_sq_H, df_H, p_value_H, Sig_H)) %>%
   tab_spanner(
     label = "J (Pielou's Evenness)",
-    columns = c(Chi_sq_J, df_J, p_value_J, Sig_J)
-  ) %>%
+    columns = c(Chi_sq_J, df_J, p_value_J, Sig_J)) %>%
   tab_spanner(
     label = "S (Number of Sites)",
-    columns = c(Chi_sq_S, df_S, p_value_S, Sig_S)
-  ) %>%
+    columns = c(Chi_sq_S, df_S, p_value_S, Sig_S)) %>%
+  
   fmt_number(
     columns = c(Chi_sq_H, Chi_sq_J, Chi_sq_S),
-    decimals = 3
-  ) %>%
+    decimals = 3) %>%
+  
   fmt_scientific(
     columns = c(p_value_H, p_value_J, p_value_S),
-    decimals = 3
-  ) %>%
+    decimals = 3) %>%
+  
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_body(
       columns = c(Sig_H, Sig_J, Sig_S),
-      rows = p_value_H < 0.05 | p_value_J < 0.05 | p_value_S < 0.05
-    )
-  ) %>%
+      rows = p_value_H < 0.05 | p_value_J < 0.05 | p_value_S < 0.05 )) %>%
+  
   tab_style(
     style = cell_fill(color = "lightgreen"),
     locations = cells_body(
       columns = c(Chi_sq_H, df_H, p_value_H, Sig_H),
-      rows = p_value_H < 0.05
-    )
-  ) %>%
+      rows = p_value_H < 0.05 )) %>%
   tab_style(
     style = cell_fill(color = "lightblue"),
     locations = cells_body(
       columns = c(Chi_sq_J, df_J, p_value_J, Sig_J),
-      rows = p_value_J < 0.05
-    )
-  ) %>%
+      rows = p_value_J < 0.05 ) ) %>%
   tab_style(
     style = cell_fill(color = "lightyellow"),
     locations = cells_body(
       columns = c(Chi_sq_S, df_S, p_value_S, Sig_S),
-      rows = p_value_S < 0.05
-    )
-  ) %>%
+      rows = p_value_S < 0.05 ) ) %>%
+  
   tab_footnote(
-    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). **N** = number of individuals. Green/blue/yellow highlighting indicates significant differences among individuals within that species. Only species with ≥3 individuals are included (minimum requirement for Kruskal-Wallis test).")
-  ) %>%
+    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). **N** = number of individuals. Green/blue/yellow highlighting indicates significant differences among individuals within that species. Only species with ≥3 individuals are included (minimum requirement for Kruskal-Wallis test).") ) %>%
+  
   tab_style(
     style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  ) %>%
+    locations = cells_column_labels() ) %>%
+  
   opt_table_font(font = "Times New Roman") %>%
+  
   tab_options(
     table.font.size = px(13),
     heading.title.font.size = px(16),
     data_row.padding = px(4),
-    table.width = pct(100)
-  )
+    table.width = pct(100))
 
 ```
 
@@ -654,8 +638,7 @@ entropy_results_tide <- data_all %>%
   group_by(speciesEN, Band.ID, tideHighLow) %>%
   mutate(
     total_detections = sum(detections),
-    proportion = detections / total_detections
-  ) %>%
+    proportion = detections / total_detections) %>%
   
   # Calculate metrics for each bird
   summarise(
@@ -665,10 +648,10 @@ entropy_results_tide <- data_all %>%
     total_detections = first(total_detections),           # Total detections for reference
     .groups = "drop") %>%
   
-  # Add effective number of sites (exp(H))
+  # Add effective number equally-used sites
   mutate(
-    exp_H = exp(H)  # Effective number of equally-used sites
-  ) %>%
+    exp_H = exp(H)) %>%
+
   
   # Arrange by Band.ID
   arrange(speciesEN, Band.ID, tideHighLow)
@@ -706,8 +689,7 @@ species_entropy_summary_tide <- entropy_results_tide %>%
     # Total detections across all individuals
     total_detections = sum(total_detections, na.rm = TRUE),
     
-    .groups = "drop"
-  ) %>%
+    .groups = "drop") %>%
   arrange(speciesEN)
 
 ```
@@ -793,18 +775,19 @@ ggplot(entropy_for_plot_tide, aes(x = speciesEN, y = value, fill = speciesEN, al
 ```
 ```{r shannon tide 5, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
 tide_tests %>%
+  
   select(speciesEN, metric, n_high, n_low, p_value, significance) %>%
   pivot_wider(
     id_cols = speciesEN,
     names_from = metric,
     values_from = c(p_value, significance),
-    names_glue = "{metric}_{.value}"
-  ) %>%
+    names_glue = "{metric}_{.value}") %>%
+  
   gt() %>%
+  
   tab_header(
     title = md("**T-test Results: High vs Low Tide Comparison**"),
-    subtitle = "Comparing entropy metrics between tide states within each species"
-  ) %>%
+    subtitle = "Comparing entropy metrics between tide states within each species") %>%
   opt_align_table_header(align = "left") %>%
   
   cols_label(
@@ -816,40 +799,32 @@ tide_tests %>%
     `J (Pielou's Evenness)_p_value` = "p-value",
     `J (Pielou's Evenness)_significance` = "Sig.",
     `exp(H) (Effective Sites)_p_value` = "p-value",
-    `exp(H) (Effective Sites)_significance` = "Sig."
-  ) %>%
+    `exp(H) (Effective Sites)_significance` = "Sig.") %>%
   
   tab_spanner(
     label = "S (Number of Sites)",
-    columns = c(`S (Number of Sites)_p_value`, `S (Number of Sites)_significance`)
-  ) %>%
+    columns = c(`S (Number of Sites)_p_value`, `S (Number of Sites)_significance`)  ) %>%
   
   tab_spanner(
     label = "H (Shannon Entropy)",
-    columns = c(`H (Shannon Entropy)_p_value`, `H (Shannon Entropy)_significance`)
-  ) %>%
+    columns = c(`H (Shannon Entropy)_p_value`, `H (Shannon Entropy)_significance`)) %>%
   
   tab_spanner(
     label = "J (Pielou's Evenness)",
-    columns = c(`J (Pielou's Evenness)_p_value`, `J (Pielou's Evenness)_significance`)
-  ) %>%
+    columns = c(`J (Pielou's Evenness)_p_value`, `J (Pielou's Evenness)_significance`)) %>%
   
   tab_spanner(
     label = "exp(H) (Effective Sites)",
-    columns = c(`exp(H) (Effective Sites)_p_value`, `exp(H) (Effective Sites)_significance`)
-  ) %>%
+    columns = c(`exp(H) (Effective Sites)_p_value`, `exp(H) (Effective Sites)_significance`)) %>%
   
   fmt_scientific(
     columns = contains("_p_value"),
-    decimals = 3
-  ) %>%
+    decimals = 3) %>%
   
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_body(
-      columns = contains("_significance")
-    )
-  ) %>%
+      columns = contains("_significance") )) %>%
   
   tab_style(
     style = cell_fill(color = "lightgreen"),
@@ -858,9 +833,7 @@ tide_tests %>%
       rows = `S (Number of Sites)_p_value` < 0.05 | 
              `H (Shannon Entropy)_p_value` < 0.05 | 
              `J (Pielou's Evenness)_p_value` < 0.05 | 
-             `exp(H) (Effective Sites)_p_value` < 0.05
-    )
-  ) %>%
+             `exp(H) (Effective Sites)_p_value` < 0.05)) %>%
   
   tab_style(
     style = cell_fill(color = "lightgreen"),
@@ -869,28 +842,22 @@ tide_tests %>%
       rows = `S (Number of Sites)_p_value` < 0.05 | 
              `H (Shannon Entropy)_p_value` < 0.05 | 
              `J (Pielou's Evenness)_p_value` < 0.05 | 
-             `exp(H) (Effective Sites)_p_value` < 0.05
-    )
-  ) %>%
+             `exp(H) (Effective Sites)_p_value` < 0.05)) %>%
   
   tab_style(
     style = cell_text(weight = "bold"),
-    locations = cells_column_labels()
-  ) %>%
+    locations = cells_column_labels()) %>%
   
   tab_style(
     style = cell_text(whitespace = "nowrap"),
-    locations = cells_body(columns = everything())
-  ) %>%
+    locations = cells_body(columns = everything())) %>%
   
   tab_style(
     style = cell_text(whitespace = "nowrap"),
-    locations = cells_column_labels(columns = everything())
-  ) %>%
+    locations = cells_column_labels(columns = everything())) %>%
   
   tab_footnote(
-    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant. T-tests compare mean values between High and Low tide for each species-metric combination. Green highlighting indicates significant differences (p < 0.05).")
-  ) %>%
+    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant. T-tests compare mean values between High and Low tide for each species-metric combination. Green highlighting indicates significant differences (p < 0.05).")) %>%
   
   opt_table_font(font = "Times New Roman") %>%
   
@@ -898,8 +865,7 @@ tide_tests %>%
     table.font.size = px(13),
     heading.title.font.size = px(16),
     data_row.padding = px(3),
-    table.width = pct(100)
-  )
+    table.width = pct(100))
 ```
 
 
@@ -907,6 +873,7 @@ tide_tests %>%
 
 # Result table with tideHighLow grouping
 species_entropy_summary_tide %>%
+  
   gt() %>%
   
   tab_header(
@@ -939,19 +906,15 @@ species_entropy_summary_tide %>%
   tab_spanner(
     label = "Sample",
     columns = c(n_individuals, total_detections)) %>%
-  
   tab_spanner(
     label = "Number of Sites (S)",
     columns = c(median_S, mean_S, sd_S) ) %>%
-  
   tab_spanner(
     label = "Shannon Entropy (H)",
     columns = c(median_H, mean_H, sd_H, CV_H) ) %>%
-  
   tab_spanner(
     label = "Pielou's Evenness (J)",
     columns = c(median_J, mean_J, sd_J) ) %>%
-  
   tab_spanner(
     label = "Effective Sites [exp(H)]",
     columns = c(median_exp_H, mean_exp_H, sd_exp_H) ) %>%
@@ -959,36 +922,28 @@ species_entropy_summary_tide %>%
   # Row grouping by species
   tab_row_group(
     label = "Bar-tailed Godwit",
-    rows = speciesEN == "Bar-tailed Godwit"
-  ) %>%
+    rows = speciesEN == "Bar-tailed Godwit" ) %>%
   tab_row_group(
     label = "Curlew Sandpiper",
-    rows = speciesEN == "Curlew Sandpiper"
-  ) %>%
+    rows = speciesEN == "Curlew Sandpiper") %>%
   tab_row_group(
     label = "Eurasian Whimbrel",
-    rows = speciesEN == "Eurasian Whimbrel"
-  ) %>%
+    rows = speciesEN == "Eurasian Whimbrel") %>%
   tab_row_group(
     label = "Far Eastern Curlew",
-    rows = speciesEN == "Far Eastern Curlew"
-  ) %>%
+    rows = speciesEN == "Far Eastern Curlew") %>%
   tab_row_group(
     label = "Masked Lapwing",
-    rows = speciesEN == "Masked Lapwing"
-  ) %>%
+    rows = speciesEN == "Masked Lapwing") %>%
   tab_row_group(
     label = "Pacific Golden-Plover",
-    rows = speciesEN == "Pacific Golden-Plover"
-  ) %>%
+    rows = speciesEN == "Pacific Golden-Plover") %>%
   tab_row_group(
     label = "Pied Stilt",
-    rows = speciesEN == "Pied Stilt"
-  ) %>%
+    rows = speciesEN == "Pied Stilt") %>%
   tab_row_group(
     label = "Red-necked Avocet",
-    rows = speciesEN == "Red-necked Avocet"
-  ) %>%
+    rows = speciesEN == "Red-necked Avocet") %>%
   
   # Hide the speciesEN column since it's now in row groups
   cols_hide(columns = speciesEN) %>%
@@ -996,15 +951,12 @@ species_entropy_summary_tide %>%
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_column_labels() ) %>%
-  
   tab_style(
     style = cell_text(weight = "bold"),
     locations = cells_row_groups() ) %>%
-  
   tab_style(
     style = cell_text(whitespace = "nowrap"),
     locations = cells_body(columns = everything()) ) %>%
-  
   tab_style(
     style = cell_text(whitespace = "nowrap"),
     locations = cells_column_labels(columns = everything()) ) %>%
@@ -1012,26 +964,20 @@ species_entropy_summary_tide %>%
   # Alternate row colors by tide within each species
   tab_style(
     style = cell_fill(color = "#F0F8FF"),
-    locations = cells_body(rows = tideHighLow == "Low")
-  ) %>%
-  
+    locations = cells_body(rows = tideHighLow == "Low")) %>%
   tab_style(
     style = cell_fill(color = "#FFF8DC"),
-    locations = cells_body(rows = tideHighLow == "High")
-  ) %>%
+    locations = cells_body(rows = tideHighLow == "High")) %>%
   
   fmt_number(
     columns = c(mean_S, sd_S, mean_H, sd_H, mean_J, sd_J, mean_exp_H, sd_exp_H),
     decimals = 2) %>%
-  
   fmt_number(
     columns = c(median_S, median_H, median_J, median_exp_H),
     decimals = 2) %>%
-  
   fmt_number(
     columns = CV_H,
     decimals = 1) %>%
-  
   fmt_number(
     columns = total_detections,
     decimals = 0,
@@ -1042,12 +988,11 @@ species_entropy_summary_tide %>%
     heading.title.font.size = px(16),
     data_row.padding = px(3),  
     table.width = pct(100),
-    row_group.font.weight = "bold"
-  )
+    row_group.font.weight = "bold")
 ```
 
 
-## Jensen-Shannon
+## Jensen-Shannon Divergence
 
 ### Definition  
 
@@ -1065,30 +1010,297 @@ $$
 
 ### Interpretation
 
-### Effective Number of Sites (exp(H))
+### General results
 
-### Pielou's Evenness (J = H / ln(S))
+#### JSD table   
 
-### Comparing Individuals Within Species:
+```{r jensen-shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+# Function to calculate Jensen-Shannon Divergence
+calculate_jsd <- function(p, q) {
+  # Add small value to avoid log(0)
+  epsilon <- 1e-10
+  p <- p + epsilon
+  q <- q + epsilon
+  
+  # Normalise
+  p <- p / sum(p)
+  q <- q / sum(q)
+  
+  # Calculate JSD
+  m <- (p + q) / 2
+  jsd <- 0.5 * sum(p * log2(p / m)) + 0.5 * sum(q * log2(q / m))
+  
+  return(jsd)
+}
+```
 
-### Statistical Tests:
+```{r jensen-shannon 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
-::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
-<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
+# Step 1: Create site use matrix (rows = individuals, columns = sites)
+site_use_matrix <- data_all %>%
+  filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
+  group_by(Band.ID, recvDeployName) %>%
+  summarise(detections = n(), .groups = "drop") %>%
+  group_by(Band.ID) %>%
+  mutate(proportion = round(detections / sum(detections), 2)) %>%
+  select(Band.ID, recvDeployName, proportion) %>%
+  pivot_wider(
+    names_from = recvDeployName,
+    values_from = proportion,
+    values_fill = 0)
 
-<img src="../../material/exemplejensen.png" style="width: 100%; height: auto; display: block;"/>
+# Step 2: Calculate pairwise JSD
+individual_ids <- site_use_matrix$Band.ID
+n_individuals <- length(individual_ids)
 
-<figcaption style="margin-top: 1em; font-style: italic;">
+jsd_results <- data.frame()
 
-Table: Summary of the entropy values with exemples.
+for (i in 1:(n_individuals - 1)) {
+  for (j in (i + 1):n_individuals) {
+    
+    p <- as.numeric(site_use_matrix[i, -1])
+    q <- as.numeric(site_use_matrix[j, -1])
+    
+    jsd_results <- rbind(jsd_results, data.frame(
+      Band.ID_1 = individual_ids[i],
+      Band.ID_2 = individual_ids[j],
+      JSD = round(calculate_jsd(p, q), 3),
+      Similarity = round(1 - calculate_jsd(p, q), 3)))
+  }
+}
 
-</figcaption>
-
-</figure>
-:::
-
-First,
-
-```{r jensen-shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+# Step 3: Add species information
+jsd_results <- jsd_results %>%
+  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(), 
+            by = c("Band.ID_1" = "Band.ID")) %>%
+  rename(species_1 = speciesEN) %>%
+  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(), 
+            by = c("Band.ID_2" = "Band.ID")) %>%
+  rename(species_2 = speciesEN) %>%
+  mutate(same_species = species_1 == species_2)
 
 ```
+
+```{r jensen-shannon 3, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+jsd_results_tab <- jsd_results %>%
+  filter(same_species == TRUE) %>%
+  group_by(species_1) %>%
+  summarise(
+    n_comparisons = n(),
+    mean_JSD = round(mean(JSD), 3),
+    sd_JSD = round(sd(JSD), 3),
+    mean_Similarity = round(mean(Similarity), 3),
+    sd_Similarity = round(sd(Similarity), 3),
+    .groups = "drop") %>%
+  rename(speciesEN = species_1)
+
+
+n_indiv <- data_all %>%
+  group_by(speciesEN) %>%
+  summarise(n_indiv = n_distinct(Band.ID), .groups = "drop")
+jsd_results_tab <- jsd_results_tab %>%
+  left_join(n_indiv, by = "speciesEN") %>%
+  select(speciesEN, n_indiv, everything()) %>%
+  arrange(mean_JSD)
+
+```
+
+```{r jensen-shannon 31, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+
+# Filter to same_species comparisons and prepare for boxplot (matching entropy_for_plot structure)
+jsd_for_plot <- jsd_results %>%
+  
+  filter(same_species == TRUE) %>%
+  
+  mutate(
+    metric = "JSD",
+    speciesEN = species_1) %>% 
+  
+  select(speciesEN, JSD, metric) %>%
+  rename(value = JSD)
+
+# Boxplot exactly matching your entropy format
+ggplot(jsd_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
+  
+  geom_boxplot(alpha = 0.7, outlier.shape = 16) +
+  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
+  
+  scale_fill_manual(values = species_colors) +
+  
+  labs(
+    title = "JSD Metrics by Species",
+    subtitle = "Individual pairwise similarity within species",
+    x = "Species",
+    y = "JSD Value",
+    fill = "Species") +
+  
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
+    strip.text = element_text(face = "bold", size = 11),
+    legend.position = "none",  
+    panel.grid.major.x = element_blank())
+
+
+```
+
+```{r jensen-shannon 31, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+jsd_results_tab %>%
+  gt()
+
+```
+
+#### Statistical Tests:  
+
+We will use Kruskal-Wallis test if the distributions of JSD differ among species. It is a non-parametric (doesn't assume normal distribution), it handles unequal sample sizes (different number of comparisons per species).
+
+```{r jensen-shannon 4, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+kruskal_value <- kruskal.test(JSD ~ species_1, 
+                            data = jsd_results %>% filter(same_species == TRUE))
+
+kruskal_summary <- data.frame(
+  Metric = c("Value"),
+  Chi_squared = round(kruskal_value$statistic, 3),
+  df = kruskal_value$parameter,
+  p_value = kruskal_value$p.value) %>%
+  mutate(
+    Significance = case_when(
+      p_value < 0.001 ~ "***",
+      p_value < 0.01 ~ "**",
+      p_value < 0.05 ~ "*",
+      TRUE ~ "ns"))
+
+kruskal_summary  %>%
+  
+  gt() %>%
+  
+  tab_header(
+    title = md("**Kruskal-Wallis Test Results**"),
+    subtitle = "Comparing value across groups") %>%
+  
+  cols_label(
+    Metric = "Metric",
+    Chi_squared = "χ2",
+    df = "df",
+    p_value = "p-value",
+    Significance = "Sig.") %>%
+  
+  fmt_number(
+    columns = Chi_squared,
+    decimals = 3) %>%
+  
+  fmt_scientific(
+    columns = p_value,
+    decimals = 3) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(
+      columns = Significance,
+      rows = p_value < 0.05)) %>%
+  
+  tab_style(
+    style = cell_fill(color = "lightgreen"),
+    locations = cells_body(
+      rows = p_value < 0.05)) %>%
+  
+  tab_footnote(
+    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). Green highlighting indicates significant differences.")) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  
+  opt_table_font(font = "Times New Roman") %>%
+  
+  tab_options(
+    table.font.size = px(14),
+    heading.title.font.size = px(16),
+    data_row.padding = px(5),
+    table.width = pct(100)
+  )
+
+
+```
+
+In the aim to observ which species significantly differs from another in term of individual co;position of site used, we need to conduct pairwise test across species. We used the Dunn method [Dunn - 1964](https://www.tandfonline.com/doi/abs/10.1080/00401706.1964.10490181) which applies a Bonferroni correction to extract the false positive from JSD significance. The Bonferroni correction adjusts for this by dividing the significance level by the number of tests ([Bonferroni - ](https://wwwnc.cdc.gov/eid/article/21/2/ET-2102_article)).
+
+```{r jensen-shannon 5, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+
+# If significant, do post-hoc pairwise comparisons
+if(kruskal_value$p.value < 0.05) {
+  library(FSA)
+  dunn_jsd <- dunnTest(JSD ~ species_1, 
+                       data = jsd_results %>% filter(same_species == TRUE),
+                       method = "bonferroni")
+  print(dunn_jsd)
+}
+
+```
+
+
+```{r jensen-shannon 6, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+dunn_jsd_table <- dunn_jsd$res %>%
+  mutate(
+    Significance = case_when(
+      P.adj < 0.001 ~ "***",
+      P.adj < 0.01 ~ "**",
+      P.adj < 0.05 ~ "*",
+      TRUE ~ "ns"
+    )
+  ) %>%
+  select(Comparison, Z, P.unadj, P.adj, Significance)  # Adjust columns as needed
+
+dunn_jsd_table %>% 
+  
+  arrange(Comparison) %>%
+  
+  gt() %>%
+  
+  tab_header(
+    title = md("**Bonferroni Correction Post-Hoc Test (Dunn)**"),
+    subtitle = "Pairwise JSD comparisons across species (same_species = TRUE)") %>%
+  
+  cols_label(
+    Comparison = "Comparison",
+    Z = "Z",
+    P.unadj = "p unadj",
+    P.adj = "p adj",
+    Significance = "Sig.") %>%
+  
+  fmt_scientific(
+    columns = c(P.unadj, P.adj),
+    decimals = 3) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(
+      columns = Significance,
+      rows = P.adj < 0.05)) %>%
+  tab_style(
+    style = cell_fill(color = "lightgreen"),
+    locations = cells_body(
+      rows = P.adj < 0.05)) %>%
+  
+  tab_footnote(
+    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant. Green = significant.")) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  
+  opt_table_font(font = "Times New Roman") %>%
+  
+  tab_options(
+    table.font.size = px(14),
+    heading.title.font.size = px(16),
+    data_row.padding = px(5),
+    table.width = pct(100))
+
+```
+
+### Tidal dependant results
+
+
