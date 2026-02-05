@@ -19,7 +19,7 @@ project:
     # - "!qmd/chapter_1/ch1_7.qmd"  # Exclude this specific file
     # - "!qmd/chapter_1/ch1_8.qmd"  # Exclude this specific file
     # - "!qmd/chapter_1/ch1_9.qmd"  # Exclude this specific file
-    - "!qmd/chapter_1/ch1_10.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_10.qmd"  # Exclude this specific file
 
     
 execute:

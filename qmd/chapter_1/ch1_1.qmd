@@ -7,13 +7,13 @@ title: "Load & Format"
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
                    quiet = TRUE))
-## _/!\_  ##     
+## _/!\_  ##      
 
 ################ First, run the .R script to download last up to date Motus data-set
 update <- TRUE # Second, Chose whether to update new detections from last data.rds (update = TRUE)
 ################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\ 
 
-## _/!\_ ##
+## _/!\_ ## 
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}

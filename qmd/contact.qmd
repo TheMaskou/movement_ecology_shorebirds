@@ -19,7 +19,7 @@ format:
 
 ::::::::::::: column-page-inset
 ::::::: {style="text-align: center; margin: 3rem 0 2rem 0;"}
-<img src="/picture.jpg" alt="Maxime Marini" style="width: 335px; height: 385px; object-fit: cover; border-radius: 60%; box-shadow: 0 8px 20px rgba(0,0,0,0.6); margin-bottom: 1.5rem; display: block; margin-left: auto; margin-right: auto;"/>
+<img src="/picture.jpg" alt="Maxime Marini" style="width: 335px; height: 385px; object-fit: cover; border-radius: 60%; box-shadow: 0 8px 20px rgba(0,0,0,0.6); margin-bottom: 1.5rem; display: block; margin-left: auto; margin-right: auto;"/>  
 
 :::::: {style="background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(250,250,250,0.5)); color: #333; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
 ::: {style="margin-bottom: 0.5rem; color: #001f3f; font-size: 1.75rem; font-weight: 600;"}
@@ -74,7 +74,7 @@ Australia]{style="display: block; margin: 0.5rem 0; line-height: 1.6; color: whi
 ::: {style="position: relative; text-align: center; margin-top: 3rem; margin-bottom: 2rem; padding: 2rem; padding-bottom: 0.5rem; background: rgba(236, 240, 241, 0.9); border-radius: 8px; overflow: visible;"}
 [**Feel free to reach out for collaborations, questions about my research, or general inquiries.**]{style="color: #7f8c8d; margin: 0;"}
 
-[A Mountaineer child from the Mediterranean coast. My lands are The South.  <br> Alors, tranquille (let's take it easy). <br><br> *- Lou tems passo, passo lou ben -* <br> <img src="/material/olive.png" style="width: 6em; height: auto; vertical-align: baseline; margin-left: 0.3em;" aria-hidden="true"/>]{style="color: #7f8c8d; margin: 0;"}
+[A Mountaineer child from the Mediterranean coast. My lands are The South. <br> Alors, tranquille (let's take it easy). <br><br> *- Lou tems passo, passo lou ben -* <br> <img src="/material/olive.png" style="width: 6em; height: auto; vertical-align: baseline; margin-left: 0.3em;" aria-hidden="true"/>]{style="color: #7f8c8d; margin: 0;"}
 :::
 :::::::::::::
 

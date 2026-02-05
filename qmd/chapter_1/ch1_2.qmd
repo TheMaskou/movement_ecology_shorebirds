@@ -6,12 +6,12 @@ format: html
 ```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
  
 library(motus) 
-library(dplyr) 
+library(dplyr)  
 library(here)
 library(DBI)
 library(RSQLite)
 library(forcats) 
-library(lubridate)
+library(lubridate) 
 library(bioRad) 
 library(purrr) 
 library(ggplot2)

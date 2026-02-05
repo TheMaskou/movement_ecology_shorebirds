@@ -3,7 +3,7 @@ title: "Location & History"
 ---
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-Since 2021, our local automated Motus array is sitting both in the **Hunter** estuary and **Port Stephens** estuary, with respectively **eight** and **three** stations. 
+Since 2021, our local automated Motus array is sitting both in the **Hunter** estuary and **Port Stephens** estuary, with respectively **eight** and **three** stations.
 
 This page displays a dynamic map where you can explore for each station and its history.
 
@@ -25,3 +25,5 @@ Note that you can build any station yourself by simply following the [installati
 ![](/material/array.png){fig-align="center" width="100%"}
 
 ShinyApp will provide the navigation. On To-Do list and Has To be done...
+
+
