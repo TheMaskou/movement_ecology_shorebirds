@@ -159,3 +159,28 @@ body a:not(.navbar a):not(.nav-link):visited {
 #title-block-header .quarto-title-meta {
   display: none !important;
 }
+
+
+
+
+
+/* COLLAPSABLE TIP DESIGN /
+
+/* Grey background */
+/* .callout-tip .callout-head {
+  background-color: #6c757d !important;
+  color: white !important;
+}
+
+/* Replace lamp with chart icon */
+/* .callout-tip .callout-icon-container::before {
+  content: "📊" !important;
+  font-size: 1.2em !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+/* Ensure collapsed state stays grey */
+/* .callout-tip.callout-collapsed .callout-head {
+  background-color: #6c757d !important;
+}

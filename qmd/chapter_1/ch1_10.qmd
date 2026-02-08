@@ -68,7 +68,10 @@ recv <- readRDS(
 
 ### Definition
 
-**Shannon entropy (H)** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication); [MacArthur \* 1965](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer); [Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article)) is employed when a large collection has a number of sites known -Type B collection ([Pielou - 1966](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130))-, to quantify the diversity of an individual's site use. It measures the **dispersion** of an individual's site use pattern to answers: *How evenly does this bird distribute its time/detections across different sites?*
+**Shannon entropy (H)** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication); [MacArthur - 1965](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer); [Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article))\
+***\> Is the individual site loyal?***
+
+Metric employed when a large collection has a number of sites known -Type B collection ([Pielou - 1966](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130))-, to quantify the diversity of an individual's site use. It measures the dispersion of an individual's site use pattern.
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
@@ -78,19 +81,29 @@ $$ $$
 $$
 :::
 
-Low Entropy (e.g., H \< 1.0) - Individual is highly specialized\
-- Uses only a few sites, or uses one site predominantly\
-- High site fidelity to specific locations\
-- Low unpredictability: we can predict where the bird will be
+-   Low Entropy (e.g., H \< 1.0) - Individual is highly specialized\
+    - Uses only a few sites, or uses one site predominantly\
+    - High site fidelity to specific locations\
+    - Low unpredictability: we can predict where the bird will be
 
-High Entropy (e.g., H \> 2.0)\
-- Individual is generalized\
-- Uses many sites relatively equally\
-- Low site fidelity to any particular location\
-- High unpredictability: harder to predict where the bird will be
+-   High Entropy (e.g., H \> 2.0)\
+    Individual is generalized\
+    - Uses many sites relatively equally\
+    - Low site fidelity to any particular location\
+    - High unpredictability: harder to predict where the bird will be
+
+**Coefficient of Variation (CV)** (Pearson - 1984)\
+\> ***Are the individuals using the same sites?***
+
+The coefficient of variation (CV) measures relative variability in site fidelity metrics, calculated as standard deviation divided by the mean (often expressed as a percentage). 
+
+-   Low CV indicates uniform fidelity (e.g., most birds reuse similar site proportions)
+-   High CV signals heterogeneity (e.g., some wanderers vs. stayers)
 
 **Effective Number of Sites (exp(H))** [(MacArthur - 1965)](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer)\
-This transforms entropy into an interpretable number: the "effective number of equally-used sites"
+***\> How many sites the individual is loyal to?***
+
+This transforms entropy into an interpretable number: the "effective number of equally-used sites" 
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
@@ -98,13 +111,16 @@ $$
 $$
 :::
 
--   If H = 1.61, then exp(1.61) ≈ 5 effective sites\
--   Interpretation: The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution)
+If H = 1.61, then exp(1.61) ≈ 5 effective sites. The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution).
 
 **Pielou's Evenness (J)** [(Pielou - 1966)](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130)\
-Evenness ranges from 0 to 1:\
-- J close to 1: Individual uses all sites equally\
-- J close to 0: Individual uses sites very unequally (dominates few sites)
+***\> Is an individual equally loyal across the sites they are loyal to?***
+
+In practice, Shannon entropy *H* increases both with number of sites (Motus stations) and when site used (detections from station) become more even, so it mixes two effects. Pielou’s index rescales by dividing it by the maximum possible Shannon entropy for the same number of sites, which is *ln⁡(S)* when all sites are equally represented. The resulting metric *J=H/ln⁡(S)* ranges from 0 to 1 and removes the dependence on the number of sites, giving a measure of how evenly the use of sites is distributed among sites. 
+
+-   J close to 1: Individual uses all sites equally
+
+-   J close to 0: Individual uses sites very unequally (dominates few sites)
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
@@ -112,7 +128,11 @@ $$
 $$
 :::
 
-<img src="../../material/exempleshannon.png" alt="Shannon entropy example" style="max-width:100%; height:auto;"/>
+### Examples
+
+<img src="../../material/exampleshannon.png" alt="Shannon entropy example" style="max-width:100%; height:auto;"/>
+
+### General results
 
 First, we define a all-in-one function to consistently computing shannon entropy.
 
@@ -127,8 +147,6 @@ calculate_shannon <- function(proportions) {
 }
 
 ```
-
-### General results
 
 Now we can proceed. Starting with counting the number of detection an individual has recorded in each stations, then extracting the proportions to finally calculate the entropy (H).
 
@@ -361,28 +379,26 @@ gt_exp_H <- entropy_results %>%
 
 ```
 
-::: panel-tabset
-#### S table
-
-```{r shannon 6, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+::: {.callout-tip collapse="true" title="S table"}
+```{r shannon 61, echo = FALSE, message = FALSE, warning = FALSE}
 gt_S
 ```
+:::
 
-#### H table
-
-```{r shannon 7, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+::: {.callout-tip collapse="true" title="H table"}
+```{r shannon 62, echo = FALSE, message = FALSE, warning = FALSE}
 gt_H
 ```
+:::
 
-#### J table
-
-```{r shannon 8, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+::: {.callout-tip collapse="true" title="J table"}
+```{r shannon 63, echo = FALSE, message = FALSE, warning = FALSE}
 gt_J
 ```
+:::
 
-#### exp(H) table
-
-```{r shannon 9, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+::: {.callout-tip collapse="true" title="exp(H) table"}
+```{r shannon 64, echo = FALSE, message = FALSE, warning = FALSE}
 gt_exp_H
 ```
 :::
@@ -613,7 +629,7 @@ kruskal_within_species %>%
 
 ```
 
-### Tidal dependant results
+### Tidal dependance
 
 We now want to clarify whether birds associate **site fidelity** depending the tide, therefore likely depending their behavior (i.e., foraging **vs** roosting).
 
@@ -986,9 +1002,12 @@ species_entropy_summary_tide %>%
 
 ### Definition
 
+**JSD** ([Lin - 1991](https://ieeexplore.ieee.org/document/61115); [Takahashi et al. 2012](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0049949#s4))\
+*Do the individuals use the same sites? Are they loyal to the same sites?*
+
 Now we know how loyal individuals are to their sites and whether there are differences across species in term of site fidelity (H), we also put against this metric the evenness which describes whether a bird use multiple site but effectively use a few (J).
 
-We know want to dive deeper and clarify whether birds use the same sites within the same species, regardless the number of sites. Then, we called another metric named Jensen-Shannon Divergence (JSD), which quantifies how different two probability distributions are, answering whether two individuals are using the same composition of sites.\
+We now want to dive deeper and clarify whether birds are using the same sites within the same species, regardless the number of sites. We called another metric named Jensen-Shannon Divergence (JSD), which quantifies how different two probability distributions of site usage are (e.g., site proportions for two birds), answering whether two individuals are using the same composition of sites.\
 JSD is defined with the simplified formula here below:
 
 ::: {style="overflow-x: auto; width: 100%;"}
@@ -1307,9 +1326,9 @@ dunn_jsd_table %>%
 
 The table above shows which species are truly using **different** sites than another. Jensen-Shannon Distance measures dissimilarity in site-use composition between species pairs. Higher JSD goes with more different site used. The Dunn test then confirms if those differences are statistically real after Bonferroni correction.
 
-### Tidal dependant results
+### Tidal dependance
 
-We now want to clarify whether birds associate **site composition** depending the tide, therefore likely depending their behavior (i.e., foraging **vs** roosting).
+We now want to clarify whether birds associate **site composition** depending the tide, therefore likely depending their behavior (i.e., foraging *vs* roosting).
 
 Applying the same method as before, we display below the results depending the tide.
 
@@ -1382,10 +1401,17 @@ jsd_results_tab_tide <- jsd_results_tide %>%
 
 n_indiv <- data_all %>%
   group_by(speciesEN, tideHighLow) %>%
-  summarise(n_indiv = n_distinct(Band.ID), .groups = "drop")
+  summarise(n_indiv = n_distinct(Band.ID), 
+            .groups = "drop")
+n_detect <- data_all %>%
+  group_by(speciesEN, tideHighLow) %>%
+  summarise(n_detect = n(), 
+            .groups = "drop")
+
 jsd_results_tab_tide <- jsd_results_tab_tide %>%
   left_join(n_indiv, by = c("speciesEN", "tideHighLow")) %>%
-  select(speciesEN, tideHighLow, n_indiv, n_comparisons, mean_JSD, sd_JSD, 
+  left_join(n_detect , by = c("speciesEN", "tideHighLow")) %>%
+  select(speciesEN, tideHighLow, n_indiv, n_detect, n_comparisons, mean_JSD, sd_JSD, 
          mean_Similarity, sd_Similarity) %>%
   arrange(tideHighLow, mean_JSD)
 ```
@@ -1399,13 +1425,14 @@ jsd_results_tab_tide %>%
     subtitle = md("Lower JSD = greater similarity in site use patterns between individuals within species") ) %>%
 
   tab_footnote(
-    footnote = md("**Legend.** **n_indiv**: tagged individuals per species×tide combination; **n_comparisons**: pairwise comparisons; **mean_JSD ± sd_JSD**: average dissimilarity in site used; **mean_Similarity ± sd_Similarity**: 1/JSD (average site used similarity). **Low tide** rows blue, **High tide** rows yellow.")) %>%
+    footnote = md("**Legend.** **n_indiv**: tagged individuals per species×tide combination; **n_detect**: total number of detections per species×tide combination; **n_comparisons**: pairwise comparisons; **mean_JSD ± sd_JSD**: average dissimilarity in site used; **mean_Similarity ± sd_Similarity**: 1/JSD (average site used similarity). **Low tide** rows blue, **High tide** rows yellow.")) %>%
   opt_table_font(font = "Times New Roman") %>%
   
   cols_label(
     speciesEN = "Species",
     tideHighLow = "Tide", 
     n_indiv = "N indiv.",
+    n_detect = "N detect.",
     n_comparisons = "N comp.",
     mean_JSD = "Mean",
     sd_JSD = "SD",
@@ -1414,7 +1441,7 @@ jsd_results_tab_tide %>%
   
   tab_spanner(
     label = "Sample Size",
-    columns = c(n_indiv, n_comparisons) ) %>%
+    columns = c(n_indiv, n_detect, n_comparisons) ) %>%
   tab_spanner(
     label = "JSD (Dissimilarity)",
     columns = c(mean_JSD, sd_JSD) ) %>%
@@ -1466,8 +1493,9 @@ jsd_results_tab_tide %>%
     columns = c(mean_JSD, sd_JSD, mean_Similarity, sd_Similarity),
     decimals = 3) %>%
   fmt_number(
-    columns = c(n_indiv, n_comparisons),
-    decimals = 0) %>%
+    columns = c(n_indiv, n_detect, n_comparisons),
+    decimals = 0,
+    use_seps = TRUE ) %>%
   
   tab_options(
     table.font.size = px(13),

@@ -46,6 +46,7 @@ library(hms)
 library(dplyr)
 library(ggplot2)
 library(scales)
+library(gt)
 ```
 
 And **load** your `activity` table too!
@@ -670,15 +671,15 @@ low_resident <- make_summary_table("Low", "resident")
 
 ### RESIDENT BIRDS
 
-::: panel-tabset
+::::: panel-tabset
 ##### High Tide
 
 ```{r 4 Used rate 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[4]]
 ```
 
+::: {.callout-tip collapse="true" title="High Tide Resident birds"}
 ```{r 4 Used rate table, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-library(gt)
 high_resident  %>%
   gt() %>%
   tab_header(title = "Statistics - High Tide Resident Species") %>%
@@ -697,6 +698,7 @@ high_resident  %>%
     locations = cells_body(
       rows = which(!duplicated(high_resident$Species))[-1]))
 ```
+:::
 
 ##### Low Tide
 
@@ -705,8 +707,8 @@ high_resident  %>%
 plots_used_rate[[3]]
 ```
 
+::: {.callout-tip collapse="true" title="Low Tide Resident birds"}
 ```{r 4 Used rate table 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-library(gt)
 low_resident  %>%
   gt() %>%
   tab_header(title = "Statistics - Low Tide Resident Species") %>%
@@ -726,18 +728,19 @@ low_resident  %>%
       rows = which(!duplicated(high_resident$Species))[-1]))
 ```
 :::
+:::::
 
 ### MIGRATORY BIRDS
 
-::: panel-tabset
+::::: panel-tabset
 ##### High Tide
 
 ```{r 4 Used rate 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[2]]
 ```
 
+::: {.callout-tip collapse="true" title="High Tide Migratory birds"}
 ```{r 4 Used rate table 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-library(gt)
 high_migratory  %>%
   gt() %>%
   tab_header(title = "Statistics - High Tide Migratory Species") %>%
@@ -756,6 +759,7 @@ high_migratory  %>%
     locations = cells_body(
       rows = which(!duplicated(high_resident$Species))[-1]))
 ```
+:::
 
 ##### Low Tide
 
@@ -764,8 +768,8 @@ high_migratory  %>%
 plots_used_rate[[1]]
 ```
 
+::: {.callout-tip collapse="true" title="Low Tide Migratory birds"}
 ```{r 4 Used rate table 5, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-library(gt)
 low_migratory  %>%
   gt() %>%
   tab_header(title = "Statistics - Low Tide Migratory Species") %>%
@@ -785,6 +789,7 @@ low_migratory  %>%
       rows = which(!duplicated(high_resident$Species))[-1]))
 ```
 :::
+:::::
 
 ## Hourly usage
 
