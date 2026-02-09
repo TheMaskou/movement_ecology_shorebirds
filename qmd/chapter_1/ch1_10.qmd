@@ -82,15 +82,14 @@ $$
 :::
 
 -   Low Entropy (e.g., H \< 1.0) - Individual is highly specialized\
-    - Uses only a few sites, or uses one site predominantly\
-    - High site fidelity to specific locations\
-    - Low unpredictability: we can predict where the bird will be
-
+    -   Uses only a few sites, or uses one site predominantly\
+    -   High site fidelity to specific locations\
+    -   Low unpredictability: we can predict where the bird will be
 -   High Entropy (e.g., H \> 2.0)\
     Individual is generalized\
-    - Uses many sites relatively equally\
-    - Low site fidelity to any particular location\
-    - High unpredictability: harder to predict where the bird will be
+    -   Uses many sites relatively equally\
+    -   Low site fidelity to any particular location\
+    -   High unpredictability: harder to predict where the bird will be
 
 **Coefficient of Variation (CV)** (Pearson - 1984)\
 \> ***Are the individuals using the same sites?***
@@ -1003,11 +1002,13 @@ species_entropy_summary_tide %>%
 ### Definition
 
 **JSD** ([Lin - 1991](https://ieeexplore.ieee.org/document/61115); [Takahashi et al. 2012](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0049949#s4))\
-*Do the individuals use the same sites? Are they loyal to the same sites?*
+**\> *Do the individuals use the same sites? Are they loyal to the same sites?***
 
 Now we know how loyal individuals are to their sites and whether there are differences across species in term of site fidelity (H), we also put against this metric the evenness which describes whether a bird use multiple site but effectively use a few (J).
 
-We now want to dive deeper and clarify whether birds are using the same sites within the same species, regardless the number of sites. We called another metric named Jensen-Shannon Divergence (JSD), which quantifies how different two probability distributions of site usage are (e.g., site proportions for two birds), answering whether two individuals are using the same composition of sites.\
+We now want to clarify whether birds are using the same sites within the same species, regardless the number of sites used. We called another metric named **Jensen-Shannon Divergence** (JSD), which quantifies how different two probability distributions of site usage are (e.g., site proportions for two birds), answering whether two individuals are using the same composition of sites.
+
+\
 JSD is defined with the simplified formula here below:
 
 ::: {style="overflow-x: auto; width: 100%;"}
@@ -1020,15 +1021,15 @@ $$
 $$
 :::
 
-JSD ≈ 0 (Similarity ≈ 1.0)\
-- Individuals use sites in nearly identical proportions\
-- High overlap in site use patterns\
-- Suggests shared habitat preferences or social coordination
+-   JSD ≈ 0 (Similarity ≈ 1.0)\
+    - Individuals use sites in nearly identical proportions\
+    - High overlap in site use patterns\
+    - Suggests shared habitat preferences or social coordination
 
-JSD ≈ 1.0 (Similarity ≈ 0)\
-- Individuals use completely different sets of sites or proportions\
-- Low overlap in site use patterns\
-- Suggests individual specialization or territoriality
+-   JSD ≈ 1.0 (Similarity ≈ 0)\
+    - Individuals use completely different sets of sites or proportions\
+    - Low overlap in site use patterns\
+    - Suggests individual specialization or territoriality
 
 ### General results
 
@@ -1054,7 +1055,9 @@ calculate_jsd <- function(p, q) {
 }
 ```
 
-Second, we need to prepare the data frame which will be used for calculation. It must include for each individual its proportion of site used and its total. Then, we can proceed and extract JSD for each pair of individuals. Indeed, JSD test the similarity between two individual, so it conducts a pairwise test.
+Second, we need to prepare the data frame which will be used for calculation. It must include for each individual its proportion of site used and its total.
+
+Then, we can proceed and extract JSD for each pair of individuals. Indeed, JSD test the similarity between two individual, so it conducts a pairwise test.
 
 ```{r jensen-shannon 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
@@ -1248,7 +1251,9 @@ kruskal_summary  %>%
 
 ```
 
-In the aim to observe which species significantly differs from another in term of individual co;position of site used, we need to conduct pairwise test across species. We used the **Dunn method** [Dunn - 1964](https://www.tandfonline.com/doi/abs/10.1080/00401706.1964.10490181) which applies a **Bonferroni correction** to extract the false positive from JSD significance. The Bonferroni correction adjusts for this by dividing the significance level by the number of tests ([Bonferroni -](https://wwwnc.cdc.gov/eid/article/21/2/ET-2102_article)).
+In the aim to observe which species significantly differs from another in term of individual co;position of site used, we need to conduct pairwise test across species.
+
+We used the **Dunn method** [Dunn - 1964](https://www.tandfonline.com/doi/abs/10.1080/00401706.1964.10490181) which applies a **Bonferroni correction** to extract the false positive from JSD significance. The Bonferroni correction adjusts for this by dividing the significance level by the number of tests ([Bonferroni -](https://wwwnc.cdc.gov/eid/article/21/2/ET-2102_article)).
 
 ```{r jensen-shannon 5, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
@@ -1324,7 +1329,9 @@ dunn_jsd_table %>%
 
 ```
 
-The table above shows which species are truly using **different** sites than another. Jensen-Shannon Distance measures dissimilarity in site-use composition between species pairs. Higher JSD goes with more different site used. The Dunn test then confirms if those differences are statistically real after Bonferroni correction.
+The table above shows which species are truly using **different** sites than another. Jensen-Shannon Distance measures dissimilarity in site-use composition between species pairs.
+
+Higher JSD goes with more different site used. The Dunn test then confirms if those differences are statistically real after Bonferroni correction.
 
 ### Tidal dependance
 
