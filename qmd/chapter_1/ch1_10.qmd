@@ -892,16 +892,30 @@ We only keep species which holds five or more individuals tagged and detected be
 
 Before to run ANOVA analysis we must check the **data verify the ANOVA Assumptions.**
 
+```{r shannon tide 521, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+# Filter species with enough individuals
+entropy_aov_data <- entropy_for_plot_tide %>%
+  group_by(speciesEN) %>%
+  filter(n_distinct(Band.ID) >= 4) %>%
+  mutate(
+    Band.ID     = droplevels(as.factor(Band.ID)),
+    tideHighLow = droplevels(as.factor(tideHighLow))) %>%
+  ungroup()
+
+species_list_entropy <- unique(entropy_aov_data$speciesEN)
+```
 
 ```{r shannon tide 52, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
 
 results      <- data.frame()
 assumptions  <- data.frame()
+species_list <- unique(species_list_entropy$speciesEN)
+
 
 for (sp in species_list) {
   for (m in metrics_list) {
     
-    df <- subset(aov_data_tide, speciesEN == sp & metric == m)
+    df <- subset(entropy_aov_data, speciesEN == sp & metric == m)
     df <- na.omit(df)
     df$Band.ID     <- droplevels(df$Band.ID)       # drop unused factor levels
     df$tideHighLow <- droplevels(df$tideHighLow)
@@ -1114,7 +1128,7 @@ Now the ANOVA assumptions verified, we can proceed the ANOVA analysis.
   
   
 
-```{r shannon tide 52, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+```{r shannon tide 522, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
 
 # Filter sufficient sample size
 aov_data_tide <- entropy_for_plot_tide %>%
