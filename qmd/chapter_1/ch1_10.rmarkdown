@@ -46,7 +46,6 @@ library(philentropy)
 library(gridExtra)
 library(gt)
 library(ggpubr)
-library(car)
 ```
 
 ```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
@@ -82,18 +81,14 @@ $$ $$
 $$
 :::
 
--   Low Entropy (e.g., H \< 1.0)
-    -   Individual is highly specialized
-
-    -   Uses only a few sites, or uses one site predominantly
-
-    -   High site fidelity to specific locations
-
+-   Low Entropy (e.g., H \< 1.0) - Individual is highly specialized\
+    -   Uses only a few sites, or uses one site predominantly\
+    -   High site fidelity to specific locations\
     -   Low unpredictability: we can predict where the bird will be
--   High Entropy (e.g., H \> 2.0)
-    -   Individual is generalized
-    -   Uses many sites relatively equally
-    -   Low site fidelity to any particular location
+-   High Entropy (e.g., H \> 2.0)\
+    Individual is generalized\
+    -   Uses many sites relatively equally\
+    -   Low site fidelity to any particular location\
     -   High unpredictability: harder to predict where the bird will be
 
 **Coefficient of Variation (CV)** (Pearson - 1984)\
@@ -497,6 +492,10 @@ Note: To proceed, we removed every species group having a size sample inferior o
 :::
 
 ```{r shannon 11, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE}
+
+library(gt)
+library(dplyr)
+
 # Filter species with at least 3 individuals (Kruskal-Wallis needs at least 3 groups)
 species_with_multiple_birds <- entropy_results %>%
   group_by(speciesEN) %>%
@@ -659,8 +658,10 @@ entropy_results_tide <- data_all %>%
     .groups = "drop") %>%
   
   # Add effective number equally-used sites
-  mutate(exp_H = exp(H)) %>%
+  mutate(
+    exp_H = exp(H)) %>%
 
+  
   # Arrange by Band.ID
   arrange(speciesEN, Band.ID, tideHighLow)
 
@@ -777,7 +778,7 @@ ggplot(entropy_for_plot_tide, aes(x = speciesEN, y = value, fill = speciesEN, al
     panel.grid.major.x = element_blank())
 ```
 
-See below **T-test** results which compare entropy values between low and high tides for each species.
+See below t-test results which compare entropy values between low and high tides for each species.
 
 ```{r shannon tide 5, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
 tide_tests %>%
@@ -871,338 +872,6 @@ tide_tests %>%
     data_row.padding = px(3),
     table.width = pct(100))
 ```
-
-T-test looks noisy and is not powerful since it remains a non-parametric test. Trying to improve this matter we'll run a Two-way ANOVA Analysis for entropy metrics.
-
-**ANOVA (Analysis of Variance)** is a statistical test that compares means across groups to see if at least one group is significantly different from the others.\
-A **two-way ANOVA** examines how two categorical independent variables (tideHihghLow & Band.ID) affect a continuous dependent variable (entropy metric values).
-
-So, we are testing three cases:
-
--   Do individual birds (Band.ID) differ in their entropy metric values? (m1, addditive model)
-
--   Do tide conditions (tideHighLow) affect entropy metric values? (m1, additive model)
-
--   Does the effect of tide vary by individual? (m2, interaction model)
-
-::: blockquote-yellow
-**Important**  
-We only keep species which holds five or more individuals tagged and detected before to run ANOVA analysis on the data.
-:::
-
-Before to run ANOVA analysis we must check the **data verify the ANOVA Assumptions.**
-
-
-```{r shannon tide 52, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
-
-results      <- data.frame()
-assumptions  <- data.frame()
-
-for (sp in species_list) {
-  for (m in metrics_list) {
-    
-    df <- subset(aov_data_tide, speciesEN == sp & metric == m)
-    df <- na.omit(df)
-    df$Band.ID     <- droplevels(df$Band.ID)       # drop unused factor levels
-    df$tideHighLow <- droplevels(df$tideHighLow)
-    
-    # Skip if not enough data
-    if (nrow(df) < 6 || nlevels(df$Band.ID) < 2) next
-    
-    model <- aov(value ~ Band.ID + tideHighLow, data = df)
-    s     <- summary(model)[[1]]
-    
-    # --- ANOVA results (tideHighLow row only) ---
-    for (term in c("Band.ID", "tideHighLow")) {
-      if (term %in% rownames(s)) {
-        results <- rbind(results, data.frame(
-          Species = sp,
-          Metric  = as.character(m),
-          Term    = ifelse(term == "tideHighLow", "Tide effect", term),
-          Df      = s[term, "Df"],
-          SS      = round(s[term, "Sum Sq"],  3),
-          MS      = round(s[term, "Mean Sq"], 3),
-          F_value = round(s[term, "F value"], 3),
-          p_value = round(s[term, "Pr(>F)"],  4),
-          stringsAsFactors = FALSE))
-      }
-    }
-    
-    # --- ASSUMPTION 1: Independence ---
-    # Checked by design: each Band.ID is a unique individual (not repeated
-    # within a tide × metric cell), so observations are independent by design.
-    indep_note <- "By design"
-    
-    # --- ASSUMPTION 2: Normality of residuals (Shapiro-Wilk) ---
-    res <- residuals(model)
-    sw  <- shapiro.test(res)
-    
-    # --- ASSUMPTION 3: Homogeneity of variance (Levene's test) ---
-    lev <- tryCatch(
-      leveneTest(value ~ tideHighLow, data = df, center = median),
-      error = function(e) NULL)
-    
-    assumptions <- rbind(assumptions, data.frame(
-      Species          = sp,
-      Metric           = as.character(m),
-      N                = nrow(df),
-      Independence     = indep_note,
-      SW_W             = round(sw$statistic, 4),
-      SW_p             = round(sw$p.value,   4),
-      Normality        = ifelse(sw$p.value > 0.05, "✓ Met", "✗ Violated"),
-      Levene_F         = ifelse(!is.null(lev), round(lev$`F value`[1], 4), NA),
-      Levene_p         = ifelse(!is.null(lev), round(lev$`Pr(>F)`[1],  4), NA),
-      Homogeneity      = ifelse(!is.null(lev),
-                           ifelse(lev$`Pr(>F)`[1] > 0.05, "✓ Met", "✗ Violated"),
-                           "Insufficient levels"),
-      stringsAsFactors = FALSE))
-  }
-}
-```
-
-```{r shannon tide 521, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-
-results <- results %>%
-  mutate(
-    sig = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ ""))
-
-
-results %>%
-  gt(groupname_col = "Species", rowname_col = "Term") %>%
-  
-  tab_header(
-    title    = md("**Two-Way ANOVA Results**"),
-    subtitle = md("*value ~ Band.ID + tideHighLow — by Species and Metric*")) %>%
-  
-  cols_label(
-    Metric  = "Metric",
-    Df      = "df",
-    SS      = "Sum Sq",
-    MS      = "Mean Sq",
-    F_value = "F value",
-    p_value = "p value",
-    sig     = "") %>%
-  
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = vars(p_value, sig),
-      rows    = sig %in% c("*", "**", "***", ".") )) %>%
-  
-  opt_row_striping() %>%
-  
-  tab_source_note(
-    source_note = "Significance codes: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1") %>%
-  
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13 )
-
-assumptions %>%
-  gt(groupname_col = "Species") %>%
-  
-  tab_header(
-    title    = md("**ANOVA Assumption Tests**"),
-    subtitle = md("*Normality (Shapiro-Wilk) and Homogeneity of Variance (Levene's test)*") ) %>%
-  
-  cols_label(
-    Metric       = "Metric",
-    N            = "n",
-    Independence = "Independence",
-    SW_W         = "W",
-    SW_p         = "p value",
-    Normality    = "Normality",
-    Levene_F     = "F",
-    Levene_p     = "p value",
-    Homogeneity  = "Homogeneity") %>%
-  
-  tab_spanner(
-    label   = "Shapiro-Wilk",
-    columns = c(SW_W, SW_p, Normality)) %>%
-  
-  tab_spanner(
-    label   = "Levene's Test",
-    columns = c(Levene_F, Levene_p, Homogeneity)) %>%
-  
-  # Green = met
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = c(Normality, Homogeneity),
-      rows    = Normality == "✓ Met")) %>%
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✓ Met")) %>%
-  
-  # Red = violated
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Normality,
-      rows    = Normality == "✗ Violated")) %>%
-  
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✗ Violated")) %>%
-  
-  # Red p-value when Shapiro violated
-  tab_style(
-    style     = cell_text(color = "#c0392b"),
-    locations = cells_body(
-      columns = SW_p,
-      rows    = SW_p < 0.05)) %>%
-  
-  opt_row_striping() %>%
-  
-  tab_source_note(
-    source_note = md(
-      "**Independence**: verified by design — each Band.ID is a unique individual measured once per tide condition per metric.  
-       **Shapiro-Wilk**: H₀ = residuals are normally distributed; p > 0.05 → assumption met.  
-       **Levene's test**: H₀ = variances are equal across tide groups; p > 0.05 → assumption met.")) %>%
-  
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13)
-
-
-```
-
-```{r shannon tide 51, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
-
-# Filter sufficient sample size
-aov_data_tide <- entropy_for_plot_tide %>%
-  group_by(speciesEN) %>%
-  filter(n_distinct(Band.ID) >= 5) %>%
-  mutate(Band.ID = as.factor(Band.ID))
-
-# Test metric per metric
-species_list <- unique(aov_data_tide$speciesEN)
-metrics_list <- unique(aov_data_tide$metric)
-
-for (sp in species_list) {
-  cat("\n==========================================\n")
-  cat("SPECIES:", sp, "\n")
-  cat("==========================================\n")
-
-  for (m in metrics_list) {
-    cat("\n--- Metric:", as.character(m), "---\n")
-
-    df <- subset(aov_data_tide, speciesEN == sp & metric == m)
-    df <- na.omit(df)
-
-    model <- aov(value ~ Band.ID + tideHighLow, data = df)
-    print(summary(model))
-  }
-}
-```
-  
-  
-Now the ANOVA assumptions verified, we can proceed the ANOVA analysis.  
-  
-  
-
-```{r shannon tide 52, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-
-# Filter sufficient sample size
-aov_data_tide <- entropy_for_plot_tide %>%
-  group_by(speciesEN) %>%
-  filter(n_distinct(Band.ID) >= 5) %>%
-  mutate(Band.ID = as.factor(Band.ID))
-
-# Test the ANOVA
-results <- data.frame()
-
-for (sp in species_list) {
-  for (m in metrics_list) {
-    
-    df <- subset(aov_data_tide, speciesEN == sp & metric == m)
-    df <- na.omit(df)
-    
-    model <- aov(value ~ Band.ID + tideHighLow, data = df)
-    s <- summary(model)[[1]]
-    
-    # Extract rows for Band.ID and tideHighLow
-    for (term in c("Band.ID", "tideHighLow")) {
-      if (term %in% rownames(s)) {
-        results <- rbind(results, data.frame(
-          Species   = sp,
-          Metric    = as.character(m),
-          Term      = term,
-          Df        = s[term, "Df"],
-          SS        = round(s[term, "Sum Sq"], 3),
-          MS        = round(s[term, "Mean Sq"], 3),
-          F_value   = round(s[term, "F value"], 3),
-          p_value   = round(s[term, "Pr(>F)"], 4),
-          stringsAsFactors = FALSE))
-      }
-    }
-  }
-}
-
-# Add significance stars
-results <- results %>%
-  mutate(
-    sig = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ "") )
-
-# Build gt table
-results %>%
-  mutate(Term = "Tide effect") %>%
-  gt(groupname_col = "Species", rowname_col = "Term") %>%
-  
-  tab_header(
-    title    = md("**Two-Way ANOVA Results**"),
-    subtitle = md("*value ~ Band.ID + tideHighLow — by Species and Metric*")) %>%
-  
-  cols_label(
-    Metric  = "Metric",
-    Term    = "Term",
-    Df      = "df",
-    SS      = "Sum Sq",
-    MS      = "Mean Sq",
-    F_value = "F value",
-    p_value = "p value",
-    sig     = "") %>%
-  
-  # Highlight significant p-values
-  tab_style(
-    style = cell_text(color = "darkgreen", weight = "bold"),
-    locations = cells_body(
-      columns = vars(p_value, sig),
-      rows    = sig %in% c("*", "**", "***", "."))) %>%
-  
-  # Stripe rows for readability
-  opt_row_striping() %>%
-  
-  # Source note
-  tab_source_note(
-    source_note = "Significance codes: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1" ) %>%
-  
-  tab_options(
-    row_group.font.weight    = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align            = "left",
-    table.font.size          = 13 )
-```
-
-
 
 Now, we displayed below for each species their associated entropy metrics, side by side with high and low tides so we can easily compare the values and report to the boxplot above.
 
@@ -1353,13 +1022,14 @@ $$
 :::
 
 -   JSD ≈ 0 (Similarity ≈ 1.0)\
-    -   Individuals use sites in nearly identical proportions\
-    -   High overlap in site use patterns\
-    -   Suggests shared habitat preferences or social coordination
+    - Individuals use sites in nearly identical proportions\
+    - High overlap in site use patterns\
+    - Suggests shared habitat preferences or social coordination
+
 -   JSD ≈ 1.0 (Similarity ≈ 0)\
-    -   Individuals use completely different sets of sites or proportions\
-    -   Low overlap in site use patterns\
-    -   Suggests individual specialization or territoriality
+    - Individuals use completely different sets of sites or proportions\
+    - Low overlap in site use patterns\
+    - Suggests individual specialization or territoriality
 
 ### General results
 
@@ -1840,243 +1510,48 @@ jsd_results_tab_tide %>%
     data_row.padding = px(3),
     table.width = pct(100),
     row_group.font.weight = "bold")
+
+
 ```
 
-We now want to test whether JSD values are different across individual of a same species at High and Low tides. To do so, we will conduct a two-paired ANOVA analysis, therefore we must verify data normality and homogeneity first.
-  
-    
-::: blockquote-yellow
-**Important**  
-We only keep species which holds five or more individuals tagged and detected before to run ANOVA analysis on the data. Plus, we only keep individuals with more than
-:::
+Let's now visualise the results with a boxplot.
 
-```{r jensen-shannon tide 41, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-# Filter species with enough individuals
-jsd_aov_data <- jsd_for_plot_tide %>%
+```{r jensen-shannon tide 4, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+# Prepare long-format data for JSD boxplot (matching entropy structure)
+jsd_for_plot_tide <- jsd_results_tide %>%
+  filter(same_species == TRUE) %>%
+  select(species_1, tideHighLow, Band.ID_1, Band.ID_2, JSD) %>%
+  rename(speciesEN = species_1, Band.ID = Band.ID_1) %>%  
+  mutate(metric = "JSD") %>%
+  select(speciesEN, tideHighLow, Band.ID, JSD, metric) %>%
+  rename(value = JSD)
+
+# Compute tide effect tests (Kruskal-Wallis since non-normal)
+tide_tests_jsd <- jsd_for_plot_tide %>%
   group_by(speciesEN) %>%
-  filter(n_distinct(Band.ID) >= 4) %>%
-  mutate(
-    Band.ID     = droplevels(as.factor(Band.ID)),
-    tideHighLow = droplevels(as.factor(tideHighLow))) %>%
-  ungroup()
-
-species_list_jsd <- unique(jsd_aov_data$speciesEN)
-```
-
-```{r jensen-shannon tide 42, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
-results_jsd     <- data.frame()
-assumptions_jsd <- data.frame()
-
-for (sp in species_list_jsd) {
-
-  df <- subset(jsd_aov_data, speciesEN == sp)
-  df <- na.omit(df)
-  df$Band.ID     <- droplevels(df$Band.ID)
-  df$tideHighLow <- droplevels(df$tideHighLow)
   
-  model <- aov(value ~ Band.ID + tideHighLow, data = df)
-  s     <- summary(model)[[1]]
-
-  # --- ANOVA results ---
-  for (term in c("Band.ID", "tideHighLow")) {
-    if (term %in% rownames(s)) {
-      results_jsd <- rbind(results_jsd, data.frame(
-        Species = sp,
-        Metric  = "JSD",
-        Term    = ifelse(term == "tideHighLow", "Tide effect", term),
-        Df      = s[term, "Df"],
-        SS      = round(s[term, "Sum Sq"],  4),
-        MS      = round(s[term, "Mean Sq"], 4),
-        F_value = round(s[term, "F value"], 3),
-        p_value = round(s[term, "Pr(>F)"],  4),
-        stringsAsFactors = FALSE
-      ))
-    }
-  }
-
-  # --- Normality (Shapiro-Wilk on residuals) ---
-  sw <- shapiro.test(residuals(model))
-
-  # --- Homogeneity (Levene's test) ---
-  lev <- tryCatch(
-    leveneTest(value ~ tideHighLow, data = df, center = median),
-    error = function(e) NULL
-  )
-
-  assumptions_jsd <- rbind(assumptions_jsd, data.frame(
-    Species      = sp,
-    Metric       = "JSD",
-    N            = nrow(df),
-    Independence = "By design",
-    SW_W         = round(sw$statistic, 4),
-    SW_p         = round(sw$p.value,   4),
-    Normality    = ifelse(sw$p.value > 0.05, "✓ Met", "✗ Violated"),
-    Levene_F     = ifelse(!is.null(lev), round(lev$`F value`[1], 4), NA),
-    Levene_p     = ifelse(!is.null(lev), round(lev$`Pr(>F)`[1],  4), NA),
-    Homogeneity  = ifelse(!is.null(lev),
-                     ifelse(lev$`Pr(>F)`[1] > 0.05, "✓ Met", "✗ Violated"),
-                     "Insufficient levels"),
-    stringsAsFactors = FALSE
-  ))
-}
-```
-
-```{r jensen-shannon tide 43, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-results_jsd <- results_jsd %>%
+  summarise(
+    n_high = sum(tideHighLow == "High"),
+    n_low = sum(tideHighLow == "Low"),
+    
+    # Wilcoxon rank-sum test (non-parametric t-test equivalent)
+    p_value = if(n_high >= 3 & n_low >= 3) {
+      wilcox.test(value ~ tideHighLow)$p.value  # NOT kruskal.test
+      } else {NA},
+    
+    test_used = if(n_high >= 3 & n_low >= 3) "Wilcoxon rank-sum" else "insufficient data",
+    .groups = "drop") %>%
   mutate(
-    sig = case_when(
+    significance = case_when(
+      is.na(p_value) ~ "",
       p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ ""))
-
-assumptions_jsd %>%
-  gt(groupname_col = "Species") %>%
-
-  tab_header(
-    title    = md("**ANOVA Assumption Tests — JSD**"),
-    subtitle = md("*Normality (Shapiro-Wilk) and Homogeneity of Variance (Levene's test)*")
-  ) %>%
-
-  cols_label(
-    Metric       = "Metric",
-    N            = "n",
-    Independence = "Independence",
-    SW_W         = "W",
-    SW_p         = "p value",
-    Normality    = "Normality",
-    Levene_F     = "F",
-    Levene_p     = "p value",
-    Homogeneity  = "Homogeneity"
-  ) %>%
-
-  tab_spanner(
-    label   = "Shapiro-Wilk",
-    columns = c(SW_W, SW_p, Normality)
-  ) %>%
-
-  tab_spanner(
-    label   = "Levene's Test",
-    columns = c(Levene_F, Levene_p, Homogeneity)
-  ) %>%
-
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = Normality,
-      rows    = Normality == "✓ Met"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✓ Met"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Normality,
-      rows    = Normality == "✗ Violated"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✗ Violated"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#c0392b"),
-    locations = cells_body(
-      columns = SW_p,
-      rows    = SW_p < 0.05
-    )
-  ) %>%
-
-  opt_row_striping() %>%
-
-  tab_source_note(
-    source_note = md(
-      "**Independence**: verified by design — each Band.ID is a unique individual measured once per tide condition.  
-       **Shapiro-Wilk**: H₀ = residuals are normally distributed; p > 0.05 → assumption met.  
-       **Levene's test**: H₀ = variances are equal across tide groups; p > 0.05 → assumption met."
-    )
-  ) %>%
-
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13
-  )
-```
-  
-  
-Now ANOVA assumptions are verified, let's see the ANOVA analysis results.  
+      p_value < 0.01 ~ "**", 
+      p_value < 0.05 ~ "*",
+      TRUE ~ "ns" ))
 
 
-```{r jensen-shannon tide 45, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
-results_jsd <- results_jsd %>%
-  mutate(
-    sig = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ ""
-    )
-  )
-
-# ── ANOVA table ──────────────────────────────────────────────────────────────
-
-results_jsd %>%
-  gt(groupname_col = "Species", rowname_col = "Term") %>%
-
-  tab_header(
-    title    = md("**Two-Way ANOVA Results — JSD**"),
-    subtitle = md("*value ~ Band.ID + tideHighLow — by Species*")
-  ) %>%
-
-  cols_label(
-    Metric  = "Metric",
-    Df      = "df",
-    SS      = "Sum Sq",
-    MS      = "Mean Sq",
-    F_value = "F value",
-    p_value = "p value",
-    sig     = ""
-  ) %>%
-
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = vars(p_value, sig),
-      rows    = sig %in% c("*", "**", "***", ".")
-    )
-  ) %>%
-
-  opt_row_striping() %>%
-
-  tab_source_note(
-    source_note = "Significance codes: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1"
-  ) %>%
-
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13
-  )
 ```
 
-  
-Let's now visualise the **JSD results** with a boxplots.
-  
-  
 ```{r jensen-shannon tide 5, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
 ggplot(
   jsd_for_plot_tide,
@@ -2112,3 +1587,67 @@ ggplot(
   
 
 ```
+
+We will use **Wilcoxon rank-sum** test for each species if the composition of site used is tide dependent. It is a non-parametric test which compare distributions between two independent groups without assuming normality.
+
+```{r jensen-shannon tide 6, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+tide_tests_jsd %>%
+  
+  select(speciesEN, n_high, n_low, p_value, significance) %>%
+  
+  gt() %>%
+  
+  tab_header(
+    title = md("**Wilcoxon Test Results: High vs Low Tide JSD Comparison**"),
+    subtitle = "Within species Jensen-Shannon Divergence between tide") %>%
+  
+  cols_label(
+    speciesEN = "Species",
+    n_high = "N High",
+    n_low = "N Low", 
+    p_value = "p-value",
+    significance = "Sig." ) %>%
+  
+  tab_spanner(
+    label = "Sample Size",
+    columns = c(n_high, n_low)) %>%
+  tab_spanner(
+    label = "Tide Effect (High vs Low)",
+    columns = c(p_value, significance)) %>%
+  
+  fmt_scientific(
+    columns = p_value,
+    decimals = 3) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(columns = significance)) %>%
+  
+  tab_style(
+  style = cell_fill(color = "lightgreen"),
+  locations = cells_body(
+    columns = c(p_value, significance),
+    rows = p_value < 0.05 & !is.na(p_value))) %>%
+  
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(whitespace = "nowrap"),
+    locations = cells_body()) %>%
+  tab_style(
+    style = cell_text(whitespace = "nowrap"),
+    locations = cells_column_labels() ) %>%
+  
+  tab_footnote(
+    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant. **Wilcoxon rank-sum tests** compare JSD distributions between High vs Low tide **within each species**. Green highlighting indicates significant tide effects (p < 0.05).")) %>%
+  
+  opt_table_font(font = "Times New Roman") %>%
+  tab_options(
+    table.font.size = px(13),
+    heading.title.font.size = px(16),
+    data_row.padding = px(3),
+    table.width = pct(100))
+
+```
+
