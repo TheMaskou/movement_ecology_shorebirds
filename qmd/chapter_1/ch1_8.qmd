@@ -60,7 +60,8 @@ data_all <- data_all %>%
 # Mean signal strength per individual, site and time categories (HD, HN, LD, LN)
 data_all <- data_all %>%
   group_by(Band.ID, tideCategory, recvDeployName) %>%
-  mutate(sig_indiv_tideCat = mean(sigPositive)) %>%
+  mutate(sig_indiv_tideCat_mean = mean(sigPositive),
+         sig_indiv_tidecat_sd = sd(sigPositive)) %>%
   ungroup()  %>%
   mutate(speciesINIT = str_split(speciesEN, " ") %>%            
            map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%    
@@ -70,11 +71,11 @@ data_all <- data_all %>%
            toupper())
 ```
 
-Here, we take the relative **signal strength value** `sigPositive` (a [*derivative*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables) of the raw values `sig`) to calculate the mean for each individual and per tide category.
+Here, we take the relative **signal strength value** `sigPositive` (a [*derivative*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables) of the raw values `sig`) to calculate the **Standard Deviation (SD)** (`sig_indiv_tideCat_sd`) for each individual and per tide category. This will inform us about signal strength variation for each individual depending particular conditions (tide category * day/night * sites).
 
-Therefore, we group the means per species and per site to observe how the signal strength varies. To that aim, we need to create a new variable: the average signal strength per individuals `sig_indiv_tideCat`.
+Then, we group the SD per species and per site to observe how the signal strength varies.  
 
-Then, we can create a list which plots the distribution of the average *signal strength* *variation* across species.
+Then, we can create a list which plots the distribution of the average *signal strength* *SD variation* across species.
 
 ```{r plot list, echo = TRUE, eval = TRUE, results = 'asis'}
 # One plot per species for better understanding
@@ -86,15 +87,15 @@ plots_list <- data_all %>%
     
     species_full <- .y  # The split name (full species name)
     
-    ggplot(.x, aes(x = tideCat, y = sig_indiv_tideCat, fill = speciesEN)) +
+    ggplot(.x, aes(x = tideCat, y = sig_indiv_tidecat_sd, fill = speciesEN)) +
       geom_boxplot() +
       facet_wrap(~ recvDeployName) +
       
       scale_fill_manual(values = species_colors, guide = "none") +
       theme_bw() +
-      labs(title = paste0("Signal Strength variance for ", species_full, " over Motus stations"),
+      labs(title = paste0("Variation of Signal Strength SD for ", species_full, " over Motus stations"),
            x = "Tide Category",
-           y = "Signal Strength variance (RSSI)",
+           y = "Variation of Signal Strength SD (RSSI)",
            fill = "Species") 
     })
 

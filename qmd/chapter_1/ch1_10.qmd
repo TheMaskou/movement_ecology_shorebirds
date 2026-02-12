@@ -416,7 +416,7 @@ gt_exp_H
 ```
 :::
 
-### Statistical Tests
+### Species comparison | Non-Parametric test
   
 ::: blockquote-yellow
 **Important**  
@@ -588,7 +588,7 @@ kruskal_within_species %>%
 
 
 
-### Tidal dependance
+### Tidal dependance | Parametric test
 
 We now want to clarify whether birds associate **site fidelity** depending the tide, therefore likely depending their behavior (i.e., foraging **vs** roosting).
 
@@ -1286,7 +1286,7 @@ jsd_results_tab %>%
 
 ```
 
-### Statistical Tests
+### Species comparison | Non-Parametric test
 
 We will use **Kruskal-Wallis** test if the distributions of JSD differ among species. It is a non-parametric (doesn't assume normal distribution), it handles unequal sample sizes (different number of comparisons per species).
 
@@ -1438,7 +1438,7 @@ The table above shows which species are truly using **different** sites than ano
 
 Higher JSD goes with more different site used. The Dunn test then confirms if those differences are statistically real after Bonferroni correction.
 
-### Tidal dependance
+### Tidal dependance | Parametric test
 
 We now want to clarify whether birds associate **site composition** depending the tide, therefore likely depending their behavior (i.e., foraging *vs* roosting).
 
@@ -1993,45 +1993,15 @@ for (sp in names(model_list)) {
 
 Below are displayed Res. vs. Fitted, Normal Q-Q, Scale-Location and Res. by tide plots, for each species.   
   
-    
-::: blockquote-RED
-**Note for authors**    
-Remember to update list as new species come available.   
-:::
 
-::: {.callout-tip collapse="true" title="Curlew Sandpiper"}
-```{r jensen-shannon tide 151, echo = FALSE, message = FALSE, warning = FALSE}
-plot_list[["Curlew Sandpiper"]]
-```
-:::
-
-::: {.callout-tip collapse="true" title="Curlew Sandpiper"}
-```{r jensen-shannon tide 152, echo = FALSE, message = FALSE, warning = FALSE}
-plot_list[["Curlew Sandpiper"]]
-```
-:::
-
-::: {.callout-tip collapse="true" title="Pacific Golden-Plover"}
-```{r jensen-shannon tide 153, echo = FALSE, message = FALSE, warning = FALSE}
-plot_list[["Pacific Golden-Plover"]]
-```
-:::
-
-::: {.callout-tip collapse="true" title="Bar-tailed Godwit"}
-```{r jensen-shannon tide 154, echo = FALSE, message = FALSE, warning = FALSE}
-plot_list[["Bar-tailed Godwit"]]
-```
-:::
-
-::: {.callout-tip collapse="true" title="Pied Stilt"}
-```{r jensen-shannon tide 155, echo = FALSE, message = FALSE, warning = FALSE}
-plot_list[["Pied Stilt"]]
-```
-:::
-
-::: {.callout-tip collapse="true" title="Red-necked Avocet"}
-```{r jensen-shannon tide 156, echo = FALSE, message = FALSE, warning = FALSE}
-plot_list[["Red-necked Avocet"]]
+::: panel-tabset
+```{r assumptions tabs, message = FALSE, warning = FALSE, results = 'asis', echo = FALSE, eval = TRUE ,fig.width = 10, fig.height = 6}
+# Create tabs dynamically
+for (sp in names(plot_list)) {
+  cat("###", sp, "\n\n")
+  print(plot_list[[sp]])
+  cat("\n\n")
+}
 ```
 :::
 
