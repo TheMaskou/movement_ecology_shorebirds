@@ -5,7 +5,7 @@ format: html
 
 ## Scientific papers
 
-2026, Estuarine movements from resident and migratory shorebirds on their non-breeding ground in Australia: Motus automated telemetry highlights a balance between circadian and tidal cycles [*(in preparation)*](#0)
+-   2026, Estuarine movements from resident and migratory shorebirds on their non-breeding ground in Australia: Motus automated telemetry highlights a balance between circadian and tidal cycles [ *(in preparation)*](https://docs.google.com/document/d/1bJ2VcW-EwPwJnT2ijhElo17LMyAgwUNw4c06vjIEZ7c/edit?usp=sharing)
 
 ## Conferences
 
