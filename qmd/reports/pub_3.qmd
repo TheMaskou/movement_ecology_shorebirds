@@ -5,18 +5,18 @@ format: html
 
 ## Scientific papers
 
--   2026, Estuarine movements from resident and migratory shorebirds on their non-breeding ground in Australia: Motus automated telemetry highlights a balance between circadian and tidal cycles [ *(in preparation)*](https://docs.google.com/document/d/1bJ2VcW-EwPwJnT2ijhElo17LMyAgwUNw4c06vjIEZ7c/edit?usp=sharing)
+-   2026 *(in preparation)* - [Estuarine movements from resident and migratory shorebirds on their non-breeding ground in Australia: Motus automated telemetry highlights a balance between circadian and tidal cycles](https://docs.google.com/document/d/1bJ2VcW-EwPwJnT2ijhElo17LMyAgwUNw4c06vjIEZ7c/edit?usp=sharing)
 
 ## Conferences
 
 ### Chapter 1 - Motus
 
--   [2025_AOC_presentation](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQAzJZXB7A4_Qruc9TMUDII-AdJPiqpmf6Od59kCJeAPXLM?e=EEMhfP)
+-   2025 June - [Motus automated telemetry reveals new insights into nocturnal and low tide habitat use is coastal shorebirds](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB-d7czEQuOQqIlka1ECJHOAW9zt85JS6Go256avSQF7zo?e=VZSK8U), Australasian Ornithological Conference (AOC), Perth, WA, Abstract.
 
--   [2025_AOC_abstract](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB-d7czEQuOQqIlka1ECJHOAW9zt85JS6Go256avSQF7zo?e=VZSK8U)
+-   2025 October - [MOTUS automated telemetry does not quite reveal habitat use from estuarine shorebirds](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQAzJZXB7A4_Qruc9TMUDII-ARsJB_hgkJhB0gTTcMguXOA?e=Aspzfx), Australian Ornithological Conference (AOC), Perth, WA, Presentation.
 
--   [2025_ESA_presentation](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQDk0spslustTp0ergZ4X-llAbruqNFNHZ1Ov51KZTSM9dw?e=WlUjbj)
+-   2025 June - [Motus automated telemetry uncovers mightatory shorebirds habitat selection, supporting adaptative land management](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQA9fmHl4hBvTZ2nyICgXKAzAZh4FQPAJ0gJTsKCioBWNBQ?e=XymyZC), Ecological Society of Australia (ESA), Adelaide, SA, Abstract.
 
--   [2025_ESA_abstract](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQA9fmHl4hBvTZ2nyICgXKAzAZh4FQPAJ0gJTsKCioBWNBQ?e=XymyZC)
+-   2025 October - [MOTUS automated telemetry does not quite yet reveal habitat use from estuarine shorebirds](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQDk0spslustTp0ergZ4X-llAbruqNFNHZ1Ov51KZTSM9dw?e=WlUjbj), Ecological Society of Australia (ESA), Adelaide, SA, Presentation.
 
--   [2026_WBF_abstract](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQC03Ixxv9JVQbO0Dc54VFp1AV7yVYGuGDgrqaE84gdb6q4?e=jnlvIx)
+-   2025 December - [Motus automated telemetry uncovers migratory shorebirds habitat selection, supporting adaptative land management](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQC03Ixxv9JVQbO0Dc54VFp1AV7yVYGuGDgrqaE84gdb6q4?e=jnlvIx), World Biodiversity Forum, Davos, CHF, Abstract.
