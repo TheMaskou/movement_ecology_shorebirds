@@ -16,6 +16,5 @@ format: html
 -   [Trapping_records](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385)
 
     Keep tracking the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding)
-    
-    
-    
+
+-   [Tide forecasts for Newcastle, NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)
