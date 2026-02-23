@@ -866,5 +866,35 @@
       "Analysis",
       "Entropy, Eveness & Composition"
     ]
+  },
+  {
+    "objectID": "qmd/reports/pub_1.html#protocols",
+    "href": "qmd/reports/pub_1.html#protocols",
+    "title": "Internal documents",
+    "section": "",
+    "text": "Basics_for_Motus_Array_&_Tags, 2025\nHandy protocol that describe how to connect to your SG receivers with a local Wi-Fi or GSM network, so you can check current time tag detections, but also download raw data from your receivers. How to activate/deactivate a Lotek nano-tags. Tips on tracker model decision related to ratio bird weight/tag weight so you remain under the 3% of individual body mass for equipment.\nMotus_tag_specs_and_species_list, 2025\nSee what Motus Lotek tag you can use depending the species of shorebird you aim to equip. Find also a dynamic table for pricing.",
+    "crumbs": [
+      "Internal documents"
+    ]
+  },
+  {
+    "objectID": "qmd/reports/pub_1.html#log-books",
+    "href": "qmd/reports/pub_1.html#log-books",
+    "title": "Internal documents",
+    "section": "Log-books",
+    "text": "Log-books\n\nTrapping_records\nKeep tracking the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding)\nMotus_VHF_stations_state\n(to be done)",
+    "crumbs": [
+      "Internal documents"
+    ]
+  },
+  {
+    "objectID": "qmd/reports/pub_1.html#miscellaneous",
+    "href": "qmd/reports/pub_1.html#miscellaneous",
+    "title": "Internal documents",
+    "section": "Miscellaneous",
+    "text": "Miscellaneous\n\nTide_forecasts_for_Newcastle,_NSW",
+    "crumbs": [
+      "Internal documents"
+    ]
   }
 ]
