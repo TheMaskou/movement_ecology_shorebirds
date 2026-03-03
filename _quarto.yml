@@ -28,6 +28,9 @@ execute:
 website:
   title: "Movement Ecology - Shorebirds"
 
+  comments:
+    hypothesis: true
+
   navbar:
     background: primary
     search: true
