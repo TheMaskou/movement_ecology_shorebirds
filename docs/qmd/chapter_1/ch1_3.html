@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-02">
+<meta name="dcterms.date" content="2026-03-03">
 
 <title>Legend – Movement Ecology - Shorebirds</title>
 <style>
@@ -68,6 +68,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+<script>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    document.body.classList.add('hypothesis-enabled');
+  });
+</script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -384,7 +390,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-02</p>
+      <p class="date">2026-03-03</p>
     </div>
   </div>
   
@@ -1105,35 +1111,6 @@ Numenius phaeopus
     }
   });
   </script>
-<input type="hidden" id="giscus-base-theme" value="preferred_color_scheme">
-<input type="hidden" id="giscus-alt-theme" value="preferred_color_scheme">
-<script>
-  function loadGiscus() {
-    // Function to get the theme based on body class
-    const getTheme = () => {
-      let baseTheme = document.getElementById('giscus-base-theme').value;
-      let altTheme = document.getElementById('giscus-alt-theme').value;
-      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
-    };
-    const script = document.createElement("script");
-    script.src = "https://giscus.app/client.js";
-    script.async = true;
-    script.dataset.repo = "TheMaskou/movement_ecology_shorebirds";
-    script.dataset.repoId = "R_kgDOQsClpg";
-    script.dataset.category = "Announcements";
-    script.dataset.categoryId = "DIC_kwDOQsClps4C3lFh";
-    script.dataset.mapping = "pathname";
-    script.dataset.reactionsEnabled = "1";
-    script.dataset.emitMetadata = "0";
-    script.dataset.inputPosition = "bottom";
-    script.dataset.theme = getTheme();
-    script.dataset.lang = "en";
-    script.crossOrigin = "anonymous";
-    // Append the script to the desired div instead of at the end of the body
-    document.getElementById("quarto-content").appendChild(script);
-  }
-  loadGiscus();
-</script>
 </div> <!-- /content -->
 
 

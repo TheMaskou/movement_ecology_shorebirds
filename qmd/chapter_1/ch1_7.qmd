@@ -459,7 +459,7 @@ Now that the *used* and *available* time have been determined for each individua
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
-\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
+\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species} 
 $$
 :::
 
