@@ -6,7 +6,7 @@ title: "Survey effort"
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
-                   quiet = TRUE))    
+                   quiet = TRUE))     
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -419,3 +419,7 @@ ggplot() +
 :::
 
 ***Legend:*** *The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is "OFF" and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed* `r uptime_summary$cont_listening_eff[uptime_summary$Station=="Curlew Point"]` % *at the total operational period for every stations within our local MOTUS array (operational survey effort).*
+
+## Condition of detections
+
+Find in [Chapter 1 \> Station usage - hours \> Condition detections](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions) the number of hours a species have been detected and where, depending the four categories of tide (Low, High, Day, Night).

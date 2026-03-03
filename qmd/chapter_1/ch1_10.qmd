@@ -7,7 +7,7 @@ format: html
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
-                   quiet = TRUE))  
+                   quiet = TRUE))   
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -79,8 +79,7 @@ Metric employed when a large collection has a number of sites known -Type B coll
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
 \text{H}   =    -Σ(p_i × ln(p_i)) 
-$$ 
-$$
+$$ $$
 \text{where } p_i \text{ is the proportion of detections at site } i
 $$
 :::
@@ -143,9 +142,6 @@ $$
 
 First, we define a all-in-one function to consistently computing shannon entropy.
 
-
-
-
 ```{r shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 # Function to calculate Shannon entropy
 calculate_shannon <- function(proportions) {
@@ -193,7 +189,6 @@ entropy_results <- data_all %>%
   arrange(speciesEN, Band.ID)
 
 ```
-
 
 ```{r shannon 3, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 # Species-level summary from entropy_results
@@ -311,7 +306,6 @@ species_entropy_summary %>%
 
 ```
 
-
 ```{r shannon 4, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE, results = 'hide'}
 # Prepare data for plotting
 entropy_for_plot <- entropy_results %>%
@@ -397,7 +391,6 @@ gt_S
 ```
 :::
 
-
 ::: {.callout-tip collapse="true" title="H table"}
 ```{r shannon 62, echo = FALSE, message = FALSE, warning = FALSE}
 gt_H
@@ -416,15 +409,14 @@ gt_exp_H
 ```
 :::
 
-### Species comparison | Non-Parametric test
-  
+### Species comparison \| Non-Parametric test
+
 ::: blockquote-yellow
-**Important**  
-Note: We only keep species which holds **three** or more individuals tagged and detected. So we can further run Kruskal-Wallis test.   
+**Important**\
+Note: We only keep species which holds **three** or more individuals tagged and detected. So we can further run Kruskal-Wallis test.
 :::
 
 **Compares H and J across individuals within each species: within a species, are individuals different from each other?**
-
 
 ```{r shannon 7, message = FALSE,  warning = FALSE, echo = TRUE, eval = FALSE}
 
@@ -582,13 +574,7 @@ kruskal_within_species %>%
 
 ```
 
-
-
-
-
-
-
-### Tidal dependance | Parametric test
+### Tidal dependance \| Parametric test
 
 We now want to clarify whether birds associate **site fidelity** depending the tide, therefore likely depending their behavior (i.e., foraging **vs** roosting).
 
@@ -624,11 +610,8 @@ entropy_results_tide <- data_all %>%
   arrange(speciesEN, Band.ID, tideHighLow)
 
 ```
-  
-    
-Let's summarise the data accordingly to the tide. Here, we display statistical values (n, mean, sd) for each metrics related to entropy.  
 
-      
+Let's summarise the data accordingly to the tide. Here, we display statistical values (n, mean, sd) for each metrics related to entropy.
 
 ```{r shannon tide 2, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
@@ -715,8 +698,7 @@ ggplot(entropy_for_plot_tide, aes(x = speciesEN, y = value, fill = speciesEN, al
     legend.position = "none",
     panel.grid.major.x = element_blank())
 ```
-  
-  
+
 Find below for each species their associated metrics of entropy, side by side with high and low tides so it is easily comparable and reportable to the figure above.
 
 ```{r shannon tide 3, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
@@ -839,8 +821,7 @@ species_entropy_summary_tide %>%
     data_row.padding = px(3),  
     table.width = pct(100),
     row_group.font.weight = "bold")
-```    
-    
+```
 
 **ANOVA (Analysis of Variance)** is a statistical test that compares means across groups to see if at least one group is significantly different from the others.\
 A **two-way ANOVA** examines how two categorical independent variables (tideHihghLow & Band.ID) affect a continuous dependent variable (entropy metric values).
@@ -854,8 +835,8 @@ So, we are testing three cases:
 -   Does the effect of tide vary by individual? (m2, interaction model)
 
 ::: blockquote-yellow
-**Important**  
-Note: We only keep species which holds **five** or more individuals tagged and detected before to run ANOVA analysis on the data.   
+**Important**\
+Note: We only keep species which holds **five** or more individuals tagged and detected before to run ANOVA analysis on the data.
 :::
 
 Before to run ANOVA analysis we must check the **data verify the ANOVA Assumptions.**
@@ -871,14 +852,11 @@ entropy_aov_data_tide <- entropy_for_plot_tide %>%
   ungroup()
 
 ```
-  
-    
-    
-We now set the table which will **check** whether the **ANOVA assumptions** are violated or met (ie., independence, normality and homogeneity).  
-By design, the data are independents: each Band.ID is a unique individual and not repeated within a tide per entropy metrics.  
+
+We now set the table which will **check** whether the **ANOVA assumptions** are violated or met (ie., independence, normality and homogeneity).\
+By design, the data are independents: each Band.ID is a unique individual and not repeated within a tide per entropy metrics.\
 You will notice that we actually run the Two-Way ANOVA analysis in this same step to facilitate smoothness of the code.
-  
-  
+
 ```{r shannon tide 5, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
 
 results      <- data.frame()
@@ -954,11 +932,9 @@ results <- results %>%
       p_value < 0.1   ~ ".",
       TRUE            ~ ""))
 ```
-  
-    
-Let's plot Two-Way ANOVA assumptions outputs first.  
-  
-  
+
+Let's plot Two-Way ANOVA assumptions outputs first.
+
 ```{r shannon tide 6, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
 
 # Display assumption test plot
@@ -1034,12 +1010,9 @@ assumptions %>%
     heading.align              = "left",
     table.font.size            = 13)
 
-``` 
-  
-    
-    
-We can now proceed and plot the Two-Way ANOVA analysis.  
-  
+```
+
+We can now proceed and plot the Two-Way ANOVA analysis.
 
 ```{r shannon tide 7, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
 # Display plot
@@ -1076,9 +1049,6 @@ results %>%
     heading.align              = "left",
     table.font.size            = 13 )
 ```
-
-  
-
 
 ## Jensen-Shannon Divergence
 
@@ -1187,12 +1157,8 @@ jsd_results <- jsd_results %>%
   mutate(same_species = species_1 == species_2)
 
 ```
-  
-  
 
 We can summarise the results to better handle visualisations in the below figure, and report to data in the following table.
-  
-  
 
 ```{r jensen-shannon 3, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
@@ -1262,7 +1228,6 @@ jsd_results_tab <- jsd_results_tab %>%
 
 ```
 
-
 ```{r jensen-shannon 5, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 jsd_results_tab %>%
@@ -1286,7 +1251,7 @@ jsd_results_tab %>%
 
 ```
 
-### Species comparison | Non-Parametric test
+### Species comparison \| Non-Parametric test
 
 We will use **Kruskal-Wallis** test if the distributions of JSD differ among species. It is a non-parametric (doesn't assume normal distribution), it handles unequal sample sizes (different number of comparisons per species).
 
@@ -1438,15 +1403,15 @@ The table above shows which species are truly using **different** sites than ano
 
 Higher JSD goes with more different site used. The Dunn test then confirms if those differences are statistically real after Bonferroni correction.
 
-### Tidal dependance | Parametric test
+### Tidal dependance \| Parametric test
 
 We now want to clarify whether birds associate **site composition** depending the tide, therefore likely depending their behavior (i.e., foraging *vs* roosting).
 
-Applying the same method as before, we display below the **JSD results depending the tide**.  
-  
+Applying the same method as before, we display below the **JSD results depending the tide**.
+
 ::: blockquote-yellow
-**Important**  
-Note: We only keep species which holds **five** or more individuals tagged and detected. So we can further run ANOVA analysis on the data.   
+**Important**\
+Note: We only keep species which holds **five** or more individuals tagged and detected. So we can further run ANOVA analysis on the data.
 :::
 
 ```{r jensen-shannon tide 9, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
@@ -1510,12 +1475,9 @@ jsd_results_tide <- jsd_results_tide %>%
   filter(same_species == TRUE)  # Only conspecific comparisons
 
 ```
-  
-    
-Let's display below the results of the JSD analysis in both the table and a boxplot. 
-  
-  
-      
+
+Let's display below the results of the JSD analysis in both the table and a boxplot.
+
 ```{r jensen-shannon tide 10, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 jsd_results_tab_tide <- jsd_results_tide %>%
@@ -1641,7 +1603,6 @@ jsd_results_tab_tide %>%
     row_group.font.weight = "bold")
 ```
 
-
 ```{r jensen-shannon tide 11, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
 # Pivot data to prepare plotting
 jsd_for_plot_tide <- jsd_results_tide %>%
@@ -1652,7 +1613,7 @@ jsd_for_plot_tide <- jsd_results_tide %>%
 
 species_list_jsd <- unique(jsd_for_plot_tide$species_1)
 ```
-  
+
 ```{r jensen-shannon tide 12, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
 
 jsd_for_plot_tide %>%
@@ -1689,10 +1650,8 @@ jsd_for_plot_tide %>%
     plot.subtitle      = element_text(size = 9, color = "grey40"))
 
 ```
-  
-    
-      
-We now want to test whether JSD values are different across individual of a same species at High and Low tides.   
+
+We now want to test whether JSD values are different across individual of a same species at High and Low tides.\
 To do so, we will conduct a **two-paired ANOVA analysis**, therefore we must verify data normality and homogeneity first.
 
 ```{r jensen-shannon tide 13, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
@@ -1871,7 +1830,6 @@ assumptions_jsd %>%
     table.font.size            = 13
   )
 ```
-  
 
 ```{r jensen-shannon tide 15, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
 
@@ -1991,8 +1949,7 @@ for (sp in names(model_list)) {
 
 ```
 
-Below are displayed Res. vs. Fitted, Normal Q-Q, Scale-Location and Res. by tide plots, for each species.   
-  
+Below are displayed Res. vs. Fitted, Normal Q-Q, Scale-Location and Res. by tide plots, for each species.
 
 ::: panel-tabset
 ```{r assumptions tabs, message = FALSE, warning = FALSE, results = 'asis', echo = FALSE, eval = TRUE ,fig.width = 10, fig.height = 6}
@@ -2005,8 +1962,7 @@ for (sp in names(plot_list)) {
 ```
 :::
 
-Now ANOVA assumptions are verified, let's see the ANOVA analysis results.  
-
+Now ANOVA assumptions are verified, let's see the ANOVA analysis results.
 
 ```{r jensen-shannon tide 16, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
 results_jsd_tide <- results_jsd_tide %>%
@@ -2061,7 +2017,3 @@ results_jsd_tide %>%
     table.font.size            = 13
   )
 ```
-
-  
-
-

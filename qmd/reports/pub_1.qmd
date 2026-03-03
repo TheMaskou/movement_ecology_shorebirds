@@ -19,10 +19,14 @@ format: html
 
     Keep tracking the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding)
 
+-   [MOTUS Tag records.docx](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQDjSf_9maEVQraUIrYpDu5NAQLrHe15pg2NDOwKBC03W0c?e=7oohiZ)
+
+    Keep tracking what Motus tag has been deployed. Bird flag and capture date detailed.
+
 -   Motus_VHF_stations_state
 
     *(to be done)*
 
-## Miscellaneous 
+## Miscellaneous
 
 -   [Tide_forecasts_for_Newcastle,\_NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)

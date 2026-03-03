@@ -7,7 +7,7 @@ format: html
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
-                   quiet = TRUE))    
+                   quiet = TRUE))     
 ```
 
 :::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -512,13 +512,13 @@ figure_plot <- left_join(available_bird_recv_time %>%
   mutate(rate_use = ifelse(rate_use > 100, 100, rate_use)) %>%
   mutate(speciesType = factor(shorebird_class[speciesEN], 
                                levels = c("migratory", "resident"))) %>%
-  filter(!speciesEN %in% c("Far Eastern Curlew", "Masked Lapwing"),
+  filter(!speciesEN %in% c("Masked Lapwing"),
          rate_use != 100) 
 
 ```
 
 ::: blockquote-yellow
-**Note:** We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data.
+**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.
 :::
 
 Now, everything is ready to format the data for plot and to visualise the results for **Usage rate** and **Hourly usage** across the Motus stations of our local array.
@@ -873,7 +873,7 @@ plots_list[[4]]
 ```
 :::
 
-**Legend**: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one tide category from the pairs "high/low" and "nocturnal/diurnal," showing *used time* in hours (red boxes) for each species at different Motus stations. The grey boxes represent the total *available time* for the corresponding tide category and Motus station, across individuals. Note that *available time* might be relatively similar across stations as it is based on the general Newcastle tide table and is not station-specific.
+**Legend**: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one tide category from the pairs "high/low" and "nocturnal/diurnal," showing *used time* in hours (colored boxes) for each species at different Motus stations. The grey boxes represent the total *available time* for the corresponding tide category and Motus station, across individuals. Note that *available time* might be relatively similar across stations as it is based on the general Newcastle tide table and is not station-specific.
 
 ### USED
 
@@ -900,7 +900,7 @@ plot_used <- function(tide_cat) {
           legend.position = "none",
           plot.margin = margin(0, 0, 0, 0, "in"))  +
     
-    coord_cartesian(ylim = c(0, NA)) + 
+    coord_cartesian(ylim = c(0, NA), expand = FALSE) + 
     labs(x = "Motus stations",
          y = "Detection duration (hours)",
          title = paste("Tide Category:", tide_cat),
@@ -922,14 +922,14 @@ plots_list_used <- purrr::map(tide_categories, plot_used)
 ##### Nocturnal Low Tide
 
 ```{r 4 used 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-plots_list_used[[1]]
+plots_list_used[[4]]
 ```
 
 ##### Nocturnal High Tide
 
 ```{r 4 used 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
-plots_list_used[[2]]
+plots_list_used[[1]]
 ```
 
 ##### Diurnal High Tide
@@ -943,7 +943,7 @@ plots_list_used[[3]]
 
 ```{r 4 used 4, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
-plots_list_used[[4]]
+plots_list_used[[2]]
 ```
 :::
 
@@ -977,7 +977,7 @@ custom_colors <- c(
 ```{r global rou, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
-  coord_cartesian(ylim = c(0, 40)) + #200 if total_used_t
+  coord_cartesian(ylim = c(0, 40)) + #300 if total_used_t
   scale_fill_manual(values = custom_colors, guide = "none") +  
   labs(title = "Rate of Use - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
@@ -994,7 +994,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 # All species and tide categories 
 ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
-  coord_cartesian(ylim = c(0, 200)) +
+  coord_cartesian(ylim = c(0, 300)) +
   labs(title = "Total used - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
        y = "Total used (h)") +
@@ -1014,7 +1014,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategor
 ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
   facet_wrap(~speciesEN) +
-  coord_cartesian(ylim = c(0, 40)) + #200 if total_used_t
+  coord_cartesian(ylim = c(0, 40)) + #300 if total_used_t
   scale_fill_manual(values = custom_colors, guide = "none") +  
   labs(title = "Rate of Use - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
@@ -1034,7 +1034,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 explore <- ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
   facet_wrap(~speciesEN) +
-  coord_cartesian(ylim = c(0, 200)) + 
+  coord_cartesian(ylim = c(0, 300)) + 
   scale_fill_manual(values = custom_colors, guide = "none") +  
   labs(title = "Total used - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",

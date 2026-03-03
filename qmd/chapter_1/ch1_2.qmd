@@ -25,7 +25,7 @@ data_all <- readRDS(
   tail(sort(list.files(
     here::here("qmd", "chapter_1", "data", "motus"),
     pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
+  )), 1))  
 
 # Receivers info
 recv <- readRDS(
@@ -103,9 +103,19 @@ detect <- spreadsheet %>%
 retag <- spreadsheet %>% 
   filter(!is.na(spreadsheet$Retagged.))
 
+# EXTRACT LAST DATE OF DATA FROM MOTUS SERVER
+latest_file <- tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)
+
+file_date <- as.Date(sub(".*/(\\d{4}-\\d{2}-\\d{2})-data\\.rds$", "\\1", latest_file))
+
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+The following analysis are based on data downloaded on **`r format(file_date, "%d-%b-%Y")`** from Motus server.
+
 Since 2021, **`r moni$value[moni$variable == "nb_released"]` birds** belonging to **`r length(unique(data_all$speciesEN))` species** have been captured, tagged and released.
 
 **You can find the complete record of the captures [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1765667294608&web=1).**

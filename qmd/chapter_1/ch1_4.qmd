@@ -25,5 +25,3 @@ Note that you can build any station yourself by simply following the [installati
 ![](/material/array.png){fig-align="center" width="100%"}
 
 ShinyApp will provide the navigation. On To-Do list and Has To be done...
-
-

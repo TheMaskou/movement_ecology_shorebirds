@@ -23,7 +23,7 @@ Our Motus project aims to better understand movements and habitat preferences fo
 
 -   **Project ID:** *294*
 
--   **Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
+-   **Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: YYYY-MM-DD*
 
 Retrieve the data from Motus server ([Accessing detections data - Motus 2025](https://motuswts.github.io/motus/articles/03-accessing-data.html)) and load them into your R environment so you can filter and format for further analysis.
 
@@ -132,6 +132,7 @@ If you already have a .sql file, set `new` = FALSE and `update` = TRUE so you ar
 ```{r 1 data quick view, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
 tail(df.alltags %>% 
+       arrange(timeAus) %>%
        select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv))
 
 ```
@@ -437,6 +438,10 @@ spreadsheet <- read.csv(here::here( "qmd", "chapter_1", "data", "spreadsheet", p
          Band.ID = as.factor(Band.ID)) %>%
   select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())  
 
+# Format motusTagID for further merging
+df.alltags <- df.alltags %>%
+  mutate(motusTagID = as.factor(motusTagID))
+
 # Join unique Band IDs for inconsistent motusTag (same bird re-tagged, etc) 
 df.alltags <- left_join(df.alltags,
                          spreadsheet %>%
@@ -579,17 +584,17 @@ df.alltags <- bind_rows(df.alltags, df.alltags.past)
 
 Some observations (**n = `r sum(is.na(df.alltags$speciesEN))`**) in the detections data retrieved from Motus server do hold *NA* values for `speciesEN`.
 
-As long as we consider it is negligible, these observations are removed.
+This can occur when tags are activated during a catch event within the vicinity of a Motus station operational and deployed. These observations are removed.
 :::
 
 ```{r 1 species NA, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
 
-df.alltags %>% 
-  filter(is.na(speciesEN)) %>%  
-  select(timeAus, speciesEN, Band.ID, markerNumber, motusTagID, tagModel, pulseLen, recvDeployName, recv)
+# df.alltags %>% 
+#   filter(is.na(speciesEN)) %>%  
+#   select(timeAus, speciesEN, Band.ID, markerNumber, motusTagID, tagModel, pulseLen, recvDeployName, recv)
 
 df.alltags <- df.alltags %>% 
-  filter(!is.na(speciesEN))
+   filter(!is.na(speciesEN))
 
 ```
 
@@ -638,7 +643,7 @@ save.image(file = here::here("qmd", "chapter_1", "data", "motus_data.RData"))
 
 To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=CcTSqA) *(a password might be required - maxime.marini\@uon.edu.au)*.
 
-**Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
+**Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: YYYY-MM-DD*
 
 <br>
 
