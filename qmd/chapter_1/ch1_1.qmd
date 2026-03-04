@@ -133,7 +133,7 @@ If you already have a .sql file, set `new` = FALSE and `update` = TRUE so you ar
 
 tail(df.alltags %>% 
        arrange(timeAus) %>%
-       select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv))
+       select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv)) 
 
 ```
 
@@ -584,7 +584,11 @@ df.alltags <- bind_rows(df.alltags, df.alltags.past)
 
 Some observations (**n = `r sum(is.na(df.alltags$speciesEN))`**) in the detections data retrieved from Motus server do hold *NA* values for `speciesEN`.
 
-This can occur when tags are activated during a catch event within the vicinity of a Motus station operational and deployed. These observations are removed.
+This can occur when tags are activated (regardless whether they are deployed on Motus server) during a catch event within the vicinity of a deployed and operational Motus station.
+
+Catching at Curlew point on 10 March 2026 generated about 11 100 tag detections from tags we did not deployed.
+
+These are removed from the data-set.
 :::
 
 ```{r 1 species NA, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}

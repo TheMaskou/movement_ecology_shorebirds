@@ -19,7 +19,7 @@ format: html
 
     Keep tracking the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding)
 
--   [MOTUS Tag records.docx](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQDjSf_9maEVQraUIrYpDu5NAQLrHe15pg2NDOwKBC03W0c?e=7oohiZ)
+-   [MOTUS_Tag_records](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQDjSf_9maEVQraUIrYpDu5NAQLrHe15pg2NDOwKBC03W0c?e=7oohiZ)
 
     Keep tracking what Motus tag has been deployed. Bird flag and capture date detailed.
 
@@ -27,6 +27,10 @@ format: html
 
     *(to be done)*
 
+## Workshop notes
+
+-   [2026_Virtual_Motus_Workshop](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQCtzPadfDgoRqsyECdzyM7RAd2MVTvX9XaqM7U44dhsJdo?e=FeVVr2)
+
 ## Miscellaneous
 
--   [Tide_forecasts_for_Newcastle,\_NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)
+-   [Tide_forecasts_for_Newcastle_NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)

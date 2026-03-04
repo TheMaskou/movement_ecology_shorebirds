@@ -1,0 +1,14 @@
+---
+title: "To-do-list"
+format: html
+---
+
+1.  **\[Station usage - hours\]** Correct the rate of use outputs. There is an issue with the box-plots, not all data shows up -\> discrepancy between *available* vs. *use* definitions of their Tide Category values. It might be because of inconsistencies in what is used to define it (i.e., hour_dt for available and timeAus for used ; tideCurve( ) from Callum for *used* and find_closest_tide( ) from Maxime for *available*)
+
+2.  **\[Station usage - hours\]** Distinguish 'fly-bys' with actual use of the station. So you can assess Fullerton Cove use when a bird FIFO, getting detected twice by the directional antenna (i.e., Bar-tailed Godwit). Color the estimate 'fly-bys' dot to give you an idea of the proportion of these vs. true staying in your Rate of Use box-plot.
+
+3.  **\[Motus server\]** Clear and clean issues in the Motus project (motus.org). Add photos and good descriptions/information in all stations.
+
+4.  **\[Location & History\]** Create a dynamic map that shows for each station an ID sheet (antenna type, no SG, structure type, battery type, photo) and its log-book sheet, tracking the SG, power and structure maintenance history. Use [Survey123](https://survey123.arcgis.com/) forms.
+
+5.  **\[Reports\]** Create an automated script to generate a small report per birds with figures showing graph of rate of use, detection condition, four maps (tide x time) showing with circle size the rate used per station and fetch a typical period with raw data recorded at the four tides across stations within 72H so we can tract the movement of the bird (trajectory with a map).

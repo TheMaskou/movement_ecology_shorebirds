@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-03">
+<meta name="dcterms.date" content="2026-03-04">
 
 <title>Load &amp; Format – Movement Ecology - Shorebirds</title>
 <style>
@@ -189,6 +189,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_9.html">
  <span class="dropdown-text">Results</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">To-do-list</li>
+        <li>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_11.html">
+ <span class="dropdown-text">To-do-list</span></a>
   </li>  
     </ul>
   </li>
@@ -394,6 +400,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">To-do-list</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../qmd/chapter_1/ch1_11.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">To-do-list</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
@@ -435,7 +458,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-03</p>
+      <p class="date">2026-03-04</p>
     </div>
   </div>
   
@@ -533,22 +556,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(df.alltags <span class="sc">%&gt;%</span> </span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">arrange</span>(timeAus) <span class="sc">%&gt;%</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">select</span>(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">select</span>(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                    timeAus        speciesEN motusTagID    tagModel pulseLen
-3449002 2026-02-14 08:07:41 Curlew Sandpiper      99023 NTQB2-4-2-M      2.5
-3449003 2026-02-14 08:07:49 Curlew Sandpiper      99026 NTQB2-4-2-M      2.5
-3449004 2026-02-14 08:07:54 Curlew Sandpiper      99023 NTQB2-4-2-M      2.5
-3449005 2026-02-14 08:08:02 Curlew Sandpiper      99026 NTQB2-4-2-M      2.5
-3449006 2026-02-14 08:08:07 Curlew Sandpiper      99023 NTQB2-4-2-M      2.5
-3449007 2026-02-14 08:08:15 Curlew Sandpiper      99026 NTQB2-4-2-M      2.5
-        recvDeployName            recv
-3449002   Curlew Point SG-61F1RPI3C8AB
-3449003   Curlew Point SG-61F1RPI3C8AB
-3449004   Curlew Point SG-61F1RPI3C8AB
-3449005   Curlew Point SG-61F1RPI3C8AB
-3449006   Curlew Point SG-61F1RPI3C8AB
-3449007   Curlew Point SG-61F1RPI3C8AB</code></pre>
+<pre><code>                    timeAus  speciesEN motusTagID  tagModel pulseLen
+3452636 2026-02-27 10:32:27       &lt;NA&gt;      43288 NTQB2-6-2      2.5
+3452637 2026-02-27 10:32:31       &lt;NA&gt;      43288 NTQB2-6-2      2.5
+3452638 2026-02-27 10:32:34       &lt;NA&gt;      43288 NTQB2-6-2      2.5
+3452639 2026-02-27 10:32:37       &lt;NA&gt;      43288 NTQB2-6-2      2.5
+3452640 2026-02-27 14:29:47 Pied Stilt      60577 NTQB2-6-2      2.5
+3452641 2026-02-27 14:31:05 Pied Stilt      60577 NTQB2-6-2      2.5
+            recvDeployName            recv
+3452636       Hexham Swamp SG-010DRPI3D708
+3452637       Hexham Swamp SG-010DRPI3D708
+3452638       Hexham Swamp SG-010DRPI3D708
+3452639       Hexham Swamp SG-010DRPI3D708
+3452640 Fullerton Entrance SG-A296RPI38A7E
+3452641 Fullerton Entrance SG-A296RPI38A7E</code></pre>
 </div>
 </div>
 <p>Above, a quick view about the last data uploaded to Motus server, giving you the latest detection taken into account for this workflow.</p>
@@ -898,7 +921,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="blockquote-yellow">
 <p><strong>Note for authors</strong>:</p>
 <p>Some observations (<strong>n = 11130</strong>) in the detections data retrieved from Motus server do hold <em>NA</em> values for <code>speciesEN</code>.</p>
-<p>This can occur when tags are activated during a catch event within the vicinity of a Motus station operational and deployed. These observations are removed.</p>
+<p>This can occur when tags are activated (regardless whether they are deployed on Motus server) during a catch event within the vicinity of a deployed and operational Motus station.</p>
+<p>Catching at Curlew point on 10 March 2026 generated about 11 100 tag detections from tags we did not deployed.</p>
+<p>These are removed from the data-set.</p>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bird detection dqtq</span></span>

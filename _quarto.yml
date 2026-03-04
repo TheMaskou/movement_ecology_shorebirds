@@ -80,6 +80,10 @@ website:
         - section: "Results"
           contents:
             - qmd/chapter_1/ch1_9.qmd # Results
+            
+        - section: "To-do-list"
+          contents:
+            - qmd/chapter_1/ch1_11.qmd # To-do-list
 
     - id: chapter2
       title: "Chapter 2"
