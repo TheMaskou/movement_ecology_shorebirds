@@ -13,7 +13,7 @@ All the way through the analysis of **Chapter 1** we will use the same English a
 station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
                        "Fullerton entrance"  = "Fullerton Entrance",
                        "North Swann Pond" = "Swan Pond" ,
-                       "Ramsar Road Floodgate" = "Ramsar Road",   
+                       "Ramsar Road Floodgate" = "Ramsar Road",    
                        "Milham's Pond" = "Milhams Pond")     
 
 ```

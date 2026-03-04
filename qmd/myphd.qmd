@@ -16,7 +16,7 @@ format:
 ::: {style="background: linear-gradient(135deg, #d97706 0%, #b91c1c 100%); color: white; padding: 2rem; border-radius: 8px; margin: 2rem 0;"}
 **PROJECT & OBJECTIVES**
 
-Currently a PhD candidate at the Center for Conservation Science, University of Newcastle, I focus on movement and spatial ecology from resident shorebirds and migratory species on their non-breeding ground, in Australia within the Hunter and Port Stephen estuaries. Shorebirds have complex behavioural and ecological needs which remain poorly understood at the level needed to inform regional land management decisions and ground-level protection in Australia.
+Currently a PhD candidate at the Center for Conservation Science, University of Newcastle, I focus on movement and spatial ecology from resident shorebirds and migratory species on their non-breeding ground, in Australia within the Hunter and Port Stephen estuaries. Shorebirds have complex behavioural and ecological needs which remain poorly understood at the level needed to inform regional land management decisions and ground-level protection in Australia. 
 
 This Research Project (PhD) intends to understand how local shorebirds use habitats for roosting and foraging, as it is crucial to inform stakeholders and land managers for effective conservation of both resident and migratory species.
 :::
