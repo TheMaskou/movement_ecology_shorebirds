@@ -26,7 +26,7 @@ sql.motus <- tagme(projRecv = proj.num,
                    dir = here("qmd", "chapter_1","data"))
 metadata(sql.motus, proj.num)
 
-## CHECK LAST DATA (43288 is test tag)
+## QUICK CHECK FOR LAST DATA (43288 is test tag)
 df.alltags <- tbl(sql.motus, "alltags") %>%
   dplyr::collect() %>%
   as.data.frame() %>%

@@ -27,7 +27,7 @@ Maxime Marini
 :::
 
 ::: {style="font-size: 1.1rem; color: #darkgrey; margin-bottom: 0.5rem;"}
-PhD Student
+PhD Student 
 :::
 
 ::: {style="font-size: 1rem; color: #34495e; font-style: italic;"}

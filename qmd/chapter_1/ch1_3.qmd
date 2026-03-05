@@ -14,7 +14,7 @@ station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
                        "Fullerton entrance"  = "Fullerton Entrance",
                        "North Swann Pond" = "Swan Pond" ,
                        "Ramsar Road Floodgate" = "Ramsar Road",    
-                       "Milham's Pond" = "Milhams Pond")     
+                       "Milham's Pond" = "Milhams Pond")       
 
 ```
 

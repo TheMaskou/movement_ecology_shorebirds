@@ -547,7 +547,7 @@ df.alltags <- df.alltags  %>%
                           "tideID",
                           "tideHeight")]
 
-# Factorise the variables
+# Stick and factorise the variables
 df.alltags <- df.alltags %>%
   mutate(tideDateTimeAus = tide_values$tideDateTimeAus,
          tideHighLow = as_factor(tide_values$high_low),

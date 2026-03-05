@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-04">
+<meta name="dcterms.date" content="2026-03-05">
 
 <title>Load &amp; Format – Movement Ecology - Shorebirds</title>
 <style>
@@ -458,7 +458,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-04</p>
+      <p class="date">2026-03-05</p>
     </div>
   </div>
   
@@ -902,7 +902,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"tideID"</span>,</span>
 <span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>                          <span class="st">"tideHeight"</span>)]</span>
 <span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Factorise the variables</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Stick and factorise the variables</span></span>
 <span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>df.alltags <span class="ot">&lt;-</span> df.alltags <span class="sc">%&gt;%</span></span>
 <span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideDateTimeAus =</span> tide_values<span class="sc">$</span>tideDateTimeAus,</span>
 <span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideHighLow =</span> <span class="fu">as_factor</span>(tide_values<span class="sc">$</span>high_low),</span>

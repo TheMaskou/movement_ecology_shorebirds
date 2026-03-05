@@ -4,7 +4,7 @@ format: html
 ---
 
 ## Grants
- 
+
 -   [2025 Research Grant - Oatley Flora & Fauna Conservation Society](https://www.oatleyflorafauna.org.au/) - *(AUD 2000)*
 
 -   [2025 Research Grant - Memorial Fund - Cumberland Bird Observers Club](https://www.cboc.org.au/memorial-fund) *- (AUD 3000)*
