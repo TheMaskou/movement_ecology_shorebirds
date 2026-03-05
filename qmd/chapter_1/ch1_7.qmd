@@ -1308,7 +1308,7 @@ final_table %>%
 
 ```
 
-**Legend**: Summary for each species and per Motus station of the number of hours a species has been detected and the number of hours the station has been listening while the species had at least one individual with an activated tag on (survey effort).   
+**Legend**: Summary for each species and per Motus station of the number of hours a species has been detected and the number of hours the station has been listening while the species had at least one individual with an activated tag on (survey effort). *NA* are when the group holds individuals that are detected less than one hour total.   
 
 ::: blockquote-red
 The only remaining limitation is the high number of hours sharing the same date and time across several Motus stations, for the survey effort. Which is not realistic since the birds can be at only one place at once. 
