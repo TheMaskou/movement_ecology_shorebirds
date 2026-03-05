@@ -470,7 +470,6 @@ $$
 Some cases may happen where the *time used* was over the *available*. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.\
 <br>
 
-
 ```{r potential error, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 table((used_bird_recv_time  %>% 
          filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
@@ -600,7 +599,6 @@ plots_used_rate <- cross2(tide_levels, species_types) %>%
   purrr::map(~ make_plot(.x[[1]], .x[[2]]))
 
 ```
-
 
 ```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 
@@ -947,7 +945,7 @@ balance_table <- figure_plot %>%
 
 ### POPULATION
 
-**USAGE RATE**
+**TOTAL SURVEY EFFORT** (%) *- TOTAL AVAILABLE -*
 
 ```{r global rou, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCategory)) + # or total_used_t
@@ -963,7 +961,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 
 **Legend**: Find the values of the Usage rate (or rate of use) from the whole tagged shorebirds population detected within the Motus array and for each tide category.
 
-**TOTAL USED**
+**TOTAL DETECTED** (hours) *- TOTAL USED -*
 
 ```{r global hours, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 # All species and tide categories 
@@ -983,7 +981,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategor
 
 ### SPECIES
 
-**USAGE RATE**
+**TOTAL SURVEY EFFORT** (%) *- TOTAL AVAILABLE -*
 
 ```{r sp rou, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCategory)) + # or total_used_t
@@ -1003,7 +1001,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 
 **Legend**: Find the values of the Usage rate (or rate of use) across each shorebirds species detected within the Motus array and for each tide category.
 
-**TOTAL USED**
+**TOTAL DETECTED** (hours) *- TOTAL USED -*
 
 ```{r sp hours, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 explore <- ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategory)) + # or total_used_t
@@ -1021,6 +1019,9 @@ explore
 
 **Legend**: Find the total of hours (or total uses) each species has been recorded within the Motus array and for each tide category.
 
+### SITES
+
+**TOTAL DETECTED** (hours) *- TOTAL USED -*
 
 ```{r summary table sp lvl, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
@@ -1308,9 +1309,8 @@ final_table %>%
 
 ```
 
-**Legend**: Summary for each species and per Motus station of the number of hours a species has been detected and the number of hours the station has been listening while the species had at least one individual with an activated tag on (survey effort). *NA* are when the group holds individuals that are detected less than one hour total.   
+**Legend**: Summary for each species and per Motus station of the number of hours a species has been detected and the number of hours the station has been listening while the species had at least one individual with an activated tag on (survey effort). *NA* are when the group holds individuals that are detected less than one hour total.
 
 ::: blockquote-red
-The only remaining limitation is the high number of hours sharing the same date and time across several Motus stations, for the survey effort. Which is not realistic since the birds can be at only one place at once. 
-:::  
-
+The only remaining limitation is the high number of hours sharing the same date and time across several Motus stations, for the survey effort. Which is not realistic since the birds can be at only one place at once.
+:::
