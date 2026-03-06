@@ -1174,7 +1174,11 @@ recv_combined_final <- recv_combined %>%
          pct_Diurnal_Low_used,   pct_Diurnal_High_used)
 
 final_table <- bind_rows(species_combined, recv_combined_final) %>%
-  arrange(speciesEN, desc(recvDeployName == "TOTAL"))
+  arrange(speciesEN, desc(recvDeployName == "TOTAL")) %>%
+  mutate(across(
+    c(hours_Nocturnal_Low, hours_Nocturnal_High, hours_Diurnal_Low, hours_Diurnal_High),
+    ~ sub("^0(\\.0)? / ", "<  1 / ", .x)
+  ))
 
 # ══════════════════════════════════════════════════════════════════════════════
 # ÉTAPE 5 — GT TABLE
