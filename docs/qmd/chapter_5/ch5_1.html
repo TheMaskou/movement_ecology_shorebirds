@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-06">
+<meta name="dcterms.date" content="2026-03-12">
 
-<title>Chapter 5 – Movement Ecology - Shorebirds</title>
+<title>Power analysis – Movement Ecology - Shorebirds</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -201,9 +236,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Chapter 5</span>
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-chapter-5">    
+        <li class="dropdown-header">Prior</li>
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_5/ch5_1.html">
- <span class="dropdown-text">Chapter 5</span></a>
+ <span class="dropdown-text">Power analysis</span></a>
   </li>  
     </ul>
   </li>
@@ -249,7 +285,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_5/ch5_1.html">Chapter 5</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_5/ch5_1.html">Prior</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_5/ch5_1.html">Power analysis</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -261,26 +297,52 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Prior</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_5/ch5_1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Chapter 5</span></a>
+ <span class="menu-text">Power analysis</span></a>
   </div>
 </li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#defining-research-targets" id="toc-defining-research-targets" class="nav-link active" data-scroll-target="#defining-research-targets">Defining research targets</a></li>
+  <li><a href="#selecting-existing-data" id="toc-selecting-existing-data" class="nav-link" data-scroll-target="#selecting-existing-data">Selecting existing data</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#formatting-data" id="toc-formatting-data" class="nav-link" data-scroll-target="#formatting-data">Formatting data</a></li>
+  <li><a href="#filtering-outliers" id="toc-filtering-outliers" class="nav-link" data-scroll-target="#filtering-outliers">Filtering outliers</a></li>
+  <li><a href="#verifying-residency-assumption" id="toc-verifying-residency-assumption" class="nav-link" data-scroll-target="#verifying-residency-assumption">Verifying residency assumption</a></li>
+  <li><a href="#segmenting-periods" id="toc-segmenting-periods" class="nav-link" data-scroll-target="#segmenting-periods">Segmenting periods</a></li>
+  <li><a href="#extracting-pilot-parameters" id="toc-extracting-pilot-parameters" class="nav-link" data-scroll-target="#extracting-pilot-parameters">Extracting pilot parameters</a></li>
+  <li><a href="#specifying-sampling-parameters-duration-and-interval" id="toc-specifying-sampling-parameters-duration-and-interval" class="nav-link" data-scroll-target="#specifying-sampling-parameters-duration-and-interval">Specifying sampling parameters (duration and interval)</a></li>
+  <li><a href="#simulating-sampling-design" id="toc-simulating-sampling-design" class="nav-link" data-scroll-target="#simulating-sampling-design">Simulating sampling design</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_5/ch5_1.html">Prior</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_5/ch5_1.html">Power analysis</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Chapter 5</h1>
+<h1 class="title">Power analysis</h1>
 </div>
 
 
@@ -291,7 +353,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-06</p>
+      <p class="date">2026-03-12</p>
     </div>
   </div>
   
@@ -303,10 +365,498 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p><em>Coming soon to cinemas…</em></p>
-<p><img src="../../material/cinema.png" style="display: block; margin: auto; width: 70vw; max-width: 600px; height: auto; border-radius: 50%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); -webkit-mask-image: radial-gradient(circle, black 35%, transparent 50%); mask-image: radial-gradient(ellipse 100% 80%, black 45%, transparent 50%);"></p>
+<div class="callout callout-style-simple callout-none no-icon" style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>This page aims to define the priors required to estimate the number of individuals we need to trap, equip with GPS collars and track, so we can reliably answer our scientific question. The priors are defined by the size sample, the sampling duration and the sampling interval.</p>
+<p>We carefully followed the methodology exposed by <a href="https://www.biorxiv.org/content/10.1101/2025.07.30.667390v1">Silva et al.&nbsp;(2025)</a>.</p>
+</div>
+</div>
+</div>
+<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
+<p><img src="../../material/gps_design.jpg" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
+<figcaption style="margin-top: 1em; font-style: italic;">
+<p>Figure: Workflow for evaluating population sample sizes while balancing trade-offs with sampling parameters (Porteus et al.&nbsp;- 2023).</p>
+</figcaption>
+</figure>
+</div>
+<section id="defining-research-targets" class="level1">
+<h1>Defining research targets</h1>
+<p>We aim to assess the potential impact of invasive predators (European red foxes, Ferral cat) on Australian shorebirds, whether they are overlapping their home ranges in time and space.</p>
+<p>Several questions are defined:</p>
+<p>(i) assess space-use of European red foxes and Feral cats depending tidal and circadian cycles in the local estuaries</p>
+<p>(ii) assess space-use of shorebirds depending tidal and circadian cycles in the local estuaries</p>
+<p>(iii) compare and test whether shorebird and invasive predators space-use overlap in space and time</p>
+</section>
+<section id="selecting-existing-data" class="level1">
+<h1>Selecting existing data</h1>
+<p>Now we established our research targets, the next step is to select the appropriate datasets to extract individual- and population-level parameters. So we can simulate a synthetic case that we will use to assess our sample features requirement to design at the best the method we will implement on the ground in the real world.</p>
+<p>We selected a data set available and open access, acquired on European red foxes (<em>Vulpes vulpes</em>) into the United Kingdom within wetlands and near peri-urban areas. This is very close to our study case since our foxes would be evolving in habitats near located around the estuaries, across wetlands and also bordered by urban areas.</p>
+<div class="blockquote-red">
+<p><strong>Load the data</strong> in your R environment accessible on movebank:</p>
+<ul>
+<li><p><em>Porteus TA, Short MJ, Hoodless AN, Reynolds JC. 2024. Data from: Study “Red Fox (Vulpes vulpes) in UK wet grasslands”. Movebank Data Repository. <a href="https://datarepository.movebank.org/entities/datapackage/86f58f48-90be-4241-b895-6af3e7952dde">https://doi.org/10.5441/001/1.304</a></em></p>
+<p>From the study <a href="https://link.springer.com/article/10.1007/s10344-023-01759-y">Porteus et al.&nbsp;2024</a>.</p></li>
+</ul>
+</div>
+</section>
+<section id="packages" class="level1">
+<h1>Packages</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here) </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(amt) </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(suncalc)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(amt)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ctmm)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_github("pratikunterwegs/atlastools")</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(atlastools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="formatting-data" class="level1">
+<h1>Formatting data</h1>
+<p>Let’s open, format and have a quick look on the data before all.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_5"</span>, <span class="st">"data"</span>, <span class="st">"fox_uk_test.csv"</span>)) </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data_all <span class="ot">&lt;-</span> data_csv <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">timestamp =</span> <span class="fu">ymd_hms</span>(timestamp)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">make_track</span>(<span class="st">"utm.easting"</span>, </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>             <span class="st">"utm.northing"</span>, </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>             timestamp,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>             individual.local.identifier, <span class="co"># keep indiv.ID</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>             gps.hdop, <span class="co"># keep location error metric (horizontal dilution-of-precision)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">crs =</span> <span class="dv">32630</span>)  <span class="co"># EPSG for UTM zone 30N</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick plot </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_all, <span class="fu">aes</span>(x_, </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                 y_, </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> individual.local.identifier)) <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/load data-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="filtering-outliers" class="level1">
+<h1>Filtering outliers</h1>
+<p>(<a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/1365-2656.13610">Gupte et al.&nbsp;- 2021</a> &amp; <a href="https://pratikunterwegs.github.io/atlastools/">documentation</a>; <a href="https://ianjonsen.github.io/aniMotum/">Jonsen et al.&nbsp;- 2023</a>).</p>
+<p>We also filter individuals to keep only 5 so the analysis doesn’t take too long to run.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract movement parameters</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>data_all <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">speed_in =</span> <span class="fu">atl_get_speed</span>(., </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">x =</span> <span class="st">"x_"</span>, </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">y =</span> <span class="st">"y_"</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">time =</span> <span class="st">"t_"</span>, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"in"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">speed_out =</span> <span class="fu">atl_get_speed</span>(., </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">x =</span> <span class="st">"x_"</span>, </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>                             <span class="at">y =</span> <span class="st">"y_"</span>, </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                             <span class="at">time =</span> <span class="st">"t_"</span>, </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">type =</span> <span class="st">"out"</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">angle =</span> <span class="fu">atl_turning_angle</span>(., </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                             <span class="at">x =</span> <span class="st">"x_"</span>, </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                             <span class="at">y =</span> <span class="st">"y_"</span>, </span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>                             <span class="at">time =</span> <span class="st">"t_"</span>)   )</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter unrealistic movement</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust S (= 10) based on Porteus &amp; al. (2023) findings</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(speed_in <span class="sc">&lt;</span> <span class="dv">10</span> <span class="sc">|</span> speed_out <span class="sc">&lt;</span> <span class="dv">10</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Median smoothing</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># I choose to not doing it because I want keep real observed values and not compute somoothed ones</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Thinning movement tracks</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co"># No need here but might be in real analysis</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only 5 individuals to save time in procedures</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(individual.local.identifier <span class="sc">%in%</span> </span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>           <span class="fu">unique</span>(data_all<span class="sc">$</span>individual.local.identifier)[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="verifying-residency-assumption" class="level1">
+<h1>Verifying residency assumption</h1>
+<p><a href="https://www.journals.uchicago.edu/doi/full/10.1086/675504?casa_token=yTa5MK3mgdwAAAAA%3AF0MriH4Gi2aBLjU2waLAC2C1LF2e_4yRBnOA_RPr0_SXdagBvwLBt1jIqu_oY2aOuGldEaU9MrQ#_i27">Fleming et al.&nbsp;- 2014</a> <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12559">Calabrese et al.&nbsp;- 2016</a></p>
+<p>We must be sure <strong>every single</strong> tracked individuals are residential and no vagrant, so we can assess a home range.</p>
+<p>An easy way to do this is to plot a variogram, essentially a means of visualizing time-lag-dependent behaviors in the data and thus informative to look at.</p>
+<p>For example, with the available data (5 individuals only are checked to save time in the process), when the below figure shows a plateau, it indicates range residency, otherwise the individual is non-stationary (i.e., B16M02).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Format for ctmm</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_ctmm <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> x_,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> y_,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">timestamp =</span> t_,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">individual.local.identifier =</span> individual.local.identifier) <span class="sc">%&gt;%</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>()</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>data_ctmm <span class="ot">&lt;-</span> <span class="fu">as.telemetry</span>(data_ctmm,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">projection =</span> <span class="st">"+proj=utm +zone=30 +datum=WGS84"</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Split by individual</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>individuals <span class="ot">&lt;-</span> <span class="fu">unique</span>(data<span class="sc">$</span>individual.local.identifier)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Loop over individuals (AI generated)</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (id <span class="cf">in</span> individuals) {</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Processing:"</span>, id, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Subset telemetry for this individual</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  data_ctmm_indiv <span class="ot">&lt;-</span> data_ctmm[[id]]</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Plot variogram to visually inspect range residency</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  vg <span class="ot">&lt;-</span> <span class="fu">variogram</span>(data_ctmm_indiv)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(vg, <span class="at">main =</span> id)</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fit candidate models</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  GUESS <span class="ot">&lt;-</span> <span class="fu">ctmm.guess</span>(data_ctmm_indiv, <span class="at">interactive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  fits <span class="ot">&lt;-</span> <span class="fu">ctmm.select</span>(data_ctmm_indiv, GUESS, <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  results[[id]] <span class="ot">&lt;-</span> fits</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing: B16M01 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/residency-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing: B16M02 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/residency-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing: B16M03 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/residency-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing: B16F01 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/residency-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing: B16M04 </code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/residency-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Beyond visually validating the residency assumption, we can infer the data with movement model selections to verify the assumption:</p>
+<ul>
+<li><p>IID (Independent and Identically Distributed) — The simplest model, assuming all locations are independent with no temporal autocorrelation. Essentially treats the animal as if it teleports randomly within its range. If this is the best model, your sampling rate is too coarse to detect any movement autocorrelation.</p></li>
+<li><p>BM (Brownian Motion) — The animal diffuses randomly with no tendency to return to any area. Non-stationary, meaning the animal has no home range — it just keeps wandering indefinitely. A red flag for home range estimation.</p></li>
+<li><p>OU (Ornstein-Uhlenbeck) — Adds a central tendency (home range attraction) to Brownian motion. The animal wanders but is pulled back toward a center, producing a stable home range. Positions are auto-correlated but velocities are not — meaning the model assumes instantaneous direction changes, which is biologically unrealistic at fine sampling scales.</p></li>
+<li><p>OUF (Ornstein-Uhlenbeck with Foraging/velocity) — Extends OU by also auto-correlating velocities, meaning the animal moves in a more continuous, realistic trajectory with persistent direction before eventually returning to its range center. The most biologically realistic model for GPS data collected at fine temporal resolution. τF captures the timescale of this velocity autocorrelation (roughly the foraging or transit timescale), while τH captures the home range timescale.</p></li>
+<li><p>OUf (Ornstein-Uhlenbeck with fine-scale autocorrelation) — Similar to OUF but with a different parameterisation of the velocity process, capturing very fine-scale movement persistence. When this model wins, it often suggests the sampling interval is very short relative to the animal’s movement timescales.</p></li>
+<li><p>Anisotropic variants — Any of the above models can be anisotropic, meaning the home range or movement is not assumed to be circular but can be elliptical, capturing directional biases in space use such as a range stretched along a valley or coastline.</p></li>
+</ul>
+<p>For example, in the below results, with the available data (5 individuals only are checked to save time in the process), all five individuals are range-resident with OUF or OUf model selected. Only B16F01 is ambiguous with AIC &lt; 1 for several models. But M1603 which was visually not indicating a plateau is indicated here as a resident.</p>
+<p><strong>Depending on our knowledge related to the species and its system, we might subjectively filter individuals.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract best fit model per individuals</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>best_fits <span class="ot">&lt;-</span> <span class="fu">lapply</span>(results, <span class="cf">function</span>(f) f[[<span class="dv">1</span>]])  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Check best model for each individual</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (id <span class="cf">in</span> individuals) {</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">--- Individual:"</span>, id, <span class="st">"---</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">summary</span>(results[[id]]))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Reminder for the output values:</strong></p>
+<p><strong>ΔAICc</strong> — Difference in AICc (corrected Akaike Information Criterion) relative to the best model. Values below 2 indicate models with comparable support, values above 7 indicate poor support. Always interpreted relatively — the model with ΔAICc = 0 is the best supported.</p>
+<p><strong>ΔRMSPE (m)</strong> — Difference in Root Mean Square Prediction Error in meters. Measures how well the model predicts withheld locations — a cross-validation metric. The model with ΔRMSPE = 0 has the best predictive accuracy. Note that the best AICc model and best RMSPE model don’t always agree, as AICc rewards parsimony while RMSPE rewards predictive fit.</p>
+<p><strong>DOF[area]</strong> — Degrees of freedom for the area estimate, roughly interpretable as the effective number of independent observations contributing to the home range estimate. Higher values mean a more reliable, better-constrained home range estimate. Very low values (e.g.&nbsp;&lt; 5) suggest the home range estimate should be interpreted cautiously.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter individuals which are non residents</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>( <span class="sc">!</span>individual.local.identifier <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"B16M02"</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>best_fits <span class="ot">&lt;-</span> best_fits[<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"B16M02"</span>, <span class="fu">names</span>(best_fits))]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="segmenting-periods" class="level1">
+<h1>Segmenting periods</h1>
+<p>Given our assumption of a stationary movement process (e.g., its statistical properties are constant in time), it may also be necessary to segment the dataset, by time or behavioral states, prior to parameter extraction.<br>
+Neglecting to address these issues 198 may result in parameter estimates drawn from an unrepresentative sample, undermining the reliability of downstream analyses.</p>
+<p>Here, we will simply segment per day and night, acknowledged as the main drivers of fox behavior and movements.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add lat/lon to data (requirement for solar time)</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>coords_latlon <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"x_"</span>, <span class="st">"y_"</span>), <span class="at">crs =</span> <span class="dv">32630</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">4326</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_coordinates</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">lon =</span> X, <span class="at">lat =</span> Y)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lon =</span> coords_latlon<span class="sc">$</span>lon,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">lat =</span> coords_latlon<span class="sc">$</span>lat)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Get sunrise and sunset for each unique date and location</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>data_filtered <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(t_)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">sun =</span> <span class="fu">list</span>(<span class="fu">getSunlightTimes</span>(<span class="at">date =</span> date,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>                                <span class="at">lat =</span> lat,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>                                <span class="at">lon =</span> lon,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>                                <span class="at">keep =</span> <span class="fu">c</span>(<span class="st">"sunrise"</span>, <span class="st">"sunset"</span>),</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>                                <span class="at">tz =</span> <span class="st">"UTC"</span>)),</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">sunrise =</span> sun<span class="sc">$</span>sunrise,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">sunset  =</span> sun<span class="sc">$</span>sunset,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinguish nocturnal and diurnal groups</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">diel =</span> <span class="fu">ifelse</span>(t_ <span class="sc">&gt;=</span> sunrise <span class="sc">&amp;</span> t_ <span class="sc">&lt;=</span> sunset, </span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"diurnal"</span>, </span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"nocturnal"</span>)  ) <span class="sc">%&gt;%</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>sun)  <span class="co"># remove list column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="extracting-pilot-parameters" class="level1">
+<h1>Extracting pilot parameters</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>tau_position <span class="ot">&lt;-</span> <span class="fu">median</span>(<span class="fu">sapply</span>(best_fits, <span class="cf">function</span>(m) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(m) <span class="sc">&gt;=</span> <span class="dv">13</span> <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(m[[<span class="dv">13</span>]])) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    m[[<span class="dv">13</span>]][<span class="st">"tau position"</span>, <span class="st">"tau position"</span>]  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cn">NA</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>}), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>tau_velocity <span class="ot">&lt;-</span> <span class="fu">median</span>(<span class="fu">sapply</span>(best_fits, <span class="cf">function</span>(m) {</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(m) <span class="sc">&gt;=</span> <span class="dv">13</span> <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(m[[<span class="dv">13</span>]])) {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    m[[<span class="dv">13</span>]][<span class="st">"tau velocity"</span>, <span class="st">"tau velocity"</span>]</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cn">NA</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>}), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">median</span>(<span class="fu">sapply</span>(best_fits, <span class="cf">function</span>(m) {</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">length</span>(m) <span class="sc">&gt;=</span> <span class="dv">5</span> <span class="sc">&amp;&amp;</span> <span class="fu">class</span>(m[[<span class="dv">5</span>]]) <span class="sc">==</span> <span class="st">"covm"</span>) {</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>(<span class="fu">diag</span>(m[[<span class="dv">5</span>]]<span class="sc">@</span>par))  </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cn">NA</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>}), <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="specifying-sampling-parameters-duration-and-interval" class="level1">
+<h1>Specifying sampling parameters (duration and interval)</h1>
+<p>After defining study objectives and movement parameters, researchers select sampling models (duration and interval) to test through simulations. These simulations can incorporate real-world sources of bias, including:</p>
+<ul>
+<li><p><strong>Location error</strong> – inaccuracies in recorded positions, critically affecting distance and speed estimation.</p></li>
+<li><p><strong>Data loss</strong> – missing locations due to low fix-success rates or temporary signal issues.</p></li>
+<li><p><strong>Deployment disruption</strong> – premature recording stoppage caused by device malfunction, failures or animal mortality.</p></li>
+<li><p><strong>Storage limits</strong> – finite memory capacity of GPS units leading to incomplete datasets.</p></li>
+</ul>
+<p>Location error is particularly important to address because, if it exceeds the true movement scale, it causes distance and speed estimates to inflate as sampling frequency increases.</p>
+<div class="blockquote-blue">
+<p><strong>USE THE APP</strong></p>
+<p>From here, we can use the <a href="https://ecoisilva.github.io/movedesign/articles/movedesign.html">movedesign app</a> developed by Ines Silva:</p>
+<ul>
+<li><em>Silva, I., Fleming, C. H., Noonan, M. J., Fagan, W. F., &amp; Calabrese, J. M. (2023). Movedesign: Shiny r app to evaluate sampling design for animal movement studies.&nbsp;Methods in Ecology and Evolution,&nbsp;14(9), 2216–2225</em>.&nbsp;<a href="https://doi.org/10.1111/2041-210X.14153" class="uri">https://doi.org/10.1111/2041-210X.14153</a></li>
+</ul>
+<p>See also <em>ctmm</em> web application <a href="https://github.com/ctmm-initiative/ctmmweb?tab=readme-ov-file">here</a>.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Meet app requirements</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>data_filtered <span class="ot">&lt;-</span> data_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># rename(animal_ID = individual.local.identifier) %&gt;%</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(animal_ID, t_, x_, y_,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>         <span class="co"># speed_in, speed_out, angle,</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>         diel, gps.hdop) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">animal_ID =</span> <span class="fu">as.factor</span>(animal_ID), </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">diel=</span> <span class="fu">as.factor</span>(diel) ) <span class="sc">%&gt;%</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(animal_ID) <span class="sc">%&gt;%</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">1000</span>, <span class="at">replace =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Save and load in the app the filtered/segmented dataset</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>readr<span class="sc">::</span><span class="fu">write_csv</span>(data_filtered, </span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>          here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_5"</span>, <span class="st">"data"</span>, <span class="st">"fox_uk_test_filtered.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"ecoisilva/movedesign"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(movedesign)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>movedesign<span class="sc">::</span><span class="fu">run_app</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="blockquote-blue">
+<p><strong>ALTERNATIVE</strong></p>
+<p>If you want to control each step or if the app doesn’t work, find here below a simplified workflow to implement the same ultimate results: <strong>how many devices should I deploy on the ground to run a robust and accurate home range analysis?</strong></p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>species        <span class="ot">&lt;-</span> <span class="st">"Vulpes vulpes"</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sampling_int   <span class="ot">&lt;-</span> <span class="dv">15</span>          <span class="co"># minutes between fixes</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>fix_success    <span class="ot">&lt;-</span> <span class="fl">0.75</span>        <span class="co"># 75% fix success rate</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>deployment_dur <span class="ot">&lt;-</span> <span class="dv">12</span>          <span class="co"># months (battery life)</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>loc_error      <span class="ot">&lt;-</span> <span class="dv">5</span>           <span class="co"># meters (GPS accuracy)</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>storage_limit  <span class="ot">&lt;-</span> <span class="dv">1900000</span>     <span class="co"># number of fixes storage limit</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>dropout_rate   <span class="ot">&lt;-</span> <span class="fl">0.15</span>        <span class="co"># 15% deployment disruption</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Effective fixes per individual after accounting for fix success and dropout</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>fixes_per_day   <span class="ot">&lt;-</span> (<span class="dv">60</span> <span class="sc">/</span> sampling_int) <span class="sc">*</span> <span class="dv">24</span> <span class="sc">*</span> fix_success</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>effective_days  <span class="ot">&lt;-</span> (deployment_dur <span class="sc">*</span> <span class="fl">30.4</span>) <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> dropout_rate)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>total_fixes     <span class="ot">&lt;-</span> fixes_per_day <span class="sc">*</span> effective_days</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Associated to the existing data and regarding the parameters specified, there is 2.2326^{4} effective fixes per individual after accounting for success of fixes collection and failure in devices. Providing 2.232576^{4} observations out of 1.9^{6}.</p>
+</section>
+<section id="simulating-sampling-design" class="level1">
+<h1>Simulating sampling design</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build population mean model from pilot parameters</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mean_model <span class="ot">&lt;-</span> <span class="fu">ctmm</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">tau      =</span> <span class="fu">c</span>(tau_position, tau_velocity),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">sigma    =</span> sigma,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">isotropic =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Time sequence based on design</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>dt    <span class="ot">&lt;-</span> sampling_int <span class="sc">*</span> <span class="dv">60</span>          <span class="co"># seconds</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>t_seq <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="fu">round</span>(total_fixes) <span class="sc">*</span> dt, </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">by =</span> dt)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>n_range   <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>n_sims    <span class="ot">&lt;-</span> <span class="dv">5</span>    </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>target_cv <span class="ot">&lt;-</span> <span class="fl">0.25</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Private choice to use most of the computer cores so it runs multiple indiv at once</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>n_cores <span class="ot">&lt;-</span> <span class="fu">detectCores</span>() <span class="sc">-</span> <span class="dv">2</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulation</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>results_power <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(n <span class="cf">in</span> n_range){</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Simulating n ="</span>, n, <span class="st">"individuals...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  cv_list <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(s <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_sims){</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    hr_estimates <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span>(ind <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n){</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tryCatch</span>({</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Simulate track from mean model</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>        sim_track <span class="ot">&lt;-</span> <span class="fu">simulate</span>(mean_model,</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>                              <span class="at">t     =</span> t_seq,</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>                              <span class="at">error =</span> loc_error)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Fit model</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>        sim_guess <span class="ot">&lt;-</span> <span class="fu">ctmm.guess</span>(sim_track, mean_model, </span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>                                <span class="at">interactive =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>        sim_fit   <span class="ot">&lt;-</span> <span class="fu">ctmm.fit</span>(sim_track, sim_guess)</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>        <span class="co"># AKDE home range estimate</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>        sim_akde     <span class="ot">&lt;-</span> <span class="fu">akde</span>(sim_track, sim_fit)</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>        hr_estimates <span class="ot">&lt;-</span> <span class="fu">c</span>(hr_estimates,</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">summary</span>(sim_akde)<span class="sc">$</span>CI[<span class="dv">2</span>] <span class="sc">/</span> <span class="fl">1e6</span>)</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>      }, <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>        <span class="fu">cat</span>(<span class="st">"Simulation failed, skipping...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">length</span>(hr_estimates) <span class="sc">&gt;=</span> <span class="dv">2</span>){</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>      cv_list <span class="ot">&lt;-</span> <span class="fu">c</span>(cv_list, </span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">sd</span>(hr_estimates) <span class="sc">/</span> <span class="fu">mean</span>(hr_estimates))</span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  results_power <span class="ot">&lt;-</span> <span class="fu">rbind</span>(results_power, <span class="fu">data.frame</span>(</span>
+<span id="cb19-45"><a href="#cb19-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_individuals =</span> n,</span>
+<span id="cb19-46"><a href="#cb19-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_cv       =</span> <span class="fu">mean</span>(cv_list),</span>
+<span id="cb19-47"><a href="#cb19-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">sd_cv         =</span> <span class="fu">sd</span>(cv_list)</span>
+<span id="cb19-48"><a href="#cb19-48" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb19-49"><a href="#cb19-49" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-50"><a href="#cb19-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-51"><a href="#cb19-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-52"><a href="#cb19-52" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>) {</span>
+<span id="cb19-53"><a href="#cb19-53" aria-hidden="true" tabindex="-1"></a>  beepr<span class="sc">::</span><span class="fu">beep</span>(<span class="at">sound =</span> <span class="dv">2</span>)</span>
+<span id="cb19-54"><a href="#cb19-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="fl">0.5</span>) </span>
+<span id="cb19-55"><a href="#cb19-55" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-56"><a href="#cb19-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-57"><a href="#cb19-57" aria-hidden="true" tabindex="-1"></a><span class="co"># Save entire R environment</span></span>
+<span id="cb19-58"><a href="#cb19-58" aria-hidden="true" tabindex="-1"></a><span class="fu">save.image</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_5"</span>, <span class="st">"data"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(),<span class="st">"_power_simulation"</span>, <span class="st">"_nsim_"</span>, n_sims,<span class="st">"_ranging_"</span>, <span class="fu">paste</span>(n_range, <span class="at">collapse =</span> <span class="st">"_"</span>), <span class="st">".RData"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch5_1_files/figure-html/plot results-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>  n_individuals   mean_cv      sd_cv
+1             2 0.1996281 0.12628533
+2             4 0.3936213 0.20640016
+3             6 0.4451786 0.22541798
+4            10 0.4137192 0.05786964
+5            15 0.4698869 0.07766856
+6            20 0.3612467 0.07377829</code></pre>
+</div>
+</div>
+<div class="blockquote-green">
+<p>Based on the power analysis using pilot movement parameters extracted from 5 <em>Vulpes vulpes</em> individuals, and assuming a sampling interval of 15 minutes, a deployment duration of 12 months, a fix success rate of 75%, and a 15% deployment disruption rate, the following recommendations apply:</p>
+<ul>
+<li><p><strong>Minimum number of individuals:</strong> <strong>We could not determine the minimum number of individuals</strong> required to achieve the analysis with a coefficient of variation ≤ 25% in home range estimate</p></li>
+<li><p><strong>Sampling interval</strong>: one fix every 15 minutes, yielding 72 fixes per individual per day after accounting for 75% fix success rate</p></li>
+<li><p><strong>Sampling period</strong>: 12 months, (310 effective days after accounting for 15% deployment disruption)</p></li>
+<li><p><strong>Expected fixes per tag</strong>: 2.2326^{4} locations over the deployment period</p></li>
+<li><p><strong>Storage check</strong>: 2.2326^{4} fixes per tag, well within the 1,900,000 fix storage limit</p></li>
+</ul>
+<p>These recommendations are derived from 5 simulations per sample size scenario, using population-level movement parameters (τ<sub>position</sub> = 764.1 h, τ<sub>velocity</sub> = 0.07 h) estimated from the pilot dataset.</p>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <div style="text-align: center; margin-top: 3rem; padding: 1rem; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 0.9rem;">

@@ -320,7 +320,7 @@ table_1_pub <- table_1 %>%
 
 
 # Table 1
-table_1_pub %>%
+table_1_pub <- table_1_pub %>%
   gt() %>%
   
   tab_header(
@@ -369,7 +369,22 @@ table_1_pub %>%
     table.width = pct(100)  
   )
 
+table_1_pub
+
 ```
+
+```{r print table, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+gtsave(
+  data = table_1_pub,
+  filename =  here::here("material", "table_1.png"),   
+  path = "outputs",           # optional folder
+  expand = 10,                # optional padding around table
+  vwidth = 1600,              # optional: wider image to avoid cropping
+  vheight = 0                 # 0 lets height be computed automatically
+)
+```
+
+Open and download the table [here](material/table_1.png){target="_blank"}.
 
 <br> <br>
 

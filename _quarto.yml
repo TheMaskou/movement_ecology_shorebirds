@@ -115,7 +115,10 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_5/ch5_1.qmd
+        - section: "Prior"
+          contents:
+            - qmd/chapter_5/ch5_1.qmd # Prior estimations
+            
         
     - id: reports
       title: "Publications"
