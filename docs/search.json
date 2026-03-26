@@ -428,12 +428,12 @@
   {
     "objectID": "qmd/chapter_1/ch1_4.html",
     "href": "qmd/chapter_1/ch1_4.html",
-    "title": "Location & History",
+    "title": "Motus Array Maintenance",
     "section": "",
-    "text": "Since 2021, our local automated Motus array is sitting both in the Hunter estuary and Port Stephens estuary, with respectively eight and three stations.\nThis page displays a dynamic map where you can explore for each station and its history.\nYou can also openly explore location and a few other aspects on Motus server.\nA Motus station is made of multiple components:\n\nAntenna (either directional or omni-directionnal), to detect any VHF signal\nSensorGnome Receiver, to identify and store VHF signal from a known or unknown tag\nSolar panel + battery (low cycle 12V), to provide electrical power\nMast, to provide supporting structure\n\nNote that you can build any station yourself by simply following the installation guide freely delivered by Motus.\n\n\n\n\n\n\n\n\nShinyApp will provide the navigation. On To-Do list and Has To be done…",
+    "text": "Since 2021, our local automated Motus array is sitting both in the Hunter estuary and Port Stephens estuary, with respectively eight and three stations.\nThis page displays a dynamic map where you can explore for each station its history.\nYou can also openly explore location and a few other aspects on Motus server.\nA Motus station is made of multiple components:\n\nAntenna (either directional or omni-directionnal), to detect any VHF signal\nSensorGnome Receiver, to identify and store VHF signal from a known or unknown tag\nSolar panel + battery (low cycle 12V), to provide electrical power\nMast & shelf, to provide a supporting structure\n\nNote that you can build any station yourself by simply following the installation guide freely delivered by Motus.\n\n\n\n\n\n\n\n\nOverview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).\n\n\n\nFind below a dynamic map with the last info concerning the status of each stations part of the local Motus array.\n\n\n\n\n\n\n\n\nAnd retrieve the tables corresponding to each stations with its complete maintenance history.",
     "crumbs": [
       "Motus array",
-      "Location & History"
+      "Motus Array Maintenance"
     ]
   },
   {

@@ -67,7 +67,7 @@ website:
             
         - section: "Motus array"
           contents:
-            - qmd/chapter_1/ch1_4.qmd # Location and History
+            - qmd/chapter_1/ch1_4.qmd # Maintenance
             - qmd/chapter_1/ch1_5.qmd # Survey effort
             
         - section: "Analysis"
