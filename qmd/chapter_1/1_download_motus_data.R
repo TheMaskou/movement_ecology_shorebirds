@@ -23,7 +23,7 @@ motusLogout()
 sql.motus <- tagme(projRecv = proj.num,
                    new = FALSE, # FALSE overwrites existing file, TRUE creates a new file
                    update = TRUE,
-                   dir = here("data", "motus"))
+                   dir = here("qmd", "chapter_1", "data", "motus"))
 metadata(sql.motus, proj.num)
 
 # Below = testing / not needed
