@@ -131,7 +131,7 @@ if (nrow(df.new) == 0) {
   # 8. Spreadsheet join (Band.ID)
   
   # Import spreadsheet from file (ensure is current)
-  spreadsheet <- read.csv(path_shorebird_tracking_spreadsheet) |> 
+  spreadsheet <- read.csv(path_shorebird_number_spreadsheet) |> 
     # Keep only the tagged ones 
     filter(Radio.tag. == "Y") %>%      
     
