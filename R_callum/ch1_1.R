@@ -6,14 +6,12 @@
 #   - qmd/chapter_1/data/motus/project-294.motus (SQLite database)
 #   - qmd/chapter_1/data/motus/data.rds (previous output from previous run, if exists)
 #   - qmd/chapter_1/data/tides/TideDataNewcastle.csv
-#   - qmd/chapter_1/data/tides/tidalCurve.rds
 #   - qmd/chapter_1/data/spreadsheet/spreadsheet.rds (band ID lookup)
 #
 # PRODUCES:
-#   - qmd/chapter_1/data/motus/data.rds (previous output — df.alltags)
-#   - qmd/chapter_1/data/motus/recv-info.rds (previous output — df.recvDeps)
-#   - qmd/chapter_1/data/spreadsheet/spreadsheet.rds (overwritten only if updated externally)
-#   - qmd/chapter_1/data/tides/tideData.rds (previous output)
+#   - qmd/chapter_1/data/motus/data.rds (df.alltags)
+#   - qmd/chapter_1/data/motus/recv-info.rds (df.recvDeps)
+#   - qmd/chapter_1/data/tides/tideData.rds
 #   - qmd/chapter_1/data/motus/backups/{date}-data.rds (dated backup)
 
 # ==== Setup ====
@@ -36,10 +34,14 @@ source(here::here("R_callum", "globals.R"))
 
 # ==== SQLite Connection ====
 
-sql.motus <- DBI::dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
+sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "motus", "project-294.motus"))
+
+# Test connection by listing tables
+dbListTables(sql.motus)
 
 # ==== Load Previous Output ====
 path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
+# If there is no previous output (i.e., this is the first time the script has been run on a machine or the data file has been deleted), will return NULL
 df.alltags.past <- if (file.exists(path_detection_data)) readRDS(path_detection_data) else NULL
 
 # ==== Get New Detections from SQLite ====
@@ -51,6 +53,7 @@ if (!is.null(df.alltags.past)) {
   # Only pull rows not already processed (hitID is unique per detection)
   past_ids <- df.alltags.past$hitID
   df.new <- tbl(sql.motus, "alltags") %>%
+    head(1000) |> 
     filter(!hitID %in% past_ids) %>%
     collect() %>%
     as.data.frame()
@@ -121,11 +124,36 @@ if (nrow(df.new) == 0) {
     mutate(recvDeployName = recode(recvDeployName, !!!station_rename))
 
   # 8. Spreadsheet join (Band.ID)
-  spreadsheet <- readRDS(path_spreadsheet)
+  
+  # Import spreadsheet from file (ensure is current)
+  spreadsheet <- read.csv(path_spreadsheet) |> 
+    # Keep only the tagged ones 
+    filter(Radio.tag. == "Y") %>%      
+    
+    # Variable names
+    rename(DateAUS.Trap = "Date", 
+           motusTagID = "Motus.tag.ID", 
+           speciesEN = "Species") %>%
+    
+    # Value names
+    mutate(speciesEN = case_when(
+      speciesEN == "Eastern Curlew" ~ "Far Eastern Curlew",
+      speciesEN == "Black-winged Stilt" ~ "Pied Stilt",
+      speciesEN == "Pacific Golden Plover" ~ "Pacific Golden-Plover",
+      speciesEN == "Whimbrel" ~ "Eurasian Whimbrel",
+      TRUE ~ speciesEN )) %>% 
+    
+    # Format
+    mutate(motusTagID = as.factor(motusTagID),
+           DateAUS.Trap = as.Date(DateAUS.Trap),
+           Band.ID = as.factor(Band.ID)) %>%
+    select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())  
 
+  # Ensure motusTagID is also a factor in df.new (otherwise merge won't work)
   df.new <- df.new %>%
     mutate(motusTagID = as.factor(motusTagID))
 
+  # Join Band ID to new detections, using motusTagID as the join key
   df.new <- left_join(df.new,
                       spreadsheet %>%
                         filter(is.na(Euthanised.)) %>%
@@ -167,7 +195,6 @@ if (nrow(df.new) == 0) {
     mutate(tideID = paste0(tideCategory, "_", row_number())) %>%
     ungroup()
 
-  tidalCurve <- readRDS(here::here("qmd", "chapter_1", "data", "tides", "tidalCurve.rds"))
   tidalCurveFunc <- splinefun(tideData$tideDateTimeAus, tideData$tideHeight, method = "natural")
   get.tideIndex <- function(time) { return(which.min(abs(tideData$tideDateTimeAus - time))) }
 
