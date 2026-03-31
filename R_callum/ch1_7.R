@@ -47,18 +47,10 @@ sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "motus", "proj
 
 ## ----my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE----
 # Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
+data_all <- readRDS(path_detection_data)
 
 # Receivers info
-recv <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-recv-info\\.rds$", full.names = TRUE
-  )), 1)) 
+recv <- readRDS(path_recv_info)
 
 # Tide
 tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))

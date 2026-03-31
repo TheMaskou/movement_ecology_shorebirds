@@ -12,18 +12,10 @@ library(tidyr)
 library(purrr)
 
 # Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
+data_all <- readRDS(path_detection_data)
 
 # Receivers info
-recv <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-recv-info\\.rds$", full.names = TRUE
-  )), 1)) 
+recv <- readRDS(path_recv_info)
 
 # Receivers activity
 sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))

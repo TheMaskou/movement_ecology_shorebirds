@@ -11,11 +11,7 @@ library(tidyr)
 
 ## ----my data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = FALSE----
 # Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
+data_all <- readRDS(path_detection_data)
 
 
 ## ----process,  message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE-----
