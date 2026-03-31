@@ -4,6 +4,7 @@ format: html
 ---
 
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# TODO: Replace this with import from .R file to avoid unnecessary knitting
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"),  
@@ -47,9 +48,17 @@ library(dplyr)
 library(ggplot2)
 library(scales)
 library(gt)
+library(DBI)
+library(RSQLite)
 ```
 
 And **load** your `activity` table too!
+
+```{r}
+load(here("data", "motus_data.RData"))
+sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
+```
+
 
 ```{r load,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 
