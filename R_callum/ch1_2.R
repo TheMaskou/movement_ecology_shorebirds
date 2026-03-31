@@ -1,3 +1,6 @@
+# Callum Note 31/02/2026
+# This file is all presentation / nothing is used later-on, so not a priority
+
 ## ----1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
  
 library(motus) 
@@ -14,29 +17,18 @@ library(tidyr)
 library(gt)
 library(gtExtras)
 
+source(here::here("R_callum", "globals.R"))
 
-# Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1))  
+# ==== Load Data ====
+
+# Shorebird detection data
+data_all <- readRDS(path_detection_data)
 
 # Receivers info
-recv <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-recv-info\\.rds$", full.names = TRUE
-  )), 1)) 
+recv <- readRDS(path_recv_info)
 
 # Spreadsheet
-spreadsheet <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "spreadsheet"),
-    pattern = "-spreadsheet\\.rds$", full.names = TRUE
-  )), 1)) 
-
-
+spreadsheet <- readRDS(path_spreadsheet_data)
 
 ## ----1 data ktables, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
