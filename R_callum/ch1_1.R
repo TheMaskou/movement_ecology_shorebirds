@@ -34,14 +34,9 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
                    quiet = TRUE))
 source(here::here("R_callum", "globals.R"))
 
-## ==== Output File Paths ====
-# TODO: these probably belong in globals.R, but left here for now for clarity
-path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
-path_recv_info <- here("qmd", "chapter_1", "data", "motus", "recv-info.rds")
-path_tideData <- here("qmd", "chapter_1", "data", "tides", "tideData.rds")
-# TODO: should be named something informative spreadsheet and path_spreadsheet 
-# should be named something informative
-path_spreadsheet <- here("qmd", "chapter_1", "data", "spreadsheet", "spreadsheet.rds")
+# IMPORTANT NOTE:
+# Output file paths are defined in globals.R; this way, they can easily be
+# imported into other files without remembering the path.
 
 # ==== SQLite Connection ====
 
@@ -136,7 +131,7 @@ if (nrow(df.new) == 0) {
   # 8. Spreadsheet join (Band.ID)
   
   # Import spreadsheet from file (ensure is current)
-  spreadsheet <- read.csv(path_spreadsheet) |> 
+  spreadsheet <- read.csv(path_shorebird_tracking_spreadsheet) |> 
     # Keep only the tagged ones 
     filter(Radio.tag. == "Y") %>%      
     
@@ -291,6 +286,7 @@ df.recvDeps |> glimpse()
 saveRDS(df.alltags,  path_detection_data)
 saveRDS(df.recvDeps, path_recv_info)
 saveRDS(tideData,    path_tideData)
+saveRDS(spreadsheet, path_spreadsheet_data)
 
 # Dated backups
 backup_dir <- here("qmd", "chapter_1", "data", "motus", "backups")
