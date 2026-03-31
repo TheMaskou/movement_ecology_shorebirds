@@ -4,16 +4,16 @@
 #   - R_callum/globals.R (constants: station_rename, tag lists, project number)
 #   - qmd/chapter_1/ch1_3.qmd (species colours, names, classifications — via knitr::purl)
 #   - qmd/chapter_1/data/motus/project-294.motus (SQLite database)
-#   - qmd/chapter_1/data/motus/df_alltags.rds (cached raw data — when use_cached_rds = TRUE)
+#   - qmd/chapter_1/data/motus/data.rds (previous output from previous run, if exists)
 #   - qmd/chapter_1/data/tides/TideDataNewcastle.csv
 #   - qmd/chapter_1/data/tides/tidalCurve.rds
-#   - Spreadsheet: Excel on Maxime's machine, or cached RDS fallback
+#   - qmd/chapter_1/data/spreadsheet/spreadsheet.rds (band ID lookup)
 #
 # PRODUCES:
-#   - qmd/chapter_1/data/motus/data.rds (source of truth — df.alltags)
-#   - qmd/chapter_1/data/motus/recv-info.rds (source of truth — df.recvDeps)
-#   - qmd/chapter_1/data/spreadsheet/spreadsheet.rds (source of truth)
-#   - qmd/chapter_1/data/tides/tideData.rds (source of truth)
+#   - qmd/chapter_1/data/motus/data.rds (previous output — df.alltags)
+#   - qmd/chapter_1/data/motus/recv-info.rds (previous output — df.recvDeps)
+#   - qmd/chapter_1/data/spreadsheet/spreadsheet.rds (overwritten only if updated externally)
+#   - qmd/chapter_1/data/tides/tideData.rds (previous output)
 #   - qmd/chapter_1/data/motus/backups/{date}-data.rds (dated backup)
 
 # ── Setup ──────────────────────────────────────────────────────────────────────
@@ -34,57 +34,37 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
                    quiet = TRUE))
 source(here::here("R_callum", "globals.R"))
 
-# ── Configuration ──────────────────────────────────────────────────────────────
-
-# Set FALSE when SQLite extraction is available (live mode).
-# Set TRUE to load from cached df_alltags.rds instead (testing mode).
-use_cached_rds <- TRUE
-
 # ── SQLite connection ──────────────────────────────────────────────────────────
 
 sql.motus <- DBI::dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
 
-# ── Load source-of-truth (previously processed data) ──────────────────────────
+# ── Load previous output (if it exists) ───────────────────────────────────────
 
-sot_path <- here("qmd", "chapter_1", "data", "motus", "data.rds")
-df.alltags.past <- if (file.exists(sot_path)) readRDS(sot_path) else NULL
+output_path <- here("qmd", "chapter_1", "data", "motus", "data.rds")
+df.alltags.past <- if (file.exists(output_path)) readRDS(output_path) else NULL
 
-# ── Get raw detections ────────────────────────────────────────────────────────
+# ── Get new detections from SQLite ────────────────────────────────────────────
 
-if (use_cached_rds) {
-  df.alltags.raw <- readRDS(here("qmd", "chapter_1", "data", "motus", "df_alltags.rds"))
+# Resolve ambiguous detections before querying
+clarify(sql.motus)
+
+if (!is.null(df.alltags.past)) {
+  # Only pull rows not already processed (hitID is unique per detection)
+  past_ids <- df.alltags.past$hitID
+  df.new <- tbl(sql.motus, "alltags") %>%
+    filter(!hitID %in% past_ids) %>%
+    collect() %>%
+    as.data.frame()
 } else {
-  # Resolve ambiguous detections before querying
-  clarify(sql.motus)
-
-  if (!is.null(df.alltags.past)) {
-    # Only pull rows not already processed (hitID is unique per detection)
-    past_ids <- df.alltags.past$hitID
-    df.alltags.raw <- tbl(sql.motus, "alltags") %>%
-      filter(!hitID %in% past_ids) %>%
-      collect() %>%
-      as.data.frame()
-  } else {
-    df.alltags.raw <- tbl(sql.motus, "alltags") %>%
-      collect() %>%
-      as.data.frame()
-  }
-}
-
-# ── Identify new rows ────────────────────────────────────────────────────────
-
-# In live mode, filtering already happened at SQL level.
-# In cached mode, filter in R:
-if (use_cached_rds && !is.null(df.alltags.past)) {
-  df.new <- df.alltags.raw %>% filter(!hitID %in% df.alltags.past$hitID)
-} else {
-  df.new <- df.alltags.raw
+  df.new <- tbl(sql.motus, "alltags") %>%
+    collect() %>%
+    as.data.frame()
 }
 
 # ── Process new rows ─────────────────────────────────────────────────────────
 
 if (nrow(df.new) == 0) {
-  message("No new detections found. Using existing source-of-truth.")
+  message("No new detections found. Using existing data.rds.")
   df.alltags <- df.alltags.past
 
 } else {
@@ -295,7 +275,7 @@ df.recvDeps <- df.recvDeps %>%
 
 # ── Save ─────────────────────────────────────────────────────────────────────
 
-# Source of truth (overwrite single file)
+# Overwrite output files
 saveRDS(df.alltags,  here("qmd", "chapter_1", "data", "motus", "data.rds"))
 saveRDS(df.recvDeps, here("qmd", "chapter_1", "data", "motus", "recv-info.rds"))
 saveRDS(tideData,    here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
@@ -303,6 +283,6 @@ saveRDS(tideData,    here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 # Dated backup
 backup_dir <- here("qmd", "chapter_1", "data", "motus", "backups")
 dir.create(backup_dir, showWarnings = FALSE, recursive = TRUE)
-file.copy(sot_path, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
+file.copy(output_path, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
 
-message("Done. Source-of-truth saved to ", sot_path)
+message("Done. Saved to ", output_path)
