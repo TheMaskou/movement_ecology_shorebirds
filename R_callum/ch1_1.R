@@ -6,13 +6,15 @@
 #   - qmd/chapter_1/data/motus/project-294.motus (SQLite database)
 #   - qmd/chapter_1/data/motus/data.rds (previous output from previous run, if exists)
 #   - qmd/chapter_1/data/tides/TideDataNewcastle.csv
-#   - qmd/chapter_1/data/spreadsheet/spreadsheet.rds (band ID lookup)
-#
+#   - qmd/chapter_1/data/spreadsheet/SHOREBIRD NUMBER TRACKING(Birds caught).csv
+# The above is stored in the shorebird group SharePoint, to be downloaded manually
+# as a .csv whenever new birds are caught / tagged.
 # PRODUCES:
 #   - qmd/chapter_1/data/motus/data.rds (df.alltags)
 #   - qmd/chapter_1/data/motus/recv-info.rds (df.recvDeps)
 #   - qmd/chapter_1/data/tides/tideData.rds
 #   - qmd/chapter_1/data/motus/backups/{date}-data.rds (dated backup)
+#   - qmd/chapter_1/data/spreadsheets/spreadsheet.rds (the result of basic cleaning done to the SHOREBIRD NUMBER TRACKING .csv)
 
 # ==== Setup ====
 
@@ -37,6 +39,9 @@ source(here::here("R_callum", "globals.R"))
 path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
 path_recv_info <- here("qmd", "chapter_1", "data", "motus", "recv-info.rds")
 path_tideData <- here("qmd", "chapter_1", "data", "tides", "tideData.rds")
+# TODO: should be named something informative spreadsheet and path_spreadsheet 
+# should be named something informative
+path_spreadsheet <- here("qmd", "chapter_1", "data", "spreadsheet", "spreadsheet.rds")
 
 # ==== SQLite Connection ====
 
