@@ -14,3 +14,10 @@ motus_tags_undeployed <- c(
   "43307", "43424", "43425", "60470", 
   "60579", "81123", "81136", "81137"
 )
+
+# ==== Receivers / Stations ====
+station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
+                       "Fullerton entrance"  = "Fullerton Entrance",
+                       "North Swann Pond" = "Swan Pond" ,
+                       "Ramsar Road Floodgate" = "Ramsar Road",    
+                       "Milham's Pond" = "Milhams Pond")  

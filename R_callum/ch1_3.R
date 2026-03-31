@@ -1,13 +1,3 @@
-## ----station, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE-----
- 
-station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
-                       "Fullerton entrance"  = "Fullerton Entrance",
-                       "North Swann Pond" = "Swan Pond" ,
-                       "Ramsar Road Floodgate" = "Ramsar Road",    
-                       "Milham's Pond" = "Milhams Pond")       
-
-
-
 ## ----color, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE-------
 
 species_colors <- c(
