@@ -1,8 +1,10 @@
 motus_proj_num <- 294
 
 # ==== Directories and File Paths ====
-dir_motus <- here::here("data", "motus")
-dir_tides <- here::here("data", "tides")
+dir_motus <- here::here("qmd", "chapter_1", "data", "motus")
+dir_tides <- here::here("qmd", "chapter_1", "data", "tides")
+
+path_spreadsheet <- here::here("qmd", "chapter_1", "data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
 # ==== Motus Tags ====
 motus_tags_test <- c(

@@ -40,8 +40,8 @@ sql.motus <- DBI::dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-
 
 # ── Load previous output (if it exists) ───────────────────────────────────────
 
-output_path <- here("qmd", "chapter_1", "data", "motus", "data.rds")
-df.alltags.past <- if (file.exists(output_path)) readRDS(output_path) else NULL
+path_output <- here("qmd", "chapter_1", "data", "motus", "data.rds")
+df.alltags.past <- if (file.exists(path_output)) readRDS(path_output) else NULL
 
 # ── Get new detections from SQLite ────────────────────────────────────────────
 
@@ -122,7 +122,7 @@ if (nrow(df.new) == 0) {
     mutate(recvDeployName = recode(recvDeployName, !!!station_rename))
 
   # 8. Spreadsheet join (Band.ID)
-  spreadsheet <- readRDS(spreadsheet_path)
+  spreadsheet <- readRDS(path_spreadsheet)
 
   df.new <- df.new %>%
     mutate(motusTagID = as.factor(motusTagID))
@@ -283,6 +283,6 @@ saveRDS(tideData,    here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 # Dated backup
 backup_dir <- here("qmd", "chapter_1", "data", "motus", "backups")
 dir.create(backup_dir, showWarnings = FALSE, recursive = TRUE)
-file.copy(output_path, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
+file.copy(path_output, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
 
-message("Done. Saved to ", output_path)
+message("Done. Saved to ", path_output)
