@@ -39,9 +39,8 @@ source(here::here("R_callum", "globals.R"))
 sql.motus <- DBI::dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
 
 # ==== Load Previous Output ====
-
-path_output <- here("qmd", "chapter_1", "data", "motus", "data.rds")
-df.alltags.past <- if (file.exists(path_output)) readRDS(path_output) else NULL
+path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
+df.alltags.past <- if (file.exists(path_detection_data)) readRDS(path_detection_data) else NULL
 
 # ==== Get New Detections from SQLite ====
 
@@ -283,6 +282,6 @@ saveRDS(tideData,    here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 # Dated backup
 backup_dir <- here("qmd", "chapter_1", "data", "motus", "backups")
 dir.create(backup_dir, showWarnings = FALSE, recursive = TRUE)
-file.copy(path_output, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
+file.copy(path_detection_data, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
 
-message("Done. Saved to ", path_output)
+message("Done. Saved to ", path_detection_data)
