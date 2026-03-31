@@ -13,3 +13,6 @@ qmd/*/data/**
 !qmd/*/data/.gitkeep
 data/**
 !data/.gitkeep
+
+# Claude folders (used by Callum on local testing branch)
+.claude/
