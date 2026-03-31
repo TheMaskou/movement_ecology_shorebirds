@@ -28,7 +28,7 @@ library(RSQLite)
 
 ## -----------------------------------------------------------------------------
 load(here("data", "motus_data.RData"))
-sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
+sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "motus", "project-294.motus"))
 
 
 ## ----load,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE-------
