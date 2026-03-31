@@ -21,11 +21,12 @@ Sys.setenv(TZ="UTC")
 proj.num <- 294       
 motusLogout()
 sql.motus <- tagme(projRecv = proj.num,
-                   new = FALSE, # TRUE overwrites existing file
+                   new = FALSE, # FALSE overwrites existing file, TRUE creates a new file
                    update = TRUE,
-                   dir = here("qmd", "chapter_1","data"))
+                   dir = here("data", "motus"))
 metadata(sql.motus, proj.num)
 
+# Below = testing / not needed
 ## QUICK CHECK FOR LAST DATA (43288 is test tag)
 df.alltags <- tbl(sql.motus, "alltags") %>%
   dplyr::collect() %>%
@@ -34,7 +35,7 @@ df.alltags <- tbl(sql.motus, "alltags") %>%
          timeAus = as_datetime(ts, tz = "Australia/Sydney"),
          dateAus = as_date(timeAus),
          year = year(time), 
-         doy = yday(time)) 
+         day = yday(time)) 
 
 tail(df.alltags %>% 
        arrange(timeAus) %>%
