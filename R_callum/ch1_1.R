@@ -1,8 +1,8 @@
 # ch1_1.R — Load, clean, and enrich Motus detection data
 #
 # DEPENDENCIES:
-#   - R_callum/globals.R (constants: station_rename, tag lists, project number)
-#   - qmd/chapter_1/ch1_3.qmd (species colours, names, classifications — via knitr::purl)
+#   - R_callum/globals.R (constants: station_rename, tag lists, project number,
+#     species colours, names, classifications)
 #   - qmd/chapter_1/data/motus/project-294.motus (SQLite database)
 #   - qmd/chapter_1/data/motus/data.rds (previous output from previous run, if exists)
 #   - qmd/chapter_1/data/tides/TideDataNewcastle.csv
@@ -29,9 +29,6 @@ library(bioRad)
 library(purrr)
 library(ggplot2)
 
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
-                   output = tempfile(fileext = ".R"),
-                   quiet = TRUE))
 source(here::here("R_callum", "globals.R"))
 
 # IMPORTANT NOTE:

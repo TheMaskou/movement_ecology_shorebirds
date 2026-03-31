@@ -1,8 +1,4 @@
-## ----style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'----
-# Source the script into that environment
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),  
-                   output = tempfile(fileext = ".R"),  
-                   quiet = TRUE))      
+source(here::here("R_callum", "globals.R"))
 
 
 ## ----packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
