@@ -16,7 +16,7 @@
 #   - qmd/chapter_1/data/tides/tideData.rds (previous output)
 #   - qmd/chapter_1/data/motus/backups/{date}-data.rds (dated backup)
 
-# ── Setup ──────────────────────────────────────────────────────────────────────
+# ==== Setup ====
 
 library(motus)
 library(dplyr)
@@ -34,16 +34,16 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
                    quiet = TRUE))
 source(here::here("R_callum", "globals.R"))
 
-# ── SQLite connection ──────────────────────────────────────────────────────────
+# ==== SQLite Connection ====
 
 sql.motus <- DBI::dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
 
-# ── Load previous output (if it exists) ───────────────────────────────────────
+# ==== Load Previous Output ====
 
 path_output <- here("qmd", "chapter_1", "data", "motus", "data.rds")
 df.alltags.past <- if (file.exists(path_output)) readRDS(path_output) else NULL
 
-# ── Get new detections from SQLite ────────────────────────────────────────────
+# ==== Get New Detections from SQLite ====
 
 # Resolve ambiguous detections before querying
 clarify(sql.motus)
@@ -61,7 +61,7 @@ if (!is.null(df.alltags.past)) {
     as.data.frame()
 }
 
-# ── Process new rows ─────────────────────────────────────────────────────────
+# ==== Process New Rows ====
 
 if (nrow(df.new) == 0) {
   message("No new detections found. Using existing data.rds.")
@@ -198,7 +198,7 @@ if (nrow(df.new) == 0) {
   df.new <- df.new %>%
     mutate(Band.ID = as.factor(Band.ID))
 
-  # ── Combine with past ──────────────────────────────────────────────────────
+  ## ---- Combine with Past ----
 
   if (!is.null(df.alltags.past)) {
     df.alltags <- bind_rows(df.alltags.past, df.new)
@@ -206,18 +206,18 @@ if (nrow(df.new) == 0) {
     df.alltags <- df.new
   }
 
-  # ── Full-dataset recalculations ────────────────────────────────────────────
+  ## ---- Full-dataset Recalculations ----
 
   df.alltags <- df.alltags %>%
     mutate(sigPositive = sig + abs(min(sig)))
 
-  # ── Final cleaning ─────────────────────────────────────────────────────────
+  ## ---- Final Cleaning ----
 
   df.alltags <- df.alltags %>%
     filter(!is.na(speciesEN))
 }
 
-# ── Diagnostic plots (using prefilter snapshot) ──────────────────────────────
+# ==== Diagnostic Plots ====
 
 if (exists("df.new.prefilter") && nrow(df.new.prefilter) > 0) {
 
@@ -248,7 +248,7 @@ if (exists("df.new.prefilter") && nrow(df.new.prefilter) > 0) {
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 
-# ── df.recvDeps (small table — always fully re-extracted) ────────────────────
+# ==== Receiver Deployments ====
 
 df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
   collect() %>%
@@ -273,7 +273,7 @@ df.recvDeps <- df.recvDeps %>%
 df.recvDeps <- df.recvDeps %>%
   filter(timeStartAus > "2023-01-31 00:00:00 AEDT")
 
-# ── Save ─────────────────────────────────────────────────────────────────────
+# ==== Save ====
 
 # Overwrite output files
 saveRDS(df.alltags,  here("qmd", "chapter_1", "data", "motus", "data.rds"))
