@@ -1,3 +1,5 @@
+motus_proj_num <- 294
+
 # ==== Directories and File Paths ====
 dir_motus <- here::here("data", "motus")
 dir_tides <- here::here("data", "tides")

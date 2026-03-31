@@ -165,21 +165,30 @@ df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
          timeEnd = as_datetime(tsEnd),
          timeEndAus = as_datetime(tsEnd, tz = "Australia/Sydney")) 
 
+df.recvDeps |> 
+  filter(projectID == motus_proj_num) |> 
+  select(name) |> 
+  unique()
 
-## ----recever names ex, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE----
-# # Correct the recv names (example)
-# station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
-#                        "North Swann Pond" = "Swan Pond" ,
-#                        "Example_three" = "Example 3")
-# 
+## ==== Update Receiver Names ====
 
-## ----filter recv 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
+# Correct the recv names (example)
+station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
+                       "North Swann Pond" = "Swan Pond" ,
+                       "Example_three" = "Example 3")
+
 
 # Apply corrections
 df.recvDeps <- df.recvDeps %>% 
   mutate(name = recode(name, !!!station_rename)) %>%
   rename(recvDeployName = "name")
 
+df.recvDeps |> 
+  filter(projectID == motus_proj_num) |> 
+  select(recvDeployName) |> 
+  unique()
+
+# TODO: Suggestion = just list stations we are interested in could be simpler
 # Filter not used stations as out of the local array 
 df.recvDeps <- df.recvDeps %>% 
   filter(!is.na(latitude),   
