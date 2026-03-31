@@ -3,13 +3,6 @@
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
                    quiet = TRUE))
-## _/!\_  ##      
-
-################ First, run the .R script to download last up to date Motus data-set 
-update <- TRUE # Second, Chose whether to update new detections from last data.rds (update = TRUE)
-################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\  
-
-## _/!\_ ## 
 
 
 ## ----1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
@@ -28,53 +21,11 @@ library(bioRad)
 library(purrr) 
 library(ggplot2) 
 
+# Code for downloading Motus data redundant to include here. Should be left in
+# a separate script. (Could be sourced here)
 
-## ----1 settings, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE----
-# 
-# # Global settings
-# setwd(dirname(rstudioapi::getSourceEditorContext()$path))
-# Sys.setenv(TZ="UTC")
-# proj.num <- 294
-# motusLogout()
-
-
-## ----1 download data, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE----
-# sql.motus <- tagme(projRecv = proj.num,
-#                    new = FALSE, # TRUE overwrites existing file
-#                    update = TRUE,
-#                    dir = here("qmd", "chapter_1","data"))
-# 
-# metadata(sql.motus, proj.num)
-# 
-# sql.motus <- dbConnect(SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
-# 
-# df.alltags <- tbl(sql.motus, "alltags") %>%
-#   dplyr::collect() %>%
-#   as.data.frame() %>%
-#     mutate(time = as_datetime(ts),
-#          timeAus = as_datetime(ts, tz = "Australia/Sydney"),
-#          dateAus = as_date(timeAus),
-#          year = year(time),
-#          doy = yday(time))
-# 
-
-
-## ----1 download data BIS, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
-
-Sys.setenv(TZ="UTC") 
-proj.num <- 294  
-
-sql.motus <- dbConnect(SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
-
-df.alltags <- tbl(sql.motus, "alltags") %>%
-  dplyr::collect() %>%
-  as.data.frame() %>%
-    mutate(time = as_datetime(ts),
-         timeAus = as_datetime(ts, tz = "Australia/Sydney"),
-         dateAus = as_date(timeAus),
-         year = year(time), 
-         doy = yday(time)) 
-
+# Load Data
+sql.motus <- DBI::dbConnect(SQLite(), here("data", ))
 
 
 ## ----1 data quick view, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
@@ -82,7 +33,6 @@ df.alltags <- tbl(sql.motus, "alltags") %>%
 tail(df.alltags %>% 
        arrange(timeAus) %>%
        select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv)) 
-
 
 
 ## ----1 filter the data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
