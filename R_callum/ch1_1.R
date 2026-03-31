@@ -32,6 +32,12 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
                    quiet = TRUE))
 source(here::here("R_callum", "globals.R"))
 
+## ==== Output File Paths ====
+# TODO: these probably belong in globals.R, but left here for now for clarity
+path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
+path_recv_info <- here("qmd", "chapter_1", "data", "motus", "recv-info.rds")
+path_tideData <- here("qmd", "chapter_1", "data", "tides", "tideData.rds")
+
 # ==== SQLite Connection ====
 
 sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "motus", "project-294.motus"))
@@ -40,7 +46,6 @@ sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "motus", "proj
 dbListTables(sql.motus)
 
 # ==== Load Previous Output ====
-path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
 # If there is no previous output (i.e., this is the first time the script has been run on a machine or the data file has been deleted), will return NULL
 df.alltags.past <- if (file.exists(path_detection_data)) readRDS(path_detection_data) else NULL
 
@@ -53,7 +58,7 @@ if (!is.null(df.alltags.past)) {
   # Only pull rows not already processed (hitID is unique per detection)
   past_ids <- df.alltags.past$hitID
   df.new <- tbl(sql.motus, "alltags") %>%
-    head(1000) |> 
+    #head(1000) |> # Uncomment this line to test with a small number of data points
     filter(!hitID %in% past_ids) %>%
     collect() %>%
     as.data.frame()
@@ -244,7 +249,8 @@ if (nrow(df.new) == 0) {
 }
 
 # ==== Receiver Deployments ====
-
+# TODO: would it be simpler to specify the stations we ARE interested in, rather
+# than filtering out specific stations?
 df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
   collect() %>%
   as.data.frame() %>%
@@ -252,6 +258,10 @@ df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
          timeStartAus = as_datetime(tsStart, tz = "Australia/Sydney"),
          timeEnd = as_datetime(tsEnd),
          timeEndAus = as_datetime(tsEnd, tz = "Australia/Sydney"))
+
+# Filter to our project (otherwise includes ALL motus stations)
+df.recvDeps <- df.recvDeps |> 
+  filter(projectID == motus_proj_num)
 
 # Apply station name corrections
 df.recvDeps <- df.recvDeps %>%
@@ -268,16 +278,19 @@ df.recvDeps <- df.recvDeps %>%
 df.recvDeps <- df.recvDeps %>%
   filter(timeStartAus > "2023-01-31 00:00:00 AEDT")
 
+df.recvDeps |> glimpse()
+
 # ==== Save ====
 
 # Overwrite output files
-saveRDS(df.alltags,  here("qmd", "chapter_1", "data", "motus", "data.rds"))
-saveRDS(df.recvDeps, here("qmd", "chapter_1", "data", "motus", "recv-info.rds"))
-saveRDS(tideData,    here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
+saveRDS(df.alltags,  path_detection_data)
+saveRDS(df.recvDeps, path_recv_info)
+saveRDS(tideData,    path_tideData)
 
-# Dated backup
+# Dated backups
 backup_dir <- here("qmd", "chapter_1", "data", "motus", "backups")
 dir.create(backup_dir, showWarnings = FALSE, recursive = TRUE)
-file.copy(path_detection_data, file.path(backup_dir, paste0(Sys.Date(), "-data.rds")))
+file.copy(path_detection_data, file.path(backup_dir, paste0("data-", Sys.Date(), ".rds")))
+file.copy(path_recv_info, file.path(backup_dir, paste0("recv-info-", Sys.Date(), ".rds")))
 
 message("Done. Saved to ", path_detection_data)
