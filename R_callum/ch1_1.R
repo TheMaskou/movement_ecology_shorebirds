@@ -243,37 +243,6 @@ if (nrow(df.new) == 0) {
     filter(!is.na(speciesEN))
 }
 
-# ==== Diagnostic Plots ====
-
-if (exists("df.new.prefilter") && nrow(df.new.prefilter) > 0) {
-
-  ggplot(df.new.prefilter %>% filter(motusFilter == 1),
-         aes(x = recvDeployName)) +
-    geom_bar(fill = "steelblue") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(x = "Motus Station", y = "Nb of motusFilter = 1 (good)")
-
-  ggplot(df.new.prefilter %>% filter(motusFilter == 0),
-         aes(x = recvDeployName)) +
-    geom_bar(fill = "orange") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(x = "Motus Station", y = "Nb of motusFilter = 0 (filtered out)")
-
-  perc <- ggplot(df.new.prefilter %>%
-                   filter(motusFilter %in% c(0, 1)),
-                 aes(x = recvDeployName, fill = factor(motusFilter))) +
-    geom_bar(position = "fill") +
-    scale_fill_manual(values = c("0" = "orange", "1" = "steelblue"),
-                      labels = c("0 (filtered out)", "1 (good)"),
-                      name = "motusFilter") +
-    theme_minimal() +
-    labs(x = "Motus Station", y = "Proportion") +
-    scale_y_continuous(labels = scales::percent) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-}
-
 # ==== Receiver Deployments ====
 
 df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
