@@ -21,6 +21,8 @@ library(bioRad)
 library(purrr) 
 library(ggplot2) 
 
+source(here::here("R_callum", "globals.R"))
+
 # Code for downloading Motus data redundant to include here. Should be left in
 # a separate script. (Could be sourced here)
 
@@ -30,16 +32,18 @@ sql.motus <- DBI::dbConnect(SQLite(), here("data", "motus", "project-294.motus")
 # List tables in sql.motus (good sanity check)
 sql.motus |> DBI::dbListTables()
 
-# Extract detections table as a dataframe ====
+# ==== Extract detections table as a dataframe ====
+# TODO: This should be elsewhere really
 df.alltags <- tbl(sql.motus, "alltags") %>%
   dplyr::collect() %>%
   as.data.frame() 
 
-
 # ==== Basic Data Cleaning ====
+# For now, test using df.alltags from the motus_data.RData that Maxime provided
+df.alltags <- readRDS(here("qmd", "chapter_1", "data", "motus", "df_alltags.rds"))
+df.alltags_raw <- df.alltags
 
 ## ==== Date and Time ====
-
 df.alltags <- df.alltags |> 
   # Date and Time
   # Note: time = in UTC (default for Motus data)
@@ -50,56 +54,47 @@ df.alltags <- df.alltags |>
          day = yday(time))
 
 
-## ----1 data quick view, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
-
-tail(df.alltags %>% 
-       arrange(timeAus) %>%
-       select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv)) 
-
-
-## ----1 filter the data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
+# TODO: Couldn't verify as I only have the already filtered df.alltags
+# (Will run full thing overnight)
+## ==== Filter Tags ====
 
 # Cleaning and correcting tags metadata
 df.alltags <- df.alltags %>% 
-   filter(
-    # test tags
-     motusTagID != c("43291"),
-    # pending, unconfirmed or undeployed tags
-    !motusTagID %in% c("43288", "43291", "43297", "43299",
-                       "43307", "43424", "43425", "60470", 
-                       "60579", "81123", "81136", "81137"),
+  filter(
+    # Exclude Test Tags
+    !(motusTagID %in% motus_tags_test),
+    # Exclude pending, unconfirmed or undeployed tags
+    !motusTagID %in% motus_tags_undeployed,
     # used for test/validation before tagging bird (remove time before the tagging)
     !(motusTagID == "81134" & time < dmy("23-11-2024")),
     !(motusTagID == "60575" & time < dmy("25-10-2023")) ) %>% 
-    # NA species
-     mutate(speciesEN = case_when(
-       is.na(speciesEN) & motusTagID %in% c("60470", "81121") ~ "Red-necked Avocet",
-       is.na(speciesEN) & motusTagID %in% c("81118") ~ "Red-necked Avocet",
-       TRUE ~ speciesEN)) %>%
+  # NA species
+  mutate(speciesEN = case_when(
+    is.na(speciesEN) & motusTagID %in% c("60470", "81121") ~ "Red-necked Avocet",
+    is.na(speciesEN) & motusTagID %in% c("81118") ~ "Red-necked Avocet",
+    TRUE ~ speciesEN)) %>%
   
   # motusTagID as factor
   mutate(motusTagID = as.character(motusTagID))
 
-  
+
 # Cleaning and correcting receiver metadata
 df.alltags <- df.alltags %>% 
   filter(
     # NA
-     !is.na(recvDeployLat),
+    !is.na(recvDeployLat),
     # site not any longer used
-      recvDeployName != c("Throsby Creek Test Site"),
+    recvDeployName != c("Throsby Creek Test Site"),
     # test sensor gnome
-      recv != c("SG-C621RPI3E17F",       
-                "SG-62A5RPI36710") ) %>% 
-    # Windeyers
+    recv != c("SG-C621RPI3E17F",       
+              "SG-62A5RPI36710") ) %>% 
+  # Windeyers
   mutate(recvDeployName = ifelse(is.na(recvDeployName) & recv == "SG-D5BBRPI3E2F7",
                                  "Windeyers", 
                                  recvDeployName))
 
 
-
-
-## ----2 filter the noise plot things, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
+## ==== Motusfilter Plots====
 
 # Checking 'motusFiltered in' tag data
 ggplot(df.alltags %>%
@@ -139,16 +134,15 @@ perc <- ggplot(df.alltags %>%
 #                  filename = here("figures", "motus_filter_perc.jpg"),
 #                  width = 800, height = 1000)
 
-perc
 
 
-## ----2 filter the noise, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
+
+## ==== Motusfilter Filter ====
 
 # False positive
 df.alltags <- df.alltags %>% 
   filter(motusFilter == 1, # 0 is invalid data
          runLen >= 3) # value might be further thought
-
 
 
 
@@ -158,13 +152,14 @@ df.alltags <- df.alltags %>%
 clarify(sql.motus) 
 
 
+# ==== Receiver Deployment Table  ====
+# TODO: this should probably be a separate script
 
-## ----filter recv, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
-
-# Get summary 
+# Convert receiver deployment table (recvDeps) to a dataframe
 df.recvDeps <- tbl(sql.motus, "recvDeps") %>%   
   collect() %>%   
   as.data.frame() %>%    
+  # Add timestamps (note tsStart and tsEnd are in UTC)
   mutate(timeStart = as_datetime(tsStart),
          timeStartAus = as_datetime(tsStart, tz = "Australia/Sydney"), 
          timeEnd = as_datetime(tsEnd),
@@ -177,7 +172,6 @@ df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
 #                        "North Swann Pond" = "Swan Pond" ,
 #                        "Example_three" = "Example 3")
 # 
-
 
 ## ----filter recv 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
 
@@ -222,27 +216,183 @@ if (update == TRUE) {
 }
 
 
+# Apply corrections
+df.alltags <- df.alltags %>% 
+  mutate(recvDeployName = recode(recvDeployName, !!!station_rename))
 
+df.recvDeps <- df.recvDeps %>%   filter(timeStartAus > "2023-01-31 00:00:00 AEDT")
 
+# ==== Band ID ====
+# Call and extract last up to date Spreadsheet record (sync your one drive with the TEAMS channel first) 
+tryCatch({
+  write.csv(
+    readxl::read_excel("C:/Users/c3541851/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General/SHOREBIRD NUMBER TRACKING.xlsx"),
+    file.path(here::here( "qmd", "chapter_1", "data", "spreadsheet"), paste0(Sys.Date(), "-teams.sheet", ".csv")),
+    row.names = FALSE
+  )
+}, error = function(e) {
+  write.csv(
+    readxl::read_excel("C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General/SHOREBIRD NUMBER TRACKING.xlsx"),
+    file.path(here::here( "qmd", "chapter_1", "data", "spreadsheet"), paste0(Sys.Date(), "-teams.sheet", ".csv")),
+    row.names = FALSE
+  )
+})
 
+# Load df with date at the beginning 
+spreadsheet <- read.csv(here::here( "qmd", "chapter_1", "data", "spreadsheet", paste0(Sys.Date(), "-teams.sheet.csv"))) %>%   
+  
+  # Keep only the tagged ones 
+  filter(Radio.tag. == "Y") %>%      
+  
+  # Variable names
+  rename(DateAUS.Trap = "Date", 
+         motusTagID = "Motus.tag.ID", 
+         speciesEN = "Species") %>%
+  
+  # Value names
+  mutate(speciesEN = case_when(
+    speciesEN == "Eastern Curlew" ~ "Far Eastern Curlew",
+    speciesEN == "Black-winged Stilt" ~ "Pied Stilt",
+    speciesEN == "Pacific Golden Plover" ~ "Pacific Golden-Plover",
+    speciesEN == "Whimbrel" ~ "Eurasian Whimbrel",
+    TRUE ~ speciesEN )) %>% 
+  
+  # Format
+  mutate(motusTagID = as.factor(motusTagID),
+         DateAUS.Trap = as.Date(DateAUS.Trap),
+         Band.ID = as.factor(Band.ID)) %>%
+  select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())  
 
+# Format motusTagID for further merging
+df.alltags <- df.alltags %>%
+  mutate(motusTagID = as.factor(motusTagID))
 
+# Join unique Band IDs for inconsistent motusTag (same bird re-tagged, etc) 
+df.alltags <- left_join(df.alltags,
+                        spreadsheet %>%
+                          filter(is.na(Euthanised.)) %>%  
+                          select(motusTagID, DateAUS.Trap, Band.ID, Bander), 
+                        by = "motusTagID")
 
+# ==== Tide Data ====
+# Read tide.csv
+tideData <- read.csv(here("qmd", "chapter_1", "data", "tides", "TideDataNewcastle.csv"))
 
+# Format date and datetime columns
+tideData <- tideData %>% mutate(
+  date = dmy(date, tz = "Australia/Sydney"),
+  tideDateTimeAus = dmy_hm(tideDateTimeAus, tz = "Australia/Sydney")
+)
 
+# Classify tides as diurnal or nocturnal
+tideData <- tideData %>% mutate(
+  sunriseNewc = sunrise(date, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
+  sunsetNewc = sunset(date, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
+  sunriseNewcTime = strftime(sunriseNewc, format = "%H:%M:%S", tz = "Australia/Sydney"),
+  sunsetNewcTime = strftime(sunsetNewc, format = "%H:%M:%S", tz = "Australia/Sydney")
+)
 
+# Define either diurnal or nocturnal 
+tideData <- tideData %>% mutate(
+  day_night = case_when(
+    tideDateTimeAus >= sunriseNewc & tideDateTimeAus <= sunsetNewc ~ "Diurnal",
+    TRUE ~ "Nocturnal"
+  )
+)
 
+# Categorise each tide by tidal/diel period
+tideData <- tideData %>% mutate(  
+  tideCategory = case_when(
+    high_low == "Low" & day_night == "Diurnal" ~ "Diurnal_Low",
+    high_low == "Low" & day_night == "Nocturnal" ~ "Nocturnal_Low",
+    high_low == "High" & day_night == "Diurnal" ~ "Diurnal_High",
+    high_low == "High" & day_night == "Nocturnal" ~ "Nocturnal_High") %>% 
+    as_factor())
 
+# Add numeric ID to each category, allowing for unique tide bins
+tideData <- tideData %>%
+  group_by(tideCategory) %>% 
+  mutate(tideID = paste0(tideCategory, "_", row_number())) %>% 
+  ungroup()
 
+# Load useful functions from Callum Gapes work
+tidalCurve <- readRDS(here::here("qmd", "chapter_1", "data", "tides", "tidalCurve.rds"))
+tidalCurveFunc <- splinefun(tideData$tideDateTimeAus, tideData$tideHeight, method = "natural")
+get.tideIndex <- function(time){ return(which.min(abs(tideData$tideDateTimeAus-time)))}
 
+# Add key variables
+df.alltags <- df.alltags  %>%
+  
+  # Positive signal strength (min. = 0) for plotting
+  mutate(sigPositive = sig + abs(min(sig))) %>% 
+  
+  # Sunrise/set
+  sunRiseSet(lat = "recvDeployLat", 
+             lon = "recvDeployLon", 
+             ts = "ts") %>% 
+  mutate(sunriseNewc = sunrise(dateAus, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
+         sunsetNewc = sunset(dateAus, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE)) %>%
+  
+  # Tide
+  mutate(tideHeight = tidalCurveFunc(timeAus),
+         tideIndex = map_dbl(timeAus, get.tideIndex))
 
+tide_values <- tideData[df.alltags$tideIndex, 
+                        c("tideDateTimeAus",
+                          "high_low",
+                          "day_night",
+                          "tideCategory",
+                          "tideID",
+                          "tideHeight")]
 
+# Stick and factorise the variables
+df.alltags <- df.alltags %>%
+  mutate(tideDateTimeAus = tide_values$tideDateTimeAus,
+         tideHighLow = as_factor(tide_values$high_low),
+         tideDiel = as_factor(tide_values$day_night),
+         tideCategory = as_factor(tide_values$tideCategory),
+         tideCategoryHeight = tide_values$tideHeight,
+         tideID = as_factor(tide_values$tideID),
+         tideTimeDiff = abs(difftime(timeAus, tideDateTimeAus, units = "hours")))
 
+df.alltags <- df.alltags %>% 
+  mutate(Band.ID = as.factor(Band.ID))
 
+# If update = T, then combine past and new data and sort with time
 
+if (update == TRUE) {
+  
+  df.alltags.past <- df.alltags.past %>% 
+    mutate(Band.ID = as.factor(Band.ID))
+  
+  # Combine updated data to new
+  df.alltags <- bind_rows(df.alltags, df.alltags.past)
+}
 
+# ==== More Data Cleaning? ====
+df.alltags <- df.alltags %>% 
+  filter(!is.na(speciesEN))
 
+# Because I don't want to save multiple data.rds every time I render the .qmd, if past and new data are the same, run_analysis = F for next saving chunk. Per default = T.
 
+if (update == TRUE) {
+  # check whether df.alltags.past and df.alltags are same data
+  run_analysis <- nrow(df.alltags) != nrow(df.alltags.past)
+} else {
+  run_analysis <- TRUE
+}
+
+# Bird detection dqtq
+saveRDS(df.alltags, here::here("qmd", "chapter_1", "data", "motus", paste0(Sys.Date(), "-data", ".rds" )))
+
+# Receiver information
+saveRDS(df.recvDeps, here::here("qmd", "chapter_1", "data", "motus", paste0(Sys.Date(), "-recv-info", ".rds" )))
+
+# Spreadsheet tracking BandID
+saveRDS(spreadsheet, here::here("qmd", "chapter_1", "data", "spreadsheet", paste0(Sys.Date(), "-spreadsheet", ".rds" )))
+
+# Tide tables
+saveRDS(tideData, here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 
 ## ----ready-to-go, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE----
 # 
