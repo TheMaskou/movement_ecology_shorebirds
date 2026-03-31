@@ -24,8 +24,30 @@ library(ggplot2)
 # Code for downloading Motus data redundant to include here. Should be left in
 # a separate script. (Could be sourced here)
 
-# Load Data
-sql.motus <- DBI::dbConnect(SQLite(), here("data", ))
+# Load Data ====
+sql.motus <- DBI::dbConnect(SQLite(), here("data", "motus", "project-294.motus"))
+
+# List tables in sql.motus (good sanity check)
+sql.motus |> DBI::dbListTables()
+
+# Extract detections table as a dataframe ====
+df.alltags <- tbl(sql.motus, "alltags") %>%
+  dplyr::collect() %>%
+  as.data.frame() 
+
+
+# ==== Basic Data Cleaning ====
+
+## ==== Date and Time ====
+
+df.alltags <- df.alltags |> 
+  # Date and Time
+  # Note: time = in UTC (default for Motus data)
+  mutate(time = as_datetime(ts),
+         timeAus = as_datetime(ts, tz = "Australia/Sydney"),
+         dateAus = as_date(timeAus),
+         year = year(time),
+         day = yday(time))
 
 
 ## ----1 data quick view, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
