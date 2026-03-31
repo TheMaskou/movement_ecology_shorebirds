@@ -2,20 +2,14 @@
 .Rhistory
 .RData
 .Ruserdata
-
-/.quarto/
-
-# Quarto output
 .quarto/
 _freeze/
-"qmd/*/files/" 
 
-# Quarto output directories (including data subfolders)
+# Quarto rendered output
 qmd/*/files/
-qmd/*/data/
 
-# Or more generally ignore all data folders
-data/
-
-# Test round 2
-# Attempting to push to main
+# Data folders — keep structure, ignore contents
+qmd/*/data/**
+!qmd/*/data/.gitkeep
+data/**
+!data/.gitkeep
