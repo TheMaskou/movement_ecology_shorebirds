@@ -8,6 +8,7 @@ dir_tides <- here::here("qmd", "chapter_1", "data", "tides")
 path_shorebird_number_spreadsheet <- here::here("qmd", "chapter_1", "data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
 # Path for data files that are imported by other files
+path_motus_database <- here::here("qmd", "chapter_1", "data", "motus", "project-294.motus")
 path_detection_data <- here::here("qmd", "chapter_1", "data", "motus", "data.rds")
 path_recv_info <- here::here("qmd", "chapter_1", "data", "motus", "recv-info.rds")
 path_tideData <- here::here("qmd", "chapter_1", "data", "tides", "tideData.rds")
