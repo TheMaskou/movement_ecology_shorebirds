@@ -191,7 +191,7 @@ tag_detection  %>%
 ## ---- Species Detection Histogram ----
 
 ggplot(tag_detection %>%
-         mutate(speciesEN = forcats::fct_reorder(speciesEN, perc, .desc = TRUE)),
+         mutate(speciesEN = forcats::fct_reorder(forcats::fct_drop(speciesEN), perc, .desc = TRUE)),
        aes(x = speciesEN,
            y = perc,
            fill = speciesEN)) +
