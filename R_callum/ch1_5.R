@@ -11,14 +11,19 @@ library(lubridate)
 library(tidyr)
 library(purrr)
 
+# ==== Load Required Data ====
+
 # Birds
 data_all <- readRDS(path_detection_data)
 
 # Receivers info
 recv <- readRDS(path_recv_info)
 
+sql.motus <- DBI::dbConnect(RSQLite::SQLite(), path_motus_database)
+
+# ==== Receiver Activity Table ====
+
 # Receivers activity
-sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
 recv.act <- tbl(sql.motus, "activity")  %>% 
   collect() %>% 
   as.data.frame() %>%
@@ -30,51 +35,44 @@ recv.act <- tbl(sql.motus, "activity")  %>%
          dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
                              tz = "Australia/Sydney")) 
 
-
-
-## ----packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE----
-# 
-# library(dplyr)
-# library(here)
-# library(forcats)
-# library(ggplot2)
-# library(lubridate)
-# library(tidyr)
-# library(purrr)
-
-
-## ----load,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE-------
-# 
-# recv.act <- tbl(sql.motus, "activity")  %>%
-#   collect() %>%
-#   as.data.frame() %>%
-#   rename(deviceID = "motusDeviceID") %>%
-#   # keep our deployed antennas only
-#   filter(deviceID %in% unique(recv$deviceID)) %>%
-#   # Set the time properly - IMPORTANT
-#   mutate(date = as_datetime(as.POSIXct(hourBin* 3600,
-#                                        origin = "1970-01-06",
-#                                        tz = "UTC")),
-#          dateAus = as_datetime(as.POSIXct(hourBin* 3600,
-#                                           origin = "1970-01-06",
-#                                           tz = "UTC"),
-#                                tz = "Australia/Sydney"))
-# 
-
-
-## ----2 check the data,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE----
-
 head(recv.act)
 
+# Check the range of values for numTags, and whether there are any NA values
+recv.act$numTags |> summary()
 
+# Check the range of values for pulseCount, and whethere there are NA values
+recv.act$pulseCount |> summary()
 
-## ----example,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE-----
+# Check number of rows (hourbins) for combinations of zero vs. nonzero numTags and pulseCount
+recv.act %>%
+  mutate(
+    condition = case_when(
+      numTags == 0 & is.na(pulseCount)  ~ "numTags=0, pulseCount=NA",
+      numTags == 0 & pulseCount > 0     ~ "numTags=0, pulseCount>0",
+      numTags > 0  & is.na(pulseCount)  ~ "numTags>0, pulseCount=NA",
+      numTags > 0  & pulseCount > 0     ~ "numTags>0, pulseCount>0"
+    )
+  ) %>%
+  count(condition)
 
+# Keep a copy for comparison
+recv.act.raw <- recv.act
+
+# TODO: figure out why there are rows with tag detections but no radio pulses
+
+# Diagnostic - check the number of hour bins that no pulses were detected (
+# i.e., pulseCount = NA), per the number of tags detected during each hour bin.
 table(is.na(recv.act$pulseCount), recv.act$numTags) 
 
+# is.na(recv.act$pulseCount) produces TRUE/FALSE for each row, where
+# TRUE = pulseCount is NA | FALSE = pulseCount is not NA
 
 
-## ----clarifying stations,  message = FALSE, warning = FALSE, eval = TRUE------
+# TODO: I do not entirely understand what is happening here.
+# Could this be solved by obtaining all the unique serno values for each 
+# stationName from the raw "recvDeps" table from the database?
+
+# ==== Receiver ID ====
 
 # Sort the terminated serno (if terminated, ie. one box has been removed from one antenna site, and a date comes along recv$timeEndAus variable)
 recv.act.term <- recv.act %>%
@@ -107,9 +105,12 @@ recv <- recv %>%
            with_tz(Sys.time(), "Australia/Sydney"),
            with_tz(as_datetime(timeEndAus, tz = "UTC"), "Australia/Sydney")) )
 
+# I am struggling to determine the functionality of the SernoStation variable
+# Is this not redundant to deployID?
 
+recv |> group_by(SernoStation) |> summarise(n_deploy = n_distinct(deployID))
 
-## ----2 Extracting listening periods,  message = FALSE, warning = FALSE, eval = TRUE----
+# ==== Operational Periods ====
 
 # Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites
 recv_hours <- recv %>%
@@ -135,8 +136,7 @@ recv$Station <- sub("_SG-.*", "", recv$SernoStation)
 recv_hours$Station <- sub("_SG-.*", "", recv_hours$SernoStation)
 
 
-
-## ----table MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE----
+# ==== Survey Effort ====
 
 uptime_summary <- recv_hours %>%
   group_by(Station) %>%
@@ -166,7 +166,8 @@ uptime_summary  %>%
 
 
 
-## ----2 hour MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
+# ==== The Array ====
+
 
 motus_survey_h <- ggplot(recv_hours %>% 
          filter(operational),
@@ -183,9 +184,6 @@ motus_survey_h <- ggplot(recv_hours %>%
   ggtitle("Receiver Operational Periods per hours")
 
 
-
-## ----motus_survey_h, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"----
-motus_survey_h
 
 
 ## ----2 day MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
@@ -253,6 +251,7 @@ motus_survey_d <- motus_survey_d +
 ## ----motus_survey_d, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"----
 motus_survey_d
 
+# ==== Stations ====
 
 ## ----2 station MOTUS array survey effort plot, echo = FALSE, eval = TRUE, results = 'asis'----
 
