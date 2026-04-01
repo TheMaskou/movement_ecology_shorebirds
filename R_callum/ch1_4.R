@@ -7,11 +7,8 @@ library(htmltools)
 
 # Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).
 
-# Define file path
-excel_path <- "C:/Users/marin/OneDrive - The University Of Newcastle/Documents/6-PHD_UON/11-PhD project/Chapters/Chapter 1 - Motus/Array maintenance/reports/motus_array_maintenance_log.xlsx"
-
 # Read data
-motus_data <- read_excel(excel_path)
+motus_data <- read_excel(path_maintenance_log)
 
 # 1. Convert lat/lon columns to numeric (E/W, N/S)
 motus_data <- motus_data %>%

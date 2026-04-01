@@ -7,10 +7,12 @@ dir_tides <- here::here("qmd", "chapter_1", "data", "tides")
 # Inputs / raw data
 path_shorebird_number_spreadsheet <- here::here("qmd", "chapter_1", "data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
+# Path for data files that are imported by other files
 path_detection_data <- here("qmd", "chapter_1", "data", "motus", "data.rds")
 path_recv_info <- here("qmd", "chapter_1", "data", "motus", "recv-info.rds")
 path_tideData <- here("qmd", "chapter_1", "data", "tides", "tideData.rds")
 path_spreadsheet_data <- here("qmd", "chapter_1", "data", "spreadsheet", "spreadsheet_data.rds")
+path_maintenance_log <- here("qmd", "chapter_1", "data", "motus", "motus_array_maintenance_log.xlsx")
 
 # ==== Motus Tags ====
 motus_tags_test <- c(
