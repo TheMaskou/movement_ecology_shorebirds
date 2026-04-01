@@ -4,6 +4,9 @@ library(dplyr)
 library(leaflet)
 library(DT)
 library(htmltools)
+library(here)
+
+source(here::here("R_callum", "globals.R"))
 
 # Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).
 
@@ -30,8 +33,9 @@ last_dl <- motus_data %>%
     last_tech_download = technician
   )
 
-# 3. Join back to main table
+# 3. Join back to main table (drop pre-existing columns that last_dl will replace)
 motus_data2 <- motus_data %>%
+  select(-any_of(c("last_data_download", "last_tech_download"))) %>%
   left_join(last_dl, by = "station_id")
 
 # 4. Photo directory and file list
