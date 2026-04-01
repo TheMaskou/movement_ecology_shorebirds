@@ -1,49 +1,64 @@
 source(here::here("R_callum", "globals.R"))
 
-
-## ----1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, , results = 'hide', include = FALSE----
+# ==== Setup ====
 
 library(dplyr)
 library(here)
-library(forcats) 
+library(forcats)
 library(ggplot2)
 library(lubridate)
 library(tidyr)
 library(purrr)
 
-# ==== Load Required Data ====
+## ---- Load Data ----
 
-# Birds
+# All bird detections across the array
 data_all <- readRDS(path_detection_data)
 
-# Receivers info
+# Receiver deployment metadata (one row per deployment of a device at a site)
 recv <- readRDS(path_recv_info)
 
 sql.motus <- DBI::dbConnect(RSQLite::SQLite(), path_motus_database)
 
-# ==== Receiver Activity Table ====
+# ==== Activity Table ====
+#
+# The "activity" table from the Motus database records VHF radio activity per
+# antenna per hour. Each row represents one hour-bin at one antenna.
+#
+# Key columns:
+#   - hourBin:    hour index (hours since 1970-01-06) — converted to datetime below
+#   - pulseCount: number of radio pulses detected (any VHF signal, not just tags)
+#   - numTags:    number of unique tags detected in that hour
+#   - deviceID:   the Raspberry Pi processor inside the SensorGnome receiver
+#
+# IMPORTANT: rows only exist when the station is actively listening. If a station
+# is offline for an hour, there is simply no row. This means absence of a row =
+# station was not operational during that hour.
 
-# Receivers activity
-recv.act <- tbl(sql.motus, "activity")  %>% 
-  collect() %>% 
+recv.act <- tbl(sql.motus, "activity")  %>%
+  collect() %>%
   as.data.frame() %>%
   rename(deviceID = "motusDeviceID") %>%
-  filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only 
-  
-  # Set the time properly - IMPORTANT
+  filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only
+
+  # Convert hourBin (hours since 1970-01-06) to datetime
   mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
-         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
-                             tz = "Australia/Sydney")) 
+         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"),
+                             tz = "Australia/Sydney"))
 
 head(recv.act)
+
+## ---- Diagnostics: pulseCount vs numTags ----
 
 # Check the range of values for numTags, and whether there are any NA values
 recv.act$numTags |> summary()
 
-# Check the range of values for pulseCount, and whethere there are NA values
+# Check the range of values for pulseCount, and whether there are NA values
 recv.act$pulseCount |> summary()
 
-# Check number of rows (hourbins) for combinations of zero vs. nonzero numTags and pulseCount
+# Cross-tabulate: how many hour-bins have tags but no pulses, or vice versa?
+# Rows with numTags > 0 but pulseCount = NA are suspicious — a tag was detected
+# but no radio pulses were recorded. This shouldn't normally happen.
 recv.act %>%
   mutate(
     condition = case_when(
@@ -62,41 +77,56 @@ recv.act.raw <- recv.act
 
 # Diagnostic - check the number of hour bins that no pulses were detected (
 # i.e., pulseCount = NA), per the number of tags detected during each hour bin.
-table(is.na(recv.act$pulseCount), recv.act$numTags) 
+table(is.na(recv.act$pulseCount), recv.act$numTags)
 
 # is.na(recv.act$pulseCount) produces TRUE/FALSE for each row, where
 # TRUE = pulseCount is NA | FALSE = pulseCount is not NA
 
 
-# TODO: I do not entirely understand what is happening here.
-# Could this be solved by obtaining all the unique serno values for each 
-# stationName from the raw "recvDeps" table from the database?
+# ==== Link Activity to Receiver Deployments ====
+#
+# PROBLEM: The activity table only has deviceID (the physical Raspberry Pi),
+# not which station it was deployed at. The same deviceID can be moved between
+# stations over time (e.g., swapped for repairs), and a station can have
+# different devices over its lifetime. So we need to match each activity row
+# to the correct deployment (= which device was at which station, when).
+#
+# APPROACH: Split receiver deployments into terminated (has an end date) and
+# active (no end date), join each group to the activity table separately,
+# then recombine. This avoids a naive join that would incorrectly match
+# activity rows to deployments that weren't active at that time.
+#
+# CAVEAT: This split-join approach doesn't actually filter by date range —
+# it just separates terminated from active deployments. If a deviceID had
+# multiple terminated deployments at different stations, activity could still
+# match to the wrong one. A date-range join would be more robust.
 
-# ==== Receiver ID ====
-
-# Sort the terminated serno (if terminated, ie. one box has been removed from one antenna site, and a date comes along recv$timeEndAus variable)
+# Join activity to TERMINATED deployments (those with an end date)
 recv.act.term <- recv.act %>%
-  left_join(recv %>% 
+  left_join(recv %>%
               filter(!is.na(timeEndAus)) %>%
               select(deviceID, serno, recvDeployName),
             "deviceID") %>%
   filter(!is.na(recvDeployName)) %>%
   mutate(SernoStation = paste0(recvDeployName, "_", serno))
 
-# Sort the still currently running serno
+# Join activity to ACTIVE deployments (still running, no end date)
 recv.act.runn <- recv.act %>%
-  left_join(recv %>% 
+  left_join(recv %>%
               filter(is.na(timeEndAus)) %>%
               select(deviceID, serno, recvDeployName),
             "deviceID") %>%
   filter(!is.na(recvDeployName)) %>%
   mutate(SernoStation = paste0(recvDeployName, "_", serno))
 
-# Merging in one data-set to use Station's name further + pick-up the rounded hours
+# Combine both and round to the hour
 recv.act <- bind_rows(recv.act.runn, recv.act.term) %>%
   mutate(hour_dt = floor_date(dateAus, "hour"))
 
-# Providing helpful variables
+## ---- SernoStation and Listening Period ----
+
+# Add SernoStation and listening period bounds to the receiver metadata.
+# lisEnd = deployment end date, or now if the station is still running.
 recv <- recv %>%
   mutate(SernoStation = paste0(recvDeployName, "_", serno),
          lisStart = timeStartAus,
@@ -105,14 +135,22 @@ recv <- recv %>%
            with_tz(Sys.time(), "Australia/Sydney"),
            with_tz(as_datetime(timeEndAus, tz = "UTC"), "Australia/Sydney")) )
 
-# I am struggling to determine the functionality of the SernoStation variable
-# Is this not redundant to deployID?
-
+# SernoStation = station name + serial number (e.g. "Ash Island_SG-AB12RPI3CD34").
+# It is NOT redundant with deployID:
+#   - deployID is a unique numeric ID per deployment (good for DB lookups, opaque)
+#   - SernoStation is human-readable and encodes WHICH device was at WHICH site
+#   - Later, Station is derived by stripping the serno suffix (line ~136)
+# This diagnostic checks whether SernoStation maps 1:1 to deployID in our data:
 recv |> group_by(SernoStation) |> summarise(n_deploy = n_distinct(deployID))
 
-# ==== Operational Periods ====
 
-# Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites
+# ==== Generate Expected Listening Hours ====
+#
+# For each receiver deployment (SernoStation), generate one row per hour
+# for its full deployment window [lisStart, lisEnd]. This is the set of
+# hours the station SHOULD have been listening. We then compare against
+# actual activity to determine which hours it truly was operational.
+
 recv_hours <- recv %>%
   select(recvDeployName, deviceID, SernoStation, lisStart, lisEnd) %>%
   rowwise() %>%
@@ -122,7 +160,9 @@ recv_hours <- recv %>%
   unnest(cols = c(hour_dt)) %>%
   ungroup()
 
-# Giving operational and not-operational hours by joining same sequences from recv.act tbl and adding operational = TRUE when existing values
+# Mark each hour as operational (TRUE) or not (FALSE) by checking whether
+# the activity table has a matching record for that SernoStation + hour.
+# No match = station was offline/not recording during that hour.
 recv_hours <- recv_hours %>%
   left_join(recv.act %>%
               distinct(SernoStation, hour_dt) %>%
@@ -130,29 +170,38 @@ recv_hours <- recv_hours %>%
             by = c("SernoStation", "hour_dt")) %>%
   mutate(operational = if_else(is.na(operational), FALSE, TRUE))
 
-# Relaying on the Station name on its own only (consistent values through SernoStation var)
+# Derive Station name by stripping the serno suffix from SernoStation.
+# This groups all deployments at the same physical site together, regardless
+# of which device was installed there at the time.
 recv.act$Station <- sub("_SG-.*", "", recv.act$SernoStation)
 recv$Station <- sub("_SG-.*", "", recv$SernoStation)
 recv_hours$Station <- sub("_SG-.*", "", recv_hours$SernoStation)
 
 
-# ==== Survey Effort ====
+# ==== Survey Effort Summary ====
 
+# Metrics per station:
+#   total_hours:        hours the station was deployed (operational or not)
+#   operational_hours:  hours the station was actually listening
+#   downtime_hours:     hours deployed but not listening
+#   uptime_pct:         % of deployment time that was operational
+#   cont_listening_eff: this station's share (%) of total operational hours
+#                       across the entire array
+#   surv_time_cover:    same as uptime_pct (operational / total per station)
 uptime_summary <- recv_hours %>%
   group_by(Station) %>%
   summarise(
     total_hours = n(),
-    operational_hours = sum(operational), 
-    downtime_hours = total_hours - operational_hours, 
-    uptime_pct = round(100 * operational_hours / total_hours), 2)  %>% 
-  mutate(cont_listening_eff = round(100 * operational_hours / sum(operational_hours), 1), 
+    operational_hours = sum(operational),
+    downtime_hours = total_hours - operational_hours,
+    uptime_pct = round(100 * operational_hours / total_hours), 2)  %>%
+  mutate(cont_listening_eff = round(100 * operational_hours / sum(operational_hours), 1),
          surv_time_cover = round(100 * operational_hours / total_hours, 1)) %>%
   arrange(desc(uptime_pct)) %>%
   select(-c("2"))
 
+## ---- Survey Effort Table ----
 
-
-## ----table survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 library(gt)
 uptime_summary  %>%
   gt() %>%
@@ -162,14 +211,15 @@ uptime_summary  %>%
     locations = cells_column_labels() ) %>%
   tab_style(
     style = cell_text(style = "italic"),
-    locations = cells_body(columns = c(Station))) 
+    locations = cells_body(columns = c(Station)))
 
 
+# ==== Plot: Array Overview (Hourly) ====
+#
+# Each black mark = one hour where the station had activity recorded,
+# meaning it was operational (recording radio noise or detecting a tag).
 
-# ==== The Array ====
-
-
-motus_survey_h <- ggplot(recv_hours %>% 
+motus_survey_h <- ggplot(recv_hours %>%
          filter(operational),
        aes(x = hour_dt, y = factor(Station))) +
   geom_segment(aes(
@@ -183,12 +233,17 @@ motus_survey_h <- ggplot(recv_hours %>%
   theme_minimal() +
   ggtitle("Receiver Operational Periods per hours")
 
+motus_survey_h
 
 
+# ==== Plot: Array Overview (Daily) ====
+#
+# Consolidates operational hours into continuous "runs" — gaps >24h start
+# a new segment. Each segment is drawn as a horizontal bar. Bird detections
+# are overlaid as coloured points. Station labels include their contribution
+# (%) to total survey effort.
 
-## ----2 day MOTUS array survey effort,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
-
-# Plot (day detailed)
+# Identify continuous operational runs per station
 recv.status <- recv_hours %>%
   filter(operational) %>%
   arrange(Station, hour_dt) %>%
@@ -203,57 +258,58 @@ recv.status <- recv_hours %>%
             end_hour = max(hour_dt) + hours(1), # +1 hour to cover full period
             .groups = "drop") %>%
   left_join(uptime_summary %>% select(Station, cont_listening_eff), "Station") %>%
-  mutate(StationP = paste0(Station, " (", round(cont_listening_eff, digits = 1), "%)")) 
+  mutate(StationP = paste0(Station, " (", round(cont_listening_eff, digits = 1), "%)"))
 
 motus_survey_d <- ggplot(recv.status, aes(y = factor(StationP))) +
   geom_segment(aes(x = start_hour, xend = end_hour,
                    yend = factor(StationP)),
                color = "black", linewidth = 1) +
-  
+
   scale_y_discrete(name = "") +
   scale_x_datetime(name = "Time",
                    date_breaks = "1 month",
                    date_labels = "%b",
                    sec.axis = dup_axis(breaks = seq(from = floor_date(min(recv.status$start_hour),
                                                                       "year") + months(3),
-                                                    to = floor_date(max(recv.status$end_hour), 
+                                                    to = floor_date(max(recv.status$end_hour),
                                                                     "year") + months(3),
                                                     by = "1 year"),
                                        labels = function(x) format(x, "%Y"),
                                        name = NULL)) +
-  
+
   theme_minimal() +
   theme(axis.text.y.left = element_text(face = "bold", vjust = 0.5, margin = margin(t = 5)),
         axis.text.x.top = element_text(face = "bold", vjust = 0.5, margin = margin(t = 5)),
         axis.text.x = element_text(size = 9)) +
   ggtitle("Receiver Operational Periods per days (contribution % at the survey effort - listening)")
 
-# Adding Birds 
+## ---- Overlay Bird Detections ----
+
+# Join detection data to StationP labels so birds appear on the correct y-axis
 data_all_plot <- left_join(data_all %>%
                              select(Band.ID, recv, recvDeployName, timeAus, tideCategory, speciesEN),
-                           recv.status %>% 
+                           recv.status %>%
                              rename(recvDeployName = Station) %>%
                              select(recvDeployName, StationP) %>%
-                             unique(), 
+                             unique(),
                            "recvDeployName")
 
 motus_survey_d <- motus_survey_d +
   geom_point(
     data = data_all_plot ,
     aes(x = timeAus,
-        y = factor(StationP), 
+        y = factor(StationP),
         color = speciesEN),
     alpha = 0.7, size = 2) +
   scale_color_manual(name = "Species", values = species_colors)
 
-
-
-## ----motus_survey_d, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"----
 motus_survey_d
 
-# ==== Stations ====
 
-## ----2 station MOTUS array survey effort plot, echo = FALSE, eval = TRUE, results = 'asis'----
+# ==== Plot: Per-station Detail ====
+#
+# One plot per station. Grey bands = operational periods. Coloured dots =
+# individual bird detections, with y-axis showing Band.ID ordered by species.
 
 # Split the detection data by StationP
 data_split <- split(data_all_plot, data_all_plot$StationP)
@@ -266,23 +322,23 @@ plots_per_station <- imap(data_split, ~ {
   station_data <- .x
   station_name <- .y
   effort_data <- recv_split[[station_name]]
-  
-tag_order <- station_data %>%
+
+  # Order birds by species then Band.ID so same-species birds are grouped on y-axis
+  tag_order <- station_data %>%
     distinct(Band.ID, speciesEN) %>%
     arrange(speciesEN, Band.ID) %>%
     pull(Band.ID)
-  
-# Create a factor with levels ordered by speciesEN grouping
-station_data <- station_data %>%
+
+  station_data <- station_data %>%
     mutate(Band.ID_ordered = factor(Band.ID, levels = tag_order))
 
-ggplot() +
-  # Vertical bands for survey effort periods
-  geom_rect(data = effort_data, 
-            aes(xmin = start_hour, xmax = end_hour, ymin = -Inf, ymax = Inf),
-            fill = "grey80", alpha = 0.3) +
-  
-    # Points for detections with ordered Band.ID
+  ggplot() +
+    # Grey bands show when this station was operational
+    geom_rect(data = effort_data,
+              aes(xmin = start_hour, xmax = end_hour, ymin = -Inf, ymax = Inf),
+              fill = "grey80", alpha = 0.3) +
+
+    # Coloured points for each detection
     geom_point(data = station_data,
                aes(x = timeAus,
                    y = Band.ID_ordered,
@@ -300,11 +356,9 @@ ggplot() +
           plot.title = element_text(hjust = 0.5))
 })
 
-# Now you can print each plot in your Quarto chunk by looping over the list
-  for (station_data in names(plots_per_station)) {
-    cat("\n\n## ", station_data, "\n\n") 
-    print(plots_per_station[[station_data]]) 
-    flush.console() #force immediate output
-  }
-
-
+# Print each station's plot
+for (station_data in names(plots_per_station)) {
+  cat("\n\n## ", station_data, "\n\n")
+  print(plots_per_station[[station_data]])
+  flush.console() #force immediate output
+}
