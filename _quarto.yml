@@ -91,7 +91,13 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_2/ch2_1.qmd
+        - section: "Prior"
+          contents:
+            - qmd/chapter_2/ch2_1.qmd # Prior estimations
+            
+        - section: "To-do-list"
+          contents:
+            - qmd/chapter_2/ch2_11.qmd # To-do-list
 
     - id: chapter3
       title: "Chapter 3"

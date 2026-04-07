@@ -1,0 +1,7 @@
+---
+title: "To-do-list"
+format: html
+---
+
+1.  **\[Power analysis\]** Use the only data available on Movebank (Oyster catchers) to determine how many behavior classes do you want to evaluate and how many individuals would you need to trap, assuming it the results will apply for targeted species (Pacific Golden Plovers and Bar-tailed Godwit, and more if applicable)
+
