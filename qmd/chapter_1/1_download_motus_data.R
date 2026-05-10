@@ -39,3 +39,27 @@ df.alltags <- tbl(sql.motus, "alltags") %>%
 tail(df.alltags %>% 
        arrange(timeAus) %>%
        select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv))
+
+# ## Particular checking
+# sql.motus <- dbConnect(SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
+# 
+# df.alltags <- tbl(sql.motus, "alltags") %>%
+#   dplyr::collect() %>%
+#   as.data.frame() %>%
+#   mutate(time = as_datetime(ts),
+#          timeAus = as_datetime(ts, tz = "Australia/Sydney"),
+#          dateAus = as_date(timeAus),
+#          year = year(time), 
+#          doy = yday(time)) 
+# 
+# df <- df.alltags %>%
+#        arrange(timeAus) %>%
+#        select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv) %>%
+# 
+#   filter(
+#     # motusTagID != "43288", # test tag
+#     # recv != c("SG-CE0DRPI43C5E", "SG-CE0DRPI43C5E"), # andrea, andrew
+#     recv == "SG-E3E4RPI4CED5"
+#     )
+
+
