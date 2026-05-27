@@ -20,7 +20,7 @@
 # Requires: globals.R (constants, paths), ch1_1 detection data .rds,
 #           tide data .rds, Motus SQLite database (activity table).
 
-source(here::here("R_callum", "globals.R"))
+source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 
 # ==== Packages ====
@@ -46,11 +46,7 @@ library(RSQLite)
 
 # ==== Load Data ====
 
-# NOTE: The load() call below references here("data", ...) which works during
-# Quarto render (working dir = project root) but may fail interactively.
-# The readRDS calls below using path_* variables from globals.R are preferred.
-load(here("data", "motus_data.RData"))
-sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
+sql.motus <- dbConnect(SQLite(), path_motus_database)
 
 # The chunk below (eval = FALSE in the .qmd) shows the pattern for loading
 # recv.act from the SQLite activity table. The actual load is in the block
@@ -79,13 +75,13 @@ data_all <- readRDS(path_detection_data)
 recv <- readRDS(path_recv_info)
 
 # Tide
-tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
+tide_data <- readRDS(path_tideData)
 
 # Receivers activity
 # The `activity` table stores hourly noise/detection records per receiver.
 # `hourBin` is hours since 1970-01-06 (Motus epoch), multiplied by 3600 to get
 # seconds for POSIXct conversion.
-sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
+sql.motus <- DBI::dbConnect(RSQLite::SQLite(), path_motus_database)
 recv.act <- tbl(sql.motus, "activity")  %>%
   collect() %>%
   as.data.frame() %>%

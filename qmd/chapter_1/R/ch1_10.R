@@ -29,7 +29,7 @@
 # Requires: globals.R (constants, paths), ch1_1 detection data .rds,
 #           receiver info .rds.
 
-source(here::here("R_callum", "globals.R"))
+source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 
 # ==== Packages ====

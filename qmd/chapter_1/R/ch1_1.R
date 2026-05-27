@@ -1,7 +1,7 @@
 # ch1_1.R — Load, clean, and enrich Motus detection data
 #
 # DEPENDENCIES:
-#   - R_callum/globals.R (constants: station_rename, tag lists, project number,
+#   - qmd/chapter_1/R/globals.R (constants: station_rename, tag lists, project number,
 #     species colours, names, classifications)
 #   - qmd/chapter_1/data/motus/project-294.motus (SQLite database)
 #   - qmd/chapter_1/data/motus/data.rds (previous output from previous run, if exists)
@@ -29,7 +29,7 @@ library(bioRad)
 library(purrr)
 library(ggplot2)
 
-source(here::here("R_callum", "globals.R"))
+source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 # IMPORTANT NOTE:
 # Output file paths are defined in globals.R; this way, they can easily be
@@ -37,7 +37,7 @@ source(here::here("R_callum", "globals.R"))
 
 # ==== SQLite Connection ====
 
-sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "motus", "project-294.motus"))
+sql.motus <- dbConnect(SQLite(), path_motus_database)
 
 # Test connection by listing tables
 dbListTables(sql.motus)
@@ -286,7 +286,7 @@ saveRDS(tideData,    path_tideData)
 saveRDS(spreadsheet, path_spreadsheet_data)
 
 # Dated backups
-backup_dir <- here("qmd", "chapter_1", "data", "motus", "backups")
+backup_dir <- file.path(dir_motus, "backups")
 dir.create(backup_dir, showWarnings = FALSE, recursive = TRUE)
 file.copy(path_detection_data, file.path(backup_dir, paste0("data-", Sys.Date(), ".rds")))
 file.copy(path_recv_info, file.path(backup_dir, paste0("recv-info-", Sys.Date(), ".rds")))

@@ -17,7 +17,7 @@ library(tidyr)
 library(gt)
 library(gtExtras)
 
-source(here::here("R_callum", "globals.R"))
+source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 # ==== Load Data ====
 
@@ -90,13 +90,18 @@ detect <- spreadsheet %>%
 retag <- spreadsheet %>% 
   filter(!is.na(spreadsheet$Retagged.))
 
-# EXTRACT LAST DATE OF DATA FROM MOTUS SERVER
-latest_file <- tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
+# Date of the most recent data build — derived from the newest dated backup
+# (backups are written by ch1_1.R as data-YYYY-MM-DD.rds on each update)
+latest_backup <- tail(sort(list.files(
+    file.path(dir_motus, "backups"),
+    pattern = "^data-\\d{4}-\\d{2}-\\d{2}\\.rds$", full.names = TRUE
   )), 1)
 
-file_date <- as.Date(sub(".*/(\\d{4}-\\d{2}-\\d{2})-data\\.rds$", "\\1", latest_file))
+file_date <- if (length(latest_backup) > 0) {
+  as.Date(sub(".*data-(\\d{4}-\\d{2}-\\d{2})\\.rds$", "\\1", latest_backup))
+} else {
+  as.Date(file.info(path_detection_data)$mtime)
+}
 
 
 
@@ -354,9 +359,7 @@ gtsave(
 
 
 ## ----explore, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE----
-temp_file <- tempfile(fileext = ".R")
-knitr::purl(here("qmd", "chapter_1", "ch1_7.qmd"), output = temp_file, quiet = TRUE)
-source(temp_file)
+source(here::here("qmd", "chapter_1", "R", "ch1_7.R"))
 
 
 ## ----explore 2, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE----

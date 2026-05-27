@@ -6,7 +6,7 @@ library(DT)
 library(htmltools)
 library(here)
 
-source(here::here("R_callum", "globals.R"))
+source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 # Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).
 
