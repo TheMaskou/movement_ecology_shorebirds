@@ -67,7 +67,7 @@ website:
             
         - section: "Motus array"
           contents:
-            - qmd/chapter_1/ch1_4.qmd # Location and History
+            - qmd/chapter_1/ch1_4.qmd # Maintenance
             - qmd/chapter_1/ch1_5.qmd # Survey effort
             
         - section: "Analysis"
@@ -91,7 +91,13 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - href: qmd/chapter_2/ch2_1.qmd
+        - section: "Prior"
+          contents:
+            - qmd/chapter_2/ch2_1.qmd # Prior estimations
+            
+        - section: "To-do-list"
+          contents:
+            - qmd/chapter_2/ch2_11.qmd # To-do-list
 
     - id: chapter3
       title: "Chapter 3"
