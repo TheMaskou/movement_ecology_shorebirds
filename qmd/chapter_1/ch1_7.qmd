@@ -3,12 +3,9 @@ title: "Station usage - hours"
 format: html
 ---
 
-```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
-# TODO: Replace this with import from .R file to avoid unnecessary knitting
-# Source the script into that environment
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-                   output = tempfile(fileext = ".R"),  
-                   quiet = TRUE))     
+```{r setup, include=FALSE}
+library(here)
+source(here::here("qmd", "chapter_1", "R", "ch1_7.R"))
 ```
 
 :::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -32,7 +29,7 @@ Plus, globally visualise the **conditions of detection** across the tagged popul
 **Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
 :::
 
-```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 library(motus)
 library(dplyr)
 library(here)
@@ -54,12 +51,6 @@ library(RSQLite)
 
 And **load** your `activity` table too!
 
-```{r}
-load(here("data", "motus_data.RData"))
-sql.motus <- dbConnect(SQLite(), here("qmd", "chapter_1", "data", "project-294.motus"))
-```
-
-
 ```{r load,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 
 recv.act <- tbl(sql.motus, "activity")  %>% 
@@ -79,38 +70,6 @@ recv.act <- tbl(sql.motus, "activity")  %>%
 
 ```
 
-```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
-# Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
-
-# Receivers info
-recv <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-recv-info\\.rds$", full.names = TRUE
-  )), 1)) 
-
-# Tide
-tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
-
-# Receivers activity
-sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
-recv.act <- tbl(sql.motus, "activity")  %>% 
-  collect() %>% 
-  as.data.frame() %>%
-  rename(deviceID = "motusDeviceID") %>%
-  filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only 
-  
-  # Set the time properly - IMPORTANT
-  mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
-         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
-                             tz = "Australia/Sydney")) 
-
-```
 
 ## Pre-requisite
 
@@ -158,7 +117,7 @@ Schema: Definition of tide variables (high or low) for one period (red line)
 </figure>
 :::
 
-```{r tide, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r tide, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 tide_data <- tide_data %>%
   
   arrange(tideDateTimeAus) %>%
@@ -190,7 +149,7 @@ We need to extract the temporal coverage of each station, starting from deployme
 
 <br>
 
-```{r Available vs Used RECV AVAILABLE, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r Available vs Used RECV AVAILABLE, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 # Sort the terminated serno (if terminated, ie. one box removed from one antenna site, a date comes along)
 # but still needed for accessing survey effort as the station is currently running with another serno 
@@ -254,7 +213,7 @@ However, due to some temporary failures or maintenance *(see [Survey effort \> O
 
 <br>
 
-```{r Available vs Used RECV OFF PERIODS, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r Available vs Used RECV OFF PERIODS, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 
 # Distinguish station from mixed recv + Giving operational variable (= TRUE when existing values from act table)
@@ -352,7 +311,7 @@ We now assign each bird its own available time period, spanning from its tagging
 
 <br>
 
-```{r Available vs Used BIRD AVAILABLE TIME, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r Available vs Used BIRD AVAILABLE TIME, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 
 # Get the monitored period of each bird
@@ -447,7 +406,7 @@ Pulse Interval depending Lotek nanotag models
 </figure>
 :::
 
-```{r Available vs Used BIRD USED TIME, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r Available vs Used BIRD USED TIME, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 # USED TIME (amount of time each bird spent during each category of tide and at each station)
 # Provide the burst interval value depending Lotek-nano tag model (scd)
@@ -528,7 +487,7 @@ And we decided to remove **n = `r nrow(above140)`** cases where the *rate used* 
 Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. *- See table above.*
 :::
 
-```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 figure_plot <- figure_plot %>%
   
@@ -548,7 +507,7 @@ figure_plot <- figure_plot %>%
 
 Now, everything is ready to format the data for plot and to visualise the results for **Usage rate** and **Hourly usage** across the Motus stations of our local array.
 
-```{r tool, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r tool, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 # Track size sample
 counts <- used_bird_recv_time %>%
       group_by(speciesEN) %>%
@@ -557,7 +516,7 @@ counts <- used_bird_recv_time %>%
 label_vec <- setNames(counts$label, counts$speciesEN)
 ```
 
-```{r 4 Used rate PLOT, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r 4 Used rate PLOT, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 # Tide and species groupings
 tide_levels <- c("Low", "High")
@@ -609,7 +568,7 @@ plots_used_rate <- cross2(tide_levels, species_types) %>%
 
 ```
 
-```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 # General function to provide one table with stats values
 make_summary_table <- function(tide_level, species_type) {
@@ -770,7 +729,7 @@ low_migratory  %>%
 
 ### USED vs AVAILABLE
 
-```{r Available vs Used PLOT, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+```{r Available vs Used PLOT, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE, results = 'asis'}
 
 # Combine dataset
 used_bird_recv_time$type <- "used"
@@ -854,7 +813,7 @@ plots_list[[4]]
 
 Since the size sample at the current date is too low, it might be hard to read in details how much each bird or species spent time (hours) at each Motus station. So here below is displayed the *used* only for each stations.
 
-```{r 4 Used PLOT, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r 4 Used PLOT, message = FALSE, warning = FALSE, echo = TRUE, eval = FALSE, results = 'asis'}
 
 # Plot function used ONLY
 plot_used <- function(tide_cat) {
@@ -928,7 +887,7 @@ plots_list_used[[2]]
 
 Visualise here the difference between the total number of hours recorded across the four tidal conditions for each species and for the whole population of tagged shorebirds, "**Total used**". And see the difference with the "**Usage rate**", which measures bird detections by the Motus array as a proportion of the total available detection time.
 
-```{r global, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+```{r global, message = FALSE,  warning = FALSE, echo = FALSE, eval = FALSE, results = 'asis'}
 
 # Bar plot that balances the data we got across tideCategory for each species
 balance_table <- figure_plot %>%

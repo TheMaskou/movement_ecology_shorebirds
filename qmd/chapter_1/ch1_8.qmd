@@ -3,11 +3,9 @@ title: "Signal strength"
 format: html
 ---
 
-```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
-# Source the script into that environment
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),  
-                   output = tempfile(fileext = ".R"),  
-                   quiet = TRUE))      
+```{r setup, include=FALSE}
+library(here)
+source(here::here("qmd", "chapter_1", "R", "ch1_8.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -17,7 +15,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 
 Using this metric, we could characterise behaviors such as foraging or roosting activity.
 
--   **Foraging:** If we assume that large signal strength variations reflect substantial movement within the Motus station’s coverage area, these variations could be associated with the research of food.
+-   **Foraging:** If we assume that large signal strength variations reflect substantial movement within the Motus station's coverage area, these variations could be associated with the research of food.
 -   **Roosting:** In contrast, small variations would suggest limited movement, potentially corresponding to the seek for rest.
 :::
 
@@ -25,49 +23,29 @@ Using this metric, we could characterise behaviors such as foraging or roosting 
 **Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
 :::
 
-```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 library(dplyr)
 library(here)
-library(forcats) 
+library(forcats)
 library(lubridate)
-library(purrr) 
+library(purrr)
 library(lubridate)
 library(ggplot2)
 library(stringr)
 ```
 
-```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
-# Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
-
-# Receivers info 
-recv <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-recv-info\\.rds$", full.names = TRUE
-  )), 1)) 
-
-# Selecting upon our needs
-data_all <- data_all %>%
-  select(Band.ID, recvDeployName, recv, speciesEN, sig, sigsd, sigPositive, tideCategory, timeAus)
-```
-
-```{r compute variables, echo = TRUE, eval = TRUE}
+```{r compute variables, echo = TRUE, eval = FALSE}
 # Mean signal strength per individual, site and time categories (HD, HN, LD, LN)
 data_all <- data_all %>%
   group_by(Band.ID, tideCategory, recvDeployName) %>%
   mutate(sig_indiv_tideCat_mean = mean(sigPositive),
          sig_indiv_tidecat_sd = sd(sigPositive)) %>%
   ungroup()  %>%
-  mutate(speciesINIT = str_split(speciesEN, " ") %>%            
-           map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%    
+  mutate(speciesINIT = str_split(speciesEN, " ") %>%
+           map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%
            toupper(),
-         tideCat = str_split(tideCategory, "_") %>%          
-           map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%    
+         tideCat = str_split(tideCategory, "_") %>%
+           map_chr(~ str_c(str_sub(.x, 1, 1), collapse = "")) %>%
            toupper())
 ```
 
@@ -77,26 +55,26 @@ Then, we group the SD per species and per site to observe how the signal strengt
 
 Then, we can create a list which plots the distribution of the average *signal strength* *SD variation* across species.
 
-```{r plot list, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r plot list, echo = TRUE, eval = FALSE, results = 'asis'}
 # One plot per species for better understanding
 plots_list <- data_all %>%
-  
+
   split(.$speciesEN) %>%
-  
+
   purrr::imap(~ {
-    
+
     species_full <- .y  # The split name (full species name)
-    
+
     ggplot(.x, aes(x = tideCat, y = sig_indiv_tidecat_sd, fill = speciesEN)) +
       geom_boxplot() +
       facet_wrap(~ recvDeployName) +
-      
+
       scale_fill_manual(values = species_colors, guide = "none") +
       theme_bw() +
       labs(title = paste0("Variation of Signal Strength SD for ", species_full, " over Motus stations"),
            x = "Tide Category",
            y = "Variation of Signal Strength SD (RSSI)",
-           fill = "Species") 
+           fill = "Species")
     })
 
 # Rename list elements to initials using the inverse mapping

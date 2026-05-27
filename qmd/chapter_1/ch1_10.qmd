@@ -3,11 +3,9 @@ title: "Entropy, Eveness & Composition"
 format: html
 ---
 
-```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
-# Source the script into that environment
-source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-                   output = tempfile(fileext = ".R"),    
-                   quiet = TRUE))    
+```{r setup, include=FALSE}
+library(here)
+source(here::here("qmd", "chapter_1", "R", "ch1_10.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -32,7 +30,7 @@ Grouped per species, this page aims to quantify the following:
 **Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
 :::
 
-```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 library(motus)
 library(dplyr)
 library(here)
@@ -51,21 +49,6 @@ library(FSA)
 library(patchwork)
 ```
 
-```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
-# Birds
-data_all <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
-
-# Receivers info
-recv <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "motus"),
-    pattern = "-recv-info\\.rds$", full.names = TRUE
-  )), 1)) 
-```
 
 ## Shannon
 
@@ -142,7 +125,7 @@ $$
 
 First, we define a all-in-one function to consistently computing shannon entropy.
 
-```{r shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r shannon, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 # Function to calculate Shannon entropy
 calculate_shannon <- function(proportions) {
   # Remove zero proportions (shouldn't be any, but safety check)
@@ -156,7 +139,7 @@ calculate_shannon <- function(proportions) {
 
 Now we can proceed. Starting with counting the number of detection an individual has recorded in each stations, then extracting the proportions to finally calculate the entropy (H).
 
-```{r shannon 2, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
+```{r shannon 2, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE}
 
 # Calculate entropy metrics for each Band.ID
 entropy_results <- data_all %>%
@@ -306,7 +289,7 @@ species_entropy_summary %>%
 
 ```
 
-```{r shannon 4, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE, results = 'hide'}
+```{r shannon 4, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE, results = 'hide'}
 # Prepare data for plotting
 entropy_for_plot <- entropy_results %>%
   select(speciesEN, Band.ID, S, H, J, exp_H) %>%
@@ -342,7 +325,7 @@ ggplot(entropy_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
 
 ```
 
-```{r shannon 5, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = FALSE}
+```{r shannon 5, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE, results = 'hide', include = FALSE}
 
 # S table
 gt_S <- entropy_results %>%
@@ -578,7 +561,7 @@ kruskal_within_species %>%
 
 We now want to clarify whether birds associate **site fidelity** depending the tide, therefore likely depending their behavior (i.e., foraging **vs** roosting).
 
-```{r shannon tide 1, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE, results = 'hide'}
+```{r shannon tide 1, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE, results = 'hide'}
 
 # Calculate entropy metrics for each Band.ID
 entropy_results_tide <- data_all %>%
@@ -841,7 +824,7 @@ Note: We only keep species which holds **five** or more individuals tagged and d
 
 Before to run ANOVA analysis we must check the **data verify the ANOVA Assumptions.**
 
-```{r shannon tide 4, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+```{r shannon tide 4, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
 # Filter species with enough individuals
 entropy_aov_data_tide <- entropy_for_plot_tide %>%
   group_by(speciesEN) %>%
@@ -857,7 +840,7 @@ We now set the table which will **check** whether the **ANOVA assumptions** are 
 By design, the data are independents: each Band.ID is a unique individual and not repeated within a tide per entropy metrics.\
 You will notice that we actually run the Two-Way ANOVA analysis in this same step to facilitate smoothness of the code.
 
-```{r shannon tide 5, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
+```{r shannon tide 5, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE}
 
 results      <- data.frame()
 assumptions  <- data.frame()
@@ -1087,7 +1070,7 @@ $$
 
 First, we set a function that will compute the JSD metric for later in the process.
 
-```{r jensen-shannon, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r jensen-shannon, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 # Function to calculate Jensen-Shannon Divergence
 calculate_jsd <- function(p, q) {
   # Add small value to avoid log(0)
@@ -1111,7 +1094,7 @@ Second, we need to prepare the data frame which will be used for calculation. It
 
 Then, we can proceed and extract JSD for each pair of individuals. Indeed, JSD test the similarity between two individual, so it conducts a pairwise test.
 
-```{r jensen-shannon 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r jensen-shannon 2, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 
 # Create site use matrix (rows = individuals, columns = sites)
 site_use_matrix <- data_all %>%
@@ -1199,7 +1182,7 @@ ggplot(jsd_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
 
 ```
 
-```{r jensen-shannon 4, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+```{r jensen-shannon 4, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
 
 # Preparing table
 jsd_results_tab <- jsd_results %>%
@@ -1414,7 +1397,7 @@ Applying the same method as before, we display below the **JSD results depending
 Note: We only keep species which holds **five** or more individuals tagged and detected. So we can further run ANOVA analysis on the data.
 :::
 
-```{r jensen-shannon tide 9, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+```{r jensen-shannon tide 9, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
 
 # Create site use matrix (rows = individuals, columns = sites)
 site_use_matrix_tide <- data_all %>%
@@ -1603,7 +1586,7 @@ jsd_results_tab_tide %>%
     row_group.font.weight = "bold")
 ```
 
-```{r jensen-shannon tide 11, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+```{r jensen-shannon tide 11, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
 # Pivot data to prepare plotting
 jsd_for_plot_tide <- jsd_results_tide %>%
   pivot_longer(
@@ -1654,7 +1637,7 @@ jsd_for_plot_tide %>%
 We now want to test whether JSD values are different across individual of a same species at High and Low tides.\
 To do so, we will conduct a **two-paired ANOVA analysis**, therefore we must verify data normality and homogeneity first.
 
-```{r jensen-shannon tide 13, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
+```{r jensen-shannon tide 13, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE}
 results_jsd_tide<- data.frame()
 assumptions_jsd <- data.frame()
 
@@ -1831,7 +1814,7 @@ assumptions_jsd %>%
   )
 ```
 
-```{r jensen-shannon tide 15, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
+```{r jensen-shannon tide 15, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
 
 # Build model_list first
 model_list <- list()
