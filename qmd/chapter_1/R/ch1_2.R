@@ -343,8 +343,6 @@ table_1_pub <- table_1_pub %>%
     table.width = pct(100)  
   )
 
-table_1_pub
-
 
 
 ## ----print table, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE----
@@ -368,7 +366,7 @@ explore
 
 ## ----1 data overview capt, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
-DT::datatable(
+dt_moni <- DT::datatable(
   moni,
   options = list(
     scrollX = TRUE,
@@ -377,7 +375,7 @@ DT::datatable(
   ),
   extensions = c('FixedColumns'),
   caption = 'Overview on birds data',
-  class = 'nowrap'  
+  class = 'nowrap'
 ) %>%
   DT::formatStyle(
     'variable',
@@ -386,13 +384,13 @@ DT::datatable(
   DT::formatStyle(
     c('value'),
     fontWeight = 'bold',
-    color = '#808080'  
+    color = '#808080'
   )
 
 
 ## ----1 detect, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
-DT::datatable(
+dt_detect <- DT::datatable(
   detect,
   options = list(
     scrollX = TRUE,
@@ -401,7 +399,7 @@ DT::datatable(
   ),
   extensions = c('FixedColumns'),
   caption = 'Birds detected',
-  class = 'nowrap'  
+  class = 'nowrap'
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),
@@ -410,13 +408,13 @@ DT::datatable(
   DT::formatStyle(
     c('speciesEN', 'DateAUS.Trap'),
     fontWeight = 'bold',
-    color = '#808080'  
+    color = '#808080'
   )
 
 
 ## ----1 table 1 indiv , message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
-data_indiv <- data_all %>% 
+data_indiv <- data_all %>%
   select(timeAus, speciesEN, markerNumber, Band.ID, recvDeployName, recv, tideCategory,  DateAUS.Trap, motusFilter) %>%
   mutate(timeAus = format(timeAus, '%Y-%m-%d %H:%M:%S')) %>%
   group_by(Band.ID) %>%
@@ -424,8 +422,7 @@ data_indiv <- data_all %>%
   slice_tail(n = 5) %>%  # Last 5 detections per Band.ID
   ungroup()
 
-# Markdown format
-DT::datatable(
+dt_indiv <- DT::datatable(
   data_indiv,
   options = list(
     scrollX = TRUE,
@@ -438,10 +435,9 @@ DT::datatable(
                   fontWeight = 'bold')
 
 
-
 ## ----1 undetect, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
-DT::datatable(
+dt_undetect <- DT::datatable(
   undetect,
   options = list(
     scrollX = TRUE,
@@ -450,7 +446,7 @@ DT::datatable(
   ),
   extensions = c('FixedColumns'),
   caption = 'Birds never detected',
-  class = 'nowrap'  
+  class = 'nowrap'
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),
@@ -459,12 +455,12 @@ DT::datatable(
   DT::formatStyle(
     c('speciesEN', 'DateAUS.Trap'),
     fontWeight = 'bold',
-    color = '#808080'  
+    color = '#808080'
   )
 
 
 ## ----1 retagged, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
-DT::datatable(
+dt_retag <- DT::datatable(
   retag,
   options = list(
     scrollX = TRUE,
@@ -473,7 +469,7 @@ DT::datatable(
   ),
   extensions = c('FixedColumns'),
   caption = 'Birds re-tagged',
-  class = 'nowrap'  
+  class = 'nowrap'
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),
@@ -482,12 +478,12 @@ DT::datatable(
   DT::formatStyle(
     c('speciesEN', 'DateAUS.Trap'),
     fontWeight = 'bold',
-    color = '#808080'  
+    color = '#808080'
   )
 
 
 ## ----1 euthanised, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
-DT::datatable(
+dt_eutha <- DT::datatable(
   eutha,
   options = list(
     scrollX = TRUE,
@@ -496,7 +492,7 @@ DT::datatable(
   ),
   extensions = c('FixedColumns'),
   caption = 'Birds euthanised',
-  class = 'nowrap'  
+  class = 'nowrap'
 ) %>%
   DT::formatStyle(
     c('Band.ID', 'motusTagID'),

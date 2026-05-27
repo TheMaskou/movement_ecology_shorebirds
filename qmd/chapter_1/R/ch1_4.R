@@ -87,7 +87,7 @@ popup_data <- motus_data2 %>%
 
 
 # Create the map
-leaflet(popup_data) %>%
+map_maintenance <- leaflet(popup_data) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircleMarkers(
     lng = ~sg_lon,
@@ -117,7 +117,7 @@ hidden_cols <- which(names(table_data) %in% c(
   "EditDate", "Editor", "photo_file"
 )) - 1
 
-datatable(
+dt_maintenance <- datatable(
   table_data,
   filter   = "top",
   rownames = FALSE,
