@@ -16,3 +16,7 @@ data/**
 
 # Claude folders (used by Callum on local testing branch)
 .claude/
+
+/.quarto/
+**/*.quarto_ipynb
+Rplots.pdf
