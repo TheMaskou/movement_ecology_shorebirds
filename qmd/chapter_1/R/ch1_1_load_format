@@ -1,4 +1,4 @@
-# ch1_1.R — Load, clean, and enrich Motus detection data
+# ch1_1_load_format.R — Load, clean, and enrich Motus detection data
 #
 # DEPENDENCIES:
 #   - qmd/chapter_1/R/globals.R (constants: station_rename, tag lists, project number,

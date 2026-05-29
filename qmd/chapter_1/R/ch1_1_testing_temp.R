@@ -1,5 +1,5 @@
 # Testing how long these operations will take
-# Note needs df.new to exist from ch1_1.R
+# Note needs df.new to exist from ch1_1_load_format.R
 library(tictoc)
 library(default)
 

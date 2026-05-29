@@ -91,7 +91,7 @@ retag <- spreadsheet %>%
   filter(!is.na(spreadsheet$Retagged.))
 
 # Date of the most recent data build — derived from the newest dated backup
-# (backups are written by ch1_1.R as data-YYYY-MM-DD.rds on each update)
+# (backups are written by ch1_1_load_format.R as data-YYYY-MM-DD.rds on each update)
 latest_backup <- tail(sort(list.files(
     file.path(dir_motus, "backups"),
     pattern = "^data-\\d{4}-\\d{2}-\\d{2}\\.rds$", full.names = TRUE

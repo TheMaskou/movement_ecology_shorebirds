@@ -5,7 +5,7 @@ title: "Load & Format"
 ```{r setup, include=FALSE}
 library(here)
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
-source(here::here("qmd", "chapter_1", "R", "ch1_1.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_1_load_format.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
