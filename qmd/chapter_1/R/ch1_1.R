@@ -258,8 +258,37 @@ if (nrow(df.new) == 0) {
                ts = "ts") %>%
     mutate(sunriseNewc = sunrise(dateAus, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
            sunsetNewc = sunset(dateAus, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE)) %>%
-    mutate(tideHeight = tidalCurveFunc(timeAus),
-           tideIndex = map_dbl(timeAus, get.tideIndex))
+    mutate(tideHeight = tidalCurveFunc(timeAus))
+
+  # Vectorised nearest-tide lookup (replaces per-row which.min via map_dbl).
+  # findInterval does a C-level binary search on sorted tide times, then we pick
+  # whichever of the two bracketing tides is closer. Same result as which.min,
+  # but O(N log M) instead of O(N * M) — the previous map_dbl scanned the whole
+  # tide table for every detection.
+  tide_num    <- as.numeric(tideData$tideDateTimeAus)
+  ord         <- order(tide_num)                 # defensive: CSV is already chronological
+  tide_sorted <- tide_num[ord]
+  query       <- as.numeric(df.new$timeAus)
+
+  j     <- findInterval(query, tide_sorted)       # largest k with tide_sorted[k] <= query (0 if before first)
+  lower <- pmax(j, 1L)
+  upper <- pmin(j + 1L, length(tide_sorted))
+  pick_upper <- abs(tide_sorted[upper] - query) < abs(query - tide_sorted[lower])
+  df.new$tideIndex <- as.double(ord[ifelse(pick_upper, upper, lower)])
+
+  # ---- Equivalence check (validation only) ----
+  # Confirms the vectorised lookup matches the old per-row which.min on a sample.
+  # `get.tideIndex` (defined above) is the original O(M) scan; running it on the
+  # full dataset is the slow path we replaced, so check a random subset only.
+  # Set check_tideIndex <- TRUE to run; leave FALSE for normal/fast runs.
+  check_tideIndex <- TRUE
+  if (check_tideIndex) {
+    set.seed(1)
+    chk <- sample(nrow(df.new), size = min(20000, nrow(df.new)))
+    old_idx <- map_dbl(df.new$timeAus[chk], get.tideIndex)
+    stopifnot(identical(old_idx, df.new$tideIndex[chk]))
+    message("Tide index equivalence check passed on ", length(chk), " sampled rows.")
+  }
 
   tide_values <- tideData[df.new$tideIndex,
                           c("tideDateTimeAus", "high_low", "day_night",
@@ -287,6 +316,13 @@ if (nrow(df.new) == 0) {
   }
 
   # ---- Full-dataset Recalculations ----
+  # The reason this is done on the entire dataset, rather than just the new
+  # rows, is because min(sig) is calculated across the entire dataset.
+  # i.e., adding new records could change the sigPositive value for existing
+  # entries. 
+  # NOTE: Ensure that this is kept in mind when interpreting plots that show
+  # sigPositive; sigPositive is for visual comparison, probably not to be used
+  # as a quantitative variable
 
   df.alltags <- df.alltags %>%
     mutate(sigPositive = sig + abs(min(sig)))
@@ -298,8 +334,10 @@ if (nrow(df.new) == 0) {
 }
 
 # ==== Receiver Deployments ====
-# TODO: would it be simpler to specify the stations we ARE interested in, rather
+# IDEA: would it be simpler to specify the stations we ARE interested in, rather
 # than filtering out specific stations?
+# TODO: This section works (the code runs), haven't yet verified the logic/ 
+# whether it makes sense
 df.recvDeps <- tbl(sql.motus, "recvDeps") %>%
   collect() %>%
   as.data.frame() %>%
