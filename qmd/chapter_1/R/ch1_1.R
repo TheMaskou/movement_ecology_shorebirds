@@ -28,6 +28,7 @@ library(lubridate)
 library(bioRad)
 library(purrr)
 library(ggplot2)
+library(tictoc)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
@@ -51,6 +52,7 @@ df.alltags.past <- if (file.exists(path_detection_data)) readRDS(path_detection_
 # Resolve ambiguous detections before querying
 clarify(sql.motus)
 
+tic("Flattening df.new using collect() and as.data.frame(): ")
 if (!is.null(df.alltags.past)) {
   # Only pull rows not already processed (hitID is unique per detection)
   past_ids <- df.alltags.past$hitID
@@ -64,9 +66,10 @@ if (!is.null(df.alltags.past)) {
     collect() %>%
     as.data.frame()
 }
+toc(log = T)
+# 2026-05-29: Entire (fresh) dataset only took 33 seconds to collect. Epic.
 
 # ==== Process New Rows ====
-
 if (nrow(df.new) == 0) {
   message("No new detections found. Using existing detection_data.rds.")
   df.alltags <- df.alltags.past
@@ -74,15 +77,18 @@ if (nrow(df.new) == 0) {
 } else {
   message(nrow(df.new), " new detections to process.")
 
-  # 1. Datetime columns
+  ## 1. Datetime columns ----
+  tic("1. Datetime columns")
   df.new <- df.new %>%
     mutate(time = as_datetime(ts),
            timeAus = as_datetime(ts, tz = "Australia/Sydney"),
            dateAus = as_date(timeAus),
            year = year(time),
            day = yday(time))
+  toc(log = TRUE)
 
-  # 2. Filter tags (test, undeployed, pre-tagging detections)
+  ## 2. Filter tags (test, undeployed, pre-tagging detections) ----
+  tic("2. Filter tags")
   df.new <- df.new %>%
     filter(
       !(motusTagID %in% motus_tags_test),
@@ -90,8 +96,10 @@ if (nrow(df.new) == 0) {
       !(motusTagID == "81134" & time < dmy("23-11-2024")),
       !(motusTagID == "60575" & time < dmy("25-10-2023"))
     )
+  toc(log = TRUE)
 
-  # 3. Fix NA species names for known tags
+  ## 3. Fix NA species names for known tags ----
+  tic("3. Fix NA species names")
   df.new <- df.new %>%
     mutate(speciesEN = case_when(
       is.na(speciesEN) & motusTagID %in% c("60470", "81121") ~ "Red-necked Avocet",
@@ -99,8 +107,10 @@ if (nrow(df.new) == 0) {
       TRUE ~ speciesEN
     )) %>%
     mutate(motusTagID = as.character(motusTagID))
+  toc(log = TRUE)
 
-  # 4. Filter receivers (bug fix: use %in% instead of != c(...))
+  ## 4. Filter receivers (bug fix: use %in% instead of != c(...)) ----
+  tic("4. Filter receivers")
   df.new <- df.new %>%
     filter(
       !is.na(recvDeployLat),
@@ -112,11 +122,15 @@ if (nrow(df.new) == 0) {
       "Windeyers",
       recvDeployName
     ))
+  toc(log = TRUE)
 
-  # 5. Snapshot before motusFilter removal (for diagnostic plots)
+  ## 5. Snapshot before motusFilter removal (for diagnostic plots) ----
+  tic("5. Snapshot before motusFilter removal")
   df.new.prefilter <- df.new
+  toc(log = TRUE)
 
-  # 6. MotusFilter: keep only valid detections (build diagnostic plots first)
+  ## 6. MotusFilter: keep only valid detections (build diagnostic plots first) ----
+  tic("6. MotusFilter")
   plot_filter_in <- ggplot(df.new.prefilter %>% filter(motusFilter == 1),
          aes(x = recvDeployName)) +
     geom_bar(fill = "steelblue") + theme_minimal() +
@@ -144,13 +158,16 @@ if (nrow(df.new) == 0) {
   df.new <- df.new %>%
     filter(motusFilter == 1,
            runLen >= 3)
+  toc(log = TRUE)
 
-  # 7. Station rename
+  ## 7. Station rename ----
+  tic("7. Station rename")
   df.new <- df.new %>%
     mutate(recvDeployName = recode(recvDeployName, !!!station_rename))
+  toc(log = TRUE)
 
-  # 8. Spreadsheet join (Band.ID)
-  
+  ## 8. Spreadsheet join (Band.ID) ----
+  tic("8. Spreadsheet join")
   # Import spreadsheet from file (ensure is current)
   spreadsheet <- read.csv(path_shorebird_number_spreadsheet) |> 
     # Keep only the tagged ones 
@@ -185,8 +202,10 @@ if (nrow(df.new) == 0) {
                         filter(is.na(Euthanised.)) %>%
                         select(motusTagID, DateAUS.Trap, Band.ID, Bander),
                       by = "motusTagID")
+  toc(log = TRUE)
 
-  # 9. Tide data
+  ## 9. Tide data ----
+  tic("9. Tide data")
   tideData <- read.csv(here("data", "tides", "TideDataNewcastle.csv"))
 
   tideData <- tideData %>% mutate(
@@ -249,8 +268,9 @@ if (nrow(df.new) == 0) {
 
   df.new <- df.new %>%
     mutate(Band.ID = as.factor(Band.ID))
+  toc(log = TRUE)
 
-  ## ---- Combine with Past ----
+  # ---- Combine with Past ----
 
   if (!is.null(df.alltags.past)) {
     df.alltags <- bind_rows(df.alltags.past, df.new)
@@ -258,12 +278,12 @@ if (nrow(df.new) == 0) {
     df.alltags <- df.new
   }
 
-  ## ---- Full-dataset Recalculations ----
+  # ---- Full-dataset Recalculations ----
 
   df.alltags <- df.alltags %>%
     mutate(sigPositive = sig + abs(min(sig)))
 
-  ## ---- Final Cleaning ----
+  # ---- Final Cleaning ----
 
   df.alltags <- df.alltags %>%
     filter(!is.na(speciesEN))
