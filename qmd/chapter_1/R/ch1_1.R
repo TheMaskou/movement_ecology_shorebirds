@@ -3,18 +3,18 @@
 # DEPENDENCIES:
 #   - qmd/chapter_1/R/globals.R (constants: station_rename, tag lists, project number,
 #     species colours, names, classifications)
-#   - qmd/chapter_1/data/motus/project-294.motus (SQLite database)
-#   - qmd/chapter_1/data/motus/data.rds (previous output from previous run, if exists)
-#   - qmd/chapter_1/data/tides/TideDataNewcastle.csv
-#   - qmd/chapter_1/data/spreadsheet/SHOREBIRD NUMBER TRACKING(Birds caught).csv
+#   - data/motus/project-294.motus (SQLite database)
+#   - data/motus/data.rds (previous output from previous run, if exists)
+#   - data/tides/TideDataNewcastle.csv
+#   - data/spreadsheet/SHOREBIRD NUMBER TRACKING(Birds caught).csv
 # The above is stored in the shorebird group SharePoint, to be downloaded manually
 # as a .csv whenever new birds are caught / tagged.
 # PRODUCES:
-#   - qmd/chapter_1/data/motus/data.rds (df.alltags)
-#   - qmd/chapter_1/data/motus/recv-info.rds (df.recvDeps)
-#   - qmd/chapter_1/data/tides/tideData.rds
-#   - qmd/chapter_1/data/motus/backups/{date}-data.rds (dated backup)
-#   - qmd/chapter_1/data/spreadsheets/spreadsheet.rds (the result of basic cleaning done to the SHOREBIRD NUMBER TRACKING .csv)
+#   - data/motus/data.rds (df.alltags)
+#   - data/motus/recv-info.rds (df.recvDeps)
+#   - data/tides/tideData.rds
+#   - data/motus/backups/{date}-data.rds (dated backup)
+#   - data/spreadsheet/spreadsheet_data.rds
 
 # ==== Setup ====
 
@@ -187,7 +187,7 @@ if (nrow(df.new) == 0) {
                       by = "motusTagID")
 
   # 9. Tide data
-  tideData <- read.csv(here("qmd", "chapter_1", "data", "tides", "TideDataNewcastle.csv"))
+  tideData <- read.csv(here("data", "tides", "TideDataNewcastle.csv"))
 
   tideData <- tideData %>% mutate(
     date = dmy(date, tz = "Australia/Sydney"),
