@@ -4,16 +4,16 @@
 #   - qmd/chapter_1/R/globals.R (constants: station_rename, tag lists, project number,
 #     species colours, names, classifications)
 #   - data/motus/project-294.motus (SQLite database)
-#   - data/motus/data.rds (previous output from previous run, if exists)
+#   - data/motus/detection_data.rds (previous output from previous run, if exists)
 #   - data/tides/TideDataNewcastle.csv
 #   - data/spreadsheet/SHOREBIRD NUMBER TRACKING(Birds caught).csv
 # The above is stored in the shorebird group SharePoint, to be downloaded manually
 # as a .csv whenever new birds are caught / tagged.
 # PRODUCES:
-#   - data/motus/data.rds (df.alltags)
+#   - data/motus/detection_data.rds (df.alltags)
 #   - data/motus/recv-info.rds (df.recvDeps)
 #   - data/tides/tideData.rds
-#   - data/motus/backups/{date}-data.rds (dated backup)
+#   - data/motus/backups/{date}-detection_data.rds (dated backup)
 #   - data/spreadsheet/spreadsheet_data.rds
 
 # ==== Setup ====
@@ -68,7 +68,7 @@ if (!is.null(df.alltags.past)) {
 # ==== Process New Rows ====
 
 if (nrow(df.new) == 0) {
-  message("No new detections found. Using existing data.rds.")
+  message("No new detections found. Using existing detection_data.rds.")
   df.alltags <- df.alltags.past
 
 } else {

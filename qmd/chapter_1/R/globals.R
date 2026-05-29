@@ -9,7 +9,7 @@ path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIR
 
 # Path for data files that are imported by other files
 path_motus_database <- here::here("data", "motus", "project-294.motus")
-path_detection_data <- here::here("data", "motus", "data.rds")
+path_detection_data <- here::here("data", "motus", "detection_data.rds")
 path_recv_info      <- here::here("data", "motus", "recv-info.rds")
 path_tideData       <- here::here("data", "tides", "tideData.rds")
 path_spreadsheet_data <- here::here("data", "spreadsheet", "spreadsheet_data.rds")
