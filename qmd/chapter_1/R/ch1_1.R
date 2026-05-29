@@ -131,29 +131,35 @@ if (nrow(df.new) == 0) {
 
   ## 6. MotusFilter: keep only valid detections (build diagnostic plots first) ----
   tic("6. MotusFilter")
-  plot_filter_in <- ggplot(df.new.prefilter %>% filter(motusFilter == 1),
-         aes(x = recvDeployName)) +
-    geom_bar(fill = "steelblue") + theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(x = "Motus Station", y = "Nb of motusFilter = 1 (good)")
-
-  plot_filter_out <- ggplot(df.new.prefilter %>% filter(motusFilter == 0),
-         aes(x = recvDeployName)) +
-    geom_bar(fill = "orange") + theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    labs(x = "Motus Station", y = "Nb of motusFilter = 0 (filtered out)")
-
-  plot_filter_perc <- ggplot(
-         df.new.prefilter %>% filter(motusFilter %in% c(0, 1)),
-         aes(x = recvDeployName, fill = factor(motusFilter))) +
-    geom_bar(position = "fill") +
-    scale_fill_manual(values = c("0" = "orange", "1" = "steelblue"),
-                      labels = c("0 (filtered out)", "1 (good)"),
-                      name = "motusFilter") +
-    theme_minimal() +
-    labs(x = "Motus Station", y = "Proportion") +
-    scale_y_continuous(labels = scales::percent) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  # FIXME: These plots are massive and use too much memory (plot_filter_in and 
+  # plot_filter_perc 1.5GB each). Would be simpler to just save the current 
+  # state of the dataset (e.g. df.new.prefilter), and generate the diagnostic 
+  # plots in a separate script.
+  
+  # plot_filter_in <- ggplot(df.new.prefilter %>% filter(motusFilter == 1),
+  #        aes(x = recvDeployName)) +
+  #   geom_bar(fill = "steelblue") + theme_minimal() +
+  #   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  #   labs(x = "Motus Station", y = "Nb of motusFilter = 1 (good)")
+  # 
+  # plot_filter_out <- ggplot(df.new.prefilter %>% filter(motusFilter == 0),
+  #        aes(x = recvDeployName)) +
+  #   geom_bar(fill = "orange") + theme_minimal() +
+  #   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  #   labs(x = "Motus Station", y = "Nb of motusFilter = 0 (filtered out)")
+  # 
+  # plot_filter_perc <- ggplot(
+  #        df.new.prefilter %>% filter(motusFilter %in% c(0, 1)),
+  #        aes(x = recvDeployName, fill = factor(motusFilter))) +
+  #   geom_bar(position = "fill") +
+  #   scale_fill_manual(values = c("0" = "orange", "1" = "steelblue"),
+  #                     labels = c("0 (filtered out)", "1 (good)"),
+  #                     name = "motusFilter") +
+  #   theme_minimal() +
+  #   labs(x = "Motus Station", y = "Proportion") +
+  #   scale_y_continuous(labels = scales::percent) +
+  #   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
   df.new <- df.new %>%
     filter(motusFilter == 1,
