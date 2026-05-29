@@ -14,6 +14,11 @@ qmd/*/data/**
 data/**
 !data/.gitkeep
 
+# Backup folder — keep structure, ignore contents
+backups/**
+!backups/.gitkeep
+!backups/data/.gitkeep
+
 # Claude folders (used by Callum on local testing branch)
 .claude/
 
