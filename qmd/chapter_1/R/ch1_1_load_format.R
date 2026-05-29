@@ -49,6 +49,10 @@ df.alltags.past <- if (file.exists(path_detection_data)) readRDS(path_detection_
 
 # ==== Get New Detections from SQLite ====
 
+# TODO: Verify that the "new detections only" logic works. So far I have only
+# tested this script with the entire dataset (i.e. all rows = new / no existing
+# df.alltags on file)
+
 # Resolve ambiguous detections before querying
 clarify(sql.motus)
 
@@ -205,13 +209,26 @@ if (nrow(df.new) == 0) {
   # Join Band ID to new detections, using motusTagID as the join key
   df.new <- left_join(df.new,
                       spreadsheet %>%
-                        filter(is.na(Euthanised.)) %>%
+                        filter(Euthanised. != "Y") %>%
                         select(motusTagID, DateAUS.Trap, Band.ID, Bander),
                       by = "motusTagID")
   toc(log = TRUE)
-  
-  # TODO: Identify records that do not have a band ID
 
+  ### Band ID Diagnostics ----
+  
+  # See how many records there are for each value of Band.ID
+  df.new |> count(Band.ID)
+
+  # And specifically check the number of NA values
+  df.new |> filter(is.na(Band.ID)) |> nrow()
+  
+  # TODO: Update the above check to be automatic / flag to user if there are
+  # missing values
+  
+  # THE BELOW LINE IS FOR TESTING ONLY
+  # Remove banding related columns to try again
+  #df.new <- df.new |> select(-c(DateAUS.Trap, Band.ID, Bander))
+  
   ## 9. Tide data ----
   tic("9. Tide data")
   tideData <- read.csv(here("data", "tides", "TideDataNewcastle.csv"))
