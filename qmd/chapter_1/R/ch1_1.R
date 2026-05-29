@@ -209,6 +209,8 @@ if (nrow(df.new) == 0) {
                         select(motusTagID, DateAUS.Trap, Band.ID, Bander),
                       by = "motusTagID")
   toc(log = TRUE)
+  
+  # TODO: Identify records that do not have a band ID
 
   ## 9. Tide data ----
   tic("9. Tide data")
