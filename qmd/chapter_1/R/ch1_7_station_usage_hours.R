@@ -859,7 +859,7 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 
 ## ---- Per-Species Total Used Hours Boxplot ----
 #
-# NOTE: `explore` is the object sourced by ch1_2.qmd — do not rename or remove.
+# NOTE: `explore` is the object sourced by ch1_2_explore.qmd — do not rename or remove.
 
 explore <- ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +

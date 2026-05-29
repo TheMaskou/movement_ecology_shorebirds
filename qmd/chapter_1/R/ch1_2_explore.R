@@ -357,7 +357,7 @@ gtsave(
 
 
 ## ----explore, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE----
-source(here::here("qmd", "chapter_1", "R", "ch1_7.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_7_station_usage_hours.R"))
 
 
 ## ----explore 2, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE----

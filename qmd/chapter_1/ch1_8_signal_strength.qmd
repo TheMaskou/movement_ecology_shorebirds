@@ -5,7 +5,7 @@ format: html
 
 ```{r setup, include=FALSE}
 library(here)
-source(here::here("qmd", "chapter_1", "R", "ch1_8.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_8_signal_strength.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -20,7 +20,7 @@ Using this metric, we could characterise behaviors such as foraging or roosting 
 :::
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#reproducibility)*
 :::
 
 ```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
@@ -49,7 +49,7 @@ data_all <- data_all %>%
            toupper())
 ```
 
-Here, we take the relative **signal strength value** `sigPositive` (a [*derivative*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables) of the raw values `sig`) to calculate the **Standard Deviation (SD)** (`sig_indiv_tideCat_sd`) for each individual and per tide category. This will inform us about signal strength variation for each individual depending particular conditions (tide category \* day/night \* sites).
+Here, we take the relative **signal strength value** `sigPositive` (a [*derivative*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#add-key-variables) of the raw values `sig`) to calculate the **Standard Deviation (SD)** (`sig_indiv_tideCat_sd`) for each individual and per tide category. This will inform us about signal strength variation for each individual depending particular conditions (tide category \* day/night \* sites).
 
 Then, we group the SD per species and per site to observe how the signal strength varies.
 

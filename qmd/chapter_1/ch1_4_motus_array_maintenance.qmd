@@ -30,7 +30,7 @@ Note that you can build any station yourself by simply following the [installati
 
 ```{r setup, message=FALSE, warning=FALSE, include=FALSE}
 library(here)
-source(here::here("qmd", "chapter_1", "R", "ch1_4.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_4_motus_array_maintenance.R"))
 ```
 
 <br>

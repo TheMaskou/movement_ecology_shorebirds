@@ -5,11 +5,11 @@ format: html
 
 ```{r setup, include=FALSE}
 library(here)
-source(here::here("qmd", "chapter_1", "R", "ch1_10.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_10_entropy_evenness_composition.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-We can inform site usage for each species with its individual variation (i.e., [average number of site used per species](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_2.html#motus-table), [average rate of use for a site and depending on tidal condition](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#resident-birds)). However, the following question remaining unanswered is multiple: How loyal a bird is to his sites? Do the birds use the same sites? Is it varying at the individual and/or species level(s)? We provide two simple metrics to address this knowledge gap: **Shannon entropy** (H) and **Jensen-Shannon Divergence**(JSD).
+We can inform site usage for each species with its individual variation (i.e., [average number of site used per species](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_2_explore.html#motus-table), [average rate of use for a site and depending on tidal condition](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7_station_usage_hours.html#resident-birds)). However, the following question remaining unanswered is multiple: How loyal a bird is to his sites? Do the birds use the same sites? Is it varying at the individual and/or species level(s)? We provide two simple metrics to address this knowledge gap: **Shannon entropy** (H) and **Jensen-Shannon Divergence**(JSD).
 
 Grouped per species, this page aims to quantify the following:
 
@@ -27,7 +27,7 @@ Grouped per species, this page aims to quantify the following:
 :::
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#reproducibility)*
 :::
 
 ```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}

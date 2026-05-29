@@ -5,7 +5,7 @@ format: html
 
 ```{r setup, include=FALSE}
 library(here)
-source(here::here("qmd", "chapter_1", "R", "ch1_2.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_2_explore.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -45,7 +45,7 @@ Open and download the table [here](material/table_1.png){target="_blank"}.
 
 <br> <br>
 
-And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*. <br>
+And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7_station_usage_hours.html#detection-conditions)*. <br>
 
 ```{r explore 2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE}
 explore

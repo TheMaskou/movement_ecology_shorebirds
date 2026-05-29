@@ -11,15 +11,15 @@ project:
     - index.qmd
     - qmd/**/*.qmd  # recursively render all .qmd files
 
-    # - "!qmd/chapter_1/ch1_1.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_2.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_4.qmd"  # Exclude this specific file 
-    # - "!qmd/chapter_1/ch1_5.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_6.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_7.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_8.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_9.qmd"  # Exclude this specific file
-    # - "!qmd/chapter_1/ch1_10.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_1_load_format.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_2_explore.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_4_motus_array_maintenance.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_5_survey_effort.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_6_estuary_usage_days.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_7_station_usage_hours.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_8_signal_strength.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_9_results.qmd"  # Exclude this specific file
+    # - "!qmd/chapter_1/ch1_10_entropy_evenness_composition.qmd"  # Exclude this specific file
 
     
 execute:
@@ -61,29 +61,29 @@ website:
       contents:
         - section: "Data"
           contents:
-            - qmd/chapter_1/ch1_1.qmd # Load and Format
-            - qmd/chapter_1/ch1_2.qmd # Explore
-            - qmd/chapter_1/ch1_3.qmd # Styles
-            
+            - qmd/chapter_1/ch1_1_load_format.qmd # Load and Format
+            - qmd/chapter_1/ch1_2_explore.qmd # Explore
+            - qmd/chapter_1/ch1_3_legend.qmd # Styles
+
         - section: "Motus array"
           contents:
-            - qmd/chapter_1/ch1_4.qmd # Maintenance
-            - qmd/chapter_1/ch1_5.qmd # Survey effort
-            
+            - qmd/chapter_1/ch1_4_motus_array_maintenance.qmd # Maintenance
+            - qmd/chapter_1/ch1_5_survey_effort.qmd # Survey effort
+
         - section: "Analysis"
           contents:
-            - qmd/chapter_1/ch1_6.qmd  # Estuary Usage
-            - qmd/chapter_1/ch1_7.qmd  # Station Usage rate
-            - qmd/chapter_1/ch1_8.qmd  # Signal strength
-            - qmd/chapter_1/ch1_10.qmd # Shannon indix
-            
+            - qmd/chapter_1/ch1_6_estuary_usage_days.qmd  # Estuary Usage
+            - qmd/chapter_1/ch1_7_station_usage_hours.qmd  # Station Usage rate
+            - qmd/chapter_1/ch1_8_signal_strength.qmd  # Signal strength
+            - qmd/chapter_1/ch1_10_entropy_evenness_composition.qmd # Shannon index
+
         - section: "Results"
           contents:
-            - qmd/chapter_1/ch1_9.qmd # Results
-            
+            - qmd/chapter_1/ch1_9_results.qmd # Results
+
         - section: "To-do-list"
           contents:
-            - qmd/chapter_1/ch1_11.qmd # To-do-list
+            - qmd/chapter_1/ch1_11_todo_list.qmd # To-do-list
 
     - id: chapter2
       title: "Chapter 2"

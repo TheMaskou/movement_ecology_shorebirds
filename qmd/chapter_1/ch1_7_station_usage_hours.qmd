@@ -5,7 +5,7 @@ format: html
 
 ```{r setup, include=FALSE}
 library(here)
-source(here::here("qmd", "chapter_1", "R", "ch1_7.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_7_station_usage_hours.R"))
 ```
 
 :::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -26,7 +26,7 @@ Plus, globally visualise the **conditions of detection** across the tagged popul
 ::::
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#reproducibility)*
 :::
 
 ```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
@@ -143,7 +143,7 @@ tide_data <- tide_data %>%
 
 Now tide data ready to be processed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.
 
-Available time for each Motus stations is accessed with `activity` table: each row is a dated record of noise or a tag detected *- see [Survey effort \> Activity table](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#activity-table)*.
+Available time for each Motus stations is accessed with `activity` table: each row is a dated record of noise or a tag detected *- see [Survey effort \> Activity table](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5_survey_effort.html#activity-table)*.
 
 We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity, and expand this period in hours.
 
@@ -209,7 +209,7 @@ recv_hours$recvDeployName <- sub("_SG-.*", "", recv_hours$SernoStation)
 
 We now how the complete temporal coverage, expanded in hours, for each Motus station.
 
-However, due to some temporary failures or maintenance *(see [Survey effort \> Operational periods](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#operational-periods))*, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substract these off-hours to the complete temporal coverage.
+However, due to some temporary failures or maintenance *(see [Survey effort \> Operational periods](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5_survey_effort.html#operational-periods))*, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substract these off-hours to the complete temporal coverage.
 
 <br>
 

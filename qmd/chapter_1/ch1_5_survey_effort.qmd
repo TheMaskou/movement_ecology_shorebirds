@@ -4,7 +4,7 @@ title: "Survey effort"
 
 ```{r setup, include=FALSE}
 library(here)
-source(here::here("qmd", "chapter_1", "R", "ch1_5.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_5_survey_effort.R"))
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -20,7 +20,7 @@ To exactly access when a station was operational and when it was not, we used th
 ## Activity table
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#reproducibility)*
 :::
 
 ```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
@@ -381,4 +381,4 @@ ggplot() +
 
 ## Condition of detections
 
-Find in [Chapter 1 \> Station usage - hours \> Condition detections](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions) the number of hours a species have been detected and where, depending the four categories of tide (Low, High, Day, Night).
+Find in [Chapter 1 \> Station usage - hours \> Condition detections](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7_station_usage_hours.html#detection-conditions) the number of hours a species have been detected and where, depending the four categories of tide (Low, High, Day, Night).
