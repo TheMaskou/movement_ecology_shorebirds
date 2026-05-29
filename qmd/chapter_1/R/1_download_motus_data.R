@@ -13,7 +13,8 @@ library(RSQLite)
 library(forcats) 
 library(lubridate)
 library(bioRad) 
-library(purrr) 
+library(purrr)
+library(tictoc)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
@@ -22,11 +23,16 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 Sys.setenv(TZ="UTC") 
 proj.num <- 294       
 motusLogout()
+tic("Running tagme() to update Motus database")
 sql.motus <- tagme(projRecv = proj.num,
                    new = TRUE, # FALSE overwrites existing file, TRUE creates a new file
-                   #update = TRUE,
+                   update = TRUE,
                    dir = dir_motus)
+toc(log = TRUE)
 metadata(sql.motus, proj.num)
+
+# Timing notes ====
+# 2026-05-29, Callum: 1141.19 sec to download entire database fresh
 
 # Below = testing / not needed
 ## QUICK CHECK FOR LAST DATA (43288 is test tag)
