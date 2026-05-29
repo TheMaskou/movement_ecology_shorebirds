@@ -15,15 +15,17 @@ library(lubridate)
 library(bioRad) 
 library(purrr) 
 
+source(here::here("qmd", "chapter_1", "R", "globals.R"))
+
 ## RETRIEVE DATA
 setwd(dirname(rstudioapi::getSourceEditorContext()$path)) 
 Sys.setenv(TZ="UTC") 
 proj.num <- 294       
 motusLogout()
 sql.motus <- tagme(projRecv = proj.num,
-                   new = FALSE, # FALSE overwrites existing file, TRUE creates a new file
-                   update = TRUE,
-                   dir = here("qmd", "chapter_1", "data", "motus"))
+                   new = TRUE, # FALSE overwrites existing file, TRUE creates a new file
+                   #update = TRUE,
+                   dir = dir_motus)
 metadata(sql.motus, proj.num)
 
 # Below = testing / not needed
