@@ -69,7 +69,7 @@ sql.motus <- dbConnect(SQLite(), path_motus_database)
 #
 
 # Birds
-data_all <- readRDS(path_detection_data)
+df.alltags <- readRDS(path_detection_data)
 
 # Receivers info
 recv <- readRDS(path_recv_info)
@@ -316,7 +316,7 @@ total_recv_tide_data <- tide_data_df %>%
 #   4. Summarise to duration_h per (bird, station, tide category).
 
 # Get the monitored period of each bird
-period_sp <- data_all  %>%
+period_sp <- df.alltags  %>%
   group_by(Band.ID) %>%
   reframe(DateAUS.Trap = first(DateAUS.Trap),
           last_dateAus = max(dateAus),
@@ -403,7 +403,7 @@ available_bird_recv_time <- available_bird_recv_time %>%
 
 # USED TIME (amount of time each bird spent during each category of tide and at each station)
 # Provide the burst interval value depending Lotek-nano tag model (scd)
-data_bird <- data_all %>%
+data_bird <- df.alltags %>%
   mutate(burst_inter = ifelse(tagModel == "NTQB2-6-2", dseconds(7.1), dseconds(13.1))) %>%
   select(timeAus, sunriseNewc, sunsetNewc, tideCategory, tideHighLow, tideDiel,
          speciesEN, tagModel, recvDeployName, recv,speciesSci, Band.ID, burst_inter)

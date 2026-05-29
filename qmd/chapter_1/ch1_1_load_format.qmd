@@ -521,7 +521,7 @@ Once loaded in your *R environment,* the file will display five objects:
 
 -   `sql.motus`: raw motus file from which you can call multiple tables (see [documentation](https://motuswts.github.io/motus/articles/03-accessing-data.html))
 
--   `data_all`: contains all the raw detections for each Lotek nanotags
+-   `df.alltags`: contains all the raw detections for each Lotek nanotags
 
 -   `recv`: contains all the details for each receiver of the Motus array
 

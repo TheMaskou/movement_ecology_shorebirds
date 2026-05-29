@@ -27,13 +27,13 @@ library(tidyr)
 
 # ==== Load Data ====
 
-data_all <- readRDS(path_detection_data)
+df.alltags <- readRDS(path_detection_data)
 
 # ==== Individual-level Detection Metrics ====
 
 # Deployment duration: number of days each tag was active, from trapping day
 # to last detection. The +1 includes the trapping day itself.
-tag_dep_duration <- data_all %>%
+tag_dep_duration <- df.alltags %>%
   group_by(Band.ID) %>%
   summarise(start_date = min(DateAUS.Trap),
             end_date = max(dateAus),
@@ -42,14 +42,14 @@ tag_dep_duration <- data_all %>%
   select(Band.ID, period_tag_dep_d)
 
 # Number of distinct days each tag was detected anywhere in the array
-tag_dep_nb_d <- data_all %>%
+tag_dep_nb_d <- df.alltags %>%
   mutate(dateAus = as.Date(dateAus)) %>%
   group_by(Band.ID) %>%
   summarise(days_detect = n_distinct(dateAus), .groups = "drop")
 
 # Number of days each tag was detected at >1 station (multi-site days).
 # Indicates movement between stations within a single day.
-multiple_site_detect <- data_all %>%
+multiple_site_detect <- df.alltags %>%
   group_by(Band.ID, dateAus) %>%
   summarise(distinct_sites = n_distinct(recvDeployName),
             .groups = "drop_last") %>%
@@ -64,7 +64,7 @@ multiple_site_detect <- data_all %>%
 # Combine per-individual station counts with deployment and detection metrics.
 # Each station becomes its own column showing days recorded there.
 # perc = proportion of deployed days on which the bird was detected at least once.
-tag_detection_indiv <- data_all %>%
+tag_detection_indiv <- df.alltags %>%
   group_by(Band.ID, recvDeployName, speciesEN) %>%
   reframe(days_recorded = n_distinct(dateAus)) %>%
   pivot_wider(names_from = recvDeployName,
@@ -139,7 +139,7 @@ ggplot(tag_detection_indiv %>%
 
 # Deployment duration per species (first trapping to last detection across all
 # individuals of that species)
-tag_dep_duration <- data_all %>%
+tag_dep_duration <- df.alltags %>%
   group_by(speciesEN) %>%
   summarise(start_date = min(DateAUS.Trap),
             end_date = max(dateAus),
@@ -148,13 +148,13 @@ tag_dep_duration <- data_all %>%
   select(speciesEN, period_tag_dep_d)
 
 # Distinct detection days per species
-tag_dep_nb_d <- data_all %>%
+tag_dep_nb_d <- df.alltags %>%
   mutate(dateAus = as.Date(dateAus)) %>%
   group_by(speciesEN) %>%
   summarise(days_detect = n_distinct(dateAus), .groups = "drop")
 
 # Multi-station days per species
-multiple_site_detect <- data_all %>%
+multiple_site_detect <- df.alltags %>%
   group_by(speciesEN, dateAus) %>%
   summarise(distinct_sites = n_distinct(recvDeployName),
             .groups = "drop_last") %>%
@@ -165,7 +165,7 @@ multiple_site_detect <- data_all %>%
 
 ## ---- Species Summary Table ----
 
-tag_detection <- data_all %>%
+tag_detection <- df.alltags %>%
   group_by(recvDeployName, speciesEN) %>%
   reframe(days_recorded = n_distinct(dateAus)) %>%
   pivot_wider(names_from = recvDeployName,

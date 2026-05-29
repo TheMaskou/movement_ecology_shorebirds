@@ -33,13 +33,13 @@ library(stringr)
 # ==== Load Data ====
 
 # Birds
-data_all <- readRDS(path_detection_data)
+df.alltags <- readRDS(path_detection_data)
 
 # Receivers info
 recv <- readRDS(path_recv_info)
 
 # Selecting upon our needs
-data_all <- data_all %>%
+df.alltags <- df.alltags %>%
   select(Band.ID, recvDeployName, recv, speciesEN, sig, sigsd, sigPositive, tideCategory, timeAus)
 
 
@@ -54,7 +54,7 @@ data_all <- data_all %>%
 # Curlew) and tideCat (e.g. "DH" for Diurnal_High) for compact axis labels.
 
 # Mean signal strength per individual, site and time categories (HD, HN, LD, LN)
-data_all <- data_all %>%
+df.alltags <- df.alltags %>%
   group_by(Band.ID, tideCategory, recvDeployName) %>%
   mutate(sig_indiv_tideCat_mean = mean(sigPositive),
          sig_indiv_tidecat_sd = sd(sigPositive)) %>%
@@ -73,7 +73,7 @@ data_all <- data_all %>%
 # distribution of individual-level SD values for a given tide category.
 
 # One plot per species for better understanding
-plots_list <- data_all %>%
+plots_list <- df.alltags %>%
 
   split(.$speciesEN) %>%
 

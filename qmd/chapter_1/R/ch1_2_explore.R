@@ -22,7 +22,7 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 # ==== Load Data ====
 
 # Shorebird detection data
-data_all <- readRDS(path_detection_data)
+df.alltags <- readRDS(path_detection_data)
 
 # Receivers info
 recv <- readRDS(path_recv_info)
@@ -32,17 +32,17 @@ spreadsheet <- readRDS(path_spreadsheet_data)
 
 ## ----1 data ktables, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
-# Band.IDs in spreadsheet but not in data_all (tagged + released but not detected)
+# Band.IDs in spreadsheet but not in df.alltags (tagged + released but not detected)
 nb_undetect <- spreadsheet %>% 
   filter(is.na(Euthanised.)) %>%
   distinct(Band.ID) %>%
-  filter(!Band.ID %in% unique(data_all$Band.ID)) 
+  filter(!Band.ID %in% unique(df.alltags$Band.ID)) 
 
-# Band.IDs in spreadsheet and in data_all (tagged + released and detected)
+# Band.IDs in spreadsheet and in df.alltags (tagged + released and detected)
 nb_detect <- spreadsheet %>% 
   filter(is.na(Euthanised.)) %>%
   distinct(Band.ID) %>%
-  filter(Band.ID %in% unique(data_all$Band.ID))
+  filter(Band.ID %in% unique(df.alltags$Band.ID))
 
 # Bird released (total tagged and released birds, supposed to be detectable) 
 nb_release <- spreadsheet %>% 
@@ -68,13 +68,13 @@ moni <- bind_rows(
          value  = nrow(nb_undetect)),
   # Nb of birds released with low detection (less than 30 times)
   tibble(variable = "detect_inf_150",
-         value  = data_all %>%
+         value  = df.alltags %>%
            count(Band.ID) %>%
            filter(n < 150) %>% #1*: we can change this treshold value depending our appreciation
            nrow() ),
   # Nb of birds released with good detection (more than 30 times)
   tibble(variable = "detect_sup_150",
-         value  = data_all %>%
+         value  = df.alltags %>%
            count(Band.ID) %>%
            filter(n > 149) %>% #1*
            nrow() ) 
@@ -113,18 +113,18 @@ n_tagged <- spreadsheet %>%
   summarise(n_tagged = n())
 
 # Nb of individual never detected
-n_undetect <- data_all %>%
+n_undetect <- df.alltags %>%
   distinct(speciesEN) %>% # to force including all values of species                        
   left_join(spreadsheet %>%
               filter(is.na(Euthanised.),
-                     !Band.ID %in% unique(data_all$Band.ID)) %>%
+                     !Band.ID %in% unique(df.alltags$Band.ID)) %>%
               group_by(speciesEN) %>%
               summarise(n_undetect = n(), .groups = "drop"),
             by = "speciesEN") %>%
   mutate(n_undetect = ifelse(is.na(n_undetect), 0, n_undetect))
 
 # Nb of individual never detected
-n_detect <- data_all %>%
+n_detect <- df.alltags %>%
   filter(Band.ID %in% (spreadsheet %>% 
                        filter(is.na(Euthanised.)) %>% 
                        pull(Band.ID))) %>%
@@ -133,7 +133,7 @@ n_detect <- data_all %>%
 
 
 # Nb of individual re-tagged
-n_retagged <- data_all %>%
+n_retagged <- df.alltags %>%
   distinct(speciesEN) %>% # to force including all values of species                        
   left_join(spreadsheet %>%
               filter(is.na(Euthanised.),
@@ -153,7 +153,7 @@ first_d <- spreadsheet %>%
   mutate(first_d = format(as.Date(first_d), format = "%d-%m-%Y"))
 
 # Last day recorded (detection)
-last_d <- data_all %>% 
+last_d <- df.alltags %>% 
   group_by(speciesEN) %>% # per species
   mutate(last_d = max(dateAus)) %>%
   select(speciesEN, last_d) %>%
@@ -161,14 +161,14 @@ last_d <- data_all %>%
   mutate(last_d = format(last_d, format = "%d-%m-%Y"))
 
 # Nb of days monitored, total period of detection (mean + SE)
-monit_d <- data_all %>%
+monit_d <- df.alltags %>%
   
   group_by(Band.ID) %>% # per individual
   summarise(DateAUS.Trap = first(DateAUS.Trap),         
             last_dateAus = max(dateAus),
             monit_d = as.numeric(last_dateAus - DateAUS.Trap) + 1) %>% 
   
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
   
   group_by(speciesEN) %>% # per species
   summarise(n_indiv = n(),
@@ -183,12 +183,12 @@ monit_d <- data_all %>%
   select(speciesEN, mean_monit_d, mean_monit_d_se)
 
 # Nb of days actually detected (mean + SE)
-detect_d <- data_all %>%
+detect_d <- df.alltags %>%
   
   group_by(Band.ID) %>% # per individual
   summarise(detect_d = n_distinct(dateAus)) %>%
   ungroup()  %>% 
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
   
   group_by(speciesEN) %>% # per species
   summarise(n_indiv = n(),
@@ -203,14 +203,14 @@ detect_d <- data_all %>%
   select(speciesEN, mean_detect_d, mean_detect_d_se)
 
 # Nb of sites visited per day (mean + SE)
-sites_d <- data_all %>%
+sites_d <- df.alltags %>%
 
   group_by(Band.ID, dateAus) %>% # per individual and day
   summarise(nb_sites = n_distinct(recvDeployName), .groups = "drop") %>%  
   group_by(Band.ID) %>%  
   summarise(nb_sites_d = round(mean(nb_sites), 1)) %>%
   ungroup()  %>% 
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
   
   group_by(speciesEN) %>% # per species
   summarise(n_indiv = n(),
@@ -225,12 +225,12 @@ sites_d <- data_all %>%
   select(speciesEN, mean_sites_d, sites_d_se)
 
 # Nb of sites visited in total (mean + SE)
-sites_tot <- data_all %>%
+sites_tot <- df.alltags %>%
   
   group_by(Band.ID) %>% # per individual
   summarise(sites_tot = n_distinct(recvDeployName), .groups = "drop") %>%  
   ungroup()  %>% 
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), by = "Band.ID") %>%
   
   group_by(speciesEN) %>% # per species
   summarise(n_indiv = n(),
@@ -269,7 +269,7 @@ table_1_pub <- table_1 %>%
          sites_d   = ifelse(is.na(sites_d_se), mean_sites_d,paste0(mean_sites_d, "  ", sites_d_se)),
          sites_tot = ifelse(is.na(sites_tot_se), mean_sites_tot, paste0(mean_sites_tot, "  ", sites_tot_se))) %>%
   
-  left_join(data_all %>% 
+  left_join(df.alltags %>% 
               filter(!is.na(speciesSci),    # avoid error
                      !is.na(speciesEN)) %>% # avoid error
                        distinct(speciesEN, speciesSci), by = "speciesEN") %>%
@@ -414,7 +414,7 @@ dt_detect <- DT::datatable(
 
 ## ----1 table 1 indiv , message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE----
 
-data_indiv <- data_all %>%
+data_indiv <- df.alltags %>%
   select(timeAus, speciesEN, markerNumber, Band.ID, recvDeployName, recv, tideCategory,  DateAUS.Trap, motusFilter) %>%
   mutate(timeAus = format(timeAus, '%Y-%m-%d %H:%M:%S')) %>%
   group_by(Band.ID) %>%

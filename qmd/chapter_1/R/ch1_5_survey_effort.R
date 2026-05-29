@@ -13,7 +13,7 @@ library(purrr)
 ## ---- Load Data ----
 
 # All bird detections across the array
-data_all <- readRDS(path_detection_data)
+df.alltags <- readRDS(path_detection_data)
 
 # Receiver deployment metadata (one row per deployment of a device at a site)
 recv <- readRDS(path_recv_info)
@@ -286,7 +286,7 @@ motus_survey_d <- ggplot(recv.status, aes(y = factor(StationP))) +
 ## ---- Overlay Bird Detections ----
 
 # Join detection data to StationP labels so birds appear on the correct y-axis
-data_all_plot <- left_join(data_all %>%
+data_all_plot <- left_join(df.alltags %>%
                              select(Band.ID, recv, recvDeployName, timeAus, tideCategory, speciesEN),
                            recv.status %>%
                              rename(recvDeployName = Station) %>%

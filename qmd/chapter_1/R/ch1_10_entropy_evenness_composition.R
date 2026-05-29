@@ -55,7 +55,7 @@ library(patchwork)
 # ==== Load Data ====
 
 # Birds
-data_all <- readRDS(path_detection_data)
+df.alltags <- readRDS(path_detection_data)
 
 # Receivers info
 recv <- readRDS(path_recv_info)
@@ -89,7 +89,7 @@ calculate_shannon <- function(proportions) {
 #   exp_H = effective number of equally-used sites
 
 # Calculate entropy metrics for each Band.ID
-entropy_results <- data_all %>%
+entropy_results <- df.alltags %>%
   # Remove any NA values in Band.ID or recvSiteName
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
 
@@ -491,7 +491,7 @@ kruskal_within_species %>%
 ## ---- Shannon by Tide — Per Individual ----
 
 # Calculate entropy metrics for each Band.ID
-entropy_results_tide <- data_all %>%
+entropy_results_tide <- df.alltags %>%
   # Remove any NA values in Band.ID or recvSiteName
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
 
@@ -982,7 +982,7 @@ calculate_jsd <- function(p, q) {
 # within-species vs between-species comparisons.
 
 # Create site use matrix (rows = individuals, columns = sites)
-site_use_matrix <- data_all %>%
+site_use_matrix <- df.alltags %>%
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
   group_by(Band.ID, recvDeployName) %>%
   summarise(detections = n(), .groups = "drop") %>%
@@ -1016,10 +1016,10 @@ for (i in 1:(n_individuals - 1)) {
 
 # Add species information
 jsd_results <- jsd_results %>%
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(),
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(),
             by = c("Band.ID_1" = "Band.ID")) %>%
   rename(species_1 = speciesEN) %>%
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(),
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(),
             by = c("Band.ID_2" = "Band.ID")) %>%
   rename(species_2 = speciesEN) %>%
   mutate(same_species = species_1 == species_2)
@@ -1082,7 +1082,7 @@ jsd_results_tab <- jsd_results %>%
 
 
 # Adding extra useful metrics
-n_indiv <- data_all %>%
+n_indiv <- df.alltags %>%
   group_by(speciesEN) %>%
   summarise(n_indiv = n_distinct(Band.ID), .groups = "drop")
 
@@ -1273,7 +1273,7 @@ dunn_jsd_table %>%
 ## ---- JSD by Tide — Pairwise Computation ----
 
 # Create site use matrix (rows = individuals, columns = sites)
-site_use_matrix_tide <- data_all %>%
+site_use_matrix_tide <- df.alltags %>%
 
   # Sanity check
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
@@ -1321,10 +1321,10 @@ for (i in 1:(n_individuals_tide - 1)) {
 
 # Add species information
 jsd_results_tide <- jsd_results_tide %>%
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(),
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(),
             by = c("Band.ID_1" = "Band.ID")) %>%
   rename(species_1 = speciesEN) %>%
-  left_join(data_all %>% select(Band.ID, speciesEN) %>% distinct(),
+  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(),
             by = c("Band.ID_2" = "Band.ID")) %>%
   rename(species_2 = speciesEN) %>%
   mutate(same_species = species_1 == species_2) %>%
@@ -1348,11 +1348,11 @@ jsd_results_tab_tide <- jsd_results_tide %>%
     .groups = "drop") %>%
   rename(speciesEN = species_1)
 
-n_indiv <- data_all %>%
+n_indiv <- df.alltags %>%
   group_by(speciesEN, tideHighLow) %>%
   summarise(n_indiv = n_distinct(Band.ID),
             .groups = "drop")
-n_detect <- data_all %>%
+n_detect <- df.alltags %>%
   group_by(speciesEN, tideHighLow) %>%
   summarise(n_detect = n(),
             .groups = "drop")

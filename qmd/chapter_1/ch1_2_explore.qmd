@@ -11,7 +11,7 @@ source(here::here("qmd", "chapter_1", "R", "ch1_2_explore.R"))
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 The following analysis are based on data downloaded on **`r format(file_date, "%d-%b-%Y")`** from Motus server.
 
-Since 2021, **`r moni$value[moni$variable == "nb_released"]` birds** belonging to **`r length(unique(data_all$speciesEN))` species** have been captured, tagged and released.
+Since 2021, **`r moni$value[moni$variable == "nb_released"]` birds** belonging to **`r length(unique(df.alltags$speciesEN))` species** have been captured, tagged and released.
 
 **You can find the complete record of the captures [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1765667294608&web=1).**
 
@@ -24,7 +24,7 @@ Below are displayed several tables to explore the data with every tagged bird un
 
 ## Motus table
 
-**Find below our data summarised across species and up to date** (last detection `r max(data_all$dateAus)`)**.**
+**Find below our data summarised across species and up to date** (last detection `r max(df.alltags$dateAus)`)**.**
 
 ```{r 1 table 1 pop, message=FALSE, warning=FALSE, eval=TRUE, echo=FALSE}
 table_1_pub
