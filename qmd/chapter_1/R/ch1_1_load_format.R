@@ -200,7 +200,11 @@ if (nrow(df.new) == 0) {
     mutate(motusTagID = as.factor(motusTagID),
            DateAUS.Trap = as.Date(DateAUS.Trap),
            Band.ID = as.factor(Band.ID)) %>%
-    select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())  
+    select(Band.ID, 
+           motusTagID, 
+           speciesEN, 
+           DateAUS.Trap, 
+           everything())  
 
   # Ensure motusTagID is also a factor in df.new (otherwise merge won't work)
   df.new <- df.new %>%
@@ -210,7 +214,12 @@ if (nrow(df.new) == 0) {
   df.new <- left_join(df.new,
                       spreadsheet %>%
                         filter(Euthanised. != "Y") %>%
-                        select(motusTagID, DateAUS.Trap, Band.ID, Bander),
+                        select(motusTagID, 
+                               DateAUS.Trap, 
+                               Band.ID, 
+                               Bander,
+                               Flag
+                               ),
                       by = "motusTagID")
   toc(log = TRUE)
 
