@@ -76,7 +76,8 @@ calculate_shannon <- function(proportions) {
   return(H)
 }
 
-
+# NOTE: I am concerned about the proportions > 0 - zero detections of a bird
+# at a specific receiver is a zero result, not something to be filtered out
 
 # ==== Shannon Entropy — Per Individual ====
 #
@@ -103,11 +104,15 @@ entropy_results <- df.alltags %>%
     total_detections = sum(detections),
     proportion = detections / total_detections) %>%
 
+  # NOTE: It is best practice to keep numeric values with full precision,
+  # and then round them for display in a table (if rounded early, rounding error
+  # will be propagated through further calculations)
+  
   # Calculate metrics for each bird
   summarise(
     S = n(),                                    # Number of sites used
-    H = round(calculate_shannon(proportion), 2),# Shannon entropy
-    J = round(H / log(S), 2),                   # Pielou's evenness
+    H = calculate_shannon(proportion),# Shannon entropy
+    J = H / log(S),                # Pielou's evenness
     total_detections = first(total_detections), # Total detections for reference
     .groups = "drop") %>%
 
@@ -117,8 +122,6 @@ entropy_results <- df.alltags %>%
 
   # Arrange by Band.ID
   arrange(speciesEN, Band.ID)
-
-
 
 # ==== Shannon Entropy — Species Summary Table ====
 
