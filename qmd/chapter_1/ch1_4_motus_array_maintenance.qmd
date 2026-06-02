@@ -39,7 +39,10 @@ source(here::here("qmd", "chapter_1", "R", "ch1_4_motus_array_maintenance.R"))
 
 **Find below a dynamic map with the last info concerning the status of each stations part of the local Motus array.**
 
-```{r mapping, message=FALSE, warning=FALSE, echo=FALSE}
+```{r mapping}
+#| message: false
+#| warning: false
+#| echo: false
 map_maintenance
 ```
 
@@ -49,6 +52,10 @@ map_maintenance
 
 **And retrieve the tables corresponding to each stations with its complete maintenance history.**
 
-```{r Tables, message=FALSE, warning=FALSE, echo=FALSE}
+```{r Tables}
+#| eval: false
+#| include: false
+# TODO: DataTable parked — dt_maintenance is not yet built in the R script.
+# Re-enable (eval: true, include: true) once the photo/table work is resumed.
 dt_maintenance
 ```
