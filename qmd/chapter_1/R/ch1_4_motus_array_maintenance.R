@@ -11,17 +11,17 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 # Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).
 
 # Read data
-motus_data <- read_excel(path_maintenance_log_excel)
+maintenance_log <- read_excel(path_maintenance_log_excel)
 
 # 1. Convert lat/lon columns to numeric (E/W, N/S)
-motus_data <- motus_data %>%
+maintenance_log <- maintenance_log %>%
   mutate(
     sg_lon = as.numeric(sub("([0-9.]+).*", "\\1", sg_lon)) * ifelse(grepl("W", sg_lon), -1, 1),
     sg_lat = as.numeric(sub("([0-9.]+).*", "\\1", sg_lat)) * ifelse(grepl("S", sg_lat), -1, 1)
   )
 
 # 2. Get last data download per station_id (where data_downloaded == "yes")
-last_dl <- motus_data %>%
+last_dl <- maintenance_log %>%
   filter(tolower(data_downloaded) == "yes") %>%
   arrange(station_id, visit_date) %>%
   group_by(station_id) %>%
@@ -34,7 +34,7 @@ last_dl <- motus_data %>%
   )
 
 # 3. Join back to main table (drop pre-existing columns that last_dl will replace)
-motus_data2 <- motus_data %>%
+maintenance_log2 <- maintenance_log %>%
   select(-any_of(c("last_data_download", "last_tech_download"))) %>%
   left_join(last_dl, by = "station_id")
 
@@ -44,7 +44,7 @@ motus_data2 <- motus_data %>%
 # photo_files <- list.files(photo_dir, full.names = FALSE)
 # 
 # # 5. Match filename by objectid and build relative URL
-# motus_data2 <- motus_data2 %>%
+# maintenance_log2 <- maintenance_log2 %>%
 #   rowwise() %>%
 #   mutate(
 #     photo_file = {
@@ -66,7 +66,7 @@ motus_data2 <- motus_data %>%
 # Find below a dynamic map with the last info concerning the status of each stations part of the local Motus array
 
 # Select only needed fields for popups
-popup_data <- motus_data2 %>%
+popup_data <- maintenance_log2 %>%
   mutate(
     popup = paste0(
       "<b>Station ID:</b> ", station_id, "<br>",
@@ -107,7 +107,7 @@ drop_cols <- c(
   "sg_lon_calc", "sg_lat_calc"
 )
 
-table_data <- motus_data2 %>%
+table_data <- maintenance_log2 %>%
   select(-any_of(drop_cols)) %>%
   relocate(station_id, visit_date, .before = 1)
 
