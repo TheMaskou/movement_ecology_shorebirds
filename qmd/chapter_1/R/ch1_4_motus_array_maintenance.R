@@ -74,7 +74,7 @@ popup_data <- maintenance_log2 %>%
       "<b>Station status:</b> ", station_status_left, "<br>",
       "<b>Last visit:</b> ", visit_date, " (", technician, ")", "<br>",
       "<b>Last data download:</b> ", last_data_download, " (", last_tech_download, ")", "<br>",
-      "<b>Last issues reported:</b> ", issue_category, "<br>",
+      "<b>Last issues reported:</b> ", issue_category, "<br>"#,
       # ifelse(
       #   is.na(photo_url),
       #   "",
