@@ -128,6 +128,10 @@ log_complete |>
   filter(is.na(visit_date)) |> 
   select(station_id, visit_date_str, visit_date)
 
+# ==== Exclude Test Entries ====
+log_complete <- log_complete |> 
+  filter(station_id != "TEST")
+
 # ==== Export ====
 openxlsx2::write_xlsx(
   log_complete,
