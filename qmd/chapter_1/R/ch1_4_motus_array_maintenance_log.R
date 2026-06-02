@@ -117,6 +117,12 @@ if (nrow(type_comparison) > 0) {
 # ==== Combine Les Tableaux ====
 log_complete <- bind_rows(log_historic, log_survey123)
 
+# ==== Fix Corries Island Naming Error ====
+# Survey123 entries submitted before the form was corrected used "Corries Island"
+# instead of "Corrie Island". Historic log already has the correct name.
+log_complete <- log_complete |>
+  mutate(station_id = if_else(station_id == "Corries Island", "Corrie Island", station_id))
+
 # ==== Parse Dates ====
 # Retain raw character values for debugging (as visit_date_str)
 log_complete <- log_complete |>
@@ -131,6 +137,8 @@ log_complete |>
 # ==== Exclude Test Entries ====
 log_complete <- log_complete |> 
   filter(station_id != "TEST")
+
+
 
 # ==== Export ====
 openxlsx2::write_xlsx(
