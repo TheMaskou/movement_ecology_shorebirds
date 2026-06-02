@@ -100,38 +100,42 @@ map_maintenance <- leaflet(popup_data) %>%
   addScaleBar(position = "bottomleft") %>%
   addMiniMap()
 
-# And retrieve the tables corresponding to each stations with its complete maintenance history.
-drop_cols <- c(
-  "globalid", "start", "end", "today",
-  "sg_id_calc", "sg_version_calc",
-  "sg_lon_calc", "sg_lat_calc"
-)
+# Display
+map_maintenance
 
-table_data <- maintenance_log2 %>%
-  select(-any_of(drop_cols)) %>%
-  relocate(station_id, visit_date, .before = 1)
-
-# 0-based indices for DT
-hidden_cols <- which(names(table_data) %in% c(
-  "objectid", "CreationDate", "Creator",
-  "EditDate", "Editor", "photo_file"
-)) - 1
-
-dt_maintenance <- datatable(
-  table_data,
-  filter   = "top",
-  rownames = FALSE,
-  class    = "stripe hover row-border order-column compact",
-  extensions = c("Buttons", "FixedColumns"),
-  options  = list(
-    pageLength = 15,
-    scrollX    = TRUE,
-    autoWidth  = TRUE,
-    dom        = "Bfrtip",
-    buttons    = c("copy", "csv", "excel"),
-    columnDefs = list(
-      list(visible = FALSE, targets = hidden_cols)
-    ),
-    fixedColumns = list(leftColumns = 2)  # station_id + visit_date
-  )
-)
+# ==== DataTable Summary ====
+# # And retrieve the tables corresponding to each stations with its complete maintenance history.
+# drop_cols <- c(
+#   "globalid", "start", "end", "today",
+#   "sg_id_calc", "sg_version_calc",
+#   "sg_lon_calc", "sg_lat_calc"
+# )
+# 
+# table_data <- maintenance_log2 %>%
+#   select(-any_of(drop_cols)) %>%
+#   relocate(station_id, visit_date, .before = 1)
+# 
+# # 0-based indices for DT
+# hidden_cols <- which(names(table_data) %in% c(
+#   "objectid", "CreationDate", "Creator",
+#   "EditDate", "Editor", "photo_file"
+# )) - 1
+# 
+# dt_maintenance <- datatable(
+#   table_data,
+#   filter   = "top",
+#   rownames = FALSE,
+#   class    = "stripe hover row-border order-column compact",
+#   extensions = c("Buttons", "FixedColumns"),
+#   options  = list(
+#     pageLength = 15,
+#     scrollX    = TRUE,
+#     autoWidth  = TRUE,
+#     dom        = "Bfrtip",
+#     buttons    = c("copy", "csv", "excel"),
+#     columnDefs = list(
+#       list(visible = FALSE, targets = hidden_cols)
+#     ),
+#     fixedColumns = list(leftColumns = 2)  # station_id + visit_date
+#   )
+# )
