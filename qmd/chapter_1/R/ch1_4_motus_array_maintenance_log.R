@@ -112,3 +112,24 @@ if (nrow(type_comparison) > 0) {
   message("No type mismatches found, yippee")
 }
 
+# ==== Combine Les Tableaux ====
+log_complete <- bind_rows(log_historic, log_survey123)
+
+# ==== Parse Dates ====
+# Retain raw character values for debugging (as visit_date_str)
+log_complete <- log_complete |>
+  mutate(visit_date_str = visit_date) |> 
+  mutate(visit_date = as.Date(as.numeric(visit_date), origin = "1899-12-30"))
+
+# Check for NA dates
+log_complete |> 
+  filter(is.na(visit_date)) |> 
+  select(station_id, visit_date_str, visit_date)
+
+# ==== Export ====
+openxlsx2::write_xlsx(
+  log_complete,
+  file = path_maintenance_log
+)
+
+saveRDS(log_complete, file = here::here("data", "motus", "array_maintenance", "receiver_log_complete.rds"))
