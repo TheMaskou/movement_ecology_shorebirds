@@ -38,29 +38,29 @@ motus_data2 <- motus_data %>%
   select(-any_of(c("last_data_download", "last_tech_download"))) %>%
   left_join(last_dl, by = "station_id")
 
-# 4. Photo directory and file list
-photo_dir <- "C:/Users/marin/OneDrive - The University Of Newcastle/Documents/6-PHD_UON/11-PhD project/Chapters/Chapter 1 - Motus/Array maintenance/reports/log_photo"
-
-photo_files <- list.files(photo_dir, full.names = FALSE)
-
-# 5. Match filename by objectid and build relative URL
-motus_data2 <- motus_data2 %>%
-  rowwise() %>%
-  mutate(
-    photo_file = {
-      oid <- as.character(objectid)
-      p <- grep(paste0("^", oid, "_"), photo_files, value = TRUE)
-      if (length(p) > 0) p[1] else NA_character_
-    }
-  ) %>%
-  ungroup() %>%
-  mutate(
-    photo_url = ifelse(
-      is.na(photo_file),
-      NA_character_,
-      paste0("log_photo/", photo_file)   # relative path for map + table
-    )
-  )
+# # 4. Photo directory and file list
+# photo_dir <- "C:/Users/marin/OneDrive - The University Of Newcastle/Documents/6-PHD_UON/11-PhD project/Chapters/Chapter 1 - Motus/Array maintenance/reports/log_photo"
+# 
+# photo_files <- list.files(photo_dir, full.names = FALSE)
+# 
+# # 5. Match filename by objectid and build relative URL
+# motus_data2 <- motus_data2 %>%
+#   rowwise() %>%
+#   mutate(
+#     photo_file = {
+#       oid <- as.character(objectid)
+#       p <- grep(paste0("^", oid, "_"), photo_files, value = TRUE)
+#       if (length(p) > 0) p[1] else NA_character_
+#     }
+#   ) %>%
+#   ungroup() %>%
+#   mutate(
+#     photo_url = ifelse(
+#       is.na(photo_file),
+#       NA_character_,
+#       paste0("log_photo/", photo_file)   # relative path for map + table
+#     )
+#   )
 
 
 # Find below a dynamic map with the last info concerning the status of each stations part of the local Motus array
@@ -75,12 +75,12 @@ popup_data <- motus_data2 %>%
       "<b>Last visit:</b> ", visit_date, " (", technician, ")", "<br>",
       "<b>Last data download:</b> ", last_data_download, " (", last_tech_download, ")", "<br>",
       "<b>Last issues reported:</b> ", issue_category, "<br>",
-      ifelse(
-        is.na(photo_url),
-        "",
-        paste0("<br><a href='", photo_url, "' target='_blank'>📷 View photo</a>")
+      # ifelse(
+      #   is.na(photo_url),
+      #   "",
+      #   paste0("<br><a href='", photo_url, "' target='_blank'>📷 View photo</a>")
         
-      )
+      #)
     )
   )
 
