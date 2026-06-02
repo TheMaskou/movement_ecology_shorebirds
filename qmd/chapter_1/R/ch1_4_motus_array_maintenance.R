@@ -1,6 +1,7 @@
 # Load packages
 library(dplyr)
 library(leaflet)
+library(leaflet.extras)
 library(htmltools)
 library(readr)
 library(here)
@@ -230,6 +231,18 @@ map_maintenance <- leaflet(popup_data, height = map_height) |>
     lat2 = max(popup_data$sg_lat) + map_bounds_padding
   ) |>
   addScaleBar(position = "bottomleft") |>
-  addMiniMap()
+  addMiniMap() |>
+  addFullscreenControl() |>
+  htmlwidgets::onRender("
+    function(el, x) {
+      var base = el.querySelector('.leaflet-control-layers-base');
+      if (base) {
+        var h = document.createElement('div');
+        h.style.cssText = 'padding:2px 4px 6px 2px;font-weight:bold;font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.05em';
+        h.textContent = 'Basemap';
+        base.parentNode.insertBefore(h, base);
+      }
+    }
+  ")
 
 map_maintenance
