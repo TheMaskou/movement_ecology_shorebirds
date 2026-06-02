@@ -8,6 +8,14 @@ _freeze/
 
 # Quarto rendered output
 qmd/*/files/
+docs/qmd/
+docs/site_libs/**
+
+# File types from quarto render
+.css
+.js
+.map
+.json
 
 # Data folders — keep structure, ignore contents
 qmd/*/data/**
