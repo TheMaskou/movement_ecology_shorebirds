@@ -1,5 +1,5 @@
 ---
-title: "Entropy, Eveness & Composition"
+title: "Entropy, Evenness & Composition"
 format: html
 ---
 
@@ -9,1993 +9,542 @@ source(here::here("qmd", "chapter_1", "R", "ch1_10_entropy_evenness_composition.
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-We can inform site usage for each species with its individual variation (i.e., [average number of site used per species](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_2_explore.html#motus-table), [average rate of use for a site and depending on tidal condition](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7_station_usage_hours.html#resident-birds)). However, the following question remaining unanswered is multiple: How loyal a bird is to his sites? Do the birds use the same sites? Is it varying at the individual and/or species level(s)? We provide two simple metrics to address this knowledge gap: **Shannon entropy** (H) and **Jensen-Shannon Divergence**(JSD).
+We can describe site usage for each species alongside its individual variation — for example the [average number of sites used per species](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_2_explore.html#motus-table) and the [average rate of use per site by tide](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7_station_usage_hours.html#resident-birds). But several questions remain: How broadly does a bird spread its detections across sites? Do conspecifics use the same sites? How much does this vary at the individual and species levels, and does tide play a role?
 
-Grouped per species, this page aims to quantify the following:
+This page uses two complementary information-theoretic metrics to address those questions:
 
--   **Site fidelity** - Evenness equivalence- *Shannon*
+-   **Shannon entropy (H)** — quantifies how broadly an individual distributes its detections across Motus stations. A low-H bird concentrates its detections at few sites (narrow, predictable use); a high-H bird spreads them widely. This breadth metric serves as a widely-used **proxy/correlate** of site fidelity: a bird that always uses the same small set of sites will have low H. Strictly, *site fidelity* is a temporal concept (returning to the same sites over time), whereas H is a snapshot of the detection-proportion distribution — it indicates but does not directly measure temporal fidelity. Derived metrics: Pielou's evenness (J), effective number of sites (exp(H)), and coefficient of variation (CV) between individuals.
 
-    How much birds part of a same species use the same sites along time?\
-    For example, if species A uses an average of five sites per day, do individual birds consistently use the same five sites over time? Does each bird always use the same five sites, or do they switch sites from day to day while still using five sites daily?\
-    *Do individuals have similar entropy (H)?* *How evenly does this bird distribute its site use (J)?* *Is this potential variation occuring at species and/or individual levels?* *Is this variation tide dependant?*
-
--   **Site composition** - Composition difference - *Jensen-Shannon Divergence*
-
-    Once we know whether a bird is loyal to its sites, we want to identify which sites is he loyal to.\
-    For example, if Bird 1 uses sites A, B, and C, while Bird 2 uses sites C, D, and E, how to extract the site use difference between these two birds?\
-    *Are individuals within a species using sites similarly?* *Is this variation tide dependant?*
+-   **Jensen-Shannon Divergence (JSD)** — compares site-use probability distributions between pairs of individuals. JSD ≈ 0 means two birds use sites in nearly identical proportions; JSD ≈ 1 means entirely different sites. This addresses *composition*, not breadth: two birds could both have high H yet use completely non-overlapping sites.
 :::
 
 ::: blockquote-blue
-**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#reproducibility)*
+**Load your data** in your R environment — see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1_load_format.html#reproducibility)
 :::
 
-```{r packages,  message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
+::: {.callout-warning style="margin-bottom: 1rem;"}
+## Limitations
+
+Three known sources of bias apply to all results on this page:
+
+1.  **Station uptime** — the array is assumed fully operational throughout the study period. Offline receivers are not accounted for; a bird detected at few stations may reflect absent receivers, not specialised site use.
+2.  **Detection-count currency** — proportions are derived from raw Motus hit counts, which are heavily autocorrelated and confounded by residence-bout length, tag burst rate, receiver sensitivity, antenna count, and detection range. A time- or presence-based currency (e.g. detection-hours from `ch1_7_station_usage_hours.R`) is more ecologically defensible and is recommended for a future iteration.
+3.  **Sampling-effort dependence** — S and H scale with total detections per individual; estimates are not rarefied. `total_detections` is reported alongside all metrics to enable assessment of this effect.
+:::
+
+```{r packages, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
 library(motus)
 library(dplyr)
 library(here)
 library(ggplot2)
 library(tidyr)
 library(readr)
-library(dplyr)
-library(ggplot2)
-library(vegan)  
-library(philentropy) 
-library(gridExtra)
+library(vegan)       # adonis2, betadisper, permutest
+library(philentropy)
 library(gt)
-library(ggpubr)
-library(car)
-library(FSA)
+library(FSA)         # dunnTest
 library(patchwork)
+# permute::how() is used inside the script for stratified permutations
 ```
 
-## Shannon
+## Shannon entropy
 
 ### Definition
 
-**Shannon entropy (H)** ([Shannon and Weaver -1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication); [MacArthur - 1965](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer); [Lou Jost - 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x?utm_source=researchgate.net&utm_medium=article))\
-***\> Is the individual site loyal?***
+**Shannon entropy (H)** ([Shannon & Weaver 1949](https://scholar.google.com/scholar_lookup?hl=en&publication_year=1949&journal=The+mathematical+theory+of+communication&author=C.+E.+Shannon&author=W.+Weaver&title=The+mathematical+theory+of+communication); [MacArthur 1965](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer); [Lou Jost 2006](https://nsojournals.onlinelibrary.wiley.com/doi/10.1111/j.2006.0030-1299.14714.x))\
+***\> How broadly does an individual spread its site use?***
 
-Metric employed when a large collection has a number of sites known -Type B collection ([Pielou - 1966](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130))-, to quantify the diversity of an individual's site use. It measures the dispersion of an individual's site use pattern.
+Shannon entropy quantifies the dispersion of an individual's site-use pattern. Applied to a bird's detection-proportion distribution across stations, it measures how **broad and unpredictable** that use is.
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
-\text{H}   =    -Σ(p_i × ln(p_i)) 
+H = -\sum p_i \ln(p_i)
 $$ $$
 \text{where } p_i \text{ is the proportion of detections at site } i
 $$
 :::
 
--   Low Entropy (e.g., H \< 1.0)
-    -   Individual is highly specialized
+-   **Low entropy (H close to 0):** Detections are concentrated at one or a few sites — narrow, predictable use. Low H is a commonly-used indicator of high site fidelity.
+-   **High entropy (H \> 2):** Detections are spread across many sites roughly equally — broad, generalist use. High H indicates low apparent fidelity to any particular site.
 
-    -   Uses only a few sites, or uses one site predominantly
+> **Note on site fidelity.** Strict ecological site fidelity refers to the *temporal* tendency to return to the same locations over time ([Haig et al. 1998](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5586202/)). Shannon entropy of detection proportions is a *snapshot* diversity measure; it indicates the breadth/predictability of site use but does not directly capture the return structure that formally defines fidelity. A bird with very low H almost certainly has high fidelity to its few sites — but H alone cannot confirm whether those sites are the *same* across different visits.
 
-    -   High site fidelity to specific locations
+------------------------------------------------------------------------
 
-    -   Low unpredictability: we can predict where the bird will be
--   High Entropy (e.g., H \> 2.0)
-    -   Individual is generalized
-    -   Uses many sites relatively equally
-    -   Low site fidelity to any particular location
-    -   High unpredictability: harder to predict where the bird will be
+**Pielou's evenness (J)** [(Pielou 1966)](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130)\
+***\> Are the sites a bird uses visited equally?***
 
-**Coefficient of Variation (CV)** (Pearson - 1984)\
-\> ***Are the individuals using the same sites?***
-
-The coefficient of variation (CV) measures relative variability in site fidelity metrics, calculated as standard deviation divided by the mean (often expressed as a percentage). 
-
--   Low CV indicates uniform fidelity (e.g., most birds reuse similar site proportions)
--   High CV signals heterogeneity (e.g., some wanderers vs. stayers)
-
-**Effective Number of Sites (exp(H))** [(MacArthur - 1965)](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer)\
-***\> How many sites the individual is loyal to?***
-
-This transforms entropy into an interpretable number: the "effective number of equally-used sites" 
+H increases both with the number of sites and when site use becomes more even, mixing two effects. Pielou's J rescales H by the maximum possible entropy for the same number of sites, giving a \[0, 1\] measure of evenness that is independent of how many sites are used.
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
-\text{Effective Number of Sites}   =    exp(H) 
+J = \frac{H}{\ln(S)} \quad \text{where } S = \text{number of sites used by the individual}
 $$
 :::
 
-If H = 1.61, then exp(1.61) ≈ 5 effective sites. The bird uses sites as if it were splitting time equally among 5 sites (even if it actually uses 10 sites, but with uneven distribution).
+-   J ≈ 1: All sites are used equally.
+-   J ≈ 0: One or a few sites dominate.
+-   J is undefined (NA) when S = 1.
 
-**Pielou's Evenness (J)** [(Pielou - 1966)](https://www.sciencedirect.com/science/article/abs/pii/0022519366900130)\
-***\> Is an individual equally loyal across the sites they are loyal to?***
+------------------------------------------------------------------------
 
-In practice, Shannon entropy *H* increases both with number of sites (Motus stations) and when site used (detections from station) become more even, so it mixes two effects. Pielou’s index rescales by dividing it by the maximum possible Shannon entropy for the same number of sites, which is *ln⁡(S)* when all sites are equally represented. The resulting metric *J=H/ln⁡(S)* ranges from 0 to 1 and removes the dependence on the number of sites, giving a measure of how evenly the use of sites is distributed among sites. 
-
--   J close to 1: Individual uses all sites equally
-
--   J close to 0: Individual uses sites very unequally (dominates few sites)
+**Effective number of sites (exp(H))** [(MacArthur 1965)](https://onlinelibrary.wiley.com/doi/epdf/10.1111/j.1469-185X.1965.tb00815.x?saml_referrer)\
+***\> How many equally-used sites does this bird's use correspond to?***
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
-\text{J}   =    \frac{H}{ln(S)} \text{  where } S \text{ the total number of sites used by one individual}
+\text{Effective sites} = e^H
 $$
 :::
+
+If H = 1.61, then exp(H) ≈ 5: the bird distributes its use as if it were split equally among 5 sites, even if it actually visits more with uneven proportions.
+
+------------------------------------------------------------------------
+
+**Coefficient of variation (CV_H)**\
+***\> How variable are individuals within a species?***
+
+CV_H = (SD of H / mean H) × 100, reported as a percentage. It is a **descriptive** measure of between-individual heterogeneity within a species. Because each bird yields only one H value from the full study period, within-species inferential testing is not valid here — temporal replication would be required. The boxplots and CV are used for description only.
+
+------------------------------------------------------------------------
 
 ### Examples
 
 <img src="../../material/exampleshannon.png" alt="Shannon entropy example" style="max-width:100%; height:auto;"/>
 
+------------------------------------------------------------------------
+
 ### General results
 
-First, we define a all-in-one function to consistently computing shannon entropy.
+We compute H, J, exp(H), and S for each individual from full-precision detection proportions (no intermediate rounding).
 
-```{r shannon, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
-# Function to calculate Shannon entropy
+```{r shannon-fn, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+# Shannon entropy: H = -sum(p * ln(p))
 calculate_shannon <- function(proportions) {
-  # Remove zero proportions (shouldn't be any, but safety check)
-  p <- proportions[proportions > 0]
-  # Calculate Shannon entropy: H = -sum(p * ln(p))
+  p <- proportions[proportions > 0]   # exclude zeros (log(0) undefined)
   H <- -sum(p * log(p))
   return(H)
 }
-
 ```
 
-Now we can proceed. Starting with counting the number of detection an individual has recorded in each stations, then extracting the proportions to finally calculate the entropy (H).
-
-```{r shannon 2, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE}
-
-# Calculate entropy metrics for each Band.ID
+```{r entropy-pipeline, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
 entropy_results <- df.alltags %>%
-  # Remove any NA values in Band.ID or recvSiteName
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
-  
+
   # Count detections per bird per site
   group_by(speciesEN, Band.ID, recvDeployName) %>%
   summarise(detections = n(), .groups = "drop") %>%
-  
-  # Calculate proportions for each bird
+
+  # Proportions per bird (full precision — rounded only at display)
   group_by(speciesEN, Band.ID) %>%
   mutate(
     total_detections = sum(detections),
-    proportion = detections / total_detections) %>%
-  
-  # Calculate metrics for each bird
+    proportion       = detections / total_detections) %>%
+
+  # Entropy metrics per bird
   summarise(
-    S = n(),                                    # Number of sites used
-    H = round(calculate_shannon(proportion), 2),# Shannon entropy
-    J = round(H / log(S), 2),                   # Pielou's evenness
-    total_detections = first(total_detections), # Total detections for reference
-    .groups = "drop") %>%
-  
-  # Add effective number of equally-used sites
-  mutate(
-    exp_H = exp(H)) %>% 
-  
-  # Arrange by Band.ID
+    S                = n(),
+    H                = calculate_shannon(proportion),
+    J                = if_else(S == 1, NA_real_, H / log(S)),   # guard S = 1
+    total_detections = first(total_detections),
+    .groups          = "drop") %>%
+
+  mutate(exp_H = exp(H)) %>%
   arrange(speciesEN, Band.ID)
-
 ```
 
-```{r shannon 3, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-# Species-level summary from entropy_results
-species_entropy_summary <- entropy_results %>%
-  
-  group_by(speciesEN) %>%
-  summarise(
-    
-    n_individuals = n(),
-    
-    # S (Number of sites) statistics
-    median_S = median(S, na.rm = TRUE),
-    mean_S = round(mean(S, na.rm = TRUE), 2),
-    sd_S = round(sd(S, na.rm = TRUE), 2),
-    
-    # H (Shannon entropy) statistics
-    median_H = median(H, na.rm = TRUE),
-    mean_H = round(mean(H, na.rm = TRUE), 2),
-    sd_H = round(sd(H, na.rm = TRUE), 2),
-    CV_H = round((sd(H, na.rm = TRUE) / mean(H, na.rm = TRUE)) * 100, 1),  # Coefficient of variation
-    
-    # J (Pielou's evenness) statistics
-    median_J = median(J, na.rm = TRUE),
-    mean_J = round(mean(J, na.rm = TRUE), 2),
-    sd_J = round(sd(J, na.rm = TRUE), 2),
-    
-    # exp_H (Effective number of sites) statistics
-    median_exp_H = round(median(exp_H, na.rm = TRUE), 2),
-    mean_exp_H = round(mean(exp_H, na.rm = TRUE), 2),
-    sd_exp_H = round(sd(exp_H, na.rm = TRUE), 2),
-    
-    # Total detections across all individuals
-    total_detections = sum(total_detections, na.rm = TRUE),
-    
-    .groups = "drop") %>%
-  arrange(speciesEN)
+**Species-level summary:**
 
-
-# Result table
-species_entropy_summary %>%
-  
-  gt() %>%
-  
-  tab_header(
-    title = md("**Table.** Shannon entropy metrics for site use patterns of shorebird species in the Hunter estuary.")) %>%
-  opt_align_table_header(align = "left") %>%
-  
-  tab_footnote(
-    footnote = md("**Legend.** Grouped by species, this table summarises site fidelity metrics using Shannon entropy analysis. **n_individuals**: number of tagged individuals; **S**: number of unique sites used; **H**: Shannon entropy (dispersion of site use, higher = more generalised); **J**: Pielou's evenness (0-1, higher = more even site use); **exp(H)**: effective number of equally-used sites; **CV_H**: coefficient of variation in H (% individual variation within species); **total_detections**: total number of detections across all individuals. Mean and standard deviation values are provided (x̄ ± SD). Median values represent the central tendency across individuals within each species."))  %>%
-  opt_table_font(font = "Times New Roman") %>%
-  
-  cols_label(
-    speciesEN = "Species (En.)",
-    n_individuals = "N individuals",
-    median_S = "Median S",
-    mean_S = "Mean S",
-    sd_S = "SD S",
-    median_H = "Median H",
-    mean_H = "Mean H",
-    sd_H = "SD H",
-    CV_H = "CV H (%)",
-    median_J = "Median J",
-    mean_J = "Mean J",
-    sd_J = "SD J",
-    median_exp_H = "Median exp(H)",
-    mean_exp_H = "Mean exp(H)",
-    sd_exp_H = "SD exp(H)",
-    total_detections = "Total detections" ) %>%
-  
-  tab_spanner(
-    label = "Sample",
-    columns = c(n_individuals, total_detections)) %>%
-  tab_spanner(
-    label = "Number of Sites (S)",
-    columns = c(median_S, mean_S, sd_S) ) %>%
-  tab_spanner(
-    label = "Shannon Entropy (H)",
-    columns = c(median_H, mean_H, sd_H, CV_H) ) %>%
-  tab_spanner(
-    label = "Pielou's Evenness (J)",
-    columns = c(median_J, mean_J, sd_J) ) %>%
-  tab_spanner(
-    label = "Effective Sites [exp(H)]",
-    columns = c(median_exp_H, mean_exp_H, sd_exp_H) ) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) %>%
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_body(columns = everything()) ) %>%
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_column_labels(columns = everything()) ) %>%
-  
-  fmt_number(
-    columns = c(mean_S, sd_S, mean_H, sd_H, mean_J, sd_J, mean_exp_H, sd_exp_H),
-    decimals = 2) %>%
-  fmt_number(
-    columns = c(median_S, median_H, median_J, median_exp_H),
-    decimals = 2) %>%
-  fmt_number(
-    columns = CV_H,
-    decimals = 1) %>%
-  fmt_number(
-    columns = total_detections,
-    decimals = 0,
-    use_seps = TRUE ) %>%
-  
-  tab_options(
-    table.font.size = px(14),
-    heading.title.font.size = px(16),
-    data_row.padding = px(3),  
-    table.width = pct(100))
-
+```{r tbl-entropy-summary, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_entropy_summary
 ```
 
-```{r shannon 4, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE, results = 'hide'}
-# Prepare data for plotting
-entropy_for_plot <- entropy_results %>%
-  select(speciesEN, Band.ID, S, H, J, exp_H) %>%
-  pivot_longer(
-    cols = c(S, H, J, exp_H),
-    names_to = "metric",
-    values_to = "value" ) %>%
-  mutate( metric = factor(metric, 
-                   levels = c("S", "H", "J", "exp_H"),
-                   labels = c("S (Number of Sites)", 
-                             "H (Shannon Entropy)", 
-                             "J (Pielou's Evenness)", 
-                             "exp(H) (Effective Sites)")))
+**Distribution of metrics across individuals:**
 
-# Create the boxplot
-ggplot(entropy_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 16) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
-  facet_wrap(~ metric, scales = "free_y", ncol = 2) +
-  scale_fill_manual(values = species_colors) +
-  labs(
-    title = "Shannon Entropy Metrics by Species",
-    subtitle = "Distribution of site use patterns across individuals",
-    x = "Species",
-    y = "Value",
-    fill = "Species") +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text = element_text(face = "bold", size = 11),
-    legend.position = "none",  
-    panel.grid.major.x = element_blank())
-
+```{r plot-entropy-box, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.width=11, fig.height=7, out.width="100%"}
+plot_entropy_box
 ```
 
-```{r shannon 5, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE, results = 'hide', include = FALSE}
+**Individual-level values** (expandable):
 
-# S table
-gt_S <- entropy_results %>%
-  select(speciesEN, Band.ID, S) %>%
-  arrange(speciesEN, Band.ID) %>%
-  gt() %>%
-  tab_header(title = md("**S - Number of Sites Used**")) %>%
-  cols_label(speciesEN = "Species", Band.ID = "Band ID", S = "S") %>%
-  tab_style(style = cell_text(weight = "bold"), locations = cells_column_labels())
-
-# H table
-gt_H <- entropy_results %>%
-  select(speciesEN, Band.ID, H) %>%
-  arrange(speciesEN, Band.ID) %>%
-  gt() %>%
-  tab_header(title = md("**H - Shannon Entropy**")) %>%
-  cols_label(speciesEN = "Species", Band.ID = "Band ID", H = "H") %>%
-  fmt_number(columns = H, decimals = 2) %>%
-  tab_style(style = cell_text(weight = "bold"), locations = cells_column_labels())
-
-# J table
-gt_J <- entropy_results %>%
-  select(speciesEN, Band.ID, J) %>%
-  arrange(speciesEN, Band.ID) %>%
-  gt() %>%
-  tab_header(title = md("**J - Pielou's Evenness**")) %>%
-  cols_label(speciesEN = "Species", Band.ID = "Band ID", J = "J") %>%
-  fmt_number(columns = J, decimals = 2) %>%
-  tab_style(style = cell_text(weight = "bold"), locations = cells_column_labels())
-
-# exp_H table
-gt_exp_H <- entropy_results %>%
-  select(speciesEN, Band.ID, exp_H) %>%
-  arrange(speciesEN, Band.ID) %>%
-  gt() %>%
-  tab_header(title = md("**exp(H) - Effective Number of Sites**")) %>%
-  cols_label(speciesEN = "Species", Band.ID = "Band ID", exp_H = "exp(H)") %>%
-  fmt_number(columns = exp_H, decimals = 2) %>%
-  tab_style(style = cell_text(weight = "bold"), locations = cells_column_labels())
-
-```
-
-::: {.callout-tip collapse="true" title="S table"}
-```{r shannon 61, echo = FALSE, message = FALSE, warning = FALSE}
+::: {.callout-tip collapse="true" title="S — Number of Sites Used"}
+```{r gt-S, echo=FALSE, message=FALSE, warning=FALSE}
 gt_S
 ```
 :::
 
-::: {.callout-tip collapse="true" title="H table"}
-```{r shannon 62, echo = FALSE, message = FALSE, warning = FALSE}
+::: {.callout-tip collapse="true" title="H — Shannon Entropy"}
+```{r gt-H, echo=FALSE, message=FALSE, warning=FALSE}
 gt_H
 ```
 :::
 
-::: {.callout-tip collapse="true" title="J table"}
-```{r shannon 63, echo = FALSE, message = FALSE, warning = FALSE}
+::: {.callout-tip collapse="true" title="J — Pielou's Evenness"}
+```{r gt-J, echo=FALSE, message=FALSE, warning=FALSE}
 gt_J
 ```
 :::
 
-::: {.callout-tip collapse="true" title="exp(H) table"}
-```{r shannon 64, echo = FALSE, message = FALSE, warning = FALSE}
+::: {.callout-tip collapse="true" title="exp(H) — Effective Number of Sites"}
+```{r gt-expH, echo=FALSE, message=FALSE, warning=FALSE}
 gt_exp_H
 ```
 :::
 
-### Species comparison \| Non-Parametric test
+------------------------------------------------------------------------
+
+### Between-species comparison \| Kruskal-Wallis + Dunn
 
 ::: blockquote-yellow
-**Important**\
-Note: We only keep species which holds **three** or more individuals tagged and detected. So we can further run Kruskal-Wallis test.
+**Note:** Only species with **≥ 3** tagged individuals are included. Individuals are valid replicates *between* species for this test. Within-species inference on H, J, S or exp(H) is not valid here — each bird produces exactly one value per metric, so there is no within-species replication; descriptive CV and boxplots serve that purpose instead.
 :::
 
-**Compares H and J across individuals within each species: within a species, are individuals different from each other?**
-
-```{r shannon 7, message = FALSE,  warning = FALSE, echo = TRUE, eval = FALSE}
-
-# Run Kruskal-Wallis for each species separately
-kruskal_within_species <- entropy_results %>%
+```{r kw-between-code, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+entropy_kw_data <- entropy_results %>%
   group_by(speciesEN) %>%
-  filter(n() >= 3) %>% # minimum 3 individuals required
-  summarise(
-    n_individuals = n(),
-    
-    # H (Shannon Entropy)
-    Chi_sq_H = kruskal.test(H ~ Band.ID)$statistic,
-    df_H = kruskal.test(H ~ Band.ID)$parameter,
-    p_value_H = kruskal.test(H ~ Band.ID)$p.value,
-    
-    # J (Pielou's Evenness)
-    Chi_sq_J = kruskal.test(J ~ Band.ID)$statistic,
-    df_J = kruskal.test(J ~ Band.ID)$parameter,
-    p_value_J = kruskal.test(J ~ Band.ID)$p.value,
-    
-    # S (Number of Sites)
-    Chi_sq_S = kruskal.test(S ~ Band.ID)$statistic,
-    df_S = kruskal.test(S ~ Band.ID)$parameter,
-    p_value_S = kruskal.test(S ~ Band.ID)$p.value,
-    
-    .groups = "drop")
+  filter(n() >= 3) %>%
+  ungroup()
+
+kw_between_species <- data.frame()
+for (m in c("H", "J", "exp_H", "S")) {
+  vals  <- entropy_kw_data[[m]]
+  grp   <- entropy_kw_data$speciesEN
+  valid <- !is.na(vals)
+  n_per_sp <- tapply(vals[valid], grp[valid], length)
+  if (any(n_per_sp < 2)) next
+
+  kt <- kruskal.test(vals[valid] ~ grp[valid])
+  kw_between_species <- rbind(kw_between_species, data.frame(
+    Metric       = m,
+    n_species    = n_distinct(grp[valid]),
+    n_indiv      = sum(valid),
+    Chi_sq       = round(kt$statistic, 3),
+    df           = kt$parameter,
+    p_value      = kt$p.value,
+    Significance = case_when(
+      kt$p.value < 0.001 ~ "***",
+      kt$p.value < 0.01  ~ "**",
+      kt$p.value < 0.05  ~ "*",
+      TRUE               ~ "ns"),
+    stringsAsFactors = FALSE))
+}
 ```
 
-```{r shannon 71, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE}
-
-# Run Kruskal-Wallis for each species separately
-kruskal_within_species <- entropy_results %>%
-  group_by(speciesEN) %>%
-  filter(n() >= 3) %>% # minimum 3 individuals required
-  summarise(
-    n_individuals = n(),
-    
-    # H (Shannon Entropy)
-    Chi_sq_H = kruskal.test(H ~ Band.ID)$statistic,
-    df_H = kruskal.test(H ~ Band.ID)$parameter,
-    p_value_H = kruskal.test(H ~ Band.ID)$p.value,
-    
-    # J (Pielou's Evenness)
-    Chi_sq_J = kruskal.test(J ~ Band.ID)$statistic,
-    df_J = kruskal.test(J ~ Band.ID)$parameter,
-    p_value_J = kruskal.test(J ~ Band.ID)$p.value,
-    
-    # S (Number of Sites)
-    Chi_sq_S = kruskal.test(S ~ Band.ID)$statistic,
-    df_S = kruskal.test(S ~ Band.ID)$parameter,
-    p_value_S = kruskal.test(S ~ Band.ID)$p.value,
-    
-    .groups = "drop"
-  ) %>%
-  mutate(
-    Sig_H = case_when(
-      p_value_H < 0.001 ~ "***",
-      p_value_H < 0.01 ~ "**",
-      p_value_H < 0.05 ~ "*",
-      TRUE ~ "ns"
-    ),
-    Sig_J = case_when(
-      p_value_J < 0.001 ~ "***",
-      p_value_J < 0.01 ~ "**",
-      p_value_J < 0.05 ~ "*",
-      TRUE ~ "ns"
-    ),
-    Sig_S = case_when(
-      p_value_S < 0.001 ~ "***",
-      p_value_S < 0.01 ~ "**",
-      p_value_S < 0.05 ~ "*",
-      TRUE ~ "ns"
-    )
-  )
-
-# Create the gt table
-kruskal_within_species %>%
-  
-  gt() %>%
-  
-  tab_header(
-    title = md("**Within Species: Kruskal-Wallis Test Results**"),
-    subtitle = "Comparing entropy metrics across individuals within each species") %>%
-  
-  cols_label(
-    speciesEN = "Species",
-    n_individuals = "N",
-    Chi_sq_H = "χ²",
-    df_H = "df",
-    p_value_H = "p-value",
-    Sig_H = "Sig.",
-    Chi_sq_J = "χ²",
-    df_J = "df",
-    p_value_J = "p-value",
-    Sig_J = "Sig.",
-    Chi_sq_S = "χ²",
-    df_S = "df",
-    p_value_S = "p-value",
-    Sig_S = "Sig.") %>%
-  
-  tab_spanner(
-    label = "H (Shannon Entropy)",
-    columns = c(Chi_sq_H, df_H, p_value_H, Sig_H)) %>%
-  tab_spanner(
-    label = "J (Pielou's Evenness)",
-    columns = c(Chi_sq_J, df_J, p_value_J, Sig_J)) %>%
-  tab_spanner(
-    label = "S (Number of Sites)",
-    columns = c(Chi_sq_S, df_S, p_value_S, Sig_S)) %>%
-  
-  fmt_number(
-    columns = c(Chi_sq_H, Chi_sq_J, Chi_sq_S),
-    decimals = 3) %>%
-  
-  fmt_scientific(
-    columns = c(p_value_H, p_value_J, p_value_S),
-    decimals = 3) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_body(
-      columns = c(Sig_H, Sig_J, Sig_S),
-      rows = p_value_H < 0.05 | p_value_J < 0.05 | p_value_S < 0.05 )) %>%
-  
-  tab_style(
-    style = cell_fill(color = "lightgreen"),
-    locations = cells_body(
-      columns = c(Chi_sq_H, df_H, p_value_H, Sig_H),
-      rows = p_value_H < 0.05 )) %>%
-  tab_style(
-    style = cell_fill(color = "lightblue"),
-    locations = cells_body(
-      columns = c(Chi_sq_J, df_J, p_value_J, Sig_J),
-      rows = p_value_J < 0.05 ) ) %>%
-  tab_style(
-    style = cell_fill(color = "lightyellow"),
-    locations = cells_body(
-      columns = c(Chi_sq_S, df_S, p_value_S, Sig_S),
-      rows = p_value_S < 0.05 ) ) %>%
-  
-  tab_footnote(
-    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). **N** = number of individuals. Green/blue/yellow highlighting indicates significant differences among individuals within that species. Only species with ≥3 individuals are included (minimum requirement for Kruskal-Wallis test).") ) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) %>%
-  
-  opt_table_font(font = "Times New Roman") %>%
-  
-  tab_options(
-    table.font.size = px(13),
-    heading.title.font.size = px(16),
-    data_row.padding = px(4),
-    table.width = pct(100))
-
+```{r tbl-kw-between, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_kw_between
 ```
 
-### Tidal dependance \| Parametric test
+**Dunn post-hoc (Bonferroni)** — shown only for metrics where Kruskal-Wallis was significant (p \< 0.05):
 
-We now want to clarify whether birds associate **site fidelity** depending the tide, therefore likely depending their behavior (i.e., foraging **vs** roosting).
+```{r tbl-dunn-between, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+if (exists("tbl_dunn_between")) tbl_dunn_between
+```
 
-```{r shannon tide 1, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE, results = 'hide'}
+------------------------------------------------------------------------
 
-# Calculate entropy metrics for each Band.ID
+### Tidal dependence \| Paired Wilcoxon signed-rank
+
+Entropy metrics are recomputed separately for High and Low tide detections. Each bird then provides one High-tide and one Low-tide value — a natural paired design. The paired Wilcoxon signed-rank test (exact = FALSE for ties) is used to ask whether tide shifts site-use breadth within a species. Only birds with both High and Low tide observations are included; only species with ≥ 5 complete pairs are tested.
+
+```{r entropy-tide-code, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
 entropy_results_tide <- df.alltags %>%
-  # Remove any NA values in Band.ID or recvSiteName
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
-  
-  # Count detections per bird per site
+
   group_by(speciesEN, Band.ID, recvDeployName, tideHighLow) %>%
   summarise(detections = n(), .groups = "drop") %>%
-  
-  # Calculate proportions for each bird
+
   group_by(speciesEN, Band.ID, tideHighLow) %>%
   mutate(
     total_detections = sum(detections),
-    proportion = detections / total_detections) %>%
-  
-  # Calculate metrics for each bird
+    proportion       = detections / total_detections) %>%
+
   summarise(
-    S = n(),                                              # Number of sites used
-    H = round(calculate_shannon(proportion), 2),          # Shannon entropy
-    J = round(H / log(S), 2),                             # Pielou's evenness
-    total_detections = first(total_detections),           # Total detections for reference
-    .groups = "drop") %>%
-  
-  # Add effective number equally-used sites
+    S                = n(),
+    H                = calculate_shannon(proportion),
+    J                = if_else(S == 1, NA_real_, H / log(S)),
+    total_detections = first(total_detections),
+    .groups          = "drop") %>%
+
   mutate(exp_H = exp(H)) %>%
-
-  # Arrange by Band.ID
   arrange(speciesEN, Band.ID, tideHighLow)
-
 ```
 
-Let's summarise the data accordingly to the tide. Here, we display statistical values (n, mean, sd) for each metrics related to entropy.
+**Distribution by species and tide** (High tide: solid, Low tide: transparent):
 
-```{r shannon tide 2, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-
-# Species-level summary from entropy_results
-species_entropy_summary_tide <- entropy_results_tide %>%
-  group_by(speciesEN, tideHighLow) %>%
-  summarise(
-    n_individuals = n(),
-    
-    # S (Number of sites) statistics
-    median_S = median(S, na.rm = TRUE),
-    mean_S = round(mean(S, na.rm = TRUE), 2),
-    sd_S = round(sd(S, na.rm = TRUE), 2),
-    
-    # H (Shannon entropy) statistics
-    median_H = median(H, na.rm = TRUE),
-    mean_H = round(mean(H, na.rm = TRUE), 2),
-    sd_H = round(sd(H, na.rm = TRUE), 2),
-    CV_H = round((sd(H, na.rm = TRUE) / mean(H, na.rm = TRUE)) * 100, 1),  # Coefficient of variation
-    
-    # J (Pielou's evenness) statistics
-    median_J = median(J, na.rm = TRUE),
-    mean_J = round(mean(J, na.rm = TRUE), 2),
-    sd_J = round(sd(J, na.rm = TRUE), 2),
-    
-    # exp_H (Effective number of sites) statistics
-    median_exp_H = round(median(exp_H, na.rm = TRUE), 2),
-    mean_exp_H = round(mean(exp_H, na.rm = TRUE), 2),
-    sd_exp_H = round(sd(exp_H, na.rm = TRUE), 2),
-    
-    # Total detections across all individuals
-    total_detections = sum(total_detections, na.rm = TRUE),
-    
-    .groups = "drop") %>%
-  
-  arrange(speciesEN)
-
-# Pivot data to prepare plotting
-entropy_for_plot_tide <- entropy_results_tide %>%
-  select(speciesEN, tideHighLow, Band.ID, S, H, J, exp_H) %>%
-  pivot_longer(
-    cols = c(S, H, J, exp_H),
-    names_to = "metric",
-    values_to = "value" ) %>%
-  mutate( 
-    metric = factor(metric, 
-                   levels = c("S", "H", "J", "exp_H"),
-                   labels = c("S (Number of Sites)", 
-                             "H (Shannon Entropy)", 
-                             "J (Pielou's Evenness)", 
-                             "exp(H) (Effective Sites)")) )
-
-
-# Plotting
-ggplot(entropy_for_plot_tide, aes(x = speciesEN, y = value, fill = speciesEN, alpha = tideHighLow)) +
-  geom_boxplot(aes(group = interaction(speciesEN, tideHighLow)), 
-               position = position_dodge(width = 0.8), 
-               outlier.shape = 16) +
-  geom_point(aes(group = interaction(speciesEN, tideHighLow)),
-           position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.8), 
-           size = 1.1) +
-  facet_wrap(~ metric, scales = "free_y", ncol = 2) +
-  scale_fill_manual(values = species_colors) +
-  scale_alpha_manual( values = c("High" = 1.0, "Low" = 0.2)) +
-  
-  # Add significance brackets
-  stat_compare_means(
-    aes(group = tideHighLow),
-    method = "t.test",
-    label = "p.signif",
-    hide.ns = TRUE,
-    size = 3,
-    bracket.size = 0.3) +
-  labs(
-    title = "Shannon Entropy Metrics by Species and Tide",
-    subtitle = "Distribution of site use patterns across individuals and tide (High tide: solid, Low tide: transparent)",
-    x = "Species",
-    y = "Value",
-    fill = "Species") +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text = element_text(face = "bold", size = 11),
-    legend.position = "none",
-    panel.grid.major.x = element_blank())
+```{r plot-entropy-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.width=11, fig.height=7, out.width="100%"}
+plot_entropy_box_tide
 ```
 
-Find below for each species their associated metrics of entropy, side by side with high and low tides so it is easily comparable and reportable to the figure above.
+**Species × tide summary:**
 
-```{r shannon tide 3, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-
-# Result table with tideHighLow grouping
-species_entropy_summary_tide %>%
-  
-  gt() %>%
-  
-  tab_header(
-    title = md("**Table.** Shannon entropy metrics for site use patterns of shorebird species by tide state in the Hunter estuary.")) %>%
-  opt_align_table_header(align = "left") %>%
-  
-  tab_footnote(
-    footnote = md("**Legend.** Grouped by species and tide state (Low/High), this table summarises site fidelity metrics using Shannon entropy analysis. **tideHighLow**: tide state during detections (Low or High tide); **n_individuals**: number of tagged individuals; **S**: number of unique sites used; **H**: Shannon entropy (dispersion of site use, higher = more generalised); **J**: Pielou's evenness (0-1, higher = more even site use); **exp(H)**: effective number of equally-used sites; **CV_H**: coefficient of variation in H (% individual variation within species); **total_detections**: total number of detections across all individuals. Mean and standard deviation values are provided (x̄ ± SD). Median values represent the central tendency across individuals within each species."))  %>%
-  opt_table_font(font = "Times New Roman") %>%
-  
-  cols_label(
-    speciesEN = "Species",
-    tideHighLow = "Tide",
-    n_individuals = "N indiv.",
-    median_S = "Median",
-    mean_S = "Mean",
-    sd_S = "SD",
-    median_H = "Median",
-    mean_H = "Mean",
-    sd_H = "SD",
-    CV_H = "CV (%)",
-    median_J = "Median",
-    mean_J = "Mean",
-    sd_J = "SD",
-    median_exp_H = "Median",
-    mean_exp_H = "Mean",
-    sd_exp_H = "SD",
-    total_detections = "Total det." ) %>%
-  
-  tab_spanner(
-    label = "Sample",
-    columns = c(n_individuals, total_detections)) %>%
-  tab_spanner(
-    label = "Number of Sites (S)",
-    columns = c(median_S, mean_S, sd_S) ) %>%
-  tab_spanner(
-    label = "Shannon Entropy (H)",
-    columns = c(median_H, mean_H, sd_H, CV_H) ) %>%
-  tab_spanner(
-    label = "Pielou's Evenness (J)",
-    columns = c(median_J, mean_J, sd_J) ) %>%
-  tab_spanner(
-    label = "Effective Sites [exp(H)]",
-    columns = c(median_exp_H, mean_exp_H, sd_exp_H) ) %>%
-  
-  # Row grouping by species
-  tab_row_group(
-    label = "Bar-tailed Godwit",
-    rows = speciesEN == "Bar-tailed Godwit" ) %>%
-  tab_row_group(
-    label = "Curlew Sandpiper",
-    rows = speciesEN == "Curlew Sandpiper") %>%
-  tab_row_group(
-    label = "Eurasian Whimbrel",
-    rows = speciesEN == "Eurasian Whimbrel") %>%
-  tab_row_group(
-    label = "Far Eastern Curlew",
-    rows = speciesEN == "Far Eastern Curlew") %>%
-  tab_row_group(
-    label = "Masked Lapwing",
-    rows = speciesEN == "Masked Lapwing") %>%
-  tab_row_group(
-    label = "Pacific Golden-Plover",
-    rows = speciesEN == "Pacific Golden-Plover") %>%
-  tab_row_group(
-    label = "Pied Stilt",
-    rows = speciesEN == "Pied Stilt") %>%
-  tab_row_group(
-    label = "Red-necked Avocet",
-    rows = speciesEN == "Red-necked Avocet") %>%
-  
-  # Hide the speciesEN column since it's now in row groups
-  cols_hide(columns = speciesEN) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_row_groups() ) %>%
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_body(columns = everything()) ) %>%
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_column_labels(columns = everything()) ) %>%
-  
-  # Alternate row colors by tide within each species
-  tab_style(
-    style = cell_fill(color = "#F0F8FF"),
-    locations = cells_body(rows = tideHighLow == "Low")) %>%
-  tab_style(
-    style = cell_fill(color = "#FFF8DC"),
-    locations = cells_body(rows = tideHighLow == "High")) %>%
-  
-  fmt_number(
-    columns = c(mean_S, sd_S, mean_H, sd_H, mean_J, sd_J, mean_exp_H, sd_exp_H),
-    decimals = 2) %>%
-  fmt_number(
-    columns = c(median_S, median_H, median_J, median_exp_H),
-    decimals = 2) %>%
-  fmt_number(
-    columns = CV_H,
-    decimals = 1) %>%
-  fmt_number(
-    columns = total_detections,
-    decimals = 0,
-    use_seps = TRUE ) %>%
-  
-  tab_options(
-    table.font.size = px(13),
-    heading.title.font.size = px(16),
-    data_row.padding = px(3),  
-    table.width = pct(100),
-    row_group.font.weight = "bold")
+```{r tbl-entropy-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_entropy_summary_tide
 ```
 
-**ANOVA (Analysis of Variance)** is a statistical test that compares means across groups to see if at least one group is significantly different from the others.\
-A **two-way ANOVA** examines how two categorical independent variables (tideHihghLow & Band.ID) affect a continuous dependent variable (entropy metric values).
+**Paired Wilcoxon test results:**
 
-So, we are testing three cases:
-
--   Do individual birds (Band.ID) differ in their entropy metric values? (m1, addditive model)
-
--   Do tide conditions (tideHighLow) affect entropy metric values? (m1, additive model)
-
--   Does the effect of tide vary by individual? (m2, interaction model)
-
-::: blockquote-yellow
-**Important**\
-Note: We only keep species which holds **five** or more individuals tagged and detected before to run ANOVA analysis on the data.
-:::
-
-Before to run ANOVA analysis we must check the **data verify the ANOVA Assumptions.**
-
-```{r shannon tide 4, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
-# Filter species with enough individuals
-entropy_aov_data_tide <- entropy_for_plot_tide %>%
-  group_by(speciesEN) %>%
-  filter(n_distinct(Band.ID) >= 5) %>%
-  mutate(
-    Band.ID     = droplevels(as.factor(Band.ID)),
-    tideHighLow = droplevels(as.factor(tideHighLow))) %>%
-  ungroup()
-
+```{r tbl-wilcox-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_wilcox_tide
 ```
 
-We now set the table which will **check** whether the **ANOVA assumptions** are violated or met (ie., independence, normality and homogeneity).\
-By design, the data are independents: each Band.ID is a unique individual and not repeated within a tide per entropy metrics.\
-You will notice that we actually run the Two-Way ANOVA analysis in this same step to facilitate smoothness of the code.
-
-```{r shannon tide 5, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE}
-
-results      <- data.frame()
-assumptions  <- data.frame()
-species_list_entropy <- unique(entropy_aov_data_tide$speciesEN)
-metrics_list_entropy <- unique(entropy_aov_data_tide$metric)
-
-
-for (sp in species_list_entropy) {
-  for (m in metrics_list_entropy) {
-    
-    df <- subset(entropy_aov_data_tide, speciesEN == sp & metric == m)
-    df <- na.omit(df)
-    df$Band.ID     <- droplevels(df$Band.ID)       # drop unused factor levels
-    df$tideHighLow <- droplevels(df$tideHighLow)
-    
-    model <- aov(value ~ Band.ID + tideHighLow, data = df) # ANOVA test
-    s     <- summary(model)[[1]]
-    
-    # --- ANOVA results (tideHighLow row only) ---
-    for (term in c("Band.ID", "tideHighLow")) {
-      if (term %in% rownames(s)) {
-        results <- rbind(results, data.frame(
-          Species = sp,
-          Metric  = as.character(m),
-          Term    = ifelse(term == "tideHighLow", "Tide effect", term),
-          Df      = s[term, "Df"],
-          SS      = round(s[term, "Sum Sq"],  3),
-          MS      = round(s[term, "Mean Sq"], 3),
-          F_value = round(s[term, "F value"], 3),
-          p_value = round(s[term, "Pr(>F)"],  4),
-          stringsAsFactors = FALSE))
-      }
-    }
-    
-    # Independence
-    indep_note <- "By design"
-    
-    # Normality of residuals (Shapiro-Wilk) 
-    res <- residuals(model)
-    sw  <- shapiro.test(res)
-    
-    # Homogeneity of variance (Levene's test) 
-    lev <- tryCatch(
-      leveneTest(value ~ tideHighLow, data = df, center = median),
-      error = function(e) NULL)
-    
-    assumptions <- rbind(assumptions, data.frame(
-      Species          = sp,
-      Metric           = as.character(m),
-      N                = nrow(df),
-      Independence     = indep_note,
-      SW_W             = round(sw$statistic, 4),
-      SW_p             = round(sw$p.value,   4),
-      Normality        = ifelse(sw$p.value > 0.049, "✓ Met", "✗ Violated"),
-      Levene_F         = ifelse(!is.null(lev), round(lev$`F value`[1], 4), NA),
-      Levene_p         = ifelse(!is.null(lev), round(lev$`Pr(>F)`[1],  4), NA),
-      Homogeneity      = ifelse(!is.null(lev),
-                           ifelse(lev$`Pr(>F)`[1] > 0.049, "✓ Met", "✗ Violated"),
-                           "Insufficient levels"),
-      stringsAsFactors = FALSE))
-  }
-}
-
-
-# Prepare results sign.
-results <- results %>%
-  mutate(
-    sig = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ ""))
-```
-
-Let's plot Two-Way ANOVA assumptions outputs first.
-
-```{r shannon tide 6, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-
-# Display assumption test plot
-assumptions %>%
-  gt(groupname_col = "Species") %>%
-  
-  tab_header(
-    title    = md("**ANOVA Assumption Tests**"),
-    subtitle = md("*Normality (Shapiro-Wilk) and Homogeneity of Variance (Levene's test)*") ) %>%
-  
-  cols_label(
-    Metric       = "Metric",
-    N            = "n",
-    Independence = "Independence",
-    SW_W         = "W",
-    SW_p         = "p value",
-    Normality    = "Normality",
-    Levene_F     = "F",
-    Levene_p     = "p value",
-    Homogeneity  = "Homogeneity") %>%
-  
-  tab_spanner(
-    label   = "Shapiro-Wilk",
-    columns = c(SW_W, SW_p, Normality)) %>%
-  
-  tab_spanner(
-    label   = "Levene's Test",
-    columns = c(Levene_F, Levene_p, Homogeneity)) %>%
-  
-  # Green = met
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = c(Normality, Homogeneity),
-      rows    = Normality == "✓ Met")) %>%
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✓ Met")) %>%
-  
-  # Red = violated
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Normality,
-      rows    = Normality == "✗ Violated")) %>%
-  
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✗ Violated")) %>%
-  
-  # Red p-value when Shapiro violated
-  tab_style(
-    style     = cell_text(color = "#c0392b"),
-    locations = cells_body(
-      columns = SW_p,
-      rows    = SW_p < 0.049)) %>%
-  
-  opt_row_striping() %>%
-  
-  tab_source_note(
-    source_note = md(
-      "**Independence**: verified by design — each Band.ID is a unique individual measured once per tide condition per metric.  
-       **Shapiro-Wilk**: H₀ = residuals are normally distributed; p > 0.05 → assumption met.  
-       **Levene's test**: H₀ = variances are equal across tide groups; p > 0.05 → assumption met.")) %>%
-  
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13)
-
-```
-
-We can now proceed and plot the Two-Way ANOVA analysis.
-
-```{r shannon tide 7, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
-# Display plot
-results %>%
-  gt(groupname_col = "Species", rowname_col = "Term") %>%
-  
-  tab_header(
-    title    = md("**Two-Way ANOVA Results**"),
-    subtitle = md("*value ~ Band.ID + tideHighLow — by Species and Metric*")) %>%
-  
-  cols_label(
-    Metric  = "Metric",
-    Df      = "df",
-    SS      = "Sum Sq",
-    MS      = "Mean Sq",
-    F_value = "F value",
-    p_value = "p value",
-    sig     = "") %>%
-  
-  tab_style(
-    style     = cell_text(weight = "bold"),
-    locations = cells_body(
-      columns = vars(p_value, sig),
-      rows    = sig %in% c("*", "**", "***", ".") )) %>%
-  
-  opt_row_striping() %>%
-  
-  tab_source_note(
-    source_note = "Significance codes: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1") %>%
-  
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13 )
-```
+------------------------------------------------------------------------
 
 ## Jensen-Shannon Divergence
 
 ### Definition
 
-**JSD** ([Lin - 1991](https://ieeexplore.ieee.org/document/61115); [Takahashi et al. 2012](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0049949#s4))\
-**\> *Do the individuals use the same sites? Are they loyal to the same sites?***
+**Jensen-Shannon Divergence (JSD)** ([Lin 1991](https://ieeexplore.ieee.org/document/61115); [Takahashi et al. 2012](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0049949))\
+***\> Do conspecifics use the same sites?***
 
-Now we know how loyal individuals are to their sites and whether there are differences across species in term of site fidelity (H), we also put against this metric the evenness which describes whether a bird use multiple site but effectively use a few (J).
-
-We now want to clarify whether birds are using the same sites within the same species, regardless the number of sites used. We called another metric named **Jensen-Shannon Divergence** (JSD), which quantifies how different two probability distributions of site usage are (e.g., site proportions for two birds), answering whether two individuals are using the same composition of sites.
-
-\
-JSD is defined with the simplified formula here below:
+Shannon entropy describes how broadly each individual uses sites. JSD addresses a different question: do individuals within the same species use *overlapping* sites? JSD compares two individuals' detection-proportion distributions:
 
 ::: {style="overflow-x: auto; width: 100%;"}
 $$
-\text{JSD}(P∥Q)  =  H(M) - \frac{H(P) + H(Q)}{2}
-$$
-
-$$
-\text{where } Q \text{ and  } P \text{ the site use distributions for two individuals; } M \text{ the mixture (average) site distribution; and } H \text{ the Shannon entropy} 
+\text{JSD}(P \| Q) = H(M) - \frac{H(P) + H(Q)}{2}
+$$ $$
+\text{where } P, Q \text{ are two individuals' site distributions; } M = \frac{P + Q}{2}; \text{ and } H \text{ is Shannon entropy}
 $$
 :::
 
--   JSD ≈ 0 (Similarity ≈ 1.0)\
-    -   Individuals use sites in nearly identical proportions\
-    -   High overlap in site use patterns\
-    -   Suggests shared habitat preferences or social coordination
--   JSD ≈ 1.0 (Similarity ≈ 0)\
-    -   Individuals use completely different sets of sites or proportions\
-    -   Low overlap in site use patterns\
-    -   Suggests individual specialization or territoriality
+-   **JSD ≈ 0** → identical site composition (conspecifics use the same sites in the same proportions).
+-   **JSD ≈ 1** → completely different site composition (non-overlapping sites or proportions).
+
+> **Why PERMANOVA, not Kruskal-Wallis?** Each pairwise JSD value involves two individuals; with *n* individuals in a species there are *n*(n-1)/2 pairs, and each individual appears in *n-1* pairs. Standard tests (KW, ANOVA) applied to pairwise values are therefore **pseudoreplicated** — the observations are not independent. PERMANOVA (adonis2) and PERMDISP (betadisper) are permutation-based and valid for distance matrices where pairwise values are inherently non-independent.
+
+------------------------------------------------------------------------
 
 ### General results
 
-First, we set a function that will compute the JSD metric for later in the process.
+Pairwise JSD is computed from full-precision proportions (no intermediate rounding) across all individuals, then filtered to same-species pairs for the summaries below.
 
-```{r jensen-shannon, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
-# Function to calculate Jensen-Shannon Divergence
+```{r jsd-fn, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
 calculate_jsd <- function(p, q) {
-  # Add small value to avoid log(0)
   epsilon <- 1e-10
   p <- p + epsilon
   q <- q + epsilon
-  
-  # Normalise
   p <- p / sum(p)
   q <- q / sum(q)
-  
-  # Calculate JSD
-  m <- (p + q) / 2
+  m   <- (p + q) / 2
   jsd <- 0.5 * sum(p * log2(p / m)) + 0.5 * sum(q * log2(q / m))
-  
   return(jsd)
 }
 ```
 
-Second, we need to prepare the data frame which will be used for calculation. It must include for each individual its proportion of site used and its total.
-
-Then, we can proceed and extract JSD for each pair of individuals. Indeed, JSD test the similarity between two individual, so it conducts a pairwise test.
-
-```{r jensen-shannon 2, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
-
-# Create site use matrix (rows = individuals, columns = sites)
+```{r jsd-pipeline, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+# Individual × site proportion matrix (full precision)
 site_use_matrix <- df.alltags %>%
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
   group_by(Band.ID, recvDeployName) %>%
   summarise(detections = n(), .groups = "drop") %>%
   group_by(Band.ID) %>%
-  mutate(proportion = round(detections / sum(detections), 2)) %>%
+  mutate(proportion = detections / sum(detections)) %>%
   select(Band.ID, recvDeployName, proportion) %>%
-  pivot_wider(
-    names_from = recvDeployName,
-    values_from = proportion,
-    values_fill = 0)
+  pivot_wider(names_from = recvDeployName, values_from = proportion, values_fill = 0)
 
-# Calculate pairwise JSD
-individual_ids <- site_use_matrix$Band.ID
-n_individuals <- length(individual_ids)
-
-jsd_results <- data.frame()
+# Pairwise JSD loop
+individual_ids <- as.character(site_use_matrix$Band.ID)
+n_individuals  <- length(individual_ids)
+jsd_results    <- data.frame()
 
 for (i in 1:(n_individuals - 1)) {
   for (j in (i + 1):n_individuals) {
-    
     p <- as.numeric(site_use_matrix[i, -1])
     q <- as.numeric(site_use_matrix[j, -1])
-    
     jsd_results <- rbind(jsd_results, data.frame(
-      Band.ID_1 = individual_ids[i],
-      Band.ID_2 = individual_ids[j],
-      JSD = round(calculate_jsd(p, q), 3), # using formula built beforehands
+      Band.ID_1  = individual_ids[i],
+      Band.ID_2  = individual_ids[j],
+      JSD        = round(calculate_jsd(p, q), 3),
       Similarity = round(1 - calculate_jsd(p, q), 3)))
   }
 }
-
-# Add species information
-jsd_results <- jsd_results %>%
-  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), 
-            by = c("Band.ID_1" = "Band.ID")) %>%
-  rename(species_1 = speciesEN) %>%
-  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), 
-            by = c("Band.ID_2" = "Band.ID")) %>%
-  rename(species_2 = speciesEN) %>%
-  mutate(same_species = species_1 == species_2)
-
 ```
 
-We can summarise the results to better handle visualisations in the below figure, and report to data in the following table.
+**Within-species JSD distribution:**
 
-```{r jensen-shannon 3, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
-
-# Filter to same_species comparisons and prepare for boxplot (matching entropy_for_plot structure)
-jsd_for_plot <- jsd_results %>%
-  
-  filter(same_species == TRUE) %>%
-  
-  mutate(
-    metric = "JSD",
-    speciesEN = species_1) %>% 
-  
-  select(speciesEN, JSD, metric) %>%
-  rename(value = JSD)
-
-# Boxplot exactly matching your entropy format
-ggplot(jsd_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
-  
-  geom_boxplot(alpha = 0.7, outlier.shape = 16) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
-  
-  scale_fill_manual(values = species_colors) +
-  
-  labs(
-    title = "Jensen-Shannon Divergence by Species",
-    subtitle = "Individual pairwise similarity within species",
-    x = "Species",
-    y = "JSD Value",
-    fill = "Species") +
-  
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text = element_text(face = "bold", size = 11),
-    legend.position = "none",  
-    panel.grid.major.x = element_blank())
-
-
+```{r plot-jsd-box, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=5, out.width="100%"}
+plot_jsd_box
 ```
 
-```{r jensen-shannon 4, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE}
+**Summary by species:**
 
-# Preparing table
-jsd_results_tab <- jsd_results %>%
-  filter(same_species == TRUE) %>%
-  group_by(species_1) %>%
-  summarise(
-    n_comparisons = n(),
-    mean_JSD = round(mean(JSD), 3),
-    sd_JSD = round(sd(JSD), 3),
-    mean_Similarity = round(mean(Similarity), 3),
-    sd_Similarity = round(sd(Similarity), 3),
-    .groups = "drop") %>%
-  rename(speciesEN = species_1)
-
-
-# Adding extra useful metrics
-n_indiv <- df.alltags %>%
-  group_by(speciesEN) %>%
-  summarise(n_indiv = n_distinct(Band.ID), .groups = "drop")
-
-# Finalise table
-jsd_results_tab <- jsd_results_tab %>%
-  left_join(n_indiv, by = "speciesEN") %>%
-  select(speciesEN, n_indiv, everything()) %>%
-  arrange(mean_JSD)
-
+```{r tbl-jsd-summary, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_jsd_summary
 ```
 
-```{r jensen-shannon 5, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+------------------------------------------------------------------------
 
-jsd_results_tab %>%
-  gt() %>%
-  
-  tab_header(
-    title    = md("**Jensen-Shannon Divergence by Species**"),
-    subtitle = md("**Individual pairwise similarity within species**")) %>%
-   tab_source_note(
-    source_note = md(
-      "**JSD ≈ 0** → high similarity in site composition, using same sites in same proportions.  
-       **JSD ≈ 1** → low similarity in site composition, using different sets of sites or proportions. ")) %>%
-  
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13)   %>%
-  
-  opt_row_striping()
+### Between-species composition \| PERMANOVA + PERMDISP
 
+Tests whether site-use composition (as captured by JSD) differs between species (PERMANOVA), and whether within-species spread in composition differs between species (PERMDISP).
+
+**PERMANOVA — do species centroids in JSD space differ?**
+
+```{r tbl-permanova-species, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_permanova_species
 ```
 
-### Species comparison \| Non-Parametric test
+**Pairwise PERMANOVA** (p-values BH-adjusted for multiple comparisons):
 
-We will use **Kruskal-Wallis** test if the distributions of JSD differ among species. It is a non-parametric (doesn't assume normal distribution), it handles unequal sample sizes (different number of comparisons per species).
-
-```{r jensen-shannon 6, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-kruskal_value <- kruskal.test(JSD ~ species_1, 
-                            data = jsd_results %>% filter(same_species == TRUE))
-
-kruskal_summary <- data.frame(
-  Metric = c("Value"),
-  Chi_squared = round(kruskal_value$statistic, 3),
-  df = kruskal_value$parameter,
-  p_value = kruskal_value$p.value) %>%
-  mutate(
-    Significance = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01 ~ "**",
-      p_value < 0.05 ~ "*",
-      TRUE ~ "ns"))
-
-kruskal_summary  %>%
-  
-  gt() %>%
-  
-  tab_header(
-    title = md("**Kruskal-Wallis Test Results**"),
-    subtitle = "Comparing value across groups") %>%
-  
-  cols_label(
-    Metric = "Metric",
-    Chi_squared = "χ2",
-    df = "df",
-    p_value = "p-value",
-    Significance = "Sig.") %>% 
-  
-  fmt_number(
-    columns = Chi_squared,
-    decimals = 3) %>%
-  
-  fmt_scientific(
-    columns = p_value,
-    decimals = 3) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_body(
-      columns = Significance,
-      rows = p_value < 0.05)) %>%
-  
-  tab_style(
-    style = cell_fill(color = "lightgreen"),
-    locations = cells_body(
-      rows = p_value < 0.05)) %>%
-  
-  tab_footnote(
-    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant (p ≥ 0.05). Green highlighting indicates significant differences.")) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels()) %>%
-  
-  opt_table_font(font = "Times New Roman") %>%
-  
-  tab_options(
-    table.font.size = px(14),
-    heading.title.font.size = px(16),
-    data_row.padding = px(5),
-    table.width = pct(100)
-  )
-
-
+```{r tbl-pairwise-permanova, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_pairwise_permanova
 ```
 
-In the aim to observe which species significantly differs from another in term of individual co;position of site used, we need to conduct pairwise test across species.
+**PERMDISP — do species differ in within-species compositional spread?**
 
-We used the **Dunn method** [Dunn - 1964](https://www.tandfonline.com/doi/abs/10.1080/00401706.1964.10490181) which applies a **Bonferroni correction** to extract the false positive from JSD significance. The Bonferroni correction adjusts for this by dividing the significance level by the number of tests ([Bonferroni -](https://wwwnc.cdc.gov/eid/article/21/2/ET-2102_article)).
-
-```{r jensen-shannon 7, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-
-# If significant, do post-hoc pairwise comparisons
-if(kruskal_value$p.value < 0.05) {
-  dunn_jsd <- dunnTest(JSD ~ species_1, 
-                       data = jsd_results %>% filter(same_species == TRUE),
-                       method = "bonferroni")
-  print(dunn_jsd)
-}
-
+```{r tbl-permdisp-species, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_permdisp_species
 ```
 
-```{r jensen-shannon 8, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+------------------------------------------------------------------------
 
-dunn_jsd_table <- dunn_jsd$res %>%
-  mutate(
-    Significance = case_when(
-      P.adj < 0.001 ~ "***",
-      P.adj < 0.01 ~ "**",
-      P.adj < 0.05 ~ "*",
-      TRUE ~ "ns" )) %>%
-  select(Comparison, Z, P.unadj, P.adj, Significance)  # Adjust columns as needed
+### Tidal dependence \| Per-species PERMANOVA + PERMDISP
 
-dunn_jsd_table %>% 
-  
-  arrange(Comparison) %>%
-  
-  gt() %>%
-  
-  tab_header(
-    title = md("**Bonferroni Correction Post-Hoc Test (Dunn)**"),
-    subtitle = "Pairwise JSD comparisons across species") %>%
-  
-  cols_label(
-    Comparison = "Comparison",
-    Z = "Z",
-    P.unadj = "p unadj",
-    P.adj = "p adj",
-    Significance = "Sig.") %>%
-  
-  fmt_scientific(
-    columns = c(P.unadj, P.adj),
-    decimals = 3) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_body(
-      columns = Significance,
-      rows = P.adj < 0.05)) %>%
-  tab_style(
-    style = cell_fill(color = "lightgreen"),
-    locations = cells_body(
-      rows = P.adj < 0.05)) %>%
-  
-  tab_footnote(
-    footnote = md("**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not significant. Green = significant. **p unadj** and **p adj** the raw and Bonferroni corrected p-values.")) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels()) %>%
-  
-  opt_table_font(font = "Times New Roman") %>%
-  
-  tab_options(
-    table.font.size = px(14),
-    heading.title.font.size = px(16),
-    data_row.padding = px(5),
-    table.width = pct(100))
+For each species, a full JSD distance matrix is computed across all individual × tide combinations, then tested with `adonis2(dist ~ tideHighLow)`. Permutations are stratified within `Band.ID` to account for the paired within-individual structure. Only species with ≥ 4 individual × tide observations and both tide levels represented are tested.
 
-```
-
-The table above shows which species are truly using **different** sites than another. Jensen-Shannon Distance measures dissimilarity in site-use composition between species pairs.
-
-Higher JSD goes with more different site used. The Dunn test then confirms if those differences are statistically real after Bonferroni correction.
-
-### Tidal dependance \| Parametric test
-
-We now want to clarify whether birds associate **site composition** depending the tide, therefore likely depending their behavior (i.e., foraging *vs* roosting).
-
-Applying the same method as before, we display below the **JSD results depending the tide**.
-
-::: blockquote-yellow
-**Important**\
-Note: We only keep species which holds **five** or more individuals tagged and detected. So we can further run ANOVA analysis on the data.
-:::
-
-```{r jensen-shannon tide 9, message = FALSE, warning = FALSE, eval = FALSE, echo = FALSE}
-
-# Create site use matrix (rows = individuals, columns = sites)
+```{r jsd-tide-code, message=FALSE, warning=FALSE, eval=FALSE, echo=TRUE}
+# Build individual × tide proportion matrix (species with >= 5 individuals)
 site_use_matrix_tide <- df.alltags %>%
-  
-  # Sanity check
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
- 
-  # Filter out speciesn with less than 5 indiv
   group_by(speciesEN) %>%
-  filter(n() >= 5) %>%
+  filter(n_distinct(Band.ID) >= 5) %>%
   ungroup() %>%
-  
-  # Actual JSD computation per tides
   group_by(Band.ID, recvDeployName, tideHighLow) %>%
   summarise(detections = n(), .groups = "drop") %>%
   group_by(Band.ID, tideHighLow) %>%
-  mutate(proportion = round(detections / sum(detections), 2)) %>%
+  mutate(proportion = detections / sum(detections)) %>%
   select(Band.ID, recvDeployName, tideHighLow, proportion) %>%
-  pivot_wider(
-    names_from = recvDeployName,
-    values_from = proportion,
-    values_fill = 0) %>%
-  unite("id_tide", Band.ID, tideHighLow, remove = FALSE)  # Unique ID for each individual*tide combo
+  pivot_wider(names_from = recvDeployName, values_from = proportion, values_fill = 0) %>%
+  unite("id_tide", Band.ID, tideHighLow, remove = FALSE)
 
-# Calculate pairwise JSD
-individual_tide_ids <- site_use_matrix_tide$id_tide
-n_individuals_tide <- length(individual_tide_ids)
-
-jsd_results_tide <- data.frame()
-
-for (i in 1:(n_individuals_tide - 1)) {
-  for (j in (i + 1):n_individuals_tide) {
-    
-    # Only compare birds with same tideHighLow
-    if (site_use_matrix_tide$tideHighLow[i] == site_use_matrix_tide$tideHighLow[j]) {
-      p <- as.numeric(site_use_matrix_tide[i, -c(1:3)])  # Exclude ID columns
-      q <- as.numeric(site_use_matrix_tide[j, -c(1:3)])
-      
-      jsd_results_tide <- rbind(jsd_results_tide, data.frame(
-        Band.ID_1 = site_use_matrix_tide$Band.ID[i],
-        Band.ID_2 = site_use_matrix_tide$Band.ID[j],
-        tideHighLow = site_use_matrix_tide$tideHighLow[i],
-        JSD = round(calculate_jsd(p, q), 3),
-        Similarity = round(1 - calculate_jsd(p, q), 3)))
-    }
-  }
+# Per-species: full JSD matrix -> adonis2 (stratified) + betadisper
+for (sp in unique(site_use_tide_meta$speciesEN)) {
+  # ... (see R script for full loop)
+  perm_h <- permute::how(blocks = sp_meta$Band.ID, nperm = 999)
+  ad_sp  <- adonis2(sp_jsd_dist ~ tideHighLow, data = sp_meta, permutations = perm_h)
+  bd_sp  <- betadisper(sp_jsd_dist, group = sp_meta$tideHighLow)
 }
-
-# Add species information
-jsd_results_tide <- jsd_results_tide %>%
-  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), 
-            by = c("Band.ID_1" = "Band.ID")) %>%
-  rename(species_1 = speciesEN) %>%
-  left_join(df.alltags %>% select(Band.ID, speciesEN) %>% distinct(), 
-            by = c("Band.ID_2" = "Band.ID")) %>%
-  rename(species_2 = speciesEN) %>%
-  mutate(same_species = species_1 == species_2) %>%
-  filter(same_species == TRUE)  # Only conspecific comparisons
-
 ```
 
-Let's display below the results of the JSD analysis in both the table and a boxplot.
+**JSD within-species summary by tide:**
 
-```{r jensen-shannon tide 10, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+```{r tbl-jsd-summary-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+tbl_jsd_summary_tide
+```
 
-jsd_results_tab_tide <- jsd_results_tide %>%
-  filter(same_species == TRUE) %>%
-  group_by(species_1, tideHighLow) %>%
+**JSD distribution by species and tide** (High tide: solid, Low tide: transparent):
+
+```{r plot-jsd-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE, fig.width=10, fig.height=5, out.width="100%"}
+plot_jsd_box_tide
+```
+
+**PERMANOVA — tide effect on JSD composition (per species):**
+
+```{r tbl-jsd-permanova-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+if (!is.null(tbl_jsd_permanova_tide)) tbl_jsd_permanova_tide else cat("*No species had sufficient data for the per-species tide PERMANOVA.*")
+```
+
+**PERMDISP — tide effect on within-group compositional spread (per species):**
+
+```{r tbl-jsd-permdisp-tide, echo=FALSE, eval=TRUE, message=FALSE, warning=FALSE}
+if (!is.null(tbl_jsd_permdisp_tide)) tbl_jsd_permdisp_tide else cat("*No species had sufficient data for the per-species tide PERMDISP.*")
+```
+
+------------------------------------------------------------------------
+
+## Appendix — Superseded exploratory analyses {#appendix}
+
+The four sections below were part of an earlier exploratory version of this page. They have been replaced by the analyses above because they were **statistically invalid**. The code is preserved here for reference but is **not executed**.
+
+::: {.callout-warning collapse="true" title="A1 — Within-species Kruskal-Wallis on H / J / S (replaced by between-species KW above)"}
+**What it did:** Ran a Kruskal-Wallis test *within each species* using individual Band.IDs as groups, asking whether individuals within the same species had significantly different H, J, or S values.
+
+**Why it is invalid:** Kruskal-Wallis tests for differences *between* groups. Here there is only *one observation per group* (each Band.ID yields exactly one H value from the full study period) — a test of between-individual differences within a species requires within-individual replication (e.g. repeated measurements across time). The test reduces to a test with no within-group variance, which produces meaningless statistics.
+
+**Replaced by:** Between-species Kruskal-Wallis (§ "Between-species comparison" above), where individuals are valid replicates within species. Within-species heterogeneity is described descriptively via CV_H and the boxplots.
+
+```{r appendix-kw-within, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+kruskal_within_species <- entropy_results %>%
+  group_by(speciesEN) %>%
+  filter(n() >= 3) %>%
   summarise(
-    n_comparisons   = n(),
-    mean_JSD        = round(mean(JSD),        3),
-    median_JSD      = round(median(JSD),      3),
-    sd_JSD          = round(sd(JSD),          3),
-    mean_Similarity = round(mean(Similarity), 3),
-    median_Similarity = round(median(Similarity), 3),
-    sd_Similarity   = round(sd(Similarity),   3),
-    .groups = "drop") %>%
-  rename(speciesEN = species_1)
-
-n_indiv <- df.alltags %>%
-  group_by(speciesEN, tideHighLow) %>%
-  summarise(n_indiv = n_distinct(Band.ID), 
-            .groups = "drop")
-n_detect <- df.alltags %>%
-  group_by(speciesEN, tideHighLow) %>%
-  summarise(n_detect = n(), 
-            .groups = "drop")
-
-# Finalise the result table
-jsd_results_tab_tide <- jsd_results_tab_tide %>%
-  left_join(n_indiv, by = c("speciesEN", "tideHighLow")) %>%
-  left_join(n_detect , by = c("speciesEN", "tideHighLow")) %>%
-  select(speciesEN, tideHighLow, n_indiv, n_detect, n_comparisons, mean_JSD, median_JSD, sd_JSD, 
-         mean_Similarity, median_Similarity, sd_Similarity) %>%
-  arrange(tideHighLow, mean_JSD)
-
-
-# Display the JSD result table
-jsd_results_tab_tide %>%
-  gt() %>%
-  tab_header(
-    title = md("**Table.** Jensen-Shannon Divergence (JSD) for intra-species habitat similarity by tide state in the Hunter estuary."),
-    subtitle = md("**JSD ≈ 0** → high similarity in site composition, using same sites in same proportions.  
-                   **JSD ≈ 1** → low similarity in site composition, using different sets of sites or proportions. ") ) %>%
-
-  tab_footnote(
-    footnote = md("**Legend.** **n_indiv**: tagged individuals per species×tide combination; **n_detect**: total number of detections per species×tide combination; **n_comparisons**: pairwise comparisons; **mean_JSD ± sd_JSD**: average dissimilarity in site used; **mean_Similarity ± sd_Similarity**: 1/JSD (average site used similarity). **Low tide** rows blue, **High tide** rows yellow.")) %>%
-  opt_table_font(font = "Times New Roman") %>%
-  
-  cols_label(
-    speciesEN = "Species",
-    tideHighLow = "Tide", 
-    n_indiv = "N indiv.",
-    n_detect = "N detect.",
-    n_comparisons = "N comp.",
-    mean_JSD = "Mean",
-    median_JSD = "Median",
-    sd_JSD = "SD",
-    mean_Similarity = "Mean",
-    median_Similarity = "Median",
-    sd_Similarity = "SD") %>%
-  
-  tab_spanner(
-    label = "Sample Size",
-    columns = c(n_indiv, n_detect, n_comparisons) ) %>%
-  tab_spanner(
-    label = "JSD (Dissimilarity)",
-    columns = c(mean_JSD, median_JSD,  sd_JSD) ) %>%
-  tab_spanner(
-    label = "Similarity (1/JSD)",
-    columns = c(mean_Similarity, median_Similarity, sd_Similarity) ) %>%
-  
-  # Row grouping by species (update with your actual species names)
-  tab_row_group(
-    label = "Bar-tailed Godwit",
-    rows = speciesEN == "Bar-tailed Godwit" ) %>%
-  tab_row_group(
-    label = "Pied Stilt", 
-    rows = speciesEN == "Pied Stilt") %>%
-  tab_row_group(
-    label = "Pacific Golden-Plover",
-    rows = speciesEN == "Pacific Golden-Plover" ) %>%
-  tab_row_group(
-    label = "Red-necked Avocet",
-    rows = speciesEN == "Red-necked Avocet" ) %>%
-  tab_row_group(
-    label = "Curlew Sandpiper",
-    rows = speciesEN == "Curlew Sandpiper") %>%
-  tab_row_group(
-    label = "Eurasian Whimbrel",
-    rows = speciesEN == "Eurasian Whimbrel" ) %>%
-  
-  cols_hide(columns = speciesEN) %>%
-  
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_row_groups()) %>%
-  tab_style(
-    style = cell_text(whitespace = "nowrap"),
-    locations = cells_body()) %>%
-  
-  # Tide-specific row colors
-  tab_style(
-    style = cell_fill(color = "#F0F8FF"),  # Light blue for Low
-    locations = cells_body(rows = tideHighLow == "Low") ) %>%
-  tab_style(
-    style = cell_fill(color = "#FFF8DC"),  # Light yellow for High  
-    locations = cells_body(rows = tideHighLow == "High")) %>%
-  
-  fmt_number(
-    columns = c(mean_JSD, median_JSD, sd_JSD, mean_Similarity, median_Similarity, sd_Similarity),
-    decimals = 3) %>%
-  fmt_number(
-    columns = c(n_indiv, n_detect, n_comparisons),
-    decimals = 0,
-    use_seps = TRUE ) %>%
-  
-  tab_options(
-    table.font.size = px(13),
-    heading.title.font.size = px(16),
-    data_row.padding = px(3),
-    table.width = pct(100),
-    row_group.font.weight = "bold")
+    n_individuals = n(),
+    Chi_sq_H  = kruskal.test(H ~ Band.ID)$statistic,
+    df_H      = kruskal.test(H ~ Band.ID)$parameter,
+    p_value_H = kruskal.test(H ~ Band.ID)$p.value,
+    Chi_sq_J  = kruskal.test(J ~ Band.ID)$statistic,
+    df_J      = kruskal.test(J ~ Band.ID)$parameter,
+    p_value_J = kruskal.test(J ~ Band.ID)$p.value,
+    Chi_sq_S  = kruskal.test(S ~ Band.ID)$statistic,
+    df_S      = kruskal.test(S ~ Band.ID)$parameter,
+    p_value_S = kruskal.test(S ~ Band.ID)$p.value,
+    .groups = "drop")
 ```
+:::
 
-```{r jensen-shannon tide 11, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
-# Pivot data to prepare plotting
-jsd_for_plot_tide <- jsd_results_tide %>%
-  pivot_longer(
-    cols      = c(JSD, Similarity),
-    names_to  = "metric",
-    values_to = "value")
+::: {.callout-warning collapse="true" title="A2 — Two-way ANOVA on entropy metrics by tide (replaced by paired Wilcoxon above)"}
+**What it did:** Fitted `aov(metric ~ Band.ID + tideHighLow)` per species, then checked Shapiro-Wilk and Levene assumptions and reported F-statistics for both terms.
 
-species_list_jsd <- unique(jsd_for_plot_tide$species_1)
-```
+**Why it is invalid:** ANOVA assumes normally distributed residuals and independence of observations. More critically, the tide × entropy data in this study have at most *one High-tide and one Low-tide value per bird* — the design is already perfectly paired, and the additive model inflates degrees of freedom. ANOVA here is equivalent to a dependent-samples t-test with incorrect error structure. Normality assumptions are also frequently violated (entropy values are bounded and skewed). Additionally, `stat_compare_means(method = "t.test")` was applied to the grouped boxplot, which treats paired observations as independent.
 
-```{r jensen-shannon tide 12, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
+**Replaced by:** Paired Wilcoxon signed-rank test (§ "Tidal dependence \| Paired Wilcoxon" above), which is exact for this paired within-individual structure, non-parametric, and handles ties correctly.
 
-jsd_for_plot_tide %>%
-  filter(metric == "JSD") %>%
-  ggplot(aes(x     = species_1,
-             y     = value,
-             fill  = species_1,
-             alpha = tideHighLow,
-             group = interaction(species_1, tideHighLow))) +
-  
-  geom_boxplot(position      = position_dodge(width = 0.8),
-               outlier.shape = 16,
-               outlier.size  = 1.5) +
-  
-  geom_point(position = position_jitterdodge(jitter.width = 0.15,
-                                             dodge.width  = 0.8),
-             size = 1.1) +
-  
-  scale_fill_manual(values = species_colors) +
-  scale_alpha_manual(values = c("High" = 1.0, "Low" = 0.35)) +
-  
-  labs(
-    title    = "Within-species Jensen-Shannon Divergence by Tide",
-    subtitle = "Pairwise JSD between individuals — High tide (solid) vs Low tide (transparent)",
-    x        = NULL,
-    y        = "Jensen-Shannon Divergence") +
-  
-  theme_minimal() +
-  theme(
-    legend.position    = "none",
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
-    panel.grid.major.x = element_blank(),
-    plot.title         = element_text(face = "bold"),
-    plot.subtitle      = element_text(size = 9, color = "grey40"))
+```{r appendix-anova-entropy, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+# Two-way ANOVA — entropy metrics by tide (SUPERSEDED — see paired Wilcoxon above)
+results     <- data.frame()
+assumptions <- data.frame()
 
-```
-
-We now want to test whether JSD values are different across individual of a same species at High and Low tides.\
-To do so, we will conduct a **two-paired ANOVA analysis**, therefore we must verify data normality and homogeneity first.
-
-```{r jensen-shannon tide 13, message = FALSE, warning = FALSE, eval = FALSE,  echo = TRUE}
-results_jsd_tide<- data.frame()
-assumptions_jsd <- data.frame()
-
-for (sp in species_list_jsd) {
-  
-  df <- subset(jsd_for_plot_tide, species_1 == sp & metric == "JSD")
-  df <- na.omit(df)
-  df$Band.ID_1   <- droplevels(df$Band.ID_1)
-  df$Band.ID_2   <- droplevels(df$Band.ID_2)
-  df$tideHighLow <- droplevels(df$tideHighLow)
-  
-  # Check levels before fitting
-  n_tide <- nlevels(df$tideHighLow)
-  n_id   <- nlevels(df$Band.ID_1)
-  
-  # Skip species with insufficient variation to fit any model
-  if (n_id < 2) {
-    message("Skipping ", sp, ": fewer than 2 individuals")
-    next
+for (sp in species_list_entropy) {
+  for (m in metrics_list_entropy) {
+    df    <- subset(entropy_aov_data_tide, speciesEN == sp & metric == m)
+    df    <- na.omit(df)
+    model <- aov(value ~ Band.ID + tideHighLow, data = df)
+    s     <- summary(model)[[1]]
+    # ... (results and assumption extraction omitted for brevity)
   }
-  
-  # Build formula depending on whether tide has 2 levels
-  model_formula <- if (n_tide >= 2) {
-    value ~ Band.ID_1 + tideHighLow
-  } else {
-    message("Note: ", sp, " has only 1 tide level — fitting without tideHighLow")
-    value ~ Band.ID_1
-  }
-  
-  model <- aov(model_formula, data = df)
-  s     <- summary(model)[[1]]
-  
-  # --- ANOVA results ---
-  # Only loop over terms that were actually in the model
-  terms_to_check <- intersect(c("Band.ID_1", "tideHighLow"), rownames(s))
-  
-  for (term in terms_to_check) {
-    results_jsd_tide <- rbind(results_jsd_tide, data.frame(
-      Species = sp,
-      Metric  = "JSD",
-      Term    = ifelse(term == "tideHighLow", "Tide effect",
-                ifelse(term == "Band.ID_1",   "Individual", term)),
-      Df      = s[term, "Df"],
-      SS      = round(s[term, "Sum Sq"],  4),
-      MS      = round(s[term, "Mean Sq"], 4),
-      F_value = round(s[term, "F value"], 3),
-      p_value = round(s[term, "Pr(>F)"],  4),
-      stringsAsFactors = FALSE
-    ))
-  }
-  
-  # --- Normality (Shapiro-Wilk on residuals) ---
-  sw <- shapiro.test(residuals(model))
-  
-  # --- Homogeneity of variance (Levene's test — only if tide has >= 2 levels) ---
-  lev <- if (n_tide >= 2) {
-    tryCatch(
-      leveneTest(value ~ tideHighLow, data = df, center = median),
-      error = function(e) NULL
-    )
-  } else {
-    NULL
-  }
-  
-  assumptions_jsd <- rbind(assumptions_jsd, data.frame(
-    Species      = sp,
-    Metric       = "JSD",
-    N            = nrow(df),
-    Independence = "By design",
-    SW_W         = round(sw$statistic,  4),
-    SW_p         = round(sw$p.value,    4),
-    Normality    = ifelse(sw$p.value > 0.05, "✓ Met", "✗ Violated"),
-    Levene_F     = ifelse(!is.null(lev), round(lev[1, "F value"], 4), NA),
-    Levene_p     = ifelse(!is.null(lev), round(lev[1, "Pr(>F)"],  4), NA),
-    Homogeneity  = ifelse(!is.null(lev),
-                     ifelse(lev[1, "Pr(>F)"] > 0.05, "✓ Met", "✗ Violated"),
-                     "Insufficient levels"),
-    stringsAsFactors = FALSE
-  ))
-}
-```
-
-```{r jensen-shannon tide 14, message = FALSE, warning = FALSE, eval = TRUE,  echo = FALSE}
-results_jsd_tide <- results_jsd_tide %>%
-  mutate(
-    sig = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ ""))
-
-assumptions_jsd %>%
-  gt(groupname_col = "Species") %>%
-
-  tab_header(
-    title    = md("**ANOVA Assumption Tests — JSD**"),
-    subtitle = md("*Normality (Shapiro-Wilk) and Homogeneity of Variance (Levene's test)*")
-  ) %>%
-
-  cols_label(
-    Metric       = "Metric",
-    N            = "n",
-    Independence = "Independence",
-    SW_W         = "W",
-    SW_p         = "p value",
-    Normality    = "Normality",
-    Levene_F     = "F",
-    Levene_p     = "p value",
-    Homogeneity  = "Homogeneity"
-  ) %>%
-
-  tab_spanner(
-    label   = "Shapiro-Wilk",
-    columns = c(SW_W, SW_p, Normality)
-  ) %>%
-
-  tab_spanner(
-    label   = "Levene's Test",
-    columns = c(Levene_F, Levene_p, Homogeneity)
-  ) %>%
-
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = Normality,
-      rows    = Normality == "✓ Met"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#27ae60", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✓ Met"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Normality,
-      rows    = Normality == "✗ Violated"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = Homogeneity,
-      rows    = Homogeneity == "✗ Violated"
-    )
-  ) %>%
-  tab_style(
-    style     = cell_text(color = "#c0392b"),
-    locations = cells_body(
-      columns = SW_p,
-      rows    = SW_p < 0.05
-    )
-  ) %>%
-
-  opt_row_striping() %>%
-
-  tab_source_note(
-    source_note = md(
-      "**Independence**: verified by design — each Band.ID is a unique individual measured once per tide condition.  
-       **Shapiro-Wilk**: H₀ = residuals are normally distributed; p > 0.05 → assumption met.  
-       **Levene's test**: H₀ = variances are equal across tide groups; p > 0.05 → assumption met."
-    )
-  ) %>%
-
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13
-  )
-```
-
-```{r jensen-shannon tide 15, message = FALSE, warning = FALSE, eval = FALSE,  echo = FALSE}
-
-# Build model_list first
-model_list <- list()
-
-for (sp in species_list_jsd) {
-  
-  df <- subset(jsd_for_plot_tide, species_1 == sp & metric == "JSD")
-  df <- na.omit(df)
-  df$Band.ID_1   <- droplevels(df$Band.ID_1)
-  df$tideHighLow <- droplevels(df$tideHighLow)
-  
-  n_tide <- nlevels(df$tideHighLow)
-  n_id   <- nlevels(df$Band.ID_1)
-  
-  if (n_id < 2) {
-    message("Skipping ", sp, ": fewer than 2 individuals")
-    next
-  }
-  
-  model_formula <- if (n_tide >= 2) {
-    value ~ Band.ID_1 + tideHighLow
-  } else {
-    message("Note: ", sp, " has only 1 tide level — fitting without tideHighLow")
-    value ~ Band.ID_1
-  }
-  
-  model_list[[sp]] <- list(
-    model  = aov(model_formula, data = df),
-    data   = df,
-    n_tide = n_tide)
-}
-
-# Build plot_list from model_list
-plot_list <- list()
-
-for (sp in names(model_list)) {
-  
-  model  <- model_list[[sp]]$model
-  df     <- model_list[[sp]]$data
-  n_tide <- model_list[[sp]]$n_tide
-  
-  res      <- residuals(model)
-  fitted_v <- fitted(model)
-  
-  diag_df <- data.frame(
-    fitted   = fitted_v,
-    res      = res,
-    sqrt_res = sqrt(abs(res)),
-    tide     = df$tideHighLow,
-    id       = df$Band.ID_1)
-  
-  # --- Plot 1: Residuals vs Fitted ---
-  p1 <- ggplot(diag_df, aes(x = fitted, y = res)) +
-    geom_point(color = "#2980b9", size = 1.5, alpha = 0.7) +
-    geom_hline(yintercept = 0, linetype = "dashed", color = "#c0392b") +
-    geom_smooth(method = "loess", se = FALSE, color = "#e67e22", linewidth = 0.8) +
-    labs(title = "Residuals vs Fitted",
-         x     = "Fitted values",
-         y     = "Residuals") +
-    theme_minimal() +
-    theme(plot.title = element_text(face = "bold", size = 10))
-  
-  # --- Plot 2: Q-Q plot ---
-  p2 <- ggplot(diag_df, aes(sample = res)) +
-    stat_qq(color = "#2980b9", size = 1.5, alpha = 0.7) +
-    stat_qq_line(color = "#c0392b", linewidth = 0.8) +
-    labs(title = "Normal Q-Q",
-         x     = "Theoretical quantiles",
-         y     = "Sample quantiles") +
-    theme_minimal() +
-    theme(plot.title = element_text(face = "bold", size = 10))
-  
-  # --- Plot 3: Scale-Location ---
-  p3 <- ggplot(diag_df, aes(x = fitted, y = sqrt_res)) +
-    geom_point(color = "#2980b9", size = 1.5, alpha = 0.7) +
-    geom_smooth(method = "loess", se = FALSE, color = "#e67e22", linewidth = 0.8) +
-    labs(title = "Scale-Location",
-         x     = "Fitted values",
-         y     = expression(sqrt("|Residuals|"))) +
-    theme_minimal() +
-    theme(plot.title = element_text(face = "bold", size = 10))
-  
-  # --- Plot 4: Residuals by tide or by individual ---
-  if (n_tide >= 2) {
-    p4 <- ggplot(diag_df, aes(x = tide, y = res, fill = tide)) +
-      geom_boxplot(alpha = 0.7, outlier.shape = 16) +
-      geom_hline(yintercept = 0, linetype = "dashed", color = "#c0392b") +
-      scale_fill_manual(values = c("High" = "#aed6f1", "Low" = "#a9dfbf")) +
-      labs(title = "Residuals by Tide",
-           x     = "Tide",
-           y     = "Residuals") +
-      theme_minimal() +
-      theme(plot.title      = element_text(face = "bold", size = 10),
-            legend.position = "none")
-  } else {
-    p4 <- ggplot(diag_df, aes(x = id, y = res)) +
-      geom_boxplot(fill = "#aed6f1", alpha = 0.7, outlier.shape = 16) +
-      geom_hline(yintercept = 0, linetype = "dashed", color = "#c0392b") +
-      labs(title = "Residuals by Individual\n(1 tide level only)",
-           x     = "Individual",
-           y     = "Residuals") +
-      theme_minimal() +
-      theme(plot.title  = element_text(face = "bold", size = 10),
-            axis.text.x = element_text(angle = 45, hjust = 1, size = 7))
-  }
-  
-  # Combine with patchwork and store
-  plot_list[[sp]] <- (p1 + p2) / (p3 + p4) +
-    plot_annotation(
-      title = paste0("Diagnostic Plots — ", sp),
-      theme = theme(plot.title = element_text(face  = "bold",
-                                              size  = 13,
-                                              color = "#2c3e50")))
-}
-
-```
-
-Below are displayed Res. vs. Fitted, Normal Q-Q, Scale-Location and Res. by tide plots, for each species.
-
-::: panel-tabset
-```{r assumptions tabs, message = FALSE, warning = FALSE, results = 'asis', echo = FALSE, eval = TRUE ,fig.width = 10, fig.height = 6}
-# Create tabs dynamically
-for (sp in names(plot_list)) {
-  cat("###", sp, "\n\n")
-  print(plot_list[[sp]])
-  cat("\n\n")
 }
 ```
 :::
 
-Now ANOVA assumptions are verified, let's see the ANOVA analysis results.
+::: {.callout-warning collapse="true" title="A3 — Kruskal-Wallis + Dunn on pairwise JSD values (replaced by PERMANOVA above)"}
+**What it did:** Applied `kruskal.test(JSD ~ species_1)` directly to the data frame of pairwise JSD values (one row per pair), then ran `dunnTest` for pairwise species comparisons.
 
-```{r jensen-shannon tide 16, message = FALSE, warning = FALSE, eval = TRUE,  echo = TRUE}
-results_jsd_tide <- results_jsd_tide %>%
-  mutate(
-    sig = case_when(
-      p_value < 0.001 ~ "***",
-      p_value < 0.01  ~ "**",
-      p_value < 0.05  ~ "*",
-      p_value < 0.1   ~ ".",
-      TRUE            ~ ""
-    )
-  )
+**Why it is invalid:** Each individual contributes to *n-1* pairs. With *n* individuals in a species, the *n*(n-1)/2 pairwise JSD values are **not independent**. KW/Dunn treat them as independent observations, massively inflating effective sample size and making all p-values meaningless (pseudoreplication). This is the same issue that makes ANOVA on pairwise distances invalid.
 
-# ── ANOVA table ──────────────────────────────────────────────────────────────
+**Replaced by:** PERMANOVA (adonis2) and pairwise PERMANOVA on the full JSD distance matrix (§ "Between-species composition" above), which use permutation-based inference that is valid for non-independent distance data.
 
-results_jsd_tide %>%
-  gt(groupname_col = "Species", rowname_col = "Term") %>%
+```{r appendix-kw-jsd, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+# Kruskal-Wallis on pairwise JSD — SUPERSEDED — pseudoreplicated (see PERMANOVA above)
+kruskal_value <- kruskal.test(JSD ~ species_1,
+                              data = jsd_results %>% filter(same_species == TRUE))
 
-  tab_header(
-    title    = md("**Two-Way ANOVA Results — JSD**"),
-    subtitle = md("*value ~ Band.ID + tideHighLow — by Species*")
-  ) %>%
-
-  cols_label(
-    Metric  = "Metric",
-    Df      = "df",
-    SS      = "Sum Sq",
-    MS      = "Mean Sq",
-    F_value = "F value",
-    p_value = "p value",
-    sig     = ""
-  ) %>%
-
-  tab_style(
-    style     = cell_text(color = "#c0392b", weight = "bold"),
-    locations = cells_body(
-      columns = vars(p_value, sig),
-      rows    = sig %in% c("*", "**", "***", ".")
-    )
-  ) %>%
-
-  opt_row_striping() %>%
-
-  tab_source_note(
-    source_note = "Significance codes: *** p<0.001  ** p<0.01  * p<0.05  . p<0.1"
-  ) %>%
-
-  tab_options(
-    row_group.font.weight      = "bold",
-    row_group.background.color = "#f0f4f8",
-    heading.align              = "left",
-    table.font.size            = 13
-  )
+if (kruskal_value$p.value < 0.05) {
+  dunn_jsd <- dunnTest(JSD ~ species_1,
+                       data   = jsd_results %>% filter(same_species == TRUE),
+                       method = "bonferroni")
+}
 ```
+:::
+
+::: {.callout-warning collapse="true" title="A4 — Two-way ANOVA on pairwise JSD by tide (replaced by per-species PERMANOVA/PERMDISP above)"}
+**What it did:** For each species, computed within-tide pairwise JSD values then fitted `aov(JSD ~ Band.ID_1 + tideHighLow)` using `Band.ID_1` as a grouping factor, along with extensive assumption checking (Shapiro-Wilk, Levene, residual diagnostic plots in tabset panels).
+
+**Why it is invalid:** All the pseudoreplication problems from A3 apply here — pairwise JSD values are non-independent observations. Additionally, using `Band.ID_1` as a covariate in ANOVA on pairwise distances does not correctly account for the paired within-individual structure; it conflates individual identity with a block effect in a way ANOVA cannot handle. Assumption violations (non-normality, heteroscedasticity) were also frequent.
+
+**Replaced by:** Per-species PERMANOVA with permutations stratified within `Band.ID` (§ "Tidal dependence \| Per-species PERMANOVA + PERMDISP" above), which correctly handles both the non-independence of pairwise distances and the paired individual structure.
+
+```{r appendix-anova-jsd, eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+# Two-way ANOVA on JSD by tide — SUPERSEDED — pseudoreplicated (see per-species PERMANOVA above)
+results_jsd_tide <- data.frame()
+assumptions_jsd  <- data.frame()
+
+for (sp in species_list_jsd) {
+  df <- subset(jsd_for_plot_tide, species_1 == sp & metric == "JSD")
+  df <- na.omit(df)
+  df$Band.ID_1   <- droplevels(df$Band.ID_1)
+  df$tideHighLow <- droplevels(df$tideHighLow)
+
+  model <- aov(value ~ Band.ID_1 + tideHighLow, data = df)
+  # ... (assumption checks and result extraction omitted for brevity)
+}
+```
+:::
