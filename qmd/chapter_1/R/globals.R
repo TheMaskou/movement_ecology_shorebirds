@@ -4,6 +4,8 @@ motus_proj_num <- 294
 dir_motus <- here::here("data", "motus")
 dir_tides <- here::here("data", "tides")
 
+dir_sharepoint <- Sys.getenv("SHOREBIRD_SHAREPOINT_PATH", unset = NA)
+
 ## Inputs / raw data ----
 path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
@@ -12,7 +14,7 @@ path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIR
 # been copied from SharePoint Motus_array_maintenance folder to the paths shown
 # below.
 path_motus_receiver_log_historic <- here::here("data", "motus", "array_maintenance", "motus_receiver_log_historic.xlsx")
-path_motus_receiver_log_survey123 <- here::here("data", "motus", "array_maintenance", "arcgis-123survey_output_table_raw.xlsx")
+path_motus_receiver_log_survey123 <- here::here("data", "motus", "array_maintenance", "motus_receiver_log_survey123.xlsx")
 
 # The below spreadsheet is generated from the historic + survey123 spreadsheets
 # by the R script qmd/chapter_1/R/ch1_4_motus_array_maintenance_log.R
