@@ -17,9 +17,14 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 map_height         <- NULL    # NULL = fills & resizes the viewer pane;
                                # set a number (e.g. 520) for a fixed pixel height
 map_bounds_padding <- 0.05    # degrees of padding around stations on initial zoom
+map_zoom_snap      <- 0.1    # zoom level granularity (1 = integer steps only,
+                               # 0.1 = tenth steps; controls where zoom stops)
+map_wheel_px_per_zoom <- 120  # scroll pixels required to move one zoom level
+                               # (default 60 = ~2 levels per wheel tick, coarse;
+                               # 120 = ~1 level per tick; 240 = ~0.5 levels per tick)
 
 ## ---- Markers ----
-marker_radius        <- 7
+marker_radius        <- 8
 marker_fill_color    <- "#1b6ca8"
 marker_fill_opacity  <- 0.9
 marker_stroke_color  <- "white"
@@ -205,7 +210,9 @@ popup_data <- tibble::tibble(
 )
 
 # ==== Map ====
-map_maintenance <- leaflet(popup_data, height = map_height) |>
+map_maintenance <- leaflet(popup_data, height = map_height,
+                          options = leafletOptions(zoomSnap = map_zoom_snap,
+                                        wheelPxPerZoomLevel = map_wheel_px_per_zoom)) |>
   addProviderTiles("CartoDB.Positron",  group = "Map") |>
   addProviderTiles("Esri.WorldImagery", group = "Satellite") |>
   addProviderTiles("OpenStreetMap",     group = "Street (OSM)") |>
