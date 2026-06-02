@@ -18,9 +18,12 @@ path_motus_receiver_log_survey123 <- here::here("data", "motus", "array_maintena
 
 # The below spreadsheet is generated from the historic + survey123 spreadsheets
 # by the R script qmd/chapter_1/R/ch1_4_motus_array_maintenance_log.R
-path_maintenance_log  <- here::here("data", "motus", "motus_array_maintenance_log.xlsx")
+path_maintenance_log_excel  <- here::here("data", "motus", "array_maintenance", "motus_array_maintenance_log.xlsx")
 # TODO: Would be good to choose a consistent name (receiver log vs. maintenance
 # log; have left alone for now)
+
+# RDS Version (USE THIS FOR FURTHER ANALYSIS as it preserves types and everything perfectly)
+path_maintenance_log <- here::here("data", "motus", "array_maintenance", "receiver_log_complete.rds")
 
 ## Path for data files that are imported by other files ----
 path_motus_database <- here::here("data", "motus", "project-294.motus")

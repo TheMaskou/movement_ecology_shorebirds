@@ -11,7 +11,7 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 # Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).
 
 # Read data
-motus_data <- read_excel(path_maintenance_log)
+motus_data <- read_excel(path_maintenance_log_excel)
 
 # 1. Convert lat/lon columns to numeric (E/W, N/S)
 motus_data <- motus_data %>%

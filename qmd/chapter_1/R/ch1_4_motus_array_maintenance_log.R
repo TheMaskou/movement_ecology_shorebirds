@@ -4,6 +4,8 @@ library(openxlsx2)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
+message("Reminder to run qmd/chapter_1/R/_sync_sharepoint_receiver_log.R if there have been any changes to either the historic or survey123 log on SharePoint!")
+
 # ==== Import Survey123 Log ====
 
 # Specify Survey123 column types, for currently empty columns.
@@ -129,7 +131,7 @@ log_complete |>
 # ==== Export ====
 openxlsx2::write_xlsx(
   log_complete,
-  file = path_maintenance_log
+  file = path_maintenance_log_excel
 )
 
-saveRDS(log_complete, file = here::here("data", "motus", "array_maintenance", "receiver_log_complete.rds"))
+saveRDS(log_complete, file = path_maintenance_log)
