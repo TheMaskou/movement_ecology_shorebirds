@@ -4,16 +4,56 @@ library(openxlsx2)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
-log_historic <- wb_to_df(
-  file = path_motus_receiver_log_historic,
-  sheet = "log"
+# ==== Import Survey123 Log ====
+
+# Specify Survey123 column types, for currently empty columns.
+# Types need to be the same between both logs to join them together.
+# The issue is that there are some columns (like technician_other) that do not
+# currently have any values, and they default to type = numeric. Shouldn't
+# need this in future.
+
+# NOTE: The reason I did not simply go into the Survey123 log and manually
+# update the column types in Excel, is because this would then need to be done
+# every time the Survey123 log is re-downloaded from Survey123.
+
+type_cols_survey123 <- c(
+  technician_other = "character",
+  repair_description = "character",
+  receiver_replacement = "character",
+  receiver_replacement_id = "character",
+  tag_test_perf_success_dep = "character",
+  tag_test_notes_dep = "character",
+  visit_date = "character"
 )
 
 # NOTE: At the time of writing, there was only a single worksheet in the 
 # spreadsheet. If more are added, should specify the sheet = "" argument.
 # But it defaults to using the first sheet anyway, so should be fine.
+
 log_survey123 <- wb_to_df(
   file = path_motus_receiver_log_survey123,
+  types = type_cols_survey123
+)
+
+# ==== Import Historic Log ====
+type_cols_historic <- c(
+  deploy_mast = "character",
+  deploy_solar = "character",
+  deploy_omni = "character",
+  deploy_dir = "character",
+  deploy_receiver = "character",
+  deploy_shelf = "character",
+  deploy_battery = "character",
+  sg_lon = "character",
+  sg_lat = "character",
+  sg_alt = "character"
+)
+
+
+log_historic <- wb_to_df(
+  file = path_motus_receiver_log_historic,
+  sheet = "log",
+  types = type_cols_historic
 )
 
 # ==== Column Comparison ====
@@ -49,7 +89,7 @@ valid_survey123_only <- c("objectid", "globalid", "start", "end", "today",
 cols_invalid_survey123 <- setdiff(cols_only_in_survey123, valid_survey123_only)
 
 if (length(cols_invalid_survey123 > 0)) {
-  warning("There are columns in the Survey123 log that do not map to the historc log: ",
+  warning("There are columns in the Survey123 log that do not map to the historic log: ",
           toString(cols_invalid_survey123))
 } else{
   message("All columns in Survey123 are valid, yippee")
@@ -71,3 +111,4 @@ if (nrow(type_comparison) > 0) {
 } else {
   message("No type mismatches found, yippee")
 }
+
