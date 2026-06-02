@@ -54,3 +54,20 @@ if (length(cols_invalid_survey123 > 0)) {
 } else{
   message("All columns in Survey123 are valid, yippee")
 }
+
+# ==== Type Mismatch Check ====
+common_cols <- intersect(names(log_historic), names(log_survey123))
+
+type_comparison <- tibble::tibble(
+  column      = common_cols,
+  type_historic  = sapply(common_cols, \(col) class(log_historic[[col]])[1]),
+  type_survey123 = sapply(common_cols, \(col) class(log_survey123[[col]])[1])
+) |>
+  dplyr::filter(type_historic != type_survey123)
+
+if (nrow(type_comparison) > 0) {
+  warning("Type mismatches found between historic and Survey123 logs:", immediate. = TRUE)
+  print(type_comparison)
+} else {
+  message("No type mismatches found, yippee")
+}
