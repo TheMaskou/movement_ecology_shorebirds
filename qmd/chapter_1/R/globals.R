@@ -4,16 +4,28 @@ motus_proj_num <- 294
 dir_motus <- here::here("data", "motus")
 dir_tides <- here::here("data", "tides")
 
-# Inputs / raw data
+## Inputs / raw data ----
 path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
-# Path for data files that are imported by other files
+### Receiver Array Maintenance Log ----
+# NOTE: Ensure that both of the below files are up-to-date, i.e., have recently
+# been copied from SharePoint Motus_array_maintenance folder to the paths shown
+# below.
+path_motus_receiver_log_historic <- here::here("data", "motus", "array_maintenance", "motus_receiver_log_historic.xlsx")
+path_motus_receiver_log_survey123 <- here::here("data", "motus", "array_maintenance", "arcgis-123survey_output_table_raw.xlsx")
+
+# The below spreadsheet is generated from the historic + survey123 spreadsheets
+# by the R script qmd/chapter_1/R/ch1_4_motus_array_maintenance_log.R
+path_maintenance_log  <- here::here("data", "motus", "motus_array_maintenance_log.xlsx")
+# TODO: Would be good to choose a consistent name (receiver log vs. maintenance
+# log; have left alone for now)
+
+## Path for data files that are imported by other files ----
 path_motus_database <- here::here("data", "motus", "project-294.motus")
 path_detection_data <- here::here("data", "motus", "detection_data.rds")
 path_recv_info      <- here::here("data", "motus", "recv-info.rds")
 path_tideData       <- here::here("data", "tides", "tideData.rds")
 path_spreadsheet_data <- here::here("data", "spreadsheet", "spreadsheet_data.rds")
-path_maintenance_log  <- here::here("data", "motus", "motus_array_maintenance_log.xlsx")
 
 # ==== Motus Tags ====
 motus_tags_test <- c(
