@@ -49,7 +49,6 @@ library(FSA)
 library(patchwork)
 ```
 
-
 ## Shannon
 
 ### Definition

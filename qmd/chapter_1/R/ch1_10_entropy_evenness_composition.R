@@ -76,9 +76,6 @@ calculate_shannon <- function(proportions) {
   return(H)
 }
 
-# NOTE: I am concerned about the proportions > 0 - zero detections of a bird
-# at a specific receiver is a zero result, not something to be filtered out
-
 # ==== Shannon Entropy — Per Individual ====
 #
 # For each bird, count detections at each station, convert to proportions,
