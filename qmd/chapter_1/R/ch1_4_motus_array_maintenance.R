@@ -8,6 +8,8 @@ library(here)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
+# TODO: Add more columns to popup (probably issue notes, comments, power status)
+
 # ==== Map Display Settings ====
 # Edit these variables to change how the map looks. All visual properties of
 # the map, markers, and popups are controlled from here — no need to search
