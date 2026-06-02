@@ -135,10 +135,17 @@ log_complete |>
   select(station_id, visit_date_str, visit_date)
 
 # ==== Exclude Test Entries ====
-log_complete <- log_complete |> 
+log_complete <- log_complete |>
   filter(station_id != "TEST")
 
+# ==== Exclude TBC Entries ====
+log_tbc <- log_complete |>
+  filter(station_id == "TBC")
 
+log_complete <- log_complete |>
+  filter(station_id != "TBC")
+
+message(nrow(log_tbc), " entries with station_id = 'TBC' excluded from log_complete (retained in log_tbc)")
 
 # ==== Export ====
 openxlsx2::write_xlsx(
