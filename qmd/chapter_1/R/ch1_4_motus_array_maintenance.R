@@ -7,6 +7,41 @@ library(here)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
+# ==== Map Display Settings ====
+# Edit these variables to change how the map looks. All visual properties of
+# the map, markers, and popups are controlled from here — no need to search
+# through the rest of the script.
+
+## ---- Map ----
+map_height         <- NULL    # NULL = fills & resizes the viewer pane;
+                               # set a number (e.g. 520) for a fixed pixel height
+map_bounds_padding <- 0.05    # degrees of padding around stations on initial zoom
+
+## ---- Markers ----
+marker_radius        <- 7
+marker_fill_color    <- "#1b6ca8"
+marker_fill_opacity  <- 0.9
+marker_stroke_color  <- "white"
+marker_stroke_weight <- 2
+
+## ---- Popups ----
+popup_max_width  <- 420   # pixels
+popup_min_width  <- 320   # pixels
+popup_font_family <- "sans-serif"
+na_placeholder   <- "—"   # text shown when a value is NA or blank
+
+## ---- Popup Summary Block ----
+summary_title_size  <- "15px"
+summary_font_size   <- "13px"
+summary_label_color <- "#666"
+
+## ---- Popup History Table ----
+history_max_height   <- "180px"
+history_font_size    <- "12px"
+history_header_bg    <- "#f5f5f5"
+history_header_color <- "#444"
+history_row_border   <- "1px solid #eee"
+
 # ==== Load Data ====
 maintenance_log <- readRDS(path_maintenance_log)
 
@@ -53,11 +88,11 @@ if (length(missing_coords) > 0) {
 # ==== Build Popup HTML ====
 
 ## ---- Helper: Format a Single Value for HTML ----
-# Returns an em dash for NA or blank values; otherwise HTML-escapes the value.
+# Returns na_placeholder for NA or blank values; otherwise HTML-escapes the value.
 .fmt <- function(x) {
   ifelse(
     is.na(x) | trimws(as.character(x)) == "",
-    "—",
+    na_placeholder,
     htmlEscape(as.character(x))
   )
 }
@@ -65,11 +100,12 @@ if (length(missing_coords) > 0) {
 ## ---- Build Popup for One Station ----
 # Takes all visit rows for a single station and returns a self-contained HTML
 # string with a summary header and a scrollable full visit history table.
+# Uses the display-settings variables defined at the top of the script.
 build_popup <- function(rows) {
   # Use only dated rows to determine the "latest" visit; undated historic rows
-  # sort last with arrange(desc(visit_date)) which is why we exclude them here.
+  # sort last with arrange(desc(visit_date)), which is why we exclude them here.
   rows_dated <- rows |> filter(!is.na(visit_date))
-  rows_all   <- rows |> arrange(desc(visit_date))  # NA dates sort last
+  rows_all   <- rows |> arrange(desc(visit_date))   # NA dates sort last
 
   latest <- if (nrow(rows_dated) > 0) {
     rows_dated |> slice_max(visit_date, n = 1, with_ties = FALSE)
@@ -83,27 +119,26 @@ build_popup <- function(rows) {
     r <- last_dl_rows |> slice_max(visit_date, n = 1, with_ties = FALSE)
     paste0(.fmt(r$visit_date), " (", .fmt(r$technician), ")")
   } else {
-    "—"
+    na_placeholder
   }
 
   # Summary block (latest-status snapshot)
   summary_html <- paste0(
-    "<div style='font-family:sans-serif;font-size:13px;",
-                  "min-width:300px;max-width:400px;padding:2px'>",
-    "<b style='font-size:15px'>", .fmt(latest$station_id), "</b><br>",
-    "<span style='color:#666;font-size:12px'>Receiver: ",
+    "<div style='font-family:", popup_font_family, ";font-size:", summary_font_size, ";padding:2px'>",
+    "<b style='font-size:", summary_title_size, "'>", .fmt(latest$station_id), "</b><br>",
+    "<span style='color:", summary_label_color, ";font-size:12px'>Receiver: ",
     .fmt(latest$sg_id), "</span><br><br>",
-    "<table style='border-collapse:collapse;width:100%;font-size:13px'>",
-    "<tr><td style='color:#666;padding:2px 10px 2px 0;white-space:nowrap'>",
+    "<table style='border-collapse:collapse;width:100%;font-size:", summary_font_size, "'>",
+    "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Last visit</td>",
       "<td>", .fmt(latest$visit_date), " (", .fmt(latest$technician), ")</td></tr>",
-    "<tr><td style='color:#666;padding:2px 10px 2px 0;white-space:nowrap'>",
+    "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Status on departure</td>",
       "<td>", .fmt(latest$station_status_left), "</td></tr>",
-    "<tr><td style='color:#666;padding:2px 10px 2px 0;white-space:nowrap'>",
+    "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Last data download</td>",
       "<td>", last_dl_str, "</td></tr>",
-    "<tr><td style='color:#666;padding:2px 10px 2px 0;white-space:nowrap'>",
+    "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Last issue</td>",
       "<td>", .fmt(latest$issue_category), "</td></tr>",
     "</table>"
@@ -114,7 +149,7 @@ build_popup <- function(rows) {
     vapply(seq_len(nrow(rows_all)), function(i) {
       r <- rows_all[i, ]
       paste0(
-        "<tr style='border-top:1px solid #eee'>",
+        "<tr style='border-top:", history_row_border, "'>",
         "<td style='padding:3px 6px;white-space:nowrap'>", .fmt(r$visit_date), "</td>",
         "<td style='padding:3px 6px'>",                    .fmt(r$technician), "</td>",
         "<td style='padding:3px 6px;text-align:center'>",  .fmt(r$data_downloaded), "</td>",
@@ -128,13 +163,14 @@ build_popup <- function(rows) {
 
   history_html <- paste0(
     "<hr style='margin:8px 0;border:none;border-top:1px solid #ddd'>",
-    "<span style='font-size:12px;color:#666'>",
+    "<span style='font-size:12px;color:", summary_label_color, "'>",
       "Visit history (", nrow(rows_all), " visit",
       ifelse(nrow(rows_all) == 1, "", "s"), ")</span>",
-    "<div style='max-height:180px;overflow-y:auto;margin-top:4px'>",
-    "<table style='border-collapse:collapse;width:100%;font-size:12px'>",
+    "<div style='max-height:", history_max_height, ";overflow-y:auto;margin-top:4px'>",
+    "<table style='border-collapse:collapse;width:100%;font-size:", history_font_size, "'>",
     "<thead>",
-    "<tr style='background:#f5f5f5;color:#444;font-size:11px;position:sticky;top:0'>",
+    "<tr style='background:", history_header_bg, ";color:", history_header_color,
+    ";font-size:11px;position:sticky;top:0'>",
     "<th style='padding:4px 6px;text-align:left'>Date</th>",
     "<th style='padding:4px 6px;text-align:left'>Technician</th>",
     "<th style='padding:4px 6px;text-align:center'>Data DL</th>",
@@ -145,7 +181,7 @@ build_popup <- function(rows) {
     "<tbody>", history_rows_html, "</tbody>",
     "</table>",
     "</div>",
-    "</div>"  # close outer div
+    "</div>"   # close outer div
   )
 
   paste0(summary_html, history_html)
@@ -168,29 +204,30 @@ popup_data <- tibble::tibble(
 )
 
 # ==== Map ====
-map_maintenance <- leaflet(popup_data, height = 520) |>
+map_maintenance <- leaflet(popup_data, height = map_height) |>
   addProviderTiles("CartoDB.Positron",  group = "Map") |>
   addProviderTiles("Esri.WorldImagery", group = "Satellite") |>
+  addProviderTiles("OpenStreetMap",     group = "Street (OSM)") |>
   addCircleMarkers(
     lng          = ~sg_lon,
     lat          = ~sg_lat,
-    radius       = 7,
-    color        = "white",
-    weight       = 2,
-    fillColor    = "#1b6ca8",
-    fillOpacity  = 0.9,
+    radius       = marker_radius,
+    color        = marker_stroke_color,
+    weight       = marker_stroke_weight,
+    fillColor    = marker_fill_color,
+    fillOpacity  = marker_fill_opacity,
     popup        = ~popup,
-    popupOptions = popupOptions(maxWidth = 420, minWidth = 320)
+    popupOptions = popupOptions(maxWidth = popup_max_width, minWidth = popup_min_width)
   ) |>
   addLayersControl(
-    baseGroups = c("Map", "Satellite"),
+    baseGroups = c("Map", "Satellite", "Street (OSM)"),
     options    = layersControlOptions(collapsed = FALSE)
   ) |>
   fitBounds(
-    lng1 = min(popup_data$sg_lon) - 0.05,
-    lat1 = min(popup_data$sg_lat) - 0.05,
-    lng2 = max(popup_data$sg_lon) + 0.05,
-    lat2 = max(popup_data$sg_lat) + 0.05
+    lng1 = min(popup_data$sg_lon) - map_bounds_padding,
+    lat1 = min(popup_data$sg_lat) - map_bounds_padding,
+    lng2 = max(popup_data$sg_lon) + map_bounds_padding,
+    lat2 = max(popup_data$sg_lat) + map_bounds_padding
   ) |>
   addScaleBar(position = "bottomleft") |>
   addMiniMap()
