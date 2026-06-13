@@ -48,6 +48,44 @@ library(gt)
 df.alltags <- readRDS(path_detection_data)
 
 
+# ==== Plot Settings ====
+#
+# Visual controls shared across the JSD boxplots below. Edit here to restyle
+# without hunting through each ggplot block.
+
+## ---- Settings: All Plots ----
+
+outlier_shape   <- 16   # outlier symbol
+axis_text_angle <- 45   # x-axis label rotation (degrees)
+axis_text_size  <- 9    # x-axis label size
+
+# Plot either JSD (dissimilarity) or Similarity (= 1 - JSD) on the y-axis.
+# Affects the column plotted and all titles/axis labels below.
+use_similarity <- FALSE
+
+jsd_metric_col   <- if (use_similarity) "Similarity" else "JSD"
+jsd_metric_label <- if (use_similarity) "Similarity (1 - JSD)" else "Jensen-Shannon Divergence (JSD)"
+
+## ---- Settings: Non-tide Plot ----
+# plot_jsd_box (geom_boxplot + geom_jitter)
+
+box_alpha    <- 0.7   # box fill opacity
+jitter_width <- 0.2   # horizontal spread of jittered points
+jitter_alpha <- 0.3   # jittered point opacity
+jitter_size  <- 1     # jittered point size
+
+## ---- Settings: By-tide Plot ----
+# plot_jsd_box_tide (dodged boxplot + dodged jittered points + Tide legend)
+
+outlier_size       <- 1.5   # outlier point size
+point_size         <- 1.1   # jittered point size
+dodge_width        <- 0.8   # gap between High/Low boxes
+tide_jitter_width  <- 0.15  # point spread within a box
+tide_alpha         <- c(High = 1.0, Low = 0.35)  # opacity per tide state
+tide_legend_colour <- "grey30"                   # Tide legend swatch colour
+legend_position    <- "top"                      # Tide legend position
+
+
 # ==== JSD Function ====
 
 calculate_jsd <- function(p, q) {
@@ -114,19 +152,19 @@ jsd_for_plot <- jsd_results %>%
   filter(same_species) %>%
   mutate(speciesEN = species_1)
 
-plot_jsd_box <- ggplot(jsd_for_plot, aes(x = speciesEN, y = JSD, fill = speciesEN)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 16) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
+plot_jsd_box <- ggplot(jsd_for_plot, aes(x = speciesEN, y = .data[[jsd_metric_col]], fill = speciesEN)) +
+  geom_boxplot(alpha = box_alpha, outlier.shape = outlier_shape) +
+  geom_jitter(width = jitter_width, alpha = jitter_alpha, size = jitter_size) +
   scale_fill_manual(values = species_colors) +
   labs(
-    title    = "Jensen-Shannon Divergence by Species",
+    title    = paste(jsd_metric_label, "by Species"),
     subtitle = "Pairwise inter-individual site-use similarity within species",
     x        = "Species",
-    y        = "JSD Value",
+    y        = jsd_metric_label,
     fill     = "Species") +
   theme_minimal() +
   theme(
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
+    axis.text.x        = element_text(angle = axis_text_angle, hjust = 1, size = axis_text_size),
     legend.position    = "none",
     panel.grid.major.x = element_blank())
 
@@ -321,30 +359,34 @@ tbl_jsd_summary_tide
 
 plot_jsd_box_tide <- jsd_results_tide %>%
   ggplot(aes(x     = species_1,
-             y     = JSD,
+             y     = .data[[jsd_metric_col]],
              fill  = species_1,
              alpha = tideHighLow,
              group = interaction(species_1, tideHighLow))) +
 
-  geom_boxplot(position = position_dodge(width = 0.8),
-               outlier.shape = 16, outlier.size = 1.5) +
+  geom_boxplot(position = position_dodge(width = dodge_width),
+               outlier.shape = outlier_shape, outlier.size = outlier_size) +
 
-  geom_point(position = position_jitterdodge(jitter.width = 0.15, dodge.width = 0.8),
-             size = 1.1) +
+  geom_point(position = position_jitterdodge(jitter.width = tide_jitter_width, dodge.width = dodge_width),
+             size = point_size) +
 
   scale_fill_manual(values  = species_colors) +
-  scale_alpha_manual(values = c("High" = 1.0, "Low" = 0.35)) +
+  scale_alpha_manual(
+    name   = "Tide",
+    values = tide_alpha,
+    guide  = guide_legend(override.aes = list(fill = tide_legend_colour))) +
+  guides(fill = "none") +
 
   labs(
-    title    = "Within-species Jensen-Shannon Divergence by Tide",
-    subtitle = "Pairwise JSD between individuals — High tide (solid) vs Low tide (transparent)",
+    title    = paste("Within-species", jsd_metric_label, "by Tide"),
+    subtitle = "Pairwise comparison between individuals",
     x        = NULL,
-    y        = "Jensen-Shannon Divergence") +
+    y        = jsd_metric_label) +
 
   theme_minimal() +
   theme(
-    legend.position    = "none",
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
+    legend.position    = legend_position,
+    axis.text.x        = element_text(angle = axis_text_angle, hjust = 1, size = axis_text_size),
     panel.grid.major.x = element_blank(),
     plot.title         = element_text(face = "bold"),
     plot.subtitle      = element_text(size = 9, color = "grey40"))
