@@ -6,7 +6,7 @@
 # 1. Shannon entropy (H) — measures how broadly an individual distributes its
 #    detections across Motus stations. Addresses: "How spread is a bird's
 #    site use?" H is a snapshot diversity/breadth metric; low H (concentrated,
-#    predictable use of few sites) serves as a widely-used proxy/correlate of
+#    predictable use of few sites) serves as a proxy/correlate of
 #    high site fidelity. Strict site fidelity is a temporal concept (returning
 #    to the same sites over time) — entropy of detection proportions does not
 #    by itself encode that return structure, so H indicates but does not directly
