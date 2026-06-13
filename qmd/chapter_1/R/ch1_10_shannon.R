@@ -18,8 +18,11 @@
 # Metrics are computed globally and split by tide (High/Low) to inspect
 # whether site-use diversity changes with tidal condition.
 #
-# Exploratory only — no statistical tests (see ch1_10_entropy_evenness_composition.R
-# for the inferential tests this script does not include).
+# Includes a between-species test of J (Pielou's evenness): ANOVA assumption
+# checks -> ANOVA -> Kruskal-Wallis assumption checks -> Kruskal-Wallis, so the
+# inappropriate test can be deleted once assumptions are inspected. The broader
+# inferential suite (H, exp_H, S, JSD, PERMANOVA, tide effects, etc.) lives in
+# ch1_10_entropy_evenness_composition.R.
 #
 # Requires: globals.R (constants, paths), ch1_1 detection data .rds.
 #
@@ -52,6 +55,8 @@ library(here)
 library(ggplot2)
 library(tidyr)
 library(gt)
+library(car)   # leveneTest (ANOVA assumption check)
+library(FSA)   # dunnTest (Kruskal-Wallis post-hoc)
 
 
 # ==== Load Data ====
@@ -361,6 +366,206 @@ plot_entropy_box_selected <- ggplot(entropy_for_plot_selected,
     panel.grid.major.x = element_blank())
 
 plot_entropy_box_selected
+
+
+# ==== Between-Species Test: Pielou's Evenness (J) ====
+#
+# Does site-use evenness (J) differ between species? Each bird contributes one
+# J value, so individuals (Band.ID) are independent replicates within species —
+# a valid between-groups comparison.
+
+## Setup Including Minimum Samples ====
+
+# J is undefined (NA) for single-site birds (S = 1) and is excluded here.
+# Species need >= 3 individuals with a defined J to be tested.
+
+j_test_data <- entropy_results %>%
+  filter(!is.na(J)) %>%
+  group_by(speciesEN) %>%
+  filter(n() >= 3) %>%
+  ungroup() %>%
+  mutate(speciesEN = factor(speciesEN))
+
+# Sample sizes per species going into the tests below
+j_test_data %>%
+  count(speciesEN, name = "n") %>%
+  print()
+
+
+## ---- ANOVA Assumptions ----
+#
+# 1. Independence: satisfied by design (one J value per individual).
+# 2. Normality of residuals: Shapiro-Wilk test on the residuals of the ANOVA
+#    model. p > 0.05 => residuals consistent with a normal distribution.
+# 3. Homogeneity of variance: Levene's test across species. p > 0.05 => group
+#    variances are consistent with being equal.
+#
+# If either normality or equal-variance fails (p < 0.05), prefer the
+# Kruskal-Wallis test below and delete the ANOVA block.
+
+aov_J <- aov(J ~ speciesEN, data = j_test_data)
+
+# Normality of residuals
+shapiro.test(residuals(aov_J))
+
+# Visual check (optional)
+qqnorm(residuals(aov_J)); qqline(residuals(aov_J))
+
+# Homogeneity of variance
+car::leveneTest(J ~ speciesEN, data = j_test_data)
+
+
+## ---- One-Way ANOVA ----
+
+# NOTE: Commented out, as the dataset as of 13/06/2026 failed Levene's
+
+# #
+# # Tests whether mean J differs between species. Only proceed/trust this if the
+# # assumption checks above were reasonable.
+# 
+# summary(aov_J)   # p-value for "speciesEN" row = overall species effect
+# 
+# # Tukey HSD post-hoc: which species pairs differ (only meaningful if the
+# # ANOVA assumptions above held).
+# TukeyHSD(aov_J)
+
+
+## ---- Kruskal-Wallis Assumptions ----
+#
+# Kruskal-Wallis requires:
+# 1. Independence: satisfied by design (as above).
+# 2. To interpret a significant result as a difference in MEDIANS, the
+#    species' J distributions should have similar shape/spread. If shapes
+#    differ a lot, a significant KW still indicates one species tends to have
+#    systematically higher/lower J (stochastic dominance) — just not strictly
+#    a median difference.
+#
+# Quick eyeball of spread per species (also visible in the boxplots above):
+
+j_test_data %>%
+  group_by(speciesEN) %>%
+  summarise(
+    n   = n(),
+    sd  = round(sd(J),  3),
+    IQR = round(IQR(J), 3),
+    .groups = "drop") %>%
+  print()
+
+
+## ---- Kruskal-Wallis Test ----
+#
+# Non-parametric alternative to ANOVA — does not require normal residuals or
+# equal variances. Tests whether J distributions differ between species.
+
+kt_J <- kruskal.test(J ~ speciesEN, data = j_test_data)
+kt_J
+
+# Dunn post-hoc (Bonferroni-corrected): which species pairs differ. Most
+# informative when the omnibus Kruskal-Wallis above is significant.
+dunn_J <- dunnTest(J ~ speciesEN, data = j_test_data, method = "bonferroni")
+dunn_J
+
+
+## ---- Kruskal-Wallis Results Table ----
+
+kw_J_results <- data.frame(
+  Metric       = "J",
+  n_species    = n_distinct(j_test_data$speciesEN),
+  n_indiv      = nrow(j_test_data),
+  Chi_sq       = round(kt_J$statistic, 3),
+  df           = kt_J$parameter,
+  p_value      = kt_J$p.value,
+  Significance = case_when(
+    kt_J$p.value < 0.001 ~ "***",
+    kt_J$p.value < 0.01  ~ "**",
+    kt_J$p.value < 0.05  ~ "*",
+    TRUE                 ~ "ns"),
+  row.names        = NULL,
+  stringsAsFactors = FALSE)
+
+tbl_kw_between <- kw_J_results %>%
+  gt() %>%
+  tab_header(
+    title    = md("**Between-Species: Kruskal-Wallis Test Results**"),
+    subtitle = "Do species differ in site-use diversity metrics? (individuals as replicates)") %>%
+  cols_label(
+    Metric       = "Metric",
+    n_species    = "N species",
+    n_indiv      = "N indiv.",
+    Chi_sq       = "χ²",
+    df           = "df",
+    p_value      = "p-value",
+    Significance = "Sig.") %>%
+  fmt_number(columns = Chi_sq,   decimals = 3) %>%
+  fmt_scientific(columns = p_value, decimals = 3) %>%
+  tab_style(
+    style     = cell_text(weight = "bold"),
+    locations = cells_body(columns = Significance, rows = p_value < 0.05)) %>%
+  tab_style(
+    style     = cell_fill(color = "lightgreen"),
+    locations = cells_body(rows = p_value < 0.05)) %>%
+  tab_footnote(
+    footnote = md(
+      "**Significance codes:** *** p < 0.001, ** p < 0.01, * p < 0.05, ns = not
+       significant (p ≥ 0.05). Only species with ≥ 3 individuals included.
+       J is NA for single-station birds and excluded from that metric's test.")) %>%
+  tab_style(
+    style     = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  opt_table_font(font = "Times New Roman") %>%
+  tab_options(
+    table.font.size         = px(14),
+    heading.title.font.size = px(16),
+    data_row.padding        = px(5),
+    table.width             = pct(100))
+
+tbl_kw_between
+
+
+## ---- Dunn Post-Hoc Results Table ----
+
+dunn_J_df <- dunn_J$res %>%
+  arrange(Comparison) %>%
+  mutate(Significance = case_when(
+    P.adj < 0.001 ~ "***",
+    P.adj < 0.01  ~ "**",
+    P.adj < 0.05  ~ "*",
+    TRUE          ~ "ns")) %>%
+  select(Comparison, Z, P.unadj, P.adj, Significance)
+
+tbl_dunn_between <- dunn_J_df %>%
+  gt() %>%
+  tab_header(
+    title    = md("**Dunn Post-Hoc Test — Between-Species (Bonferroni)**"),
+    subtitle = "Pairwise species comparisons for Pielou's evenness (J)") %>%
+  cols_label(
+    Comparison   = "Comparison",
+    Z            = "Z",
+    P.unadj      = "p unadj",
+    P.adj        = "p adj",
+    Significance = "Sig.") %>%
+  fmt_scientific(columns = c(P.unadj, P.adj), decimals = 3) %>%
+  tab_style(
+    style     = cell_text(weight = "bold"),
+    locations = cells_body(columns = Significance, rows = P.adj < 0.05)) %>%
+  tab_style(
+    style     = cell_fill(color = "lightgreen"),
+    locations = cells_body(rows = P.adj < 0.05)) %>%
+  tab_footnote(
+    footnote = md(
+      "Only shown for metrics where Kruskal-Wallis was significant (p < 0.05).
+       **p adj**: Bonferroni-corrected p-value.")) %>%
+  tab_style(
+    style     = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  opt_table_font(font = "Times New Roman") %>%
+  tab_options(
+    table.font.size            = px(14),
+    heading.title.font.size    = px(16),
+    data_row.padding           = px(5),
+    table.width                = pct(100))
+
+tbl_dunn_between
 
 
 ## ---- Shannon Entropy Individual-Level Table ----
