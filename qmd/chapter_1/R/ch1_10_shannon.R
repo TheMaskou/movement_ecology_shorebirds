@@ -85,6 +85,16 @@ axis_text_angle <- 45   # x-axis label rotation (degrees)
 axis_text_size  <- 9    # x-axis label size
 strip_text_size <- 11   # facet strip label size
 
+# Minimum tagged individuals (distinct Band.ID) per species for that species to
+# appear in a plot. Species below the threshold are dropped from that plot only
+# (summary tables are unaffected). Set to 1 for no filtering.
+min_tags_main_plot <- 1   # non-tide boxplots (plot_entropy_box, plot_entropy_box_selected)
+min_tags_tide_plot <- 1   # by-tide boxplots (plot_entropy_box_tide, plot_entropy_box_tide_selected)
+
+# Visibility of basic plot elements (TRUE = shown)
+show_title    <- TRUE
+show_subtitle <- TRUE
+
 ## ---- Settings: Non-tide Plots ----
 # plot_entropy_box, plot_entropy_box_selected (geom_boxplot + geom_jitter)
 
@@ -107,6 +117,27 @@ legend_position    <- "top"                     # Tide legend position
 # Derived (used by both Selected-Metrics plots)
 selected_labels <- unname(metric_labels[selected_metrics])
 ncol_selected   <- if (length(selected_metrics) <= facet_single_col_max) 1 else 2
+
+
+# ==== Min-Tags Filtering ====
+#
+# Distinct tagged individuals per species (used by the min-tags plot filters
+# above). Species below the relevant threshold are dropped from that plot
+# only — summary tables are unaffected.
+
+species_tag_counts <- df.alltags %>%
+  filter(!is.na(Band.ID)) %>%
+  group_by(speciesEN) %>%
+  summarise(n_tags = n_distinct(Band.ID), .groups = "drop")
+
+species_keep_main <- species_tag_counts$speciesEN[species_tag_counts$n_tags >= min_tags_main_plot]
+species_keep_tide <- species_tag_counts$speciesEN[species_tag_counts$n_tags >= min_tags_tide_plot]
+
+# Suffix appended to a plot subtitle describing an active min-tags filter.
+# Returns "" when min_tags == 1 (no filtering) so default output is unchanged.
+filter_note <- function(min_tags) {
+  if (min_tags > 1) paste0(" (species with ≥ ", min_tags, " tagged individuals)") else ""
+}
 
 
 # ==== Shannon Entropy Function ====
@@ -252,6 +283,7 @@ tbl_entropy_summary
 ## ---- Boxplot - All Metrics ----
 
 entropy_for_plot <- entropy_results %>%
+  filter(speciesEN %in% species_keep_main) %>%
   select(speciesEN, Band.ID, S, H, J, exp_H) %>%
   pivot_longer(
     cols      = c(S, H, J, exp_H),
@@ -270,8 +302,8 @@ plot_entropy_box <- ggplot(entropy_for_plot, aes(x = speciesEN, y = value, fill 
   facet_wrap(~ metric, scales = "free_y", ncol = 2) +
   scale_fill_manual(values = species_colors) +
   labs(
-    title    = "Shannon Entropy Metrics by Species",
-    subtitle = "Distribution of site-use diversity across individuals",
+    title    = if (show_title) "Shannon Entropy Metrics by Species" else NULL,
+    subtitle = if (show_subtitle) paste0("Distribution of site-use diversity across individuals", filter_note(min_tags_main_plot)) else NULL,
     x        = "Species",
     y        = "Value",
     fill     = "Species") +
@@ -301,8 +333,8 @@ plot_entropy_box_selected <- ggplot(entropy_for_plot_selected,
   facet_wrap(~ metric, scales = "free_y", ncol = ncol_selected) +
   scale_fill_manual(values = species_colors) +
   labs(
-    title    = "Selected Entropy Metrics by Species",
-    subtitle = "Distribution of site-use diversity across individuals",
+    title    = if (show_title) "Selected Entropy Metrics by Species" else NULL,
+    subtitle = if (show_subtitle) paste0("Distribution of site-use diversity across individuals", filter_note(min_tags_main_plot)) else NULL,
     x        = "Species",
     y        = "Value",
     fill     = "Species") +
@@ -398,6 +430,7 @@ species_entropy_summary_tide <- entropy_results_tide %>%
 ## ---- Boxplot by Tide - All Metrics ----
 
 entropy_for_plot_tide <- entropy_results_tide %>%
+  filter(speciesEN %in% species_keep_tide) %>%
   select(speciesEN, tideHighLow, Band.ID, S, H, J, exp_H) %>%
   pivot_longer(
     cols      = c(S, H, J, exp_H),
@@ -426,8 +459,8 @@ plot_entropy_box_tide <- ggplot(entropy_for_plot_tide,
     guide  = guide_legend(override.aes = list(fill = tide_legend_colour))) +
   guides(fill = "none") +
   labs(
-    title    = "Shannon Entropy Metrics by Species and Tide",
-    subtitle = "Site-use diversity across individuals and tide",
+    title    = if (show_title) "Shannon Entropy Metrics by Species and Tide" else NULL,
+    subtitle = if (show_subtitle) paste0("Site-use diversity across individuals and tide", filter_note(min_tags_tide_plot)) else NULL,
     x        = "Species",
     y        = "Value") +
   theme_minimal() +
@@ -465,8 +498,8 @@ plot_entropy_box_tide_selected <- ggplot(entropy_for_plot_tide_selected,
     guide  = guide_legend(override.aes = list(fill = tide_legend_colour))) +
   guides(fill = "none") +
   labs(
-    title    = "Selected Entropy Metrics by Species and Tide",
-    subtitle = "Site-use diversity across individuals and tide",
+    title    = if (show_title) "Selected Entropy Metrics by Species and Tide" else NULL,
+    subtitle = if (show_subtitle) paste0("Site-use diversity across individuals and tide", filter_note(min_tags_tide_plot)) else NULL,
     x        = "Species",
     y        = "Value") +
   theme_minimal() +

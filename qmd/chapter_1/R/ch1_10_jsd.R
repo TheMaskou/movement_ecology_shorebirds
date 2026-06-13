@@ -59,9 +59,19 @@ outlier_shape   <- 16   # outlier symbol
 axis_text_angle <- 45   # x-axis label rotation (degrees)
 axis_text_size  <- 9    # x-axis label size
 
+# Minimum tagged individuals (distinct Band.ID) per species for that species to
+# appear in a plot. Species below the threshold are dropped from that plot only
+# (summary tables are unaffected). Set to 1 for no filtering.
+min_tags_main_plot <- 1   # non-tide boxplot (plot_jsd_box)
+min_tags_tide_plot <- 1   # by-tide boxplot (plot_jsd_box_tide)
+
+# Visibility of basic plot elements (TRUE = shown)
+show_title    <- TRUE
+show_subtitle <- TRUE
+
 # Plot either JSD (dissimilarity) or Similarity (= 1 - JSD) on the y-axis.
 # Affects the column plotted and all titles/axis labels below.
-use_similarity <- FALSE
+use_similarity <- TRUE
 
 jsd_metric_col   <- if (use_similarity) "Similarity" else "JSD"
 jsd_metric_label <- if (use_similarity) "Similarity (1 - JSD)" else "Jensen-Shannon Divergence (JSD)"
@@ -84,6 +94,27 @@ tide_jitter_width  <- 0.15  # point spread within a box
 tide_alpha         <- c(High = 1.0, Low = 0.35)  # opacity per tide state
 tide_legend_colour <- "grey30"                   # Tide legend swatch colour
 legend_position    <- "top"                      # Tide legend position
+
+
+# ==== Min-Tags Filtering ====
+#
+# Distinct tagged individuals per species (used by the min-tags plot filters
+# above). Species below the relevant threshold are dropped from that plot
+# only — summary tables are unaffected.
+
+species_tag_counts <- df.alltags %>%
+  filter(!is.na(Band.ID)) %>%
+  group_by(speciesEN) %>%
+  summarise(n_tags = n_distinct(Band.ID), .groups = "drop")
+
+species_keep_main <- species_tag_counts$speciesEN[species_tag_counts$n_tags >= min_tags_main_plot]
+species_keep_tide <- species_tag_counts$speciesEN[species_tag_counts$n_tags >= min_tags_tide_plot]
+
+# Suffix appended to a plot subtitle describing an active min-tags filter.
+# Returns "" when min_tags == 1 (no filtering) so default output is unchanged.
+filter_note <- function(min_tags) {
+  if (min_tags > 1) paste0(" (species with ≥ ", min_tags, " tagged individuals)") else ""
+}
 
 
 # ==== JSD Function ====
@@ -150,15 +181,16 @@ jsd_results <- jsd_results %>%
 
 jsd_for_plot <- jsd_results %>%
   filter(same_species) %>%
-  mutate(speciesEN = species_1)
+  mutate(speciesEN = species_1) %>%
+  filter(speciesEN %in% species_keep_main)
 
 plot_jsd_box <- ggplot(jsd_for_plot, aes(x = speciesEN, y = .data[[jsd_metric_col]], fill = speciesEN)) +
   geom_boxplot(alpha = box_alpha, outlier.shape = outlier_shape) +
   geom_jitter(width = jitter_width, alpha = jitter_alpha, size = jitter_size) +
   scale_fill_manual(values = species_colors) +
   labs(
-    title    = paste(jsd_metric_label, "by Species"),
-    subtitle = "Pairwise inter-individual site-use similarity within species",
+    title    = if (show_title) paste(jsd_metric_label, "by Species") else NULL,
+    subtitle = if (show_subtitle) paste0("Pairwise inter-individual site-use similarity within species", filter_note(min_tags_main_plot)) else NULL,
     x        = "Species",
     y        = jsd_metric_label,
     fill     = "Species") +
@@ -215,17 +247,12 @@ tbl_jsd_summary
 #
 # Computes within-tide pairwise JSD (High-High and Low-Low pairs only) to
 # describe how similar conspecifics are within each tidal state.
-# Only species with >= 5 *individuals* (n_distinct(Band.ID)) are included.
+# Species are filtered for the by-tide boxplot via `min_tags_tide_plot`
+# (see Min-Tags Filtering above); this table itself is unfiltered.
 # Full-precision proportions used (no rounding).
 
 site_use_matrix_tide <- df.alltags %>%
   filter(!is.na(Band.ID), !is.na(recvDeployName)) %>%
-
-  # Filter to species with >= 5 tagged individuals (not raw detections)
-  group_by(speciesEN) %>%
-  filter(n_distinct(Band.ID) >= 5) %>%
-  ungroup() %>%
-
   group_by(Band.ID, recvDeployName, tideHighLow) %>%
   summarise(detections = n(), .groups = "drop") %>%
   group_by(Band.ID, tideHighLow) %>%
@@ -358,6 +385,7 @@ tbl_jsd_summary_tide
 ## ---- JSD by Tide — Boxplot ----
 
 plot_jsd_box_tide <- jsd_results_tide %>%
+  filter(species_1 %in% species_keep_tide) %>%
   ggplot(aes(x     = species_1,
              y     = .data[[jsd_metric_col]],
              fill  = species_1,
@@ -378,8 +406,8 @@ plot_jsd_box_tide <- jsd_results_tide %>%
   guides(fill = "none") +
 
   labs(
-    title    = paste("Within-species", jsd_metric_label, "by Tide"),
-    subtitle = "Pairwise comparison between individuals",
+    title    = if (show_title) paste("Within-species", jsd_metric_label, "by Tide") else NULL,
+    subtitle = if (show_subtitle) paste0("Pairwise comparison between individuals", filter_note(min_tags_tide_plot)) else NULL,
     x        = NULL,
     y        = jsd_metric_label) +
 
@@ -392,3 +420,10 @@ plot_jsd_box_tide <- jsd_results_tide %>%
     plot.subtitle      = element_text(size = 9, color = "grey40"))
 
 plot_jsd_box_tide
+
+# Diagnostics / Misc ====
+
+## Number of Tags Per Species ====
+df.alltags |> 
+  group_by(speciesEN) |> 
+  summarise(n_tags = n_distinct(Band.ID))
