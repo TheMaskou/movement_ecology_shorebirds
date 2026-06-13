@@ -59,6 +59,21 @@ library(gt)
 df.alltags <- readRDS(path_detection_data)
 
 
+# ==== Date Range Filter ====
+#
+# Clip detections to a fixed date window for reproducibility (so the same
+# script gives the same result regardless of which df.alltags build is
+# loaded). Dates are "YYYY-MM-DD" strings; set either bound to NA for no
+# limit on that side. Both NA = use all data (no filtering).
+
+date_min <- NA   # e.g. "2023-01-01"
+date_max <- NA   # e.g. "2024-12-31"
+
+df.alltags <- df.alltags %>%
+  filter(is.na(date_min) | dateAus >= as.Date(date_min),
+         is.na(date_max) | dateAus <= as.Date(date_max))
+
+
 # ==== Plot Settings ====
 #
 # Visual controls shared across the entropy boxplots below. Edit here to
