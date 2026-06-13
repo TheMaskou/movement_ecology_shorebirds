@@ -5,29 +5,24 @@
 .quarto/
 _freeze/
 .Renviron
-
-.html
-
+*.html
 # Quarto rendered output
 qmd/*/files/
 docs/qmd/
 docs/site_libs/**
-
 # File types from quarto render
-.css
-.js
-.map
-.json
-
+*.css
+*.js
+*.map
+*.json
 # Data folders — keep structure, ignore contents
 qmd/*/data/**
 !qmd/*/data/.gitkeep
 data/**
 !data/.gitkeep
-
 # Claude folders (used by Callum on local testing branch)
 .claude/
-
 /.quarto/
 **/*.quarto_ipynb
 Rplots.pdf
+array_maintenance_map.html
