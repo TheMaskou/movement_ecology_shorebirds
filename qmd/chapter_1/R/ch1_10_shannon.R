@@ -59,6 +59,50 @@ library(gt)
 df.alltags <- readRDS(path_detection_data)
 
 
+# ==== Plot Settings ====
+#
+# Visual controls shared across the entropy boxplots below. Edit here to
+# restyle without hunting through each ggplot block.
+
+# Metrics shown in the "Selected Metrics" plots (friendly names or raw codes):
+# "Sites"/"S", "Entropy"/"H", "Evenness"/"J", "Effective Sites"/"exp_H"
+selected_metrics <- c("Sites", "Evenness")
+
+# Lookup: friendly name / code -> factor label used in the plots
+metric_labels <- c(
+  S     = "S (Number of Sites)",      Sites             = "S (Number of Sites)",
+  H     = "H (Shannon Entropy)",      Entropy           = "H (Shannon Entropy)",
+  J     = "J (Pielou's Evenness)",    Evenness          = "J (Pielou's Evenness)",
+  exp_H = "exp(H) (Effective Sites)", `Effective Sites` = "exp(H) (Effective Sites)")
+
+# Boxplot / point geoms
+box_alpha          <- 0.7   # box fill opacity (non-tide plots)
+outlier_shape      <- 16    # outlier symbol
+jitter_width       <- 0.2   # horizontal spread of jittered points (non-tide)
+jitter_alpha       <- 0.3   # jittered point opacity (non-tide)
+jitter_size        <- 1     # jittered point size (non-tide)
+point_size         <- 1.1   # point size (tide plots)
+dodge_width        <- 0.8   # gap between High/Low boxes (tide plots)
+jitterdodge_jitter <- 0.1   # point spread within a box (tide plots)
+
+# Tide encoding
+tide_alpha         <- c(High = 1.0, Low = 0.2)  # opacity per tide state
+tide_legend_colour <- "grey30"                  # Tide legend swatch colour
+
+# Facet layout: single column when <= this many metrics, else 2 columns
+facet_single_col_max <- 2
+
+# Theme / text
+axis_text_angle    <- 45
+axis_text_size     <- 9
+strip_text_size    <- 11
+legend_position    <- "top"  # tide plots (non-tide plots show no legend)
+
+# Derived (used by both Selected-Metrics plots)
+selected_labels <- unname(metric_labels[selected_metrics])
+ncol_selected   <- if (length(selected_metrics) <= facet_single_col_max) 1 else 2
+
+
 # ==== Shannon Entropy Function ====
 
 # Calculates Shannon entropy H = -sum(p * ln(p)) for a vector of proportions.
@@ -215,8 +259,8 @@ entropy_for_plot <- entropy_results %>%
                                     "exp(H) (Effective Sites)")))
 
 plot_entropy_box <- ggplot(entropy_for_plot, aes(x = speciesEN, y = value, fill = speciesEN)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 16) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
+  geom_boxplot(alpha = box_alpha, outlier.shape = outlier_shape) +
+  geom_jitter(width = jitter_width, alpha = jitter_alpha, size = jitter_size) +
   facet_wrap(~ metric, scales = "free_y", ncol = 2) +
   scale_fill_manual(values = species_colors) +
   labs(
@@ -227,8 +271,8 @@ plot_entropy_box <- ggplot(entropy_for_plot, aes(x = speciesEN, y = value, fill 
     fill     = "Species") +
   theme_minimal() +
   theme(
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text         = element_text(face = "bold", size = 11),
+    axis.text.x        = element_text(angle = axis_text_angle, hjust = 1, size = axis_text_size),
+    strip.text         = element_text(face = "bold", size = strip_text_size),
     legend.position    = "none",
     panel.grid.major.x = element_blank())
 
@@ -237,21 +281,8 @@ plot_entropy_box
 
 ## ---- Boxplot - Selected Metrics ----
 #
-# Friendly names (or raw codes) -> the factor labels used in entropy_for_plot.
-# "Sites"/"S", "Entropy"/"H", "Evenness"/"J", "Effective Sites"/"exp_H".
-# Layout: 2 columns for 3-4 metrics, 1 column (2 rows) for 1-2 metrics.
-
-metric_labels <- c(
-  S     = "S (Number of Sites)",      Sites           = "S (Number of Sites)",
-  H     = "H (Shannon Entropy)",      Entropy         = "H (Shannon Entropy)",
-  J     = "J (Pielou's Evenness)",    Evenness        = "J (Pielou's Evenness)",
-  exp_H = "exp(H) (Effective Sites)", `Effective Sites` = "exp(H) (Effective Sites)")
-
-# Metrics to display
-selected_metrics <- c("Sites", "Evenness")
-
-selected_labels <- unname(metric_labels[selected_metrics])
-ncol_selected   <- if (length(selected_metrics) <= 2) 1 else 2
+# Metrics shown here are controlled by `selected_metrics` in Plot Settings
+# above. Layout: 2 columns for 3-4 metrics, 1 column (2 rows) for 1-2 metrics.
 
 entropy_for_plot_selected <- entropy_for_plot %>%
   filter(metric %in% selected_labels) %>%
@@ -259,8 +290,8 @@ entropy_for_plot_selected <- entropy_for_plot %>%
 
 plot_entropy_box_selected <- ggplot(entropy_for_plot_selected,
        aes(x = speciesEN, y = value, fill = speciesEN)) +
-  geom_boxplot(alpha = 0.7, outlier.shape = 16) +
-  geom_jitter(width = 0.2, alpha = 0.3, size = 1) +
+  geom_boxplot(alpha = box_alpha, outlier.shape = outlier_shape) +
+  geom_jitter(width = jitter_width, alpha = jitter_alpha, size = jitter_size) +
   facet_wrap(~ metric, scales = "free_y", ncol = ncol_selected) +
   scale_fill_manual(values = species_colors) +
   labs(
@@ -271,8 +302,8 @@ plot_entropy_box_selected <- ggplot(entropy_for_plot_selected,
     fill     = "Species") +
   theme_minimal() +
   theme(
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text         = element_text(face = "bold", size = 11),
+    axis.text.x        = element_text(angle = axis_text_angle, hjust = 1, size = axis_text_size),
+    strip.text         = element_text(face = "bold", size = strip_text_size),
     legend.position    = "none",
     panel.grid.major.x = element_blank())
 
@@ -358,7 +389,8 @@ species_entropy_summary_tide <- entropy_results_tide %>%
     .groups = "drop") %>%
   arrange(speciesEN)
 
-## Boxplot - All Metrics ====
+## ---- Boxplot by Tide - All Metrics ----
+
 entropy_for_plot_tide <- entropy_results_tide %>%
   select(speciesEN, tideHighLow, Band.ID, S, H, J, exp_H) %>%
   pivot_longer(
@@ -375,17 +407,17 @@ entropy_for_plot_tide <- entropy_results_tide %>%
 plot_entropy_box_tide <- ggplot(entropy_for_plot_tide,
        aes(x = speciesEN, y = value, fill = speciesEN, alpha = tideHighLow)) +
   geom_boxplot(aes(group = interaction(speciesEN, tideHighLow)),
-               position = position_dodge(width = 0.8),
-               outlier.shape = 16) +
+               position = position_dodge(width = dodge_width),
+               outlier.shape = outlier_shape) +
   geom_point(aes(group = interaction(speciesEN, tideHighLow)),
-             position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.8),
-             size = 1.1) +
+             position = position_jitterdodge(jitter.width = jitterdodge_jitter, dodge.width = dodge_width),
+             size = point_size) +
   facet_wrap(~ metric, scales = "free_y", ncol = 2) +
   scale_fill_manual(values = species_colors) +
   scale_alpha_manual(
     name   = "Tide",
-    values = c("High" = 1.0, "Low" = 0.2),
-    guide  = guide_legend(override.aes = list(fill = "grey30"))) +
+    values = tide_alpha,
+    guide  = guide_legend(override.aes = list(fill = tide_legend_colour))) +
   guides(fill = "none") +
   labs(
     title    = "Shannon Entropy Metrics by Species and Tide",
@@ -394,39 +426,37 @@ plot_entropy_box_tide <- ggplot(entropy_for_plot_tide,
     y        = "Value") +
   theme_minimal() +
   theme(
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text         = element_text(face = "bold", size = 11),
-    legend.position    = "top",
+    axis.text.x        = element_text(angle = axis_text_angle, hjust = 1, size = axis_text_size),
+    strip.text         = element_text(face = "bold", size = strip_text_size),
+    legend.position    = legend_position,
     panel.grid.major.x = element_blank())
 
 plot_entropy_box_tide
 
 
 ## ---- Boxplot by Tide - Selected Metrics ----
-
-selected_metrics <- c("Sites", "Evenness")
-
-selected_labels_tide <- unname(metric_labels[selected_metrics_tide])
-ncol_selected_tide   <- if (length(selected_metrics_tide) <= 2) 1 else 2
+#
+# Metrics shown here are controlled by `selected_metrics` in Plot Settings
+# above (shared with the non-tide "Selected Metrics" plot).
 
 entropy_for_plot_tide_selected <- entropy_for_plot_tide %>%
-  filter(metric %in% selected_labels_tide) %>%
+  filter(metric %in% selected_labels) %>%
   mutate(metric = droplevels(metric))
 
 plot_entropy_box_tide_selected <- ggplot(entropy_for_plot_tide_selected,
        aes(x = speciesEN, y = value, fill = speciesEN, alpha = tideHighLow)) +
   geom_boxplot(aes(group = interaction(speciesEN, tideHighLow)),
-               position = position_dodge(width = 0.8),
-               outlier.shape = 16) +
+               position = position_dodge(width = dodge_width),
+               outlier.shape = outlier_shape) +
   geom_point(aes(group = interaction(speciesEN, tideHighLow)),
-             position = position_jitterdodge(jitter.width = 0.1, dodge.width = 0.8),
-             size = 1.1) +
-  facet_wrap(~ metric, scales = "free_y", ncol = ncol_selected_tide) +
+             position = position_jitterdodge(jitter.width = jitterdodge_jitter, dodge.width = dodge_width),
+             size = point_size) +
+  facet_wrap(~ metric, scales = "free_y", ncol = ncol_selected) +
   scale_fill_manual(values = species_colors) +
   scale_alpha_manual(
     name   = "Tide",
-    values = c("High" = 1.0, "Low" = 0.2),
-    guide  = guide_legend(override.aes = list(fill = "grey30"))) +
+    values = tide_alpha,
+    guide  = guide_legend(override.aes = list(fill = tide_legend_colour))) +
   guides(fill = "none") +
   labs(
     title    = "Selected Entropy Metrics by Species and Tide",
@@ -435,9 +465,9 @@ plot_entropy_box_tide_selected <- ggplot(entropy_for_plot_tide_selected,
     y        = "Value") +
   theme_minimal() +
   theme(
-    axis.text.x        = element_text(angle = 45, hjust = 1, size = 9),
-    strip.text         = element_text(face = "bold", size = 11),
-    legend.position    = "top",
+    axis.text.x        = element_text(angle = axis_text_angle, hjust = 1, size = axis_text_size),
+    strip.text         = element_text(face = "bold", size = strip_text_size),
+    legend.position    = legend_position,
     panel.grid.major.x = element_blank())
 
 plot_entropy_box_tide_selected
