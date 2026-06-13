@@ -75,28 +75,34 @@ metric_labels <- c(
   J     = "J (Pielou's Evenness)",    Evenness          = "J (Pielou's Evenness)",
   exp_H = "exp(H) (Effective Sites)", `Effective Sites` = "exp(H) (Effective Sites)")
 
-# Boxplot / point geoms
-box_alpha          <- 0.7   # box fill opacity (non-tide plots)
-outlier_shape      <- 16    # outlier symbol
-jitter_width       <- 0.2   # horizontal spread of jittered points (non-tide)
-jitter_alpha       <- 0.3   # jittered point opacity (non-tide)
-jitter_size        <- 1     # jittered point size (non-tide)
-point_size         <- 1.1   # point size (tide plots)
-dodge_width        <- 0.8   # gap between High/Low boxes (tide plots)
-jitterdodge_jitter <- 0.1   # point spread within a box (tide plots)
-
-# Tide encoding
-tide_alpha         <- c(High = 1.0, Low = 0.2)  # opacity per tide state
-tide_legend_colour <- "grey30"                  # Tide legend swatch colour
-
 # Facet layout: single column when <= this many metrics, else 2 columns
 facet_single_col_max <- 2
 
-# Theme / text
-axis_text_angle    <- 45
-axis_text_size     <- 9
-strip_text_size    <- 11
-legend_position    <- "top"  # tide plots (non-tide plots show no legend)
+## ---- Settings: All Plots ----
+
+outlier_shape   <- 16   # outlier symbol
+axis_text_angle <- 45   # x-axis label rotation (degrees)
+axis_text_size  <- 9    # x-axis label size
+strip_text_size <- 11   # facet strip label size
+
+## ---- Settings: Non-tide Plots ----
+# plot_entropy_box, plot_entropy_box_selected (geom_boxplot + geom_jitter)
+
+box_alpha    <- 0.7   # box fill opacity
+jitter_width <- 0.2   # horizontal spread of jittered points
+jitter_alpha <- 0.3   # jittered point opacity
+jitter_size  <- 1     # jittered point size
+
+## ---- Settings: By-tide Plots ----
+# plot_entropy_box_tide, plot_entropy_box_tide_selected
+# (dodged boxplot + dodged jittered points + Tide legend)
+
+point_size         <- 1.1   # jittered point size
+dodge_width        <- 0.8   # gap between High/Low boxes
+tide_jitter_width  <- 0.1   # point spread within a box
+tide_alpha         <- c(High = 1.0, Low = 0.2)  # opacity per tide state
+tide_legend_colour <- "grey30"                  # Tide legend swatch colour
+legend_position    <- "top"                     # Tide legend position
 
 # Derived (used by both Selected-Metrics plots)
 selected_labels <- unname(metric_labels[selected_metrics])
@@ -410,7 +416,7 @@ plot_entropy_box_tide <- ggplot(entropy_for_plot_tide,
                position = position_dodge(width = dodge_width),
                outlier.shape = outlier_shape) +
   geom_point(aes(group = interaction(speciesEN, tideHighLow)),
-             position = position_jitterdodge(jitter.width = jitterdodge_jitter, dodge.width = dodge_width),
+             position = position_jitterdodge(jitter.width = tide_jitter_width, dodge.width = dodge_width),
              size = point_size) +
   facet_wrap(~ metric, scales = "free_y", ncol = 2) +
   scale_fill_manual(values = species_colors) +
@@ -449,7 +455,7 @@ plot_entropy_box_tide_selected <- ggplot(entropy_for_plot_tide_selected,
                position = position_dodge(width = dodge_width),
                outlier.shape = outlier_shape) +
   geom_point(aes(group = interaction(speciesEN, tideHighLow)),
-             position = position_jitterdodge(jitter.width = jitterdodge_jitter, dodge.width = dodge_width),
+             position = position_jitterdodge(jitter.width = tide_jitter_width, dodge.width = dodge_width),
              size = point_size) +
   facet_wrap(~ metric, scales = "free_y", ncol = ncol_selected) +
   scale_fill_manual(values = species_colors) +
