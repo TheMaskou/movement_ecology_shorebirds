@@ -2,10 +2,15 @@ library(dplyr)
 library(here)
 library(openxlsx2)
 library(lubridate)
+library(DT)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 message("Reminder to run qmd/chapter_1/R/_sync_sharepoint_receiver_log.R if there have been any changes to either the historic or survey123 log on SharePoint!")
+
+# Yes, the above message is kinda defunct, but I'm leaving it there in case
+# the below needs to be commented out at any point.
+source(here::here("qmd", "chapter_1", "R", "_sync_sharepoint_receiver_log.R"))
 
 # ==== Import Survey123 Log ====
 
@@ -116,7 +121,12 @@ if (nrow(type_comparison) > 0) {
 }
 
 # ==== Combine Les Tableaux ====
-log_complete <- bind_rows(log_historic, log_survey123)
+# entry_source records which log each row came from ("historic" / "survey123"),
+# since bind_rows() otherwise leaves no way to tell the two apart afterwards.
+log_complete <- bind_rows(
+  log_historic  |> mutate(entry_source = "historic"),
+  log_survey123 |> mutate(entry_source = "survey123")
+)
 
 # ==== Fix Corries Island Naming Error ====
 # Survey123 entries submitted before the form was corrected used "Corries Island"
@@ -277,6 +287,44 @@ if (n_dep_unfilled > 0) {
 } else {
   message("All deprecated-field departure statuses filled, yippee")
 }
+
+# ==== Remove Deprecated Fields ====
+# To avoid confusion in downstream processing
+fields_deprecated <- c(
+  "station_status_arrival",
+  "station_status_left",
+  "station_status",
+  "visit_category",
+  # TODO
+  # Below columns not really 'deprecated', used for manual verification (mainly)
+  # for the historic log
+  "Row Status",
+  "Row Note"
+)
+
+log_complete <- log_complete |> 
+  select(!any_of(fields_deprecated))
+
+# ==== Check for Duplicate Entries ====
+duplicates <- log_complete |> 
+  # Exclude NA dates, as these are TODO items for the Historic log
+  filter(!is.na(visit_date)) |> 
+  count(station_id, visit_date, name = "n_entries") |>
+  filter(n_entries != 1)
+  
+if (nrow(duplicates) > 0) {
+  message("There are ", nrow(duplicates), " combinations of station_id and visit_date that have multiple entries.")
+  print(duplicates)
+} else {
+  message("There are no duplicate entries! (Assuming all visit_dates are correct)")
+}
+
+# ==== Verify Field Value Validity ====
+log_complete |> count(wifi_arrival)
+log_complete |> count(wifi_dep)
+
+log_complete |> count(station_power_arrival)
+log_complete |> count(station_power_dep)
 
 # ==== Export ====
 openxlsx2::write_xlsx(
