@@ -153,10 +153,12 @@ log_complete <- log_complete |>
 
 ## ---- Remove Test Entries without Test Label ----
 
-# I believe I submitted the 2026-04-29 Davies Point entry as a test, before
-# "TEST" was a station_id option.
-log_complete |> 
+# The 2026-04-29 Davies Point entry was submitted as a test, before "TEST" was
+# a station_id option. Confirmed with Callum 2026-07-08 - drop it.
+n_before <- nrow(log_complete)
+log_complete <- log_complete |>
   filter(!((station_id == "Davies Point") & (visit_date == ymd("2026-04-29"))))
+message(n_before - nrow(log_complete), " Davies Point test entry/entries removed")
 
 # ==== Exclude TBC Entries ====
 log_tbc <- log_complete |>
@@ -169,14 +171,74 @@ message(nrow(log_tbc), " entries with station_id = 'TBC' excluded from log_compl
 
 # ==== Fix Entries With Deprecated Field Names ====
 # The issue is that some of the Survey123 entries were completed before
-# finalising the survey structure. 
-# Specifically, the field "station_status_left" was used for whether the station
-# was functioning when leaving the site - this has now been updated to wifi_dep
-# and station_power_dep, meaning that for those entries, wifi_dep and 
-# station_power_dep had an NA value. 
+# finalising the survey structure.
+# Specifically, "station_status_left" / "station_status_arrival" were used for
+# whether the station was functioning on departure/arrival - these have now
+# been replaced by wifi_dep/station_power_dep and wifi_arrival/
+# station_power_arrival, meaning that for those entries, the new fields had an
+# NA value. Fixed below by deriving the new fields from the deprecated status
+# values (confirmed with Callum 2026-07-08). This is a one-off cleanup - the
+# Survey123 form has been corrected, so no future entries will need it.
+#
+# Field vocabulary: wifi_* in {yes, no, unknown};
+#                    station_power_* in {on, off, removed, unknown}.
+#
+# Departure (feeds the map): station_status_left = "online" -> power on/wifi
+# yes; "removed" -> power removed/wifi no. No rows have "unknown" or "offline"
+# for status_left, so those are not handled here.
+#
+# Arrival: station_status_arrival = "unknown" -> power/wifi unknown; "online"
+# -> power on/wifi yes, EXCEPT Hexham, which was online but had wifi off.
+# "offline" is ambiguous (doesn't say whether power or wifi was the problem),
+# so there is no generic rule for it - Swan Pond is the sole offline row and is
+# hardcoded instead (power on, wifi no, per Callum's notes).
+#
+# Matching is value-based (not station-name-based, except the two named
+# exceptions above) so it is robust to station_id spelling variants - note
+# station_rename (globals.R) is not applied in this script.
 
-# Inspect the entries
-log_deprecated_fields <- log_complete |> 
+log_complete <- log_complete |>
+  mutate(
+    .ssl = tolower(trimws(as.character(station_status_left))),
+    .ssa = tolower(trimws(as.character(station_status_arrival))),
+    .sid = tolower(trimws(as.character(station_id))),
+
+    ## Departure (feeds the map)
+    station_power_dep = case_when(
+      !is.na(station_power_dep) ~ station_power_dep,
+      .ssl == "online"          ~ "on",
+      .ssl == "removed"         ~ "removed",
+      TRUE                      ~ station_power_dep
+    ),
+    wifi_dep = case_when(
+      !is.na(wifi_dep) ~ wifi_dep,
+      .ssl == "online"  ~ "yes",
+      .ssl == "removed" ~ "no",
+      TRUE              ~ wifi_dep
+    ),
+
+    ## Arrival
+    station_power_arrival = case_when(
+      !is.na(station_power_arrival) ~ station_power_arrival,
+      .ssa == "unknown" ~ "unknown",
+      .ssa == "offline" ~ "on",    # Swan Pond (sole offline row) - hardcoded
+      .ssa == "online"  ~ "on",
+      TRUE              ~ station_power_arrival
+    ),
+    wifi_arrival = case_when(
+      !is.na(wifi_arrival) ~ wifi_arrival,
+      is.na(.ssa)          ~ wifi_arrival,   # not a deprecated row -> leave as-is
+      .ssa == "unknown"    ~ "unknown",
+      .ssa == "offline"    ~ "no",           # Swan Pond (sole offline row) - hardcoded
+      .sid == "hexham swamp" ~ "no",         # online, but wifi off per comments
+      .ssa == "online"     ~ "yes",
+      TRUE                 ~ wifi_arrival
+    )
+  ) |>
+  select(-.ssl, -.ssa, -.sid)
+
+# Inspect the (now-fixed) entries
+log_deprecated_fields <- log_complete |>
   filter(is.na(station_status_left)==F | is.na(station_status_arrival) == F)
 
 nrow(log_deprecated_fields)
@@ -203,10 +265,18 @@ log_deprecated_fields |> select(
 ) |> datatable()
 
 # Verify that all entries using the deprecated station status fields, now have
-# a value for wifi_dep and station_power_dep.
-log_deprecated_fields |> filter(is.na(wifi_dep) | is.na(station_power_dep)) |> nrow()
+# a value for wifi_dep and station_power_dep (feeds the map, so most important).
+n_dep_unfilled <- log_deprecated_fields |>
+  filter(!is.na(station_status_left) &
+         (is.na(wifi_dep) | is.na(station_power_dep))) |>
+  nrow()
 
-# TODO: Also ensure values for wifi_arrival and station_power_arrival (less important)
+if (n_dep_unfilled > 0) {
+  warning(n_dep_unfilled,
+          " deprecated-field rows still have NA wifi_dep/station_power_dep after fix")
+} else {
+  message("All deprecated-field departure statuses filled, yippee")
+}
 
 # ==== Export ====
 openxlsx2::write_xlsx(
