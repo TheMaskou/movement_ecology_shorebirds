@@ -8,8 +8,6 @@ library(here)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
-# TODO: Add more columns to popup (probably issue notes, comments, power status)
-
 # ==== Map Display Settings ====
 # Edit these variables to change how the map looks. All visual properties of
 # the map, markers, and popups are controlled from here — no need to search
@@ -45,6 +43,7 @@ marker_stroke_darken <- 0.7   # outline = fill colour darkened by this factor (0
 
 # Circle fill rule: first matching rule wins, else marker_fill_default.
 # To add or restyle a category, edit this function only — nothing else needs to change.
+# Expects wifi already converted to display terms (on/off) via wifi_display().
 marker_fill_for <- function(power, wifi) {
   power <- tolower(trimws(as.character(power)))
   wifi  <- tolower(trimws(as.character(wifi)))
@@ -54,6 +53,19 @@ marker_fill_for <- function(power, wifi) {
   marker_fill_default
 }
 
+## ---- WiFi Display Mapping ----
+# WiFi is stored as yes/no/unknown but shown on the map as on/off (yes = on,
+# no = off). Edit this named vector to change the displayed terms — nothing
+# else needs to change.
+wifi_display_map <- c(yes = "on", no = "off", unknown = "unknown")
+
+# Map a stored WiFi value to its display term; unmapped/NA values pass through
+# unchanged (so na_placeholder / .status_token still handle them normally).
+wifi_display <- function(x) {
+  out <- unname(wifi_display_map[tolower(trimws(as.character(x)))])
+  ifelse(is.na(out), as.character(x), out)
+}
+
 # Darken a colour (hex or named) for the marker outline, for contrast with the fill.
 darken_color <- function(col, factor = marker_stroke_darken) {
   v <- grDevices::col2rgb(col)
@@ -61,7 +73,7 @@ darken_color <- function(col, factor = marker_stroke_darken) {
 }
 
 ## ---- Popups ----
-popup_max_width  <- 420   # pixels
+popup_max_width  <- 440   # pixels (widened for the 19-column history table)
 popup_min_width  <- 320   # pixels
 popup_font_family <- "sans-serif"
 na_placeholder   <- "—"   # text shown when a value is NA or blank
@@ -77,6 +89,35 @@ history_font_size    <- "12px"
 history_header_bg    <- "#f5f5f5"
 history_header_color <- "#444"
 history_row_border   <- "1px solid #eee"
+
+# Field -> column header for the visit-history table. Edit / reorder / remove
+# entries here to change the table — column order follows this vector's order.
+history_fields <- c(
+  visit_date                = "Date",
+  technician                = "Technician",
+  data_downloaded           = "Data DL",
+  station_power_dep         = "Power (dep)",
+  wifi_dep                  = "WiFi (dep)",
+  tag_test_perf_dep         = "Tag test (dep)",
+  tag_test_perf_success_dep = "Tag test OK (dep)",
+  sg_id                     = "Receiver",
+  sg_version                = "Version",
+  issue_presence            = "Issue?",
+  issue_category            = "Issue cat.",
+  #issue_description         = "Issue desc.",
+  repair_done               = "Repair?",
+  #repair_description        = "Repair desc.",
+  station_power_arrival     = "Power (arr)",
+  wifi_arrival              = "WiFi (arr)"
+  #comments                  = "Comments",
+  #data_notes                = "Data notes",
+  #tag_test_notes_dep        = "Tag test notes"
+)
+
+# Per-column width bounds (long free-text wraps within these; the table
+# scrolls horizontally once total column width exceeds the popup width).
+history_cell_min_width <- "80px"
+history_cell_max_width <- "220px"
 
 # ==== Load Data ====
 maintenance_log <- readRDS(path_maintenance_log)
@@ -133,6 +174,24 @@ if (length(missing_coords) > 0) {
   )
 }
 
+## ---- Helper: Short SensorGnome Version Token ----
+# e.g. "SensorGnome v1" -> "v1"; returns the raw (trimmed) value if no "vN"
+# pattern is found (e.g. "NONE").
+sg_version_short <- function(x) {
+  raw <- trimws(as.character(x))
+  ifelse(grepl("v[0-9]+", raw, ignore.case = TRUE),
+         sub(".*?(v[0-9]+).*", "\\1", raw, ignore.case = TRUE), raw)
+}
+
+## ---- Helper: Format a History-table Cell ----
+# Applies field-specific display conversions (WiFi yes/no -> on/off, short
+# SensorGnome version) on top of the generic .fmt() NA/blank handling.
+fmt_cell <- function(field, value) {
+  if (field %in% c("wifi_dep", "wifi_arrival")) return(.fmt(wifi_display(value)))
+  if (field == "sg_version")                    return(.fmt(sg_version_short(value)))
+  .fmt(value)
+}
+
 ## ---- Helper: Colour-coded Status Token ----
 # Green if the value is "on" (any case); red for everything else, including NA/blank.
 .status_token <- function(x) {
@@ -173,12 +232,21 @@ build_popup <- function(rows) {
     na_placeholder
   }
 
+  # Receiver line: append the short SensorGnome version, e.g. "SG-... (v1)".
+  # Omit the "(vN)" suffix when there's no real version (NA / blank / "NONE").
+  sg_version_raw <- trimws(as.character(latest$sg_version))
+  receiver_str <- if (is.na(latest$sg_version) || sg_version_raw %in% c("", "NONE")) {
+    .fmt(latest$sg_id)
+  } else {
+    paste0(.fmt(latest$sg_id), " (", htmlEscape(sg_version_short(latest$sg_version)), ")")
+  }
+
   # Summary block (latest-status snapshot)
   summary_html <- paste0(
     "<div style='font-family:", popup_font_family, ";font-size:", summary_font_size, ";padding:2px'>",
     "<b style='font-size:", summary_title_size, "'>", .fmt(latest$station_id), "</b><br>",
     "<span style='color:", summary_label_color, ";font-size:12px'>Receiver: ",
-    .fmt(latest$sg_id), "</span><br><br>",
+    receiver_str, "</span><br><br>",
     "<table style='border-collapse:collapse;width:100%;font-size:", summary_font_size, "'>",
     "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Last visit</td>",
@@ -186,29 +254,36 @@ build_popup <- function(rows) {
     "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Status on departure</td>",
       "<td>Power: ", .status_token(latest$station_power_dep),
-      "  |  WiFi: ", .status_token(latest$wifi_dep), "</td></tr>",
+      "  |  WiFi: ", .status_token(wifi_display(latest$wifi_dep)), "</td></tr>",
     "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Last data download</td>",
       "<td>", last_dl_str, "</td></tr>",
-    "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
-      "Last issue</td>",
-      "<td>", .fmt(latest$issue_category), "</td></tr>",
     "</table>"
   )
 
-  # Scrollable visit history table (all visits, newest first)
+  # Scrollable visit history table (all visits, newest first). Columns are
+  # driven entirely by history_fields (settings, top of script) — edit that
+  # vector to add/remove/reorder columns.
+  cell_style <- paste0(
+    "padding:3px 6px;vertical-align:top;min-width:", history_cell_min_width,
+    ";max-width:", history_cell_max_width, ";white-space:normal;word-wrap:break-word"
+  )
+
   history_rows_html <- paste0(
     vapply(seq_len(nrow(rows_all)), function(i) {
       r <- rows_all[i, ]
-      paste0(
-        "<tr style='border-top:", history_row_border, "'>",
-        "<td style='padding:3px 6px;white-space:nowrap'>", .fmt(r$visit_date), "</td>",
-        "<td style='padding:3px 6px'>",                    .fmt(r$technician), "</td>",
-        "<td style='padding:3px 6px;text-align:center'>",  .fmt(r$data_downloaded), "</td>",
-        "<td style='padding:3px 6px'>",                    .fmt(r$issue_category), "</td>",
-        "<td style='padding:3px 6px'>",                    .fmt(r$repair_description), "</td>",
-        "</tr>"
-      )
+      cells <- vapply(names(history_fields), function(field) {
+        paste0("<td style='", cell_style, "'>", fmt_cell(field, r[[field]]), "</td>")
+      }, character(1))
+      paste0("<tr style='border-top:", history_row_border, "'>",
+             paste(cells, collapse = ""), "</tr>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  header_cells <- paste0(
+    vapply(history_fields, function(label) {
+      paste0("<th style='padding:4px 6px;text-align:left'>", htmlEscape(label), "</th>")
     }, character(1)),
     collapse = ""
   )
@@ -218,16 +293,12 @@ build_popup <- function(rows) {
     "<span style='font-size:12px;color:", summary_label_color, "'>",
       "Visit history (", nrow(rows_all), " visit",
       ifelse(nrow(rows_all) == 1, "", "s"), ")</span>",
-    "<div style='max-height:", history_max_height, ";overflow-y:auto;margin-top:4px'>",
+    "<div style='max-height:", history_max_height, ";overflow-y:auto;overflow-x:auto;margin-top:4px'>",
     "<table style='border-collapse:collapse;width:100%;font-size:", history_font_size, "'>",
     "<thead>",
     "<tr style='background:", history_header_bg, ";color:", history_header_color,
     ";font-size:11px;position:sticky;top:0'>",
-    "<th style='padding:4px 6px;text-align:left'>Date</th>",
-    "<th style='padding:4px 6px;text-align:left'>Technician</th>",
-    "<th style='padding:4px 6px;text-align:center'>Data DL</th>",
-    "<th style='padding:4px 6px;text-align:left'>Issue</th>",
-    "<th style='padding:4px 6px;text-align:left'>Repair</th>",
+    header_cells,
     "</tr>",
     "</thead>",
     "<tbody>", history_rows_html, "</tbody>",
@@ -255,7 +326,7 @@ popup_data <- tibble::tibble(
   popup      = sapply(station_groups, build_popup),
   fill_color = sapply(station_groups, \(grp) {
     lv <- latest_visit(grp)
-    marker_fill_for(lv$station_power_dep, lv$wifi_dep)
+    marker_fill_for(lv$station_power_dep, wifi_display(lv$wifi_dep))
   })
 ) |>
   mutate(stroke_color = darken_color(fill_color))
