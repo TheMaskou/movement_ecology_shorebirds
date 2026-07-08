@@ -1,6 +1,7 @@
 library(dplyr)
 library(here)
 library(openxlsx2)
+library(lubridate)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
@@ -125,9 +126,21 @@ log_complete <- log_complete |>
 
 # ==== Parse Dates ====
 # Retain raw character values for debugging (as visit_date_str)
+# Survey123's "visit_date" question is typed as `datetime` with a default of
+# now(), so every Survey123-sourced value carries a real time-of-day, not just
+# a calendar date (confirmed 2026-07-08 by inspecting the raw serials - e.g.
+# Davies Point 2026-04-29 is stored as 46141.1, not 46141). Historic log
+# entries are plain whole-day serials with no time component. Parsing via
+# as.Date(as.numeric(x), ...) alone does NOT drop that fractional part - it
+# only gets floored for display - so it silently breaks any exact `==`
+# comparison against a clean Date downstream. Parse the full datetime first,
+# then derive visit_date from it in the Sydney timezone so the calendar date
+# reflects the local day of the visit rather than the UTC day.
 log_complete <- log_complete |>
-  mutate(visit_date_str = visit_date) |> 
-  mutate(visit_date = as.Date(as.numeric(visit_date), origin = "1899-12-30"))
+  mutate(visit_date_str = visit_date) |>
+  mutate(visit_datetime = as.POSIXct(as.numeric(visit_date) * 86400,
+                                      origin = "1899-12-30", tz = "UTC")) |>
+  mutate(visit_date = as.Date(visit_datetime, tz = "Australia/Sydney"))
 
 # Check for NA dates
 log_complete |> 
@@ -138,6 +151,13 @@ log_complete |>
 log_complete <- log_complete |>
   filter(station_id != "TEST")
 
+## ---- Remove Test Entries without Test Label ----
+
+# I believe I submitted the 2026-04-29 Davies Point entry as a test, before
+# "TEST" was a station_id option.
+log_complete |> 
+  filter(!((station_id == "Davies Point") & (visit_date == ymd("2026-04-29"))))
+
 # ==== Exclude TBC Entries ====
 log_tbc <- log_complete |>
   filter(station_id == "TBC")
@@ -146,6 +166,47 @@ log_complete <- log_complete |>
   filter(station_id != "TBC")
 
 message(nrow(log_tbc), " entries with station_id = 'TBC' excluded from log_complete (retained in log_tbc)")
+
+# ==== Fix Entries With Deprecated Field Names ====
+# The issue is that some of the Survey123 entries were completed before
+# finalising the survey structure. 
+# Specifically, the field "station_status_left" was used for whether the station
+# was functioning when leaving the site - this has now been updated to wifi_dep
+# and station_power_dep, meaning that for those entries, wifi_dep and 
+# station_power_dep had an NA value. 
+
+# Inspect the entries
+log_deprecated_fields <- log_complete |> 
+  filter(is.na(station_status_left)==F | is.na(station_status_arrival) == F)
+
+nrow(log_deprecated_fields)
+
+log_deprecated_fields |> select(
+  station_id,
+  visit_date,
+  technician,
+  data_downloaded,
+  data_notes,
+  issue_presence,
+  issue_found,
+  issue_category,
+  issue_description,
+  repair_done,
+  repair_description,
+  comments,
+  station_status_arrival,
+  station_status_left,
+  wifi_arrival,
+  wifi_dep,
+  station_power_arrival,
+  station_power_dep
+) |> datatable()
+
+# Verify that all entries using the deprecated station status fields, now have
+# a value for wifi_dep and station_power_dep.
+log_deprecated_fields |> filter(is.na(wifi_dep) | is.na(station_power_dep)) |> nrow()
+
+# TODO: Also ensure values for wifi_arrival and station_power_arrival (less important)
 
 # ==== Export ====
 openxlsx2::write_xlsx(
