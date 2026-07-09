@@ -531,6 +531,12 @@ figure_plot <- figure_plot %>%
   
   filter(!speciesEN %in% c("Masked Lapwing")) 
 
+
+
+  
+#  filter(speciesEN %in% c("Pacific Golden-Plover", "Curlew Sandpiper", "Bar-tailed Godwit")) %>%
+#  filter(!recvDeployName %in% c("Corrie Island", "Davies Point", "Swan Pond"))
+
 ```
 
 ::: blockquote-yellow

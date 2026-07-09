@@ -1,0 +1,84 @@
+motus_proj_num <- 294
+
+# ==== Directories and File Paths ====
+dir_motus <- here::here("data", "motus")
+dir_tides <- here::here("data", "tides")
+
+dir_sharepoint <- Sys.getenv("SHOREBIRD_SHAREPOINT_PATH", unset = NA)
+
+## Inputs / raw data ----
+path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", tryCatch({
+  write.csv(
+    readxl::read_excel("C:/Users/c3541851/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General/SHOREBIRD NUMBER TRACKING.xlsx"),
+    file.path(here::here( "qmd", "chapter_1", "data", "spreadsheet"), paste0(Sys.Date(), "-teams.sheet", ".csv")),
+    row.names = FALSE
+  )
+}, error = function(e) {
+  write.csv(
+    readxl::read_excel("C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General/SHOREBIRD NUMBER TRACKING.xlsx"),
+    file.path(here::here( "qmd", "chapter_1", "data", "spreadsheet"), paste0(Sys.Date(), "-teams.sheet", ".csv")),
+    row.names = FALSE
+  )
+}))
+
+
+
+### Receiver Array Maintenance Log ----
+# NOTE: Ensure that both of the below files are up-to-date, i.e., have recently
+# been copied from SharePoint Motus_array_maintenance folder to the paths shown
+# below.
+path_motus_receiver_log_historic <- here::here("qmd", "chapter_1","data", "motus", "array_maintenance", "motus_receiver_log_historic.xlsx")
+path_motus_receiver_log_survey123 <- here::here("qmd", "chapter_1","data", "motus", "array_maintenance", "motus_receiver_log_survey123.xlsx")
+
+# The below spreadsheet is generated from the historic + survey123 spreadsheets
+# by the R script qmd/chapter_1/R/ch1_4_motus_array_maintenance_log.R
+path_maintenance_log_excel  <- here::here("qmd", "chapter_1","data", "motus", "array_maintenance", "motus_array_maintenance_log.xlsx")
+# TODO: Would be good to choose a consistent name (receiver log vs. maintenance
+# log; have left alone for now)
+
+# RDS Version (USE THIS FOR FURTHER ANALYSIS as it preserves types and everything perfectly)
+path_maintenance_log <- here::here("qmd", "chapter_1","data", "motus", "array_maintenance", "receiver_log_complete.rds")
+
+## Path for data files that are imported by other files ----
+path_motus_database <- here::here("qmd", "chapter_1","data", "motus", "project-294.motus")
+path_detection_data <- here::here("qmd", "chapter_1","data", "motus", "detection_data.rds")
+path_recv_info      <- here::here("qmd", "chapter_1","data", "motus", "recv-info.rds")
+path_tideData       <- here::here("qmd", "chapter_1","data", "tides", "tideData.rds")
+path_spreadsheet_data <- here::here("qmd", "chapter_1","data", "spreadsheet", "spreadsheet_data.rds")
+
+# ==== Motus Tags ====
+motus_tags_test <- c(
+  "43291"
+)
+
+motus_tags_undeployed <- c(
+  "43288", "43291", "43297", "43299",
+  "43307", "43424", "43425", "60470", 
+  "60579", "81123", "81136", "81137"
+)
+
+# ==== Receivers / Stations ====
+station_rename <- list("Barry_Fullerton_cove"  = "Fullerton Entrance",
+                       "Fullerton entrance"  = "Fullerton Entrance",
+                       "North Swann Pond" = "Swan Pond" ,
+                       "Ramsar Road Floodgate" = "Ramsar Road",
+                       "Milham's Pond" = "Milhams Pond")
+
+# ==== Species Constants ====
+species <- tibble::tribble(
+  ~code, ~english,                 ~scientific,                       ~class,      ~color,
+  "BTG", "Bar-tailed Godwit",     "Limosa lapponica",                "migratory", "#FF1493",
+  "FEC", "Far Eastern Curlew",    "Numenius madagascariensis",       "migratory", "#FF8C00",
+  "ML",  "Masked Lapwing",        "Vanellus miles",                  "resident",  "#32CD32",
+  "PGP", "Pacific Golden-Plover", "Pluvialis fulva",                 "migratory", "#FFD700",
+  "PS",  "Pied Stilt",            "Himantopus leucocephalus",        "resident",  "#00CED1",
+  "CS",  "Curlew Sandpiper",      "Calidris ferruginea",             "migratory", "#9370DB",
+  "RNA", "Red-necked Avocet",     "Recurvirostra novaehollandiae",   "resident",  "#FF4500",
+  "EW",  "Eurasian Whimbrel",     "Numenius phaeopus",               "migratory", "#1E90FF"
+)
+
+## ---- Derived Named Vectors ----
+species_colors      <- setNames(species$color, species$english)
+species_init_colors <- setNames(species$color, species$code)
+shorebird_class     <- setNames(species$class, species$english)
+
