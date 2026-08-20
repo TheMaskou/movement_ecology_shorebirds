@@ -56,10 +56,7 @@ Use the filters at the top of each column to search the log. You can also downlo
 -   [⬇ Download the full receiver log (Excel .xlsx)](downloads/receiver_log_complete.xlsx)
 -   [⬇ Download for R (.rds)](downloads/receiver_log_complete.rds)
 
-**NOTE:** Below is a work in progress (was struggling to figure out how to make the comments / text columns wider)
-
 ::: {.callout-note collapse="true" title="Click to view the receiver log"}
-
 ```{r Tables}
 #| message: false
 #| warning: false
@@ -68,3 +65,59 @@ dt_maintenance
 ```
 :::
 
+
+Below is shown the last 20 detections from the complete array (including noise and test tags), the data is raw and unfiltered.  
+  
+::: {.callout-note collapse="true" title="Click to view the raw detection data"}
+```{r Tables rawdata}
+#| message: false
+#| warning: false
+#| echo: false
+#| 
+library(motus)
+library(dplyr)
+library(here)
+library(DBI)
+library(RSQLite)
+library(forcats) 
+library(lubridate)
+library(bioRad) 
+library(purrr) 
+
+
+sql.motus <- tagme(
+  projRecv = 294,
+  new = FALSE,
+  update = FALSE,
+  dir = here::here("qmd", "chapter_1", "data"))
+
+df.alltags <- tbl(sql.motus, "alltags") %>%
+  dplyr::collect() %>%
+  as.data.frame() %>%
+  mutate(time = as_datetime(ts),
+         timeAus = as_datetime(ts, tz = "Australia/Sydney"),
+         dateAus = as_date(timeAus),
+         year = year(time), 
+         doy = yday(time)) 
+
+df.alltags <- df.alltags %>%
+  select(recvDeployName, recv, tagModel, pulseLen, motusTagID, timeAus, speciesEN) %>%
+  arrange(recvDeployName, timeAus) %>%
+  group_by(recvDeployName) %>%
+  slice_tail(n = 20) %>%
+  ungroup() %>%
+  filter(!is.na(recvDeployName)) %>%
+  DT::datatable(
+    options = list(
+      pageLength = 25,
+      scrollX = TRUE,
+      order = list(list(0, 'asc'))),
+    filter = "top",
+    rownames = FALSE,
+    caption = "Last 20 detections (raw data) per Motus station")
+
+df.alltags
+
+```
+::: 
+    
