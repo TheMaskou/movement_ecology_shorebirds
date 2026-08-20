@@ -3,7 +3,7 @@ title: "Motus Array Maintenance"
 ---
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-Since 2021, our local automated Motus array is sitting both in the **Hunter** estuary and **Port Stephens** estuary, with respectively **eight** and **three** stations.
+Since 2021, our local automated Motus array is sitting both in the **Hunter** estuary and **Port Stephens** estuary, with **eight** and **three** stations respectively.
 
 This page displays a dynamic map where you can explore for each station its history.
 
@@ -11,9 +11,9 @@ You can also openly explore location and a few other aspects on [Motus server](h
 
 A Motus station is made of multiple components:
 
--   **Antenna** (either directional or omni-directionnal), to detect any VHF signal
+-   **Antenna** (either directional or omni-directional), to detect any VHF signal
 
--   **SensorGnome Receiver**, to identify and store VHF signal from a known or unknown tag
+-   **SensorGnome Receiver**, to identify a VHF signal from a known or unknown tag, to transform it into detection data before to store it onboard
 
 -   **Solar panel + battery** (low cycle 12V), to provide electrical power
 
@@ -58,9 +58,13 @@ Use the filters at the top of each column to search the log. You can also downlo
 
 **NOTE:** Below is a work in progress (was struggling to figure out how to make the comments / text columns wider)
 
+::: {.callout-note collapse="true" title="Click to view the receiver log"}
+
 ```{r Tables}
 #| message: false
 #| warning: false
 #| echo: false
 dt_maintenance
 ```
+:::
+

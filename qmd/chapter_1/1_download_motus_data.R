@@ -20,6 +20,7 @@ setwd(dirname(rstudioapi::getSourceEditorContext()$path))
 Sys.setenv(TZ="UTC") 
 proj.num <- 294       
 motusLogout()
+srvTimeout(600)  # increase from default 120s to e.g. 10 minutes
 sql.motus <- tagme(projRecv = proj.num,
                    new = FALSE, # TRUE overwrites existing file
                    update = TRUE,

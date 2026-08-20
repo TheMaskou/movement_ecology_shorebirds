@@ -122,7 +122,7 @@ Since 2021, **`r moni$value[moni$variable == "nb_released"]` birds** belonging t
 
 Motus allows you to openly [explore the data](https://motus.org/dashboard/#e=profile&d=projects&s=294&f=%7B%7D) on the server.
 
-However, it might be useful and more talkative to observe fine and direct movement events from the detections, and to breakdown the data into different groups depending particular point of views and wishes.
+However, it might be useful and more informative to observe fine and direct movement events from the detections, and to breakdown the data into different groups depending particular point of views and wishes.
 
 Below are displayed several tables to explore the data with every tagged bird uniquely identified with a \`Band.ID*\`*, also related to a *MOTUS tag ID*.
 :::
@@ -328,7 +328,7 @@ table_1_pub <- table_1_pub %>%
   opt_align_table_header(align = "left") %>%
   
   tab_footnote(
-    footnote = md("**Legend.** Grouped by species, this table summarises the number of shorebird individuals tagged and tracked using MOTUS-VHF technology in the Hunter estuary near Newcastle (NSW, Australia). Birds have been surveyed from the day they have been tagged (First day) to their last detection (Last day), which gives the Total of days. However, detections occurred only on certain days (Detected days). We also looked at the number of sites each species might visit per day (Nb of sites/days) and the Total number of sites the species visited during its whole survey. Dates are in dd-mm-yyyy format. Mean and standard error values are provided(x̄ \u00B1 SE, with SE = SD/\u221An)"))  %>%
+    footnote = md("**Legend.**Mean and standard error values are systemtically provided (x̄ \u00B1 SE, with SE = SD/\u221An). Grouped by species, this table summarises the number of shorebird individuals tagged and tracked using MOTUS-VHF technology in the Hunter estuary near Newcastle (NSW, Australia). Birds have been surveyed from the day they have been tagged (First day - at species level) to their last detection (Last day), which gives the Total of days. However, detections occurred only on certain days (Detected days - at species level). We also looked at the number of sites each species might visit per day (Nb of sites/days) and the Total number of sites the species visited during its whole survey. Dates are in dd-mm-yyyy format."))  %>%
 
   opt_table_font(font = "Times New Roman") %>%
   
@@ -384,11 +384,9 @@ gtsave(
 )
 ```
 
-Open and download the table [here](material/table_1.png){target="_blank"}.
-
 <br> <br>
 
-And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*. <br>
+And have a hint about the tidal-diel **conditions that each species is detected for** in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*. <br>
 
 ```{r explore, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 temp_file <- tempfile(fileext = ".R")

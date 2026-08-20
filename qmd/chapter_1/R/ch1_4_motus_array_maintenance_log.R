@@ -124,8 +124,8 @@ if (nrow(type_comparison) > 0) {
 # entry_source records which log each row came from ("historic" / "survey123"),
 # since bind_rows() otherwise leaves no way to tell the two apart afterwards.
 log_complete <- bind_rows(
-  log_historic  |> mutate(entry_source = "historic"),
-  log_survey123 |> mutate(entry_source = "survey123")
+  log_historic  |> mutate(entry_source = "historic",  wifi_notes_arrival = as.character(wifi_notes_arrival)),
+  log_survey123 |> mutate(entry_source = "survey123", wifi_notes_arrival = as.character(wifi_notes_arrival))
 )
 
 # ==== Fix Corries Island Naming Error ====

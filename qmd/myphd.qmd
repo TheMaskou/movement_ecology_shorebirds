@@ -14,52 +14,66 @@ format:
 :::
 
 ::: {style="background: linear-gradient(135deg, #d97706 0%, #b91c1c 100%); color: white; padding: 2rem; border-radius: 8px; margin: 2rem 0;"}
-**PROJECT & OBJECTIVES** 
+**PROJECT & OBJECTIVES**
 
-Currently a PhD candidate at the Center for Conservation Science, University of Newcastle, I focus on movement and spatial ecology from resident shorebirds and migratory species on their non-breeding ground, in Australia within the Hunter and Port Stephen estuaries. Shorebirds have complex behavioural and ecological needs which remain poorly understood at the level needed to inform regional land management decisions and ground-level protection in Australia. 
+Currently a PhD candidate at the Center for Conservation Science, University of Newcastle, I focus on movement and spatial ecology from resident shorebirds and migratory species on their non-breeding ground, in Australia within the Hunter and Port Stephen estuaries. Shorebirds have complex behavioural and ecological needs which remain poorly understood at the level needed to inform regional land management decisions and ground-level protection in Australia.
 
 This Research Project (PhD) intends to understand how local shorebirds use habitats for roosting and foraging, as it is crucial to inform stakeholders and land managers for effective conservation of both resident and migratory species.
 :::
 
 ::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
-**Chapter 1: Where the different species of shorebirds forage and roost at night and where do they feed during the day?**
+**Chapter 1: Are shorebirds estuary loyal and do they show site preferences? Where do they forage and roost at night and during low tide?**
 
-Recent Motus telemetry technology revealed individuals use distinct estuary areas following tidal and circadian cycles, yet detection gaps remain. Continuing and combining VHF and GPS methods will improve sample size and clarify the land-use from shorebirds population.
+*Hypothesis: Birds are expected to show estuary fidelity and tide-driven site preferences, using VHF Motus presence data from VHF tagged birds and descriptive analysis.*
+
+A local automated telemetry array is deployed across the Hunter (eight VHF stations) and Port Stephens (three VHF stations) estuaries, combining omnidirectional and directional antennas that listen continuously for signals from individually coded nanotags (\<4 g) attached to shorebirds captured at known roosting sites. These tags offer a low-impact and low-cost option for long-term population monitoring. Since 2021, individuals are tagged across several species. Detection patterns across tidal and circadian cycles let us examine movement and site selection over time.
+
+Early results confirm estuary loyalty for most of the species (average 70% daily detection within the same estuary) and show tide- and diel-dependent site selection that varies by species. However, over half of detections occurred during daylight, reflecting station placement at diurnal roosts and leaving nocturnal and low-tide movements poorly understood. Using satellite data from GPS-tagged shorebirds should guide future station placement to address this main limitation, improving our understanding and long-term monitoring.
 :::
 
 ::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
-**Chapter 2: Do shorebird species within local estuaries have segregated or overlapping foraging niches?**
+**Chapter** **2: Are shorebirds evenly partitioning their behavior within the estuary? Are the different sites providing the same functional role for all species?**
 
-Stable isotope analysis (C/N) revealed foraging niche overlap between two threatened migratory species, as first results. However, C4 plant might be undistinguished through this method. Adding sulfur δ34S improves this distinction and traces marine versus terrestrial and benthic versus pelagic sources. Clarifying what vegetation provisions foraging grounds will inform restoration priorities, particularly if invertebrates are included to complete the trophic pathway for shorebirds.
+*Hypothesis*: *Shorebirds are expected to use distinct sites to forage and roost, using GPS-accelerometer data from devices equipped on birds and automated behavioral classification models. Resident species might show overlapping foraging and roosting sites, while migratory species may separate these activities.*
+
+Motus technology reveals shorebird movement and site selection but cannot explain why a site is chosen: what activity occurs there, and when? Direct diurnal observations, mostly happening at high tide, show shorebirds foraging and roosting at distinct sites. Yet, this hasn't never been confirmed whether it is true during the night or at low tide. Using combined GPS/accelerometer and video technologies will allow to assess birds behavior 24/7, and reveal activity patterns across species and the full behavioral cycle (day/night, low/high tide).
 :::
 
 ::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
-**Chapter 3: How the inter-tidal flats evolved along time over Australia and is this evolution threatening migratory shorebirds population?**
+**Chapter 3: How the foraging and roosting areas for shorebirds evolved during the last decade in Australia? And how do they shape their demography?**
 
-Migratory shorebirds depend on inter-tidal flats for foraging. Digital Earth Australia Inter-tidal data (2016-2026) combined with Birdlife Australia datasets enables continental-scale analysis linking habitat evolution to population dynamics, informing coastal management and conservation under sea level rise.
+*Hypothesis: Foraging areas are expected to mostly drive shorebird demography, implementing models which include Geographic Information System data from Digital Earth Australia and bird abundance data from BirdLife Australia.*
+
+Using a recently released intertidal spatial layer ([DEA Intertidal](https://www.ga.gov.au/scientific-topics/dea/dea-data-and-products/dea-intertidal)), we will accurately examine the extent and distribution of shorebird foraging areas (e.g., mudflats) since 2016. This dataset provides an annual, high-resolution elevation product combined with tide modelling, enabling precise mapping of exposed and flooded areas over time. We will also use Supratidal and Coastal Lowland Forest spatial layer ([SCLF](https://openresearch.newcastle.edu.au/articles/dataset/National_Supratidal_and_Coastal_Lowland_Forest_extent_map_of_Australia/29755589)), combined with additional datasets on supratidal habitat, coastal ecosystems, and land cover to extract roosting areas (e.g., islets, sandy shores). Both foraging and roosting outputs will serve as dynamic variables in a longitudinal, multi-species model testing which most strongly drives shorebird demography. Demographic data ([Bird Life Australia](https://birdlife.org.au/)) will come from standardised abundance surveys.
+
+This work provides a continental-scale analysis linking habitat evolution to population dynamics, informing coastal management and conservation under sea level rise.
 :::
 
 ::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
-**Chapter 4: How native resident shorebirds are exposed to predation risk from cats and foxes at high tide roosts and foraging ground: is there a spatio-temporal overlap in respective home ranges utilisation?**
+**Chapter 4: Are shorebirds showing segregating or overlapping foraging niche during the non-breeding season?**
 
-Invasive feral cats and European red foxes threaten Hunter estuary shorebirds. GPS tracking offers an efficient method to assess individual trajectories, home ranges, and spatial utilisation distribution for both predators and preys. Analysing spatio-temporal overlaps relative to tidal cycles, land-cover, and inter-tidal exposure can quantify predation risk and identify potential refuges for shorebirds.
+*Birds are expected to show segregated foraging niches, using a multi-species carbon, nitrogen, and sulphur stable isotope analysis based on vegetation samples from the study areas and blood samples from trapped shorebirds.*
+
+Carbon and nitrogen isotopes trace habitat use and trophic position, while sulfur isotopes help resolve the limitations of carbon alone, given strong terrestrial-marine sulfur contrasts, making them a useful additional tracer of estuarine habitat use. Blood samples from multiple species, collected post-arrival, and vegetation samples across habitats allows to characterise population-level trophic niches across the non-breeding season. Crucially, this approach captures both the direct foraging habitats birds use and the indirect habitats supporting their prey, revealing the trophic sources shorebirds depend on and which habitats should be prioritised for conservation.
 :::
 
 ::: {style="background: linear-gradient(135deg, rgba(220,110,100,0.95), rgba(200,90,80,0.95)); color: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 12px rgba(0,0,0,0.3); margin-bottom: 1.5rem; border-left: 5px solid #e68a7a;"}
-**Chapter 5 (extras): Additional Research Questions**
+**Chapter 5** (bonus)**: Are risks from pest predators shaping movements of native shorebirds?**
 
-How red foxes move and use their habitat across and within the local estuaries? Where and when resident shorebirds go inland? What variables drive resident shorebirds habitat selection? What is the preferred diet from migratory shorebirds across the local estuaries, and does a shift exist during overwintering period? Many questions remains and might potentially make the fifth chapter.
+*Predators and shorebirds home ranges are expected to not overlap in time, using satellite tracking data from tagged individuals from both groups.*
+
+Tidal cycles primarily drive shorebird movements between foraging and roosting sites, but diel cycles introduce an additional asynchroned constraint since most mammalian predators are nocturnally active, and potentially also shaping shorebirds site selection. Invasive European red foxes threaten Hunter estuary shorebirds. GPS tracking offers an efficient method to assess individual trajectories, home ranges, and spatial utilisation distribution for both predators and preys. Analysing spatio-temporal overlaps relative to tidal cycles, land-cover, and inter-tidal exposure can quantify predation risk and identify potential refuges for shorebirds.
 :::
 
 :::: {style="background: linear-gradient(135deg, rgba(120,140,160,0.95), rgba(100,120,140,0.95)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
 **FOUNDERS & COLLABORATORS**
 
--   The PhD program is a generously donor-funded scholarship from **Ms Margaret Flynn.**
+-   **The PhD program is generously donor-funded by Ms Margaret Flynn.**
 
--   The Research Project is funded by many institutions that may also collaborate with us as the Hunter Local Land Services, Hunter Bird Observers Club, Department of Planning and Environment, and National Parks and Wildlife.
+-   The Research Project is funded by many institutions that may also collaborate with us as the Hunter Local Land Services, Hunter Bird Observers Club, Department of Planning and Environment, National Parks and Wildlife Services, Wettenhall Environment Trust, Bird Life Australia, Australian and Pacific Science Foundation, Cumberland Birds Observers Club, Digital Earth Australia, and Griffith University.
 
 ::: {style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2rem; margin: 2rem auto 0; padding: 2rem; background: white; border-radius: 50px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); max-width: 1200px;"}
-![](/material/cboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/dccew.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/lls.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/hboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/off.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
+![](/material/cboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/dccew.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/lls.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/hboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/off.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/apsf.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/dea.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/uog.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/bla.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/wet.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
 :::
 ::::
 

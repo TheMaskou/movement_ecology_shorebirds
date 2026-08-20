@@ -17,7 +17,7 @@ update <- TRUE # Second, Chose whether to update new detections from last data.r
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-Our Motus project aims to better understand movements and habitat preferences for shorebird populations within the local estuaries of the Hunter and Port Stephens. It has a focus on Far Eastern Curlew but additional species are also studied.
+Our Motus project aims to better understand movements and habitat preferences for shorebird populations within the local estuaries of the Hunter and Port Stephens.
 
 -   **Motus Project:** [*Shorebird monitoring in central NSW estuaries*](https://motus.org/dashboard/#e=profile&d=projects&s=294)
 
@@ -95,7 +95,7 @@ df.alltags <- tbl(sql.motus, "alltags") %>%
          timeAus = as_datetime(ts, tz = "Australia/Sydney"),
          dateAus = as_date(timeAus),
          year = year(time), 
-         doy = yday(time))
+         day = yday(time))
 
 ```
 
@@ -125,9 +125,9 @@ If you already have a .sql file, set `new` = FALSE and `update` = TRUE so you ar
 
 `motus::metadata()` downloads the metadata from the online Motus network (receiver information and more).
 
-`motus::dbConnect()` links your .sql to your environment. Avoid to use high memory as .sql is a *lazy* table and not yet hardly written on your hardware.
+`motus::dbConnect()` links your .sql to your environment to your environment as a *lazy* table, preventing the entire database from being written straight to hardware memory.
 
-`motus::tbl()` extracts all the tags fat into your environment. Then formatted into a classic dataframe.
+`motus::tbl()` extracts all the tags data into your environment. Then formatted into a classic dataframe.
 
 ```{r 1 data quick view, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
@@ -144,7 +144,7 @@ Above, a quick view about the last data uploaded to Motus server, giving you the
 ### TAGS
 
 ::: blockquote-red
-**WARNING**: The values entered within the below filtering R code are depending your own context.
+**WARNING**: Onward, values and variable names might change depending your own context.
 :::
 
 Here are cleaned-out the data recorded from undesired tags and/or receivers depending our local context. So the following has been processed on the raw data.
@@ -205,7 +205,7 @@ df.alltags <- df.alltags %>%
 
 **Have been modified:**
 
--   Tag's `specieEN` information have been changed from *NA* to different values depending case to case;
+-   Tag's `speciesEN` information have been changed from *NA* to different values depending case to case;
 
 -   Receiver station's name `recvDeployName` has been changed from *NA* to Windeyers starting from 02/15/2025.
 
@@ -222,7 +222,7 @@ ggplot(df.alltags %>%
   geom_bar(fill = "steelblue") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(x = "Motus Station", y = "Nb of motusFilter = 1 (good)") 
+  labs(x = "Motus Station", y = "Good detections (Count when motusFilter = 1)") 
 
 # Checking 'motusFiltered out' tag data
 ggplot(df.alltags %>%
@@ -231,7 +231,7 @@ ggplot(df.alltags %>%
   geom_bar(fill = "orange") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(x = "Motus Station", y = "Nb of motusFilter = 0 (filtered out)")
+  labs(x = "Motus Station", y = "False detections (Count when motusFilter = 0)")
 
 # Checking proportion of data quality for each station
 perc <- ggplot(df.alltags %>% 
@@ -240,18 +240,14 @@ perc <- ggplot(df.alltags %>%
   geom_bar(position = "fill") + 
   scale_fill_manual(values = c("0" = "orange",
                                "1" = "steelblue"),
-                    labels = c("0 (filtered out)", 
-                               "1 (good)"),
+                    labels = c("False detections (filtered out)", 
+                               "Good detections"),
                     name = "motusFilter") +
   theme_minimal() +
   labs(x = "Motus Station",
        y = "Proportion") +
   scale_y_continuous(labels = scales::percent) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# ggpubr::ggexport(perc,
-#                  filename = here("figures", "motus_filter_perc.jpg"),
-#                  width = 800, height = 1000)
 
 perc
 ```
@@ -384,11 +380,11 @@ df.recvDeps <- df.recvDeps %>%   filter(timeStartAus > "2023-01-31 00:00:00 AEDT
 
 Finally, we need to set temporal aspect of the *survey effort.*
 
-Day one for our local Motus array to start *listening* any tag signals is set on the **31st January 2023** - one month before the first day a bird has been caught and tagged (information found into the [SharePoint](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385) to access the file.).
+Day one for our local Motus array to start *listening* any tag signals is set on the **31st January 2023** - one month before the first day a bird has been caught and tagged (see [SharePoint](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385) spreadsheet).
 
 ## Import band ID
 
-As we might re-trap individuals and re-tag them with a new MOTUS tag, we can't use the Motus tag ID as unique ID anymore and have to use Band ID which supposes to last on the same bird from banding date to individual's death. Unfortunately, the Band ID is not imported by MOTUS network at the moment. So, we need to import it from our own record accessible on SharePoint [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/General/SHOREBIRD%20NUMBER%20TRACKING.xlsx?d=wa23e66f0c5514ba4acd0de0d5e83ca42&csf=1&web=1&e=BuGI0w&nav=MTVfe0QyREY1NzZGLUM2RjktNEJFRi1BQThGLTc1M0E3OEFFM0ZERn0), download the .*csv*.
+As we might re-trap individuals and re-tag them with a new MOTUS tag, we can't use the Motus tag ID as unique ID anymore and have to use band number which supposes to last on the same bird from banding date to individual's death. Unfortunately, the band number is not imported by MOTUS network at the moment. So, we need to import band number (see [SharePoint](#0) spreadsheet).
 
 ```{r 1 Band ID BIS, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
 
@@ -453,7 +449,9 @@ df.alltags <- left_join(df.alltags,
 
 So we merged our records with Band ID for each bird to the Motus data, linked with the Motus tag ID. Allowing unique individual IDs.
 
-## Add key variables
+## Additional variables
+
+### Pre-processing
 
 It is crucial for our further analysis to add the **Tidal and Circadian cycles** as variables so we can match each bird detection with a categorical value for a date, a tide (high/low) and a period of the day (night/day).
 
@@ -506,6 +504,8 @@ tideData <- tideData %>%
 Note that tide data-set must be extracted from [New South Wales government resources](https://www.nsw.gov.au/driving-boating-and-transport/using-waterways-boating-and-transport-information/conditions-weather-and-tides/nsw-tide-tables) and formatted into a .csv file - made for you and directly accessible [here](https://uoneduau-my.sharepoint.com/:x:/g/personal/c3541851_uon_edu_au/IQBIG1rLs3tZT4oH64iNlp-UAX_G5teXcB5f76Uc7Aoe8hs?e=Znl4jf).
 
 All the **Tide** categories are set for a unique point in Newcastle, easing the complexity of small scale differences for the tide within the estuary.
+
+### Signal strength, Tidal & Circadian periods
 
 **Let's now add our key variables for each bird detection:**
 
@@ -661,7 +661,7 @@ Once loaded in your *R environment,* the file will display five objects:
 
 -   `spreadsheet`: contains all the capture events details provided for each trapped individual
 
--   `tideData`: tidal details for Newcaslte, NSW
+-   `tideData`: tidal details for Newcastle, NSW
 
 ::: {style="text-align: right;"}
 *The data are last updated on the 21 December 2025.*

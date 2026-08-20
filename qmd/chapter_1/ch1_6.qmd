@@ -227,7 +227,7 @@ tag_detection  %>%
 
 <br>
 
-```{r 3 species histo, echo = FALSE, eval = TRUE}
+```{r 3 species histo, echo = FALSE, eval = FALSE}
 ggplot(tag_detection %>% 
          mutate(speciesEN = forcats::fct_reorder(speciesEN, perc, .desc = TRUE)),      
        aes(x = speciesEN, 
@@ -240,7 +240,7 @@ ggplot(tag_detection %>%
         legend.position = "none") +
   labs(x = "Species",
        y = "Detection (%)",
-       title = "Species detectability across the MOTUS array (Histogram)")
+       title = "Species detectability across the MOTUS array")
 
 ```
 
@@ -260,6 +260,8 @@ ggplot(tag_detection_indiv %>%
        title = "Species detectability across the MOTUS array (Boxplot)")
 
 ```
+
+The box-plot above shows, for each species, the percentage variation among individuals in the percentage of tracking days on which birds were detected at least once at any station in the array.
 
 ```{r 3 species plot value table, echo = TRUE, eval = TRUE}
 detection_table <- tag_detection_indiv %>%

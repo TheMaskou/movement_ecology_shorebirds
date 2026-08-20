@@ -13,4 +13,6 @@ format: html
 
 ## Ethics reports
 
--   2026_ARA-2024-400_progress_report *- to be done ...*
+-   [2025_Progress_Report_ARA400](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQA0qpcFoX0KQaqBnGmfgID6AdZLYRV46ANawURxp-rp5BI?e=l20XNv)
+
+-   [2024_Progress_Report_ARA400](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQBvp8TADpzDS7FCrwzQsHZFAaWedvGbK3RqlO-L0D4wU4g?e=ZVxVIb)

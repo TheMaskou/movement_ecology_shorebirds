@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-05">
+<meta name="dcterms.date" content="2026-08-19">
 
 <title>Signal strength – Movement Ecology - Shorebirds</title>
 <style>
@@ -449,7 +449,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-05</p>
+      <p class="date">2026-08-19</p>
     </div>
   </div>
   
@@ -505,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">toupper</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Here, we take the relative <strong>signal strength value</strong> <code>sigPositive</code> (a <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables"><em>derivative</em></a> of the raw values <code>sig</code>) to calculate the <strong>Standard Deviation (SD)</strong> (<code>sig_indiv_tideCat_sd</code>) for each individual and per tide category. This will inform us about signal strength variation for each individual depending particular conditions (tide category * day/night * sites).</p>
-<p>Then, we group the SD per species and per site to observe how the signal strength varies.</p>
+<p>Then, we group the SD per species and per site to observe how the variation of the signal strength varies.</p>
 <p>Then, we can create a list which plots the distribution of the average <em>signal strength</em> <em>SD variation</em> across species.</p>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># One plot per species for better understanding</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plots_list <span class="ot">&lt;-</span> data_all <span class="sc">%&gt;%</span></span>

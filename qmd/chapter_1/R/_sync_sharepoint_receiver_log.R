@@ -30,7 +30,7 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 # !!!! DEFINE THE FILE NAMES OF THE SPREADSHEETS AS THEY ARE IN SHAREPOINT
 # HERE !!!!
 
-sharepoint_receiver_log_survey123 <- "arcgis-123survey_output_table_raw-manually-updated-callum.xlsx"
+sharepoint_receiver_log_survey123 <- "arcgis-123survey_output_table_raw-from-app-maxime.xlsx"
 dir_sharepoint <- "C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General"
 
 sharepoint_receiver_log_historic <- "motus_receiver_log_historic_callum.xlsx"

@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-03-06">
+<meta name="dcterms.date" content="2026-08-19">
 
 <title>Survey effort – Movement Ecology - Shorebirds</title>
 <style>
@@ -464,7 +464,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-03-06</p>
+      <p class="date">2026-08-19</p>
     </div>
   </div>
   
@@ -543,7 +543,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><code>pulseCount</code>: Quantifies the number of radio pulses measured on each antenna over each hour period <code>hourBin</code> but does not necessary correspond to a known VHF tag detection. It can be any other VHF signal, even simple noise - <a href="https://docs.motus.org/en/stations/station-inspection/up-time-and-detectability#antenna-pulses"><em>documentation</em></a></li>
 <li><code>numTags</code>: Represents the total number of unique tags detected. This, given a context, as typically a specific site, or within a batch, or for a set of detections.</li>
-<li><code>deviceID</code>: Raspberry Pi processor ID. A small electronic part of the receiver that plays the role of an embarked computer.</li>
+<li><code>deviceID</code>: Raspberry Pi processor ID. A small electronic part of the receiver that plays the role of a small computer.</li>
 <li><code>ant</code>: Port of antenna the <code>activity</code> has been recorded.</li>
 </ul>
 <p><strong>How the data are recorded in this table?</strong></p>
@@ -551,10 +551,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li><p>When a <strong>station is listening</strong>, the table has either values or <em>NA</em> for <code>pulseCount</code> or/and for <code>numTags</code> variables. For example:</p>
 <ul>
-<li><p>No noise has been recorded but one or several tags have been recorded: <code>pulseCount</code> = 0 or is <em>NA</em> and <code>numTags</code> &gt; 1</p></li>
+<li><p>No noise has been recorded but one or several tags have been recorded: <code>pulseCount</code> = 0 or is <em>NA</em> and <code>numTags</code> &gt; 0</p></li>
 <li><p>No tag has been recorded but noise happened: <code>pulseCount</code> &gt; 0 and <code>numTags</code> = 0 or is <em>NA</em></p></li>
+<li><p>Tag and noise have been recorded: <code>pulseCount</code> &gt; 0 and <code>numTags</code> &gt; 0</p></li>
 </ul></li>
-<li><p>When a <strong>station is</strong> <strong>not listening</strong>, there is no row at all in the table (no data recorded).</p></li>
+<li><p>When a <strong>station is</strong> <strong>not listening</strong> (or there is no noise and no tags in the surrounding - assumed negligible), there is no row at all in the table (no data recorded).</p></li>
 </ul>
 <p><strong>Keep in mind</strong> <strong>we can miss the hours where no tag or noise are happening within the environment BUT the antenna is still operational and being “listening”.</strong> In such a case, let’s further assume than the antenna is not working or listening. Indeed, an environment with “no noise” condition during more than an hour may be extremely rare and very unlikely.</p>
 <div class="cell">
@@ -562,8 +563,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>       
              0      1      2      3      4      5      6      7     13     14
-  FALSE 126304   5823   1329    661    289    125     40     17      1      1
-  TRUE   13191    138     32      7      2      2      0      0      0      0
+  FALSE 132299   5904   1374    688    297    125     40     17      1      1
+  TRUE   13193    140     34      7      3      2      0      0      0      0
        
             16
   FALSE      2
@@ -664,23 +665,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<div id="zxssibpojs" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zxssibpojs table {
+<div id="gkeglvdwob" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gkeglvdwob table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zxssibpojs thead, #zxssibpojs tbody, #zxssibpojs tfoot, #zxssibpojs tr, #zxssibpojs td, #zxssibpojs th {
+#gkeglvdwob thead, #gkeglvdwob tbody, #gkeglvdwob tfoot, #gkeglvdwob tr, #gkeglvdwob td, #gkeglvdwob th {
   border-style: none;
 }
 
-#zxssibpojs p {
+#gkeglvdwob p {
   margin: 0;
   padding: 0;
 }
 
-#zxssibpojs .gt_table {
+#gkeglvdwob .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -706,12 +707,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_caption {
+#gkeglvdwob .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zxssibpojs .gt_title {
+#gkeglvdwob .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -723,7 +724,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#zxssibpojs .gt_subtitle {
+#gkeglvdwob .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -735,7 +736,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#zxssibpojs .gt_heading {
+#gkeglvdwob .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -747,13 +748,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_bottom_border {
+#gkeglvdwob .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_col_headings {
+#gkeglvdwob .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -768,7 +769,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_col_heading {
+#gkeglvdwob .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -788,7 +789,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#zxssibpojs .gt_column_spanner_outer {
+#gkeglvdwob .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -800,15 +801,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#zxssibpojs .gt_column_spanner_outer:first-child {
+#gkeglvdwob .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zxssibpojs .gt_column_spanner_outer:last-child {
+#gkeglvdwob .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zxssibpojs .gt_column_spanner {
+#gkeglvdwob .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -820,11 +821,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#zxssibpojs .gt_spanner_row {
+#gkeglvdwob .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zxssibpojs .gt_group_heading {
+#gkeglvdwob .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -850,7 +851,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#zxssibpojs .gt_empty_group_heading {
+#gkeglvdwob .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -865,15 +866,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#zxssibpojs .gt_from_md > :first-child {
+#gkeglvdwob .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zxssibpojs .gt_from_md > :last-child {
+#gkeglvdwob .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zxssibpojs .gt_row {
+#gkeglvdwob .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -892,7 +893,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#zxssibpojs .gt_stub {
+#gkeglvdwob .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -905,7 +906,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zxssibpojs .gt_stub_row_group {
+#gkeglvdwob .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -919,15 +920,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#zxssibpojs .gt_row_group_first td {
+#gkeglvdwob .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zxssibpojs .gt_row_group_first th {
+#gkeglvdwob .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zxssibpojs .gt_summary_row {
+#gkeglvdwob .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -937,16 +938,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zxssibpojs .gt_first_summary_row {
+#gkeglvdwob .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_first_summary_row.thick {
+#gkeglvdwob .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zxssibpojs .gt_last_summary_row {
+#gkeglvdwob .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -956,7 +957,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_grand_summary_row {
+#gkeglvdwob .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -966,7 +967,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zxssibpojs .gt_first_grand_summary_row {
+#gkeglvdwob .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -976,7 +977,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_last_grand_summary_row_top {
+#gkeglvdwob .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -986,11 +987,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_striped {
+#gkeglvdwob .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zxssibpojs .gt_table_body {
+#gkeglvdwob .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -999,7 +1000,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_footnotes {
+#gkeglvdwob .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1013,7 +1014,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_footnote {
+#gkeglvdwob .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1022,7 +1023,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zxssibpojs .gt_sourcenotes {
+#gkeglvdwob .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1036,7 +1037,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#zxssibpojs .gt_sourcenote {
+#gkeglvdwob .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1044,72 +1045,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#zxssibpojs .gt_left {
+#gkeglvdwob .gt_left {
   text-align: left;
 }
 
-#zxssibpojs .gt_center {
+#gkeglvdwob .gt_center {
   text-align: center;
 }
 
-#zxssibpojs .gt_right {
+#gkeglvdwob .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zxssibpojs .gt_font_normal {
+#gkeglvdwob .gt_font_normal {
   font-weight: normal;
 }
 
-#zxssibpojs .gt_font_bold {
+#gkeglvdwob .gt_font_bold {
   font-weight: bold;
 }
 
-#zxssibpojs .gt_font_italic {
+#gkeglvdwob .gt_font_italic {
   font-style: italic;
 }
 
-#zxssibpojs .gt_super {
+#gkeglvdwob .gt_super {
   font-size: 65%;
 }
 
-#zxssibpojs .gt_footnote_marks {
+#gkeglvdwob .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zxssibpojs .gt_asterisk {
+#gkeglvdwob .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zxssibpojs .gt_indent_1 {
+#gkeglvdwob .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zxssibpojs .gt_indent_2 {
+#gkeglvdwob .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zxssibpojs .gt_indent_3 {
+#gkeglvdwob .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zxssibpojs .gt_indent_4 {
+#gkeglvdwob .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zxssibpojs .gt_indent_5 {
+#gkeglvdwob .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zxssibpojs .katex-display {
+#gkeglvdwob .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zxssibpojs div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gkeglvdwob div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1129,99 +1130,108 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tbody class="gt_table_body">
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Swan Pond</td>
-<td class="gt_row gt_right" headers="total_hours">25982</td>
+<td class="gt_row gt_right" headers="total_hours">30005</td>
 <td class="gt_row gt_right" headers="operational_hours">24248</td>
-<td class="gt_row gt_right" headers="downtime_hours">1734</td>
-<td class="gt_row gt_right" headers="uptime_pct">93</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">19.6</td>
-<td class="gt_row gt_right" headers="surv_time_cover">93.3</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Station" style="font-style: italic">Hexham Swamp</td>
-<td class="gt_row gt_right" headers="total_hours">21772</td>
-<td class="gt_row gt_right" headers="operational_hours">17058</td>
-<td class="gt_row gt_right" headers="downtime_hours">4714</td>
-<td class="gt_row gt_right" headers="uptime_pct">78</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">13.8</td>
-<td class="gt_row gt_right" headers="surv_time_cover">78.3</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Station" style="font-style: italic">Corrie Island</td>
-<td class="gt_row gt_right" headers="total_hours">20922</td>
-<td class="gt_row gt_right" headers="operational_hours">15218</td>
-<td class="gt_row gt_right" headers="downtime_hours">5704</td>
-<td class="gt_row gt_right" headers="uptime_pct">73</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">12.3</td>
-<td class="gt_row gt_right" headers="surv_time_cover">72.7</td>
+<td class="gt_row gt_right" headers="downtime_hours">5757</td>
+<td class="gt_row gt_right" headers="uptime_pct">81</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">19.3</td>
+<td class="gt_row gt_right" headers="surv_time_cover">80.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Ramsar Road</td>
-<td class="gt_row gt_right" headers="total_hours">25815</td>
-<td class="gt_row gt_right" headers="operational_hours">18216</td>
-<td class="gt_row gt_right" headers="downtime_hours">7599</td>
-<td class="gt_row gt_right" headers="uptime_pct">71</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">14.8</td>
-<td class="gt_row gt_right" headers="surv_time_cover">70.6</td>
+<td class="gt_row gt_right" headers="total_hours">29838</td>
+<td class="gt_row gt_right" headers="operational_hours">20466</td>
+<td class="gt_row gt_right" headers="downtime_hours">9372</td>
+<td class="gt_row gt_right" headers="uptime_pct">69</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">16.3</td>
+<td class="gt_row gt_right" headers="surv_time_cover">68.6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Hexham Swamp</td>
+<td class="gt_row gt_right" headers="total_hours">25795</td>
+<td class="gt_row gt_right" headers="operational_hours">17058</td>
+<td class="gt_row gt_right" headers="downtime_hours">8737</td>
+<td class="gt_row gt_right" headers="uptime_pct">66</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">13.5</td>
+<td class="gt_row gt_right" headers="surv_time_cover">66.1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Corrie Island</td>
+<td class="gt_row gt_right" headers="total_hours">24879</td>
+<td class="gt_row gt_right" headers="operational_hours">15403</td>
+<td class="gt_row gt_right" headers="downtime_hours">9476</td>
+<td class="gt_row gt_right" headers="uptime_pct">62</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">12.2</td>
+<td class="gt_row gt_right" headers="surv_time_cover">61.9</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Fullerton Entrance</td>
-<td class="gt_row gt_right" headers="total_hours">25743</td>
+<td class="gt_row gt_right" headers="total_hours">29766</td>
 <td class="gt_row gt_right" headers="operational_hours">17221</td>
-<td class="gt_row gt_right" headers="downtime_hours">8522</td>
-<td class="gt_row gt_right" headers="uptime_pct">67</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">13.9</td>
-<td class="gt_row gt_right" headers="surv_time_cover">66.9</td>
+<td class="gt_row gt_right" headers="downtime_hours">12545</td>
+<td class="gt_row gt_right" headers="uptime_pct">58</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">13.7</td>
+<td class="gt_row gt_right" headers="surv_time_cover">57.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Milhams Pond</td>
-<td class="gt_row gt_right" headers="total_hours">25934</td>
+<td class="gt_row gt_right" headers="total_hours">29957</td>
 <td class="gt_row gt_right" headers="operational_hours">13144</td>
-<td class="gt_row gt_right" headers="downtime_hours">12790</td>
-<td class="gt_row gt_right" headers="uptime_pct">51</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">10.6</td>
-<td class="gt_row gt_right" headers="surv_time_cover">50.7</td>
+<td class="gt_row gt_right" headers="downtime_hours">16813</td>
+<td class="gt_row gt_right" headers="uptime_pct">44</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">10.4</td>
+<td class="gt_row gt_right" headers="surv_time_cover">43.9</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Curlew Point</td>
-<td class="gt_row gt_right" headers="total_hours">21772</td>
+<td class="gt_row gt_right" headers="total_hours">25795</td>
 <td class="gt_row gt_right" headers="operational_hours">10813</td>
-<td class="gt_row gt_right" headers="downtime_hours">10959</td>
-<td class="gt_row gt_right" headers="uptime_pct">50</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">8.8</td>
-<td class="gt_row gt_right" headers="surv_time_cover">49.7</td>
+<td class="gt_row gt_right" headers="downtime_hours">14982</td>
+<td class="gt_row gt_right" headers="uptime_pct">42</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">8.6</td>
+<td class="gt_row gt_right" headers="surv_time_cover">41.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Tomago</td>
-<td class="gt_row gt_right" headers="total_hours">20870</td>
+<td class="gt_row gt_right" headers="total_hours">24893</td>
 <td class="gt_row gt_right" headers="operational_hours">6673</td>
-<td class="gt_row gt_right" headers="downtime_hours">14197</td>
-<td class="gt_row gt_right" headers="uptime_pct">32</td>
-<td class="gt_row gt_right" headers="cont_listening_eff">5.4</td>
-<td class="gt_row gt_right" headers="surv_time_cover">32.0</td>
+<td class="gt_row gt_right" headers="downtime_hours">18220</td>
+<td class="gt_row gt_right" headers="uptime_pct">27</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">5.3</td>
+<td class="gt_row gt_right" headers="surv_time_cover">26.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Windeyers</td>
-<td class="gt_row gt_right" headers="total_hours">10743</td>
+<td class="gt_row gt_right" headers="total_hours">9795</td>
 <td class="gt_row gt_right" headers="operational_hours">441</td>
-<td class="gt_row gt_right" headers="downtime_hours">10302</td>
-<td class="gt_row gt_right" headers="uptime_pct">4</td>
+<td class="gt_row gt_right" headers="downtime_hours">9354</td>
+<td class="gt_row gt_right" headers="uptime_pct">5</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">0.4</td>
-<td class="gt_row gt_right" headers="surv_time_cover">4.1</td>
+<td class="gt_row gt_right" headers="surv_time_cover">4.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Davies Point</td>
-<td class="gt_row gt_right" headers="total_hours">20892</td>
-<td class="gt_row gt_right" headers="operational_hours">441</td>
-<td class="gt_row gt_right" headers="downtime_hours">20451</td>
+<td class="gt_row gt_right" headers="total_hours">24912</td>
+<td class="gt_row gt_right" headers="operational_hours">464</td>
+<td class="gt_row gt_right" headers="downtime_hours">24448</td>
 <td class="gt_row gt_right" headers="uptime_pct">2</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">0.4</td>
-<td class="gt_row gt_right" headers="surv_time_cover">2.1</td>
+<td class="gt_row gt_right" headers="surv_time_cover">1.9</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Station" style="font-style: italic">Dudley Test Site</td>
-<td class="gt_row gt_right" headers="total_hours">4142</td>
+<td class="gt_row gt_right" headers="total_hours">4359</td>
 <td class="gt_row gt_right" headers="operational_hours">0</td>
-<td class="gt_row gt_right" headers="downtime_hours">4142</td>
+<td class="gt_row gt_right" headers="downtime_hours">4359</td>
+<td class="gt_row gt_right" headers="uptime_pct">0</td>
+<td class="gt_row gt_right" headers="cont_listening_eff">0.0</td>
+<td class="gt_row gt_right" headers="surv_time_cover">0.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Station" style="font-style: italic">Swan Bay</td>
+<td class="gt_row gt_right" headers="total_hours">1997</td>
+<td class="gt_row gt_right" headers="operational_hours">0</td>
+<td class="gt_row gt_right" headers="downtime_hours">1997</td>
 <td class="gt_row gt_right" headers="uptime_pct">0</td>
 <td class="gt_row gt_right" headers="cont_listening_eff">0.0</td>
 <td class="gt_row gt_right" headers="surv_time_cover">0.0</td>
@@ -1245,10 +1255,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="the-array">THE ARRAY</h3>
 <div class="page-columns page-full">
 <div class="cell page-columns page-full">
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 15 rows containing missing values or values outside the scale range
-(`geom_segment()`).</code></pre>
-</div>
 <div class="cell-output-display page-columns page-full">
 <div class="page-columns page-full">
 <figure class="figure page-columns page-full">
@@ -1270,12 +1276,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Solid black lines are when a MOTUS station is operational. To simplify, when a station is not operational less than 24 hours, this period is considered as a operational period. Every dot represent at least one detection of one bird within an hour of the operational period. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.8 % to the total operational period for every stations within our local MOTUS array.</p>
+<p>Solid black lines are when a MOTUS station is operational. To simplify, when a station is not operational less than 24 hours, this period is considered as a operational period. Every dot represent at least one detection of one bird within an hour of the operational period. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed 8.6 % to the total operational period for every stations within our local MOTUS array.</p>
 </section>
 <section id="stations" class="level3">
 <h3 class="anchored" data-anchor-id="stations">STATIONS</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Curlew Point (8.8%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Fullerton Entrance (13.9%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Hexham Swamp (13.8%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Milhams Pond (10.6%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false">Ramsar Road (14.8%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false">Swan Pond (19.6%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false">Tomago (5.4%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-8" role="tab" aria-controls="tabset-1-8" aria-selected="false">Windeyers (0.4%)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Curlew Point (8.6%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Fullerton Entrance (13.7%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">Hexham Swamp (13.5%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-4" role="tab" aria-controls="tabset-1-4" aria-selected="false">Milhams Pond (10.4%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-5" role="tab" aria-controls="tabset-1-5" aria-selected="false">Ramsar Road (16.3%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-6" role="tab" aria-controls="tabset-1-6" aria-selected="false">Swan Pond (19.3%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-7-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-7" role="tab" aria-controls="tabset-1-7" aria-selected="false">Tomago (5.3%)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-8-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-8" role="tab" aria-controls="tabset-1-8" aria-selected="false">Windeyers (0.4%)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <p><img src="ch1_5_files/figure-html/2 station MOTUS array survey effort plot-1.png" class="img-fluid" width="672"></p>
@@ -1303,7 +1309,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong><em>Legend:</em></strong> <em>The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is “OFF” and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed</em> 8.8 % <em>at the total operational period for every stations within our local MOTUS array (operational survey effort).</em></p>
+<p><strong><em>Legend:</em></strong> <em>The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is “OFF” and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed</em> 8.6 % <em>at the total operational period for every stations within our local MOTUS array (operational survey effort).</em></p>
 </section>
 </section>
 <section id="condition-of-detections" class="level2">
