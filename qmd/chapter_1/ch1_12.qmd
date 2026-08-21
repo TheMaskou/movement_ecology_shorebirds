@@ -1,0 +1,911 @@
+---
+title: "Final analysis (OBP method)"
+format: html
+---
+
+```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# Source the script into that environment
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
+                   output = tempfile(fileext = ".R"),    
+                   quiet = TRUE))    
+```
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+TO BE COMPLETED
+
+Most of the analysis below is widely inspired from *Orange-bellied Parrot Migration Tracking Project, 2025 Report, Department of Natural Resources and Environment Tasmania*
+:::
+
+::: blockquote-blue
+**Load your data** in your R environment *- see [Load & Format \> Reproducibility](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#reproducibility)*
+:::
+
+```{r packages,  message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+library(motus)
+library(dplyr)
+library(here)
+library(ggridges)
+library(tidyr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(vegan)  
+library(philentropy) 
+library(gridExtra)
+library(gt)
+library(ggpubr)
+library(car)
+library(FSA)
+library(purrr)
+library(patchwork)
+library(mixtools)
+library(lubridate)
+```
+
+```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+# Birds
+data_all <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers info
+recv <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-recv-info\\.rds$", full.names = TRUE
+  )), 1)) 
+
+# Receivers activity
+sql.motus <- DBI::dbConnect(RSQLite::SQLite(), here::here("qmd", "chapter_1", "data", "project-294.motus"))
+recv.act <- tbl(sql.motus, "activity")  %>% 
+  collect() %>% 
+  as.data.frame() %>%
+  rename(deviceID = "motusDeviceID") %>%
+  filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only 
+  
+  # Set the time properly - IMPORTANT
+  mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
+         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
+                             tz = "Australia/Sydney")) 
+
+# Tide
+tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
+
+```
+
+## Relative Signal Strength Indicator (RSSI) 
+
+::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
+
+<img src="../../material/rssi_obp_schema.png" alt="Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)" style="width: 100%; height: auto; display: block;"/>
+
+<figcaption style="margin-top: 1em; font-style: italic;">
+
+Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)
+</figcaption>
+
+</figure>
+:::
+
+```{r rssi, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+
+ggplot(data_all, aes(x = sigPositive, y = speciesEN, fill = speciesEN)) +
+  geom_density_ridges(alpha = 0.7, na.rm = TRUE) +
+  facet_wrap(~ recvDeployName) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+## Defining observation events based on detection gap threshold
+
+### Filter true detections
+
+Motus protocols group detections at a receiver into runs of detections. A run is defined as a series of detections without a gap between sequential detections of more than 60 missed detections [(Motus 2022)](https://docs.motus.org/en/tags/tag-aliasing).   
+
+The tags used in our project emit radio bursts at a different set intervals so the gaps to define a new run vary:  
+ - 13.1 min (= 13.1 sec x 60) ==> NTQB2-4-2
+ - 13.1 min (= 13.1 sec x 60) ==> NTQB2-6-1
+ - 7.1 min (= 7.1  sec x 60)  ==> NTQB2-6-2
+ 
+```{r filter true detection, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+ 
+ 
+```
+
+
+### Detection treshold
+
+To define independent observations, we needed a time gap that separates a bird leaving a site from just briefly dropping out of antenna range (e.g., by turning away or moving behind vegetation). Short gaps likely mean the bird is still present; long gaps likely mean it has left. We analysed the distribution of time gaps between successive detection runs of the same bird at the same station, and across all individuals, and used this to choose a cut-off separating "same visit" from "new visit". A three-component mixture model (MIXTOOLS 2.0.0.1) was fitted to the gap durations, distinguishing short gaps (same visit) from medium/long gaps (new visit). Gaps were truncated to 5 min – 30 hours to remove noise from very short or very long outliers, and each gap was classified by whichever distribution best matched it. 
+
+```{r gap inclusion, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+
+
+# ---------------------------------------------------------------
+# 1. Build run-level summary (one row per run) from your hit data
+# ---------------------------------------------------------------
+# A "run" is already identified by runID in data_all. We need the
+# start/end time of each run, per individual, per station.
+
+runs <- data_all %>%
+  group_by(Band.ID, recvDeployName, runID) %>%
+  summarise(
+    runStart = min(timeAus, na.rm = TRUE),
+    runEnd   = max(timeAus, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# ---------------------------------------------------------------
+# 2. Compute gaps between successive runs of the same individual
+#    at the same antenna/site
+# ---------------------------------------------------------------
+gaps <- runs %>%
+  arrange(Band.ID, recvDeployName, runStart) %>%
+  group_by(Band.ID, recvDeployName) %>%
+  mutate(
+    prevRunEnd = lag(runEnd),
+    gapSec     = runStart - prevRunEnd,
+    gapHours   = as.numeric(gapSec) / 3600
+  ) %>%
+  ungroup() %>%
+  filter(!is.na(gapHours)) %>%
+  
+  filter(gapHours > 0) # we are not dealing with overlap yet
+
+# ---------------------------------------------------------------
+# 3. Truncate gaps to (0.3, 96) hours for mixture model fitting                  /!\ WHAT TO CHOOSE HERE /!\
+# ---------------------------------------------------------------
+gap_trunc <- gaps %>%
+  filter(gapHours > 0.3,     # ~5 minutes                   
+         gapHours < 96)      # 5 hours
+   # pull(gapHours)
+
+ggplot(gap_trunc, aes(x = gapHours, y = after_stat(density))) +
+  geom_histogram(binwidth = 2, # 2h
+                 fill = "grey30", 
+                 color = "white") +
+  scale_x_continuous(breaks = seq(0, 96, 5)) + # 5h
+  labs(x = "Gap Duration (hours)", y = "density") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank()) 
+
+ggplot(gap_trunc %>% filter(gapHours < 30), aes(x = gapHours, y = after_stat(density))) +
+  geom_histogram(binwidth = 1, # 1h
+                 fill = "grey30", 
+                 color = "white") +
+  scale_x_continuous(breaks = seq(0, 30, 1)) + # 1h
+  labs(x = "Gap Duration (hours)", y = "density") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank())
+
+ggplot(gap_trunc %>% filter(gapHours < 15), aes(x = gapHours, y = after_stat(density))) +
+  geom_histogram(binwidth = 0.12, # ~5min
+                 fill = "grey30", 
+                 color = "white") +
+  scale_x_continuous(breaks = seq(0, 15, 1)) + # 1h
+  labs(x = "Gap Duration (hours)", y = "density") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank()) # /!\ I SELECT SUBJECTIVELY 1h AS TRESHOLD - conservative as 2h could be /!\
+
+# ---------------------------------------------------------------
+# 4. Fit a 3-component normal mixture model
+# ---------------------------------------------------------------
+gap_trunc <- gaps %>%
+  filter(gapHours > 0.3,     # ~5 minutes                   
+         gapHours < 30) %>%  # 30 hours
+  pull(gapHours)
+
+set.seed(123)  # for reproducibility of EM starting values
+
+mix_model <- normalmixEM(
+  gap_trunc,
+  k = 3,
+  maxit = 5000,
+  epsilon = 1e-08
+)
+
+summary(mix_model)
+
+# ---------------------------------------------------------------
+# 5. Classify each gap to the component with highest posterior prob
+# ---------------------------------------------------------------
+posteriors <- mix_model$posterior
+classification <- apply(posteriors, 1, which.max)
+
+# Order components by their mean, so component 1 = shortest-gap
+# (non-independent), 2 = medium, 3 = long (independent)
+comp_order <- order(mix_model$mu)
+comp_labels <- c("Non-independent", "Independent (medium)", "Independent (long)")
+names(comp_labels) <- as.character(comp_order)
+
+class_df <- data.frame(
+  gapHours = gap_trunc,
+  component = comp_labels[as.character(classification)]
+)
+
+# ---------------------------------------------------------------
+# 6. Find the cut-point: the gap value where classification
+#    switches from "Non-independent" to an "Independent" class
+#    (i.e. where posterior prob of the non-independent component
+#    drops below 0.5 as gap duration increases)
+# ---------------------------------------------------------------
+nonindep_comp <- comp_order[1]
+
+cutpoint_df <- data.frame(
+  gapHours = gap_trunc,
+  p_nonindep = posteriors[, nonindep_comp]
+) %>%
+  arrange(gapHours)
+
+# first point where posterior probability of non-independence < 0.5
+cutpoint <- cutpoint_df$gapHours[which(cutpoint_df$p_nonindep < 0.5)[1]]
+cat("Cut-point (hours):", round(cutpoint, 2), "\n")
+
+# ---------------------------------------------------------------
+# 7. Build density curves for each component (scaled by lambda)
+#    to overlay on the histogram
+# ---------------------------------------------------------------
+x_grid <- seq(0, 30, length.out = 500)
+
+dens_df <- do.call(rbind, lapply(seq_along(mix_model$mu), function(i) {
+  data.frame(
+    x = x_grid,
+    y = mix_model$lambda[i] * dnorm(x_grid, mix_model$mu[i], mix_model$sigma[i]),
+    component = comp_labels[as.character(i)]
+  )
+}))
+
+# assign colours matching the appendix figure
+comp_colors <- c(
+  "Non-independent"      = "darkred",
+  "Independent (medium)" = "lightblue",
+  "Independent (long)"   = "darkgreen"
+)
+
+# ---------------------------------------------------------------
+# 8. Plot: histogram of truncated gaps + mixture density curves
+#    + vertical cut-point line
+# ---------------------------------------------------------------
+ggplot() +
+  geom_histogram(
+    data = data.frame(gapHours = gap_trunc),
+    aes(x = gapHours, y = after_stat(density)),
+    binwidth = 1, fill = "grey30", color = "white", boundary = 0
+  ) +
+  geom_line(
+    data = dens_df,
+    aes(x = x, y = y, color = component),
+    linewidth = 1
+  ) +
+  geom_vline(xintercept = cutpoint, color = "black", linewidth = 0.6) +
+  scale_color_manual(values = comp_colors) +
+  scale_x_continuous(breaks = seq(0, 30, 2)) +
+  labs(
+    x = "Gap Duration (hours)",
+    y = "density",
+    color = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank()
+  )
+
+```
+
+### Define used time (hours)
+
+```{r site use, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+
+used_bird_recv_time <- runs %>%
+  
+  left_join(data_all %>% select(Band.ID, recvDeployName, runID, tideCategory, speciesEN),
+            by = c("Band.ID", "recvDeployName", "runID")) %>%
+  mutate(duration_h = difftime(runEnd, runStart, units = "hours")) %>%
+  
+  group_by(Band.ID, speciesEN, recvDeployName, tideCategory)  %>%
+  summarise(duration_h = sum(duration_h)) %>%
+  
+  mutate(tideDiel = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal"),
+         tideHighLow = if_else(grepl("High", tideCategory), "High", "Low"))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##
+
+            TO BE CONTINUED
+
+
+### Define available time per site
+
+Now tide data ready to be processed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.
+
+Available time for each Motus stations is accessed with `activity` table: each row is a dated record of noise or a tag detected *- see [Survey effort \> Activity table](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#activity-table)*.
+
+We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity, and expand this period in hours.
+
+<br>
+
+```{r Available vs Used RECV AVAILABLE, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+# Sort the terminated serno (if terminated, ie. one box removed from one antenna site, a date comes along)
+# but still needed for accessing survey effort as the station is currently running with another serno 
+recv.act.term <- recv.act %>%
+  left_join(recv %>% 
+              filter(!is.na(timeEndAus)) %>%
+              select(deviceID, serno, recvDeployName),
+            "deviceID") %>%
+  filter(!is.na(recvDeployName)) %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno))
+
+# Sort the currently running serno
+recv.act.runn <- recv.act %>%
+  left_join(recv %>% 
+              filter(is.na(timeEndAus)) %>%
+              select(deviceID, serno, recvDeployName),
+            "deviceID") %>%
+  filter(!is.na(recvDeployName)) %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno))
+
+# Merging in one data-set to use Station's name further + pick-up the rounded hours
+recv.act <- bind_rows(recv.act.runn, recv.act.term) %>%
+  mutate(hour_dt = round_date(dateAus, "hour"))
+
+# Providing helpful variables
+recv <- recv %>%
+  mutate(SernoStation = paste0(recvDeployName, "_", serno),
+         lisStart = timeStartAus,
+         lisEnd = if_else(
+           is.na(timeEndAus), # means the station is still running since the last data downloading
+           with_tz(Sys.time(), "Australia/Sydney"),
+           with_tz(as_datetime(timeEndAus, tz = "UTC"), "Australia/Sydney")) )
+
+# Generating hourly sequences per SernoStation from start to end dates of the deviceID at particular sites
+recv_hours <- recv %>%
+  select(recvDeployName, deviceID, SernoStation, lisStart, lisEnd) %>%
+  group_by(SernoStation) %>%
+  rowwise() %>%
+  mutate(hour_dt = list(seq(from = round_date(lisStart, unit = "hour"),
+                            to = round_date(lisEnd, unit = "hour"),
+                            by = "hour")) ) %>%
+  unnest(cols = c(hour_dt)) %>%
+  ungroup()
+
+# Simplify station variables (recvDeployName)
+recv <- recv %>% 
+  select(!recvDeployName) 
+recv$recvDeployName <- sub("_SG-.*", "", recv$SernoStation)
+
+recv_hours <- recv_hours %>% 
+  select(!recvDeployName) 
+recv_hours$recvDeployName <- sub("_SG-.*", "", recv_hours$SernoStation)
+
+```
+
+<br>
+
+We now how the complete temporal coverage, expanded in hours, for each Motus station.
+
+However, due to some temporary failures or maintenance *(see [Survey effort \> Operational periods](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#operational-periods))*, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substrate these off-hours to the complete temporal coverage.
+
+<br>
+
+```{r Available vs Used RECV OFF PERIODS, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+
+# Distinguish station from mixed recv + Giving operational variable (= TRUE when existing values from act table)
+recv_hours <- recv_hours %>%
+  left_join(recv.act %>%
+              distinct(recvDeployName, hour_dt) %>%
+              mutate(operational = TRUE),
+            by = c("recvDeployName", "hour_dt")) %>%
+  mutate(operational = if_else(is.na(operational), FALSE, TRUE))
+
+# /!\ Due to unknown error? Have to set this manually
+recv_hours <- recv_hours %>%
+  mutate(operational = case_when(
+    recvDeployName == "Fullerton Entrance" & 
+      hour_dt > as.POSIXct("2023-04-02") & 
+      hour_dt < as.POSIXct("2023-04-05") ~ FALSE,
+    TRUE ~ operational))
+
+# Summary table                                                                     
+off_runs <- recv_hours %>% 
+  arrange(recvDeployName, hour_dt) %>%
+  group_by(recvDeployName) %>%
+  mutate(off_run_id = consecutive_id(operational == FALSE)) %>%
+  ungroup() %>%
+  
+  filter(operational == FALSE) %>%
+  
+  group_by(recvDeployName, off_run_id) %>%
+  summarise(
+    start_off = min(hour_dt),
+    end_off = max(hour_dt),
+    tot_off_hours = n(),
+    .groups = "drop") %>%
+  
+  filter(tot_off_hours > 24)
+
+# Unique recvDeployNames from off_runs
+recv_names <- unique(recv_hours$recvDeployName)
+
+# Split tide_data into a named list with one element per recvDeployName
+tide_data_list <- setNames(vector("list", length(recv_names)), recv_names)
+tide_data <- tide_data %>%
+    rename(timeAus = "tideDateTimeAus")
+  
+for(name in recv_names) {
+  # Get off intervals for this recvDeployName
+  intervals <- off_runs %>%
+    filter(recvDeployName == name) %>%
+    select(start_off, end_off)
+  
+  # Get deployment start and end dates for this recvDeployName
+  deploy <- recv_hours %>%
+    filter(recvDeployName == name) %>%
+    summarise(
+      lisStart = min(lisStart, na.rm = TRUE),
+      lisEnd = max(lisEnd, na.rm = TRUE)
+    )
+  
+  # Filter tide_data by deployment period
+  td <- tide_data %>%
+    filter(timeAus >= deploy$lisStart & timeAus <= deploy$lisEnd) %>%
+    mutate(recvDeployName = name) 
+  
+  if(nrow(intervals) > 0) {
+    # Vectorized exclusion of off intervals
+    is_in_off <- sapply(td$timeAus, function(t) {
+      any(t >= intervals$start_off & t <= intervals$end_off)
+    })
+    td <- td[!is_in_off, ]
+  }
+  tide_data_list[[name]] <- td
+}
+
+tide_data_df <- bind_rows(tide_data_list) %>%
+  mutate(hour_dt = round_date(timeAus, unit = "hour"))            # AVAILABLE TIME (tide categories covering same time as recv survey effort) 
+
+# Finalise data set for receiver ON with tidal data, per hour
+total_recv_tide_data <- tide_data_df %>%
+  group_by(recvDeployName) %>%
+  
+  # Expand per hour bin
+  summarise(hour_seq = list(seq(min(hour_dt), max(hour_dt), by = "hour")), .groups = "drop") %>% 
+  unnest(hour_seq) %>%
+  rename(hour_dt = hour_seq) %>%
+  
+  # Match tide data to hourly grid
+  # Hours WITHOUT tide data get NA values across all columns but we'll deal with this later
+  left_join(tide_data_df, by = c("recvDeployName", "hour_dt")) 
+
+```
+
+<br>
+
+**Temporal coverage for each station is now reduced to its operational periods**, and ready to be processed.
+
+We now assign each bird its own available time period, spanning from its tagging date to its last Motus detection, and expanded to hourly resolution too.
+
+<br>
+
+```{r Available vs Used BIRD AVAILABLE TIME, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+
+# Get the monitored period of each bird
+period_sp <- data_all  %>%
+  group_by(Band.ID) %>%
+  reframe(DateAUS.Trap = first(DateAUS.Trap), 
+          last_dateAus = max(dateAus),
+          speciesEN = speciesEN) %>%
+  unique()
+
+# Expand one row per hours to each individual across its whole period (this is the available time)
+bird_hours <- period_sp %>%
+  group_by(Band.ID) %>%
+  rowwise() %>%
+  mutate(hour_dt = list(seq(from = as.POSIXct(ymd(DateAUS.Trap), tz = "UTC"),
+                            to = as.POSIXct(last_dateAus, tz = "UTC"),
+                            by = "hour"))) %>%
+  unnest(cols = c(hour_dt)) %>%
+  ungroup() 
+
+# Duplicate in as many list as many stations
+recv_names <- unique(recv_hours$recvDeployName)
+bird_data_list <- setNames(vector("list", length(recv_names)), recv_names)
+
+for(name in recv_names) {
+  
+  valid_hours_recv <- total_recv_tide_data %>%
+    filter(recvDeployName == name) %>%
+    pull(hour_dt)
+  
+  valid_hours_bird_recv <- bird_hours %>%
+    filter(hour_dt %in% valid_hours_recv)
+  
+  valid_hours_bird_recv$name <- name
+  
+    
+  bird_data_list[[name]] <- valid_hours_bird_recv
+} 
+
+# ADD TIDE TO AVAILABLE TIME
+# The NA cols left over before from recv table, now also filtered out based on available time coming from bird periods table
+get.tideIndex <- function(time){return(which.min(abs(tide_data$timeAus - time)))}
+
+available_bird_recv_time <- bind_rows(bird_data_list) %>%
+  mutate(hour_dt = force_tz(hour_dt, "Australia/Sydney")) %>%
+  # Remove rows with ANY NA
+  filter(if_all(everything(), ~ !is.na(.))) %>%
+  mutate(tideIndex = purrr::map_dbl(hour_dt, get.tideIndex))
+
+# Extract tide categories thanks to tide index (row order in available_bird_recv_time)
+tide_values <- tide_data[available_bird_recv_time$tideIndex, c("tideCategory")]
+
+# Merge tide categories to available_bird_recv_time and factorise the variables
+available_bird_recv_time <- available_bird_recv_time %>%
+  mutate(tideCategory = as_factor(tide_values$tideCategory))
+
+# FINALISE AVAILABLE TIME 
+available_bird_recv_time <- available_bird_recv_time %>%
+  rename(recvDeployName = name) %>%
+  group_by(Band.ID, speciesEN, recvDeployName, tideCategory)  %>%
+  summarise(duration_h = n()) %>%
+  mutate(tideDiel = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal"),
+         tideHighLow = if_else(grepl("High", tideCategory), "High", "Low")) %>%
+  select(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, duration_h)
+
+
+```
+
+::: blockquote-blue
+**The *available* time is now defined** for each bird across each Motus station, taking into account the periods where stations where ON only. The *available* periods are expanded in hours and the tide condition is associated.
+:::
+
+
+
+## Usage rate per site
+
+Now that the *used* and *available* time have been determined for each individual and for each Motus station, we can relate these two elements together with the **Usage rate** (or rate of use).
+
+::: {style="overflow-x: auto; width: 100%;"}
+$$
+\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species} 
+$$
+:::
+
+Some cases may happen where the *time used* was over the *available*. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.\
+<br>
+
+```{r potential error, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+table((used_bird_recv_time  %>% 
+         filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
+used_bird_recv_time %>% 
+  filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew") %>%
+  select(tideCategory, duration_h)
+
+
+table((available_bird_recv_time  %>% 
+         filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
+available_bird_recv_time %>% 
+  filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew") %>%
+  select(tideCategory, duration_h)
+```
+
+```{r above hundred, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+
+figure_plot <- left_join(available_bird_recv_time %>% 
+                           group_by(recvDeployName, Band.ID, speciesEN) %>%
+                           rename(available_t = "duration_h"),
+                         used_bird_recv_time %>%
+                           rename(used_t = "duration_h")) %>%
+  mutate(rate_use = used_t*100/available_t)
+
+
+
+
+above <- figure_plot %>%
+  filter(rate_use > 100)
+above  %>%
+ ungroup() %>% 
+  gt() %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels() ) 
+
+above100 <- above %>%
+  filter(rate_use > 100 & rate_use < 140)
+above140 <- above %>%
+  filter(rate_use >= 140)
+
+```
+
+::: blockquote-yellow
+**Note:** We decided to force **n = `r nrow(above100)`** out of `r nrow(figure_plot)` cases where the *rate used* was between 100 and 140 % to equal 100 %.\
+And we decided to remove **n = `r nrow(above140)`** cases where the *rate used* was over 140 %, considering the tag might simply have fell of the bird within the vicinity of the station.\
+Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. *- See table above.*
+:::
+
+```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+figure_plot <- figure_plot %>%
+  
+  mutate(rate_use = ifelse(rate_use > 100 & rate_use < 140, 100, rate_use)) %>% # force 100-140 rate values to equal 100 %
+  mutate(rate_use = ifelse(rate_use >= 140, NA, rate_use)) %>%                  # remove rates above 140 %
+  
+  mutate(speciesType = factor(shorebird_class[speciesEN], 
+                               levels = c("migratory", "resident"))) %>%
+  
+  filter(!speciesEN %in% c("Masked Lapwing")) 
+
+
+
+  
+#  filter(speciesEN %in% c("Pacific Golden-Plover", "Curlew Sandpiper", "Bar-tailed Godwit")) %>%
+#  filter(!recvDeployName %in% c("Corrie Island", "Davies Point", "Swan Pond"))
+
+```
+
+::: blockquote-yellow
+**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.
+:::
+
+Now, everything is ready to format the data for plot and to visualise the results for **Usage rate** and **Hourly usage** across the Motus stations of our local array.
+
+```{r tool, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+# Track size sample
+counts <- used_bird_recv_time %>%
+      group_by(speciesEN) %>%
+      summarise(n = n_distinct(Band.ID)) %>%
+      mutate(label = paste0(speciesEN, " (n = ", n, ")"))
+label_vec <- setNames(counts$label, counts$speciesEN)
+```
+
+```{r 4 Used rate PLOT, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+# Tide and species groupings
+tide_levels <- c("Low", "High")
+species_types <- unique(shorebird_class)  
+
+# Simplified function - no min_n_nonzero check
+make_plot <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  p <- ggplot(data_sub,
+              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
+                  y    = rate_use,
+                  fill = tideDiel))
+  
+  # Always add boxplot for all available data
+  p <- p + 
+    geom_boxplot(outlier.shape = NA,
+                 varwidth = FALSE,
+                 position = position_dodge(width = 0.8, preserve = "single")) +
+    
+    # Always show individual points
+    geom_point(aes(shape = tideDiel), 
+               position = position_dodge(width = 0.8),
+               alpha = 1, size = 1.5,
+               show.legend = FALSE) +
+    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+    
+    facet_wrap(~ speciesEN,
+               labeller = labeller(speciesEN = label_vec)) +
+    labs(x     = "Receiver Deployment",
+         y     = "Rate of Use (%)",
+         title = paste(ifelse(species_type == "migratory",
+                              "Migratory species", "Resident species"),
+                       "during", tide_level, "tide")) +
+    coord_cartesian(ylim = c(0, 100)) +
+    theme_minimal() +
+    scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  return(p)
+}
+
+# Generate all plots
+plots_used_rate <- purrr::cross2(tide_levels, species_types) %>%
+  purrr::map(~ make_plot(.x[[1]], .x[[2]]))
+
+```
+
+```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+# General function to provide one table with stats values
+make_summary_table <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  summary_table <- data_sub %>%
+    group_by(speciesEN, recvDeployName, tideDiel) %>%
+    summarise(
+      n_individual = n(),
+      min = round(min(rate_use, na.rm = TRUE), 1),
+      q1 = round(quantile(rate_use, 0.25, na.rm = TRUE),1),
+      median = round(median(rate_use, na.rm = TRUE),1),
+      q3 = round(quantile(rate_use, 0.75, na.rm = TRUE),1),
+      max = round(max(rate_use, na.rm = TRUE),1),
+      mean = round(mean(rate_use, na.rm = TRUE),1),
+      sd = round(sd(rate_use, na.rm = TRUE),1),
+      .groups = 'drop'
+    ) %>%
+    arrange(speciesEN, recvDeployName, tideDiel) %>%
+    rename(Species = "speciesEN", Station = "recvDeployName", condition = "tideDiel")
+  
+  return(summary_table)
+}
+
+# One table per conditions
+high_migratory <- make_summary_table("High", "migratory")
+high_resident <- make_summary_table("High", "resident")
+low_migratory <- make_summary_table("Low", "migratory")
+low_resident <- make_summary_table("Low", "resident")
+```
+
+### RESIDENT BIRDS
+
+::::: panel-tabset
+##### High Tide
+
+```{r 4 Used rate 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+plots_used_rate[[4]]
+```
+
+::: {.callout-tip collapse="true" title="High Tide Resident birds"}
+```{r 4 Used rate table, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+high_resident  %>%
+  gt() %>%
+  tab_header(title = "Statistics - High Tide Resident Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+:::
+
+##### Low Tide
+
+```{r 4 Used rate 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+plots_used_rate[[3]]
+```
+
+::: {.callout-tip collapse="true" title="Low Tide Resident birds"}
+```{r 4 Used rate table 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+low_resident  %>%
+  gt() %>%
+  tab_header(title = "Statistics - Low Tide Resident Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+:::
+:::::
+
+### MIGRATORY BIRDS
+
+::::: panel-tabset
+##### High Tide
+
+```{r 4 Used rate 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+plots_used_rate[[2]]
+```
+
+::: {.callout-tip collapse="true" title="High Tide Migratory birds"}
+```{r 4 Used rate table 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+high_migratory  %>%
+  gt() %>%
+  tab_header(title = "Statistics - High Tide Migratory Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+:::
+
+##### Low Tide
+
+```{r 4 Used rate 4, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+plots_used_rate[[1]]
+```
+
+::: {.callout-tip collapse="true" title="Low Tide Migratory birds"}
+```{r 4 Used rate table 5, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+low_migratory  %>%
+  gt() %>%
+  tab_header(title = "Statistics - Low Tide Migratory Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+:::
+:::::

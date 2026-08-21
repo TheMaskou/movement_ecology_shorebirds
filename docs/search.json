@@ -979,5 +979,12 @@
       "Data",
       "Load & Format"
     ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_12.html",
+    "href": "qmd/chapter_1/ch1_12.html",
+    "title": "Movement Ecology - Shorebirds",
+    "section": "",
+    "text": "library(motus)\nlibrary(dplyr)\nlibrary(here)\nlibrary(ggplot2)\nlibrary(tidyr)\nlibrary(readr)\nlibrary(dplyr)\nlibrary(ggplot2)\nlibrary(vegan)  \nlibrary(philentropy) \nlibrary(gridExtra)\nlibrary(gt)\nlibrary(ggpubr)\nlibrary(car)\nlibrary(FSA)\nlibrary(patchwork)"
   }
 ]
