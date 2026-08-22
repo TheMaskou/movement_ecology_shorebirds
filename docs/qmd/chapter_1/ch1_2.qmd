@@ -5,14 +5,13 @@ format: html
 
 ```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
  
-
-library(motus)
-library(dplyr)
-library(here)
+library(motus) 
+library(dplyr)   
+library(here)  
 library(DBI)
 library(RSQLite)
-library(forcats) 
-library(lubridate)
+library(forcats)  
+library(lubridate) 
 library(bioRad) 
 library(purrr) 
 library(ggplot2)
@@ -26,7 +25,7 @@ data_all <- readRDS(
   tail(sort(list.files(
     here::here("qmd", "chapter_1", "data", "motus"),
     pattern = "-data\\.rds$", full.names = TRUE
-  )), 1)) 
+  )), 1))  
 
 # Receivers info
 recv <- readRDS(
@@ -50,7 +49,7 @@ spreadsheet <- readRDS(
 nb_undetect <- spreadsheet %>% 
   filter(is.na(Euthanised.)) %>%
   distinct(Band.ID) %>%
-  filter(!Band.ID %in% unique(data_all$Band.ID))
+  filter(!Band.ID %in% unique(data_all$Band.ID)) 
 
 # Band.IDs in spreadsheet and in data_all (tagged + released and detected)
 nb_detect <- spreadsheet %>% 
@@ -104,23 +103,33 @@ detect <- spreadsheet %>%
 retag <- spreadsheet %>% 
   filter(!is.na(spreadsheet$Retagged.))
 
+# EXTRACT LAST DATE OF DATA FROM MOTUS SERVER
+latest_file <- tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "motus"),
+    pattern = "-data\\.rds$", full.names = TRUE
+  )), 1)
+
+file_date <- as.Date(sub(".*/(\\d{4}-\\d{2}-\\d{2})-data\\.rds$", "\\1", latest_file))
+
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+The following analysis are based on data downloaded on **`r format(file_date, "%d-%b-%Y")`** from Motus server.
+
 Since 2021, **`r moni$value[moni$variable == "nb_released"]` birds** belonging to **`r length(unique(data_all$speciesEN))` species** have been captured, tagged and released.
 
 **You can find the complete record of the captures [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=1765667294608&web=1).**
 
 Motus allows you to openly [explore the data](https://motus.org/dashboard/#e=profile&d=projects&s=294&f=%7B%7D) on the server.
 
-However, it might be useful and more talkative to observe fine and direct movement events from the detections, and to breakdown the data into different groups depending particular point of views and wishes.
+However, it might be useful and more informative to observe fine and direct movement events from the detections, and to breakdown the data into different groups depending particular point of views and wishes.
 
 Below are displayed several tables to explore the data with every tagged bird uniquely identified with a \`Band.ID*\`*, also related to a *MOTUS tag ID*.
 :::
 
 ## Motus table
 
-**Find below a our data summarised across species and up to date** (last detection `r max(data_all$dateAus)`)**.**
+**Find below our data summarised across species and up to date** (last detection `r max(data_all$dateAus)`)**.**
 
 ```{r 1 table 1 pop , message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
@@ -142,14 +151,12 @@ n_undetect <- data_all %>%
 
 # Nb of individual never detected
 n_detect <- data_all %>%
-  distinct(speciesEN) %>% # to force including all values of species                        
-  left_join(spreadsheet %>%
-              filter(is.na(Euthanised.),
-                     Band.ID %in% unique(data_all$Band.ID)) %>%
-              group_by(speciesEN) %>%
-              summarise(n_detect = n(), .groups = "drop"),
-            by = "speciesEN") %>%
-  mutate(n_detect = ifelse(is.na(n_detect), 0, n_detect))
+  filter(Band.ID %in% (spreadsheet %>% 
+                       filter(is.na(Euthanised.)) %>% 
+                       pull(Band.ID))) %>%
+  distinct(speciesEN, Band.ID) %>%
+  count(speciesEN, name = "n_detect")
+
 
 # Nb of individual re-tagged
 n_retagged <- data_all %>%
@@ -313,7 +320,7 @@ table_1_pub <- table_1 %>%
 
 
 # Table 1
-table_1_pub %>%
+table_1_pub <- table_1_pub %>%
   gt() %>%
   
   tab_header(
@@ -321,7 +328,7 @@ table_1_pub %>%
   opt_align_table_header(align = "left") %>%
   
   tab_footnote(
-    footnote = md("**Legend.** Grouped by species, this table summarises the number of shorebird individuals tagged and tracked using MOTUS-VHF technology in the Hunter estuary near Newcastle (NSW, Australia). Birds have been surveyed from the day they have been tagged (First day) to their last detection (Last day), which gives the Total of days. However, detections occurred only on certain days (Detected days). We also looked at the number of sites each species might visit per day (Nb of sites/days) and the Total number of sites the species visited during its whole survey. Dates are in dd-mm-yyyy format. Mean and standard error values are provided(x̄ \u00B1 SE, with SE = SD/\u221An)"))  %>%
+    footnote = md("**Legend.**Mean and standard error values are systemtically provided (x̄ \u00B1 SE, with SE = SD/\u221An). Grouped by species, this table summarises the number of shorebird individuals tagged and tracked using MOTUS-VHF technology in the Hunter estuary near Newcastle (NSW, Australia). Birds have been surveyed from the day they have been tagged (First day - at species level) to their last detection (Last day), which gives the Total of days. However, detections occurred only on certain days (Detected days - at species level). We also looked at the number of sites each species might visit per day (Nb of sites/days) and the Total number of sites the species visited during its whole survey. Dates are in dd-mm-yyyy format."))  %>%
 
   opt_table_font(font = "Times New Roman") %>%
   
@@ -356,15 +363,30 @@ table_1_pub %>%
     locations = cells_column_labels(columns = everything())) %>%
   
   tab_options(
-    table.font.size = pct(90),
+    table.font.size = px(16),
     heading.title.font.size = px(16),
     data_row.padding = px(3),  
     table.width = pct(100)  
   )
 
+table_1_pub
+
 ```
 
-And have a hint about the **conditions of detection for each species**, in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*.
+```{r print table, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+gtsave(
+  data = table_1_pub,
+  filename =  here::here("material", "table_1.png"),   
+  path = "outputs",           # optional folder
+  expand = 10,                # optional padding around table
+  vwidth = 1600,              # optional: wider image to avoid cropping
+  vheight = 0                 # 0 lets height be computed automatically
+)
+```
+
+<br> <br>
+
+And have a hint about the tidal-diel **conditions that each species is detected for** in the figure below *- see further details in [Station usage - hours \> Detection conditions](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions)*. <br>
 
 ```{r explore, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 temp_file <- tempfile(fileext = ".R")
@@ -375,6 +397,8 @@ source(temp_file)
 ```{r explore 2, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 explore
 ```
+
+<br>
 
 ## Captures
 

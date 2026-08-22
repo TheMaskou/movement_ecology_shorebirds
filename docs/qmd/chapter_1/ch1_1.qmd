@@ -7,24 +7,23 @@ title: "Load & Format"
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
                    output = tempfile(fileext = ".R"), 
                    quiet = TRUE))
-## _/!\_  ##    
+## _/!\_  ##      
 
-################ First, run the .R script to download last up to date Motus data-set
+################ First, run the .R script to download last up to date Motus data-set 
 update <- TRUE # Second, Chose whether to update new detections from last data.rds (update = TRUE)
-################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\
+################ Or to treat the complete Motus data-set (update = FALSE) - /!\ takes a while ... /!\  
 
-## _/!\_ ##
-
+## _/!\_ ## 
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-Our Motus project aims to better understand movements and habitat preferences for shorebird populations within the local estuaries of the Hunter and Port Stephens. It has a focus on Far Eastern Curlew but additional species are also studied.
+Our Motus project aims to better understand movements and habitat preferences for shorebird populations within the local estuaries of the Hunter and Port Stephens.
 
 -   **Motus Project:** [*Shorebird monitoring in central NSW estuaries*](https://motus.org/dashboard/#e=profile&d=projects&s=294)
 
 -   **Project ID:** *294*
 
--   **Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
+-   **Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: YYYY-MM-DD*
 
 Retrieve the data from Motus server ([Accessing detections data - Motus 2025](https://motuswts.github.io/motus/articles/03-accessing-data.html)) and load them into your R environment so you can filter and format for further analysis.
 
@@ -96,7 +95,7 @@ df.alltags <- tbl(sql.motus, "alltags") %>%
          timeAus = as_datetime(ts, tz = "Australia/Sydney"),
          dateAus = as_date(timeAus),
          year = year(time), 
-         doy = yday(time))
+         day = yday(time))
 
 ```
 
@@ -126,14 +125,15 @@ If you already have a .sql file, set `new` = FALSE and `update` = TRUE so you ar
 
 `motus::metadata()` downloads the metadata from the online Motus network (receiver information and more).
 
-`motus::dbConnect()` links your .sql to your environment. Avoid to use high memory as .sql is a *lazy* table and not yet hardly written on your hardware.
+`motus::dbConnect()` links your .sql to your environment to your environment as a *lazy* table, preventing the entire database from being written straight to hardware memory.
 
-`motus::tbl()` extracts all the tags fat into your environment. Then formatted into a classic dataframe.
+`motus::tbl()` extracts all the tags data into your environment. Then formatted into a classic dataframe.
 
 ```{r 1 data quick view, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
 tail(df.alltags %>% 
-       select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv))
+       arrange(timeAus) %>%
+       select(timeAus, speciesEN, motusTagID, tagModel, pulseLen, recvDeployName, recv)) 
 
 ```
 
@@ -144,7 +144,7 @@ Above, a quick view about the last data uploaded to Motus server, giving you the
 ### TAGS
 
 ::: blockquote-red
-**WARNING**: The values entered within the below filtering R code are depending your own context.
+**WARNING**: Onward, values and variable names might change depending your own context.
 :::
 
 Here are cleaned-out the data recorded from undesired tags and/or receivers depending our local context. So the following has been processed on the raw data.
@@ -170,7 +170,7 @@ df.alltags <- df.alltags %>%
        TRUE ~ speciesEN)) %>%
   
   # motusTagID as factor
-  mutate(motusTagID = as.factor(motusTagID))
+  mutate(motusTagID = as.character(motusTagID))
 
   
 # Cleaning and correcting receiver metadata
@@ -205,7 +205,7 @@ df.alltags <- df.alltags %>%
 
 **Have been modified:**
 
--   Tag's `specieEN` information have been changed from *NA* to different values depending case to case;
+-   Tag's `speciesEN` information have been changed from *NA* to different values depending case to case;
 
 -   Receiver station's name `recvDeployName` has been changed from *NA* to Windeyers starting from 02/15/2025.
 
@@ -222,7 +222,7 @@ ggplot(df.alltags %>%
   geom_bar(fill = "steelblue") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(x = "Motus Station", y = "Nb of motusFilter = 1 (good)") 
+  labs(x = "Motus Station", y = "Good detections (Count when motusFilter = 1)") 
 
 # Checking 'motusFiltered out' tag data
 ggplot(df.alltags %>%
@@ -231,7 +231,7 @@ ggplot(df.alltags %>%
   geom_bar(fill = "orange") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(x = "Motus Station", y = "Nb of motusFilter = 0 (filtered out)")
+  labs(x = "Motus Station", y = "False detections (Count when motusFilter = 0)")
 
 # Checking proportion of data quality for each station
 perc <- ggplot(df.alltags %>% 
@@ -240,18 +240,14 @@ perc <- ggplot(df.alltags %>%
   geom_bar(position = "fill") + 
   scale_fill_manual(values = c("0" = "orange",
                                "1" = "steelblue"),
-                    labels = c("0 (filtered out)", 
-                               "1 (good)"),
+                    labels = c("False detections (filtered out)", 
+                               "Good detections"),
                     name = "motusFilter") +
   theme_minimal() +
   labs(x = "Motus Station",
        y = "Proportion") +
   scale_y_continuous(labels = scales::percent) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-# ggpubr::ggexport(perc,
-#                  filename = here("figures", "motus_filter_perc.jpg"),
-#                  width = 800, height = 1000)
 
 perc
 ```
@@ -353,7 +349,7 @@ df.alltags.past <- readRDS(
 
 # Keep only new data
 df.alltags <- df.alltags %>%
-  filter(!timeAus %in% df.alltags.past$timeAus)
+    filter(!timeAus %in% df.alltags.past$timeAus)
 
 }
 
@@ -384,11 +380,11 @@ df.recvDeps <- df.recvDeps %>%   filter(timeStartAus > "2023-01-31 00:00:00 AEDT
 
 Finally, we need to set temporal aspect of the *survey effort.*
 
-Day one for our local Motus array to start *listening* any tag signals is set on the **31st January 2023** - one month before the first day a bird has been caught and tagged (information found into the [SharePoint](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385) to access the file.).
+Day one for our local Motus array to start *listening* any tag signals is set on the **31st January 2023** - one month before the first day a bird has been caught and tagged (see [SharePoint](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385) spreadsheet).
 
 ## Import band ID
 
-As we might re-trap individuals and re-tag them with a new MOTUS tag, we can't use the Motus tag ID as unique ID anymore and have to use Band ID which supposes to last on the same bird from banding date to individual's death. Unfortunately, the Band ID is not imported by MOTUS network at the moment. So, we need to import it from our own record accessible on SharePoint [here](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/General/SHOREBIRD%20NUMBER%20TRACKING.xlsx?d=wa23e66f0c5514ba4acd0de0d5e83ca42&csf=1&web=1&e=BuGI0w&nav=MTVfe0QyREY1NzZGLUM2RjktNEJFRi1BQThGLTc1M0E3OEFFM0ZERn0), download the .*csv*.
+As we might re-trap individuals and re-tag them with a new MOTUS tag, we can't use the Motus tag ID as unique ID anymore and have to use band number which supposes to last on the same bird from banding date to individual's death. Unfortunately, the band number is not imported by MOTUS network at the moment. So, we need to import band number (see [SharePoint](#0) spreadsheet).
 
 ```{r 1 Band ID BIS, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
 
@@ -434,20 +430,28 @@ spreadsheet <- read.csv(here::here( "qmd", "chapter_1", "data", "spreadsheet", p
   
   # Format
   mutate(motusTagID = as.factor(motusTagID),
-         DateAUS.Trap = as.Date(DateAUS.Trap) ) %>%
+         DateAUS.Trap = as.Date(DateAUS.Trap),
+         Band.ID = as.factor(Band.ID)) %>%
   select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())  
 
+# Format motusTagID for further merging
+df.alltags <- df.alltags %>%
+  mutate(motusTagID = as.factor(motusTagID))
+
 # Join unique Band IDs for inconsistent motusTag (same bird re-tagged, etc) 
-df.alltags <- left_join(df.alltags, spreadsheet %>%    
-                        filter(is.na(Euthanised.)) %>%  
-                        select(motusTagID, DateAUS.Trap, Band.ID, Bander), 
+df.alltags <- left_join(df.alltags,
+                         spreadsheet %>%
+                           filter(is.na(Euthanised.)) %>%  
+                           select(motusTagID, DateAUS.Trap, Band.ID, Bander), 
                       by = "motusTagID")
 
 ```
 
 So we merged our records with Band ID for each bird to the Motus data, linked with the Motus tag ID. Allowing unique individual IDs.
 
-## Add key variables
+## Additional variables
+
+### Pre-processing
 
 It is crucial for our further analysis to add the **Tidal and Circadian cycles** as variables so we can match each bird detection with a categorical value for a date, a tide (high/low) and a period of the day (night/day).
 
@@ -501,6 +505,8 @@ Note that tide data-set must be extracted from [New South Wales government resou
 
 All the **Tide** categories are set for a unique point in Newcastle, easing the complexity of small scale differences for the tide within the estuary.
 
+### Signal strength, Tidal & Circadian periods
+
 **Let's now add our key variables for each bird detection:**
 
 -   Signal strength
@@ -541,7 +547,7 @@ df.alltags <- df.alltags  %>%
                           "tideID",
                           "tideHeight")]
 
-# Factorise the variables
+# Stick and factorise the variables
 df.alltags <- df.alltags %>%
   mutate(tideDateTimeAus = tide_values$tideDateTimeAus,
          tideHighLow = as_factor(tide_values$high_low),
@@ -551,6 +557,9 @@ df.alltags <- df.alltags %>%
          tideID = as_factor(tide_values$tideID),
          tideTimeDiff = abs(difftime(timeAus, tideDateTimeAus, units = "hours")))
 
+df.alltags <- df.alltags %>% 
+  mutate(Band.ID = as.factor(Band.ID))
+
 ```
 
 ```{r update T/F 2, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
@@ -558,6 +567,10 @@ df.alltags <- df.alltags %>%
 # If update = T, then combine past and new data and sort with time
 
 if (update == TRUE) {
+  
+df.alltags.past <- df.alltags.past %>% 
+  mutate(Band.ID = as.factor(Band.ID))
+  
 # Combine updated data to new
 df.alltags <- bind_rows(df.alltags, df.alltags.past)
   }
@@ -571,17 +584,21 @@ df.alltags <- bind_rows(df.alltags, df.alltags.past)
 
 Some observations (**n = `r sum(is.na(df.alltags$speciesEN))`**) in the detections data retrieved from Motus server do hold *NA* values for `speciesEN`.
 
-As long as we consider it is negligible, these observations are removed.
+This can occur when tags are activated (regardless whether they are deployed on Motus server) during a catch event within the vicinity of a deployed and operational Motus station.
+
+Catching at Curlew point on 10 March 2026 generated about 11 100 tag detections from tags we did not deployed.
+
+These are removed from the data-set.
 :::
 
 ```{r 1 species NA, message = FALSE, warning = FALSE, eval = run_analysis, echo = FALSE}
 
-df.alltags %>% 
-  filter(is.na(speciesEN)) %>%  
-  select(timeAus, speciesEN, Band.ID, markerNumber, motusTagID, tagModel, pulseLen, recvDeployName, recv)
+# df.alltags %>% 
+#   filter(is.na(speciesEN)) %>%  
+#   select(timeAus, speciesEN, Band.ID, markerNumber, motusTagID, tagModel, pulseLen, recvDeployName, recv)
 
 df.alltags <- df.alltags %>% 
-  filter(!is.na(speciesEN))
+   filter(!is.na(speciesEN))
 
 ```
 
@@ -628,9 +645,9 @@ save.image(file = here::here("qmd", "chapter_1", "data", "motus_data.RData"))
 :::: blockquote-red
 **Ready-to-Go**!
 
-To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAxU8zWYFxmTbW90BrF1w03AelgXNvwPTNmD4gd7LORT8o?e=CcTSqA) *(a password might be required - maxime.marini\@uon.edu.au)*.
+To reproduce any of the analysis of this Research Project, simply [**click and download the data**](https://uoneduau-my.sharepoint.com/:u:/g/personal/c3541851_uon_edu_au/IQAZKKtGel8wQofOHq3LC5D3AeBS8CjSOzqm1_ZozVyHbiU?e=5jWuMm) *(a password might be required - maxime.marini\@uon.edu.au)*.
 
-**Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: 2025-12-11*
+**Citation:** *Griffin, A. Shorebird monitoring in central NSW estuaries (Project 294). 2019. Data accessed from Motus Wildlife Tracking System, Birds Canada. Available: https://motus.org/. Accessed: YYYY-MM-DD*
 
 <br>
 
@@ -638,13 +655,15 @@ Once loaded in your *R environment,* the file will display five objects:
 
 -   `sql.motus`: raw motus file from which you can call multiple tables (see [documentation](https://motuswts.github.io/motus/articles/03-accessing-data.html))
 
--   `data_all`: contains all the raw detections for each Lotek nanotags
+-   `df.alltags`: contains all the raw detections for each Lotek nanotags
 
--   `recv`: contains all the details for each receiver of the Motus array
+-   `df.recvDeps`: contains all the details for each receiver of the Motus array
+
+-   `recv.act`: activity table for each receiver of the Motus array
 
 -   `spreadsheet`: contains all the capture events details provided for each trapped individual
 
--   `tideData`: tidal details for Newcaslte, NSW
+-   `tideData`: tidal details for Newcastle, NSW
 
 ::: {style="text-align: right;"}
 *The data are last updated on the 21 December 2025.*

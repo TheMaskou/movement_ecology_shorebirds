@@ -6,8 +6,8 @@ format: html
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-                   output = tempfile(fileext = ".R"), 
-                   quiet = TRUE))
+                   output = tempfile(fileext = ".R"),  
+                   quiet = TRUE))     
 ```
 
 :::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -46,6 +46,7 @@ library(hms)
 library(dplyr)
 library(ggplot2)
 library(scales)
+library(gt)
 ```
 
 And **load** your `activity` table too!
@@ -130,14 +131,14 @@ Schema: Definition of available and used periods across bird individuals and Mot
 
 ### TIDE VARIABLE
 
-Based on [New South Wales Tide Tables](https://www.bom.gov.au/oceanography/projects/ntc/nsw_tide_tables.shtml) we were able to extract and classify the total time for each of the four categories of tide that occurred within the Hunter estuary. Note that one data-set is provided at the estuary scale, therefore, we assume the tide is occurring at the same scale, time, frequency and amplitude across our MOTUS station.
+Based on [New South Wales Tide Tables](https://www.bom.gov.au/oceanography/projects/ntc/nsw_tide_tables.shtml) we were able to extract and classify the total time for each of the four categories of tide that occurred within the Hunter estuary. Note that one data-set is provided at the estuary scale, therefore, we assume the tide is occurring at the same scale, time, frequency and amplitude across our MOTUS stations.
 
 Tide table informs for Low and High tide peaks. Half of the period between peak *n* and peak *n-1* is taken, added to the period between peak *n* and peak *n+1*, then expanded in hours for further analysis. The tide associated to peak *n* defines its variable period (i.e. red lines below is defined as high tide since peak *n* is a high tide peak).
 
 ::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
 <figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
 
-<img src="../../material/tide.png" alt="Schema 2: Definition of tide variables (high or low) for one period" style="width: 100%; height: auto; display: block;"/>
+<img src="../../material/tide.png" style="width: 100%; height: auto; display: block;"/>
 
 <figcaption style="margin-top: 1em; font-style: italic;">
 
@@ -150,30 +151,24 @@ Schema: Definition of tide variables (high or low) for one period (red line)
 
 ```{r tide, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 tide_data <- tide_data %>%
+  
   arrange(tideDateTimeAus) %>%
   mutate(prev_time = lag(tideDateTimeAus),
          next_time = lead(tideDateTimeAus) ) %>%
   filter(!is.na(prev_time) & !is.na(next_time)) %>%
+  
+  # Get the duration of the tide centered around Peak 2 (P2), with start halfway between P1 and P2, and with end btw P2-P3
   mutate(duration_h = as.numeric(difftime(tideDateTimeAus, prev_time, units = "hours")/2 + 
                                     difftime(next_time, tideDateTimeAus, units = "hours")/2)) %>%
   
-  mutate(sunriseNewc = sunrise(tideDateTimeAus, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
-         sunsetNewc = sunset(tideDateTimeAus, 151.7833, -32.9167, elev = -0.268, tz = "Australia/Sydney", force_tz = TRUE),
-         sunriseNewcTime = strftime(sunriseNewc, format = "%H:%M:%S", tz = "Australia/Sydney"),
-         sunsetNewcTime = strftime(sunsetNewc, format = "%H:%M:%S", tz = "Australia/Sydney")) %>%
-  
-  mutate(tideDiel = case_when(tideDateTimeAus < sunriseNewc ~ "Nocturnal",
-                               tideDateTimeAus > sunriseNewc & tideDateTimeAus < sunsetNewc ~ "Diurnal",
-                               tideDateTimeAus > sunsetNewc ~ "Nocturnal")) %>%
-  
-  mutate(tideCategory = case_when(high_low == "Low" & tideDiel == "Diurnal" ~ "Diurnal_Low",
-                                  high_low == "Low" & tideDiel == "Nocturnal" ~ "Nocturnal_Low",
-                                  high_low == "High" & tideDiel == "Diurnal" ~ "Diurnal_High",
-                                  high_low == "High" & tideDiel == "Nocturnal" ~ "Nocturnal_High") %>% 
-           as_factor()) %>%
+  # Rename for consistency
   rename(tideHighLow = high_low,
-         timeAus = tideDateTimeAus) %>%
-  select(timeAus, tideCategory, tideHighLow, tideDiel, duration_h, sunriseNewc, sunsetNewc)
+         timeAus = tideDateTimeAus,
+         tideDiel = day_night) %>%
+  select(timeAus, tideCategory, tideHighLow, tideDiel, duration_h, sunriseNewc, sunsetNewc) %>%
+  
+  # Factorise
+  mutate(tideCategory = as_factor(tideCategory))
 ```
 
 ### TIME AVAILABLE
@@ -325,16 +320,18 @@ for(name in recv_names) {
 tide_data_df <- bind_rows(tide_data_list) %>%
   mutate(hour_dt = round_date(timeAus, unit = "hour"))            # AVAILABLE TIME (tide categories covering same time as recv survey effort) 
 
+# Finalise data set for receiver ON with tidal data, per hour
 total_recv_tide_data <- tide_data_df %>%
   group_by(recvDeployName) %>%
-  summarise(hour_seq = list(seq(min(hour_dt), max(hour_dt), by = "hour")), .groups = "drop") %>%
+  
+  # Expand per hour bin
+  summarise(hour_seq = list(seq(min(hour_dt), max(hour_dt), by = "hour")), .groups = "drop") %>% 
   unnest(hour_seq) %>%
   rename(hour_dt = hour_seq) %>%
   
-  left_join(tide_data_df, by = c("recvDeployName", "hour_dt")) %>%
-  arrange(recvDeployName, hour_dt) %>%
-  group_by(recvDeployName) %>%
-  mutate(across(everything(), ~ zoo::na.locf(.x, na.rm = FALSE), .names = "{.col}"))
+  # Match tide data to hourly grid
+  # Hours WITHOUT tide data get NA values across all columns but we'll deal with this later
+  left_join(tide_data_df, by = c("recvDeployName", "hour_dt")) 
 
 ```
 
@@ -367,16 +364,6 @@ bird_hours <- period_sp %>%
   unnest(cols = c(hour_dt)) %>%
   ungroup() 
 
-# Add tide category for each available hours
-find_closest_tide <- function(target_time) {
-  # Calculate absolute time differences
-  time_diffs <- as.numeric(tide_data$timeAus - target_time, units = "mins")
-  closest_idx <- which.min(abs(time_diffs))
-  return(tide_data$tideCategory[closest_idx])
-}
-bird_hours <- bird_hours %>%
-  mutate(tideCategory = sapply(hour_dt, find_closest_tide))
-
 # Duplicate in as many list as many stations
 recv_names <- unique(recv_hours$recvDeployName)
 bird_data_list <- setNames(vector("list", length(recv_names)), recv_names)
@@ -396,19 +383,37 @@ for(name in recv_names) {
   bird_data_list[[name]] <- valid_hours_bird_recv
 } 
 
-# AVAILABLE TIME (tide categories covering same time as recv survey effort AND birds monitoring period)
+# ADD TIDE TO AVAILABLE TIME
+# The NA cols left over before from recv table, now also filtered out based on available time coming from bird periods table
+get.tideIndex <- function(time){return(which.min(abs(tide_data$timeAus - time)))}
+
 available_bird_recv_time <- bind_rows(bird_data_list) %>%
+  mutate(hour_dt = force_tz(hour_dt, "Australia/Sydney")) %>%
+  # Remove rows with ANY NA
+  filter(if_all(everything(), ~ !is.na(.))) %>%
+  mutate(tideIndex = map_dbl(hour_dt, get.tideIndex))
+
+# Extract tide categories thanks to tide index (row order in available_bird_recv_time)
+tide_values <- tide_data[available_bird_recv_time$tideIndex, c("tideCategory")]
+
+# Merge tide categories to available_bird_recv_time and factorise the variables
+available_bird_recv_time <- available_bird_recv_time %>%
+  mutate(tideCategory = as_factor(tide_values$tideCategory))
+
+# FINALISE AVAILABLE TIME 
+available_bird_recv_time <- available_bird_recv_time %>%
   rename(recvDeployName = name) %>%
   group_by(Band.ID, speciesEN, recvDeployName, tideCategory)  %>%
   summarise(duration_h = n()) %>%
   mutate(tideDiel = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal"),
-         tideHighLow = if_else(grepl("High", tideCategory), "High", "Low")) 
+         tideHighLow = if_else(grepl("High", tideCategory), "High", "Low")) %>%
+  select(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, duration_h)
 
 
 ```
 
 ::: blockquote-blue
-**The *available* time is now defined** for each bird across each Motus station, taking into account the periods where stations where ON only. The *available* periods are expanded in hours.
+**The *available* time is now defined** for each bird across each Motus station, taking into account the periods where stations where ON only. The *available* periods are expanded in hours and the tide condition is associated.
 :::
 
 ### TIME USED
@@ -439,7 +444,7 @@ Pulse Interval depending Lotek nanotag models
 # Provide the burst interval value depending Lotek-nano tag model (scd)
 data_bird <- data_all %>%
   mutate(burst_inter = ifelse(tagModel == "NTQB2-6-2", dseconds(7.1), dseconds(13.1))) %>%
-  select(timeAus, tideCategory, tideHighLow, tideDiel, sunriseNewc, sunsetNewc, 
+  select(timeAus, sunriseNewc, sunsetNewc, tideCategory, tideHighLow, tideDiel, 
          speciesEN, tagModel, recvDeployName, recv,speciesSci, Band.ID, burst_inter)
 
 used_bird_recv_time <- data_bird %>%
@@ -448,7 +453,7 @@ used_bird_recv_time <- data_bird %>%
   mutate(duration_h = round(duration_sec / 3600, 0),
          tideDiel = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal"),
          tideHighLow = if_else(grepl("High", tideCategory), "High", "Low")) %>%
-  select(speciesEN, tideCategory, tideDiel, tideHighLow, duration_h, recvDeployName)
+  select(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, duration_h)
 
 ```
 
@@ -456,35 +461,44 @@ used_bird_recv_time <- data_bird %>%
 
 Now that the *used* and *available* time have been determined for each individual and for each Motus station, we can relate these two elements together with the **Usage rate** (or rate of use).
 
-<div style="overflow-x: auto; width: 100%;">
+::: {style="overflow-x: auto; width: 100%;"}
 $$
-\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species}
+\text{Usage rate} = \frac{\text{Time used}}{\text{Time available}} \times 100 \quad \textit{across stations and species} 
 $$
-</div>
-
+:::
 
 Some cases may happen where the *time used* was over the *available*. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.\
 <br>
 
+```{r potential error, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
+table((used_bird_recv_time  %>% 
+         filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
+used_bird_recv_time %>% 
+  filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew") %>%
+  select(tideCategory, duration_h)
+
+
+table((available_bird_recv_time  %>% 
+         filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
+available_bird_recv_time %>% 
+  filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew") %>%
+  select(tideCategory, duration_h)
+```
+
 ```{r above hundred, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 
-all <- left_join(available_bird_recv_time %>% 
-                           group_by(recvDeployName, Band.ID, speciesEN, tideCategory) %>%
+figure_plot <- left_join(available_bird_recv_time %>% 
+                           group_by(recvDeployName, Band.ID, speciesEN) %>%
                            rename(available_t = "duration_h"),
                          used_bird_recv_time %>%
                            rename(used_t = "duration_h")) %>%
   mutate(rate_use = used_t*100/available_t)
 
-above <- left_join(available_bird_recv_time %>% 
-                           group_by(recvDeployName, Band.ID, speciesEN, tideCategory) %>%
-                           rename(available_t = "duration_h"),
-                         used_bird_recv_time %>%
-                           rename(used_t = "duration_h")) %>%
-  mutate(rate_use = used_t*100/available_t) %>%
+
+
+
+above <- figure_plot %>%
   filter(rate_use > 100)
-
-
-library(gt)
 above  %>%
  ungroup() %>% 
   gt() %>%
@@ -492,33 +506,41 @@ above  %>%
     style = cell_text(weight = "bold"),
     locations = cells_column_labels() ) 
 
+above100 <- above %>%
+  filter(rate_use > 100 & rate_use < 140)
+above140 <- above %>%
+  filter(rate_use >= 140)
 
 ```
 
 ::: blockquote-yellow
-**Note:** We removed **n = `r nrow(above)`** out of `r nrow(all)` cases where the *time used* was over the *available*. Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. *- See table above.*
+**Note:** We decided to force **n = `r nrow(above100)`** out of `r nrow(figure_plot)` cases where the *rate used* was between 100 and 140 % to equal 100 %.\
+And we decided to remove **n = `r nrow(above140)`** cases where the *rate used* was over 140 %, considering the tag might simply have fell of the bird within the vicinity of the station.\
+Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. *- See table above.*
 :::
-
-This limitation is currently ignored and not taken into account into the analysis regarding the general low ratio time used/time available.
 
 ```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 
-figure_plot <- left_join(available_bird_recv_time %>% 
-                           group_by(recvDeployName, Band.ID, speciesEN, tideCategory) %>%
-                           rename(available_t = "duration_h"),
-                         used_bird_recv_time %>%
-                           rename(used_t = "duration_h")) %>%
-  mutate(rate_use = used_t*100/available_t) %>%
-  mutate(rate_use = ifelse(rate_use > 100, 100, rate_use)) %>%
+figure_plot <- figure_plot %>%
+  
+  mutate(rate_use = ifelse(rate_use > 100 & rate_use < 140, 100, rate_use)) %>% # force 100-140 rate values to equal 100 %
+  mutate(rate_use = ifelse(rate_use >= 140, NA, rate_use)) %>%                  # remove rates above 140 %
+  
   mutate(speciesType = factor(shorebird_class[speciesEN], 
                                levels = c("migratory", "resident"))) %>%
-  filter(!speciesEN %in% c("Far Eastern Curlew", "Masked Lapwing"),
-         rate_use != 100) 
+  
+  filter(!speciesEN %in% c("Masked Lapwing")) 
+
+
+
+  
+#  filter(speciesEN %in% c("Pacific Golden-Plover", "Curlew Sandpiper", "Bar-tailed Godwit")) %>%
+#  filter(!recvDeployName %in% c("Corrie Island", "Davies Point", "Swan Pond"))
 
 ```
 
 ::: blockquote-yellow
-**Note:** We filtered out Masked Lapwing and Far Eastern Curlew from the analysis, since they have too few data.
+**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.
 :::
 
 Now, everything is ready to format the data for plot and to visualise the results for **Usage rate** and **Hourly usage** across the Motus stations of our local array.
@@ -538,46 +560,117 @@ label_vec <- setNames(counts$label, counts$speciesEN)
 tide_levels <- c("Low", "High")
 species_types <- unique(shorebird_class)  
 
-# Function to generate a plot for a given combination
+# Simplified function - no min_n_nonzero check
 make_plot <- function(tide_level, species_type) {
   data_sub <- figure_plot %>%
     filter(tideHighLow == tide_level) %>%
     mutate(species_class = shorebird_class[speciesEN]) %>%
     filter(species_class == species_type)
   
-  ggplot(data_sub,
-    aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
-        y    = rate_use,
-        fill = tideDiel)) +
-    geom_boxplot() +
+  p <- ggplot(data_sub,
+              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
+                  y    = rate_use,
+                  fill = tideDiel))
+  
+  # Always add boxplot for all available data
+  p <- p + 
+    geom_boxplot(outlier.shape = NA,
+                 varwidth = FALSE,
+                 position = position_dodge(width = 0.8, preserve = "single")) +
+    
+    # Always show individual points
+    geom_point(aes(shape = tideDiel), 
+               position = position_dodge(width = 0.8),
+               alpha = 1, size = 1.5,
+               show.legend = FALSE) +
+    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+    
     facet_wrap(~ speciesEN,
                labeller = labeller(speciesEN = label_vec)) +
     labs(x     = "Receiver Deployment",
          y     = "Rate of Use (%)",
-         fill  = "Tide Diel",
          title = paste(ifelse(species_type == "migratory",
                               "Migratory species", "Resident species"),
                        "during", tide_level, "tide")) +
-    coord_cartesian(ylim = c(0, 50)) +
+    coord_cartesian(ylim = c(0, 100)) +
     theme_minimal() +
     scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  return(p)
 }
 
-# Generate and store all plots in a list
+# Generate all plots
 plots_used_rate <- cross2(tide_levels, species_types) %>%
   purrr::map(~ make_plot(.x[[1]], .x[[2]]))
 
 ```
 
+```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+
+# General function to provide one table with stats values
+make_summary_table <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  summary_table <- data_sub %>%
+    group_by(speciesEN, recvDeployName, tideDiel) %>%
+    summarise(
+      n_individual = n(),
+      min = round(min(rate_use, na.rm = TRUE), 1),
+      q1 = round(quantile(rate_use, 0.25, na.rm = TRUE),1),
+      median = round(median(rate_use, na.rm = TRUE),1),
+      q3 = round(quantile(rate_use, 0.75, na.rm = TRUE),1),
+      max = round(max(rate_use, na.rm = TRUE),1),
+      mean = round(mean(rate_use, na.rm = TRUE),1),
+      sd = round(sd(rate_use, na.rm = TRUE),1),
+      .groups = 'drop'
+    ) %>%
+    arrange(speciesEN, recvDeployName, tideDiel) %>%
+    rename(Species = "speciesEN", Station = "recvDeployName", condition = "tideDiel")
+  
+  return(summary_table)
+}
+
+# One table per conditions
+high_migratory <- make_summary_table("High", "migratory")
+high_resident <- make_summary_table("High", "resident")
+low_migratory <- make_summary_table("Low", "migratory")
+low_resident <- make_summary_table("Low", "resident")
+```
+
 ### RESIDENT BIRDS
 
-::: panel-tabset
+::::: panel-tabset
 ##### High Tide
 
 ```{r 4 Used rate 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[4]]
 ```
+
+::: {.callout-tip collapse="true" title="High Tide Resident birds"}
+```{r 4 Used rate table, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+high_resident  %>%
+  gt() %>%
+  tab_header(title = "Statistics - High Tide Resident Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+:::
 
 ##### Low Tide
 
@@ -585,16 +678,60 @@ plots_used_rate[[4]]
 
 plots_used_rate[[3]]
 ```
+
+::: {.callout-tip collapse="true" title="Low Tide Resident birds"}
+```{r 4 Used rate table 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+low_resident  %>%
+  gt() %>%
+  tab_header(title = "Statistics - Low Tide Resident Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
 :::
+:::::
 
 ### MIGRATORY BIRDS
 
-::: panel-tabset
+::::: panel-tabset
 ##### High Tide
 
 ```{r 4 Used rate 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[2]]
 ```
+
+::: {.callout-tip collapse="true" title="High Tide Migratory birds"}
+```{r 4 Used rate table 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+high_migratory  %>%
+  gt() %>%
+  tab_header(title = "Statistics - High Tide Migratory Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
+:::
 
 ##### Low Tide
 
@@ -602,7 +739,29 @@ plots_used_rate[[2]]
 
 plots_used_rate[[1]]
 ```
+
+::: {.callout-tip collapse="true" title="Low Tide Migratory birds"}
+```{r 4 Used rate table 5, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+low_migratory  %>%
+  gt() %>%
+  tab_header(title = "Statistics - Low Tide Migratory Species") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "darkgrey",
+      weight = px(2)),
+    locations = cells_body(
+      rows = which(!duplicated(high_resident$Species))[-1]))
+```
 :::
+:::::
 
 ## Hourly usage
 
@@ -686,7 +845,7 @@ plots_list[[4]]
 ```
 :::
 
-**Legend**: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one tide category from the pairs "high/low" and "nocturnal/diurnal," showing *used time* in hours (red boxes) for each species at different Motus stations. The grey boxes represent the total *available time* for the corresponding tide category and Motus station, across individuals. Note that *available time* might be relatively similar across stations as it is based on the general Newcastle tide table and is not station-specific.
+**Legend**: Shorebird movement and spatial ecology vary across species and within the local MOTUS array in NSW. Each tab displays one tide category from the pairs "high/low" and "nocturnal/diurnal," showing *used time* in hours (colored boxes) for each species at different Motus stations. The grey boxes represent the total *available time* for the corresponding tide category and Motus station, across individuals. Note that *available time* might be relatively similar across stations as it is based on the general Newcastle tide table and is not station-specific.
 
 ### USED
 
@@ -713,7 +872,7 @@ plot_used <- function(tide_cat) {
           legend.position = "none",
           plot.margin = margin(0, 0, 0, 0, "in"))  +
     
-    coord_cartesian(ylim = c(0, NA)) + 
+    coord_cartesian(ylim = c(0, NA), expand = FALSE) + 
     labs(x = "Motus stations",
          y = "Detection duration (hours)",
          title = paste("Tide Category:", tide_cat),
@@ -735,14 +894,14 @@ plots_list_used <- purrr::map(tide_categories, plot_used)
 ##### Nocturnal Low Tide
 
 ```{r 4 used 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-plots_list_used[[1]]
+plots_list_used[[4]]
 ```
 
 ##### Nocturnal High Tide
 
 ```{r 4 used 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
-plots_list_used[[2]]
+plots_list_used[[1]]
 ```
 
 ##### Diurnal High Tide
@@ -756,7 +915,7 @@ plots_list_used[[3]]
 
 ```{r 4 used 4, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
-plots_list_used[[4]]
+plots_list_used[[2]]
 ```
 :::
 
@@ -774,23 +933,30 @@ balance_table <- figure_plot %>%
   summarise(total_used_t = sum(used_t, na.rm = TRUE),
             total_available_t = sum(available_t, na.rm = TRUE),
             total_rate_use = total_used_t*100/total_available_t) %>%
-  ungroup()
-custom_colors <- c(
-  "Nocturnal_Low" = "darkgrey",
-  "Nocturnal_High" = "darkgrey",
-  "Diurnal_Low" = "white",
-  "Diurnal_High" = "white"
-)
+  ungroup() %>%
+  
+  # Choose order in plot
+  mutate(tideCategory = factor(tideCategory, 
+                               levels = c("Diurnal_High",
+                                          "Diurnal_Low",
+                                          "Nocturnal_High", 
+                                          "Nocturnal_Low")))
+
+  # Choose colors in plot
+  custom_colors <- c("Nocturnal_Low" = "darkgrey",
+                     "Nocturnal_High" = "darkgrey",
+                     "Diurnal_Low" = "white",
+                     "Diurnal_High" = "white")
 ```
 
 ### POPULATION
 
-**USAGE RATE**
+**TOTAL SURVEY EFFORT** (%) *- TOTAL AVAILABLE -*
 
 ```{r global rou, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
-  coord_cartesian(ylim = c(0, 40)) + #200 if total_used_t
+  coord_cartesian(ylim = c(0, 30)) + #300 if total_used_t
   scale_fill_manual(values = custom_colors, guide = "none") +  
   labs(title = "Rate of Use - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
@@ -801,13 +967,13 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 
 **Legend**: Find the values of the Usage rate (or rate of use) from the whole tagged shorebirds population detected within the Motus array and for each tide category.
 
-**TOTAL USED**
+**TOTAL DETECTED** (hours) *- TOTAL USED -*
 
 ```{r global hours, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 # All species and tide categories 
 ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
-  coord_cartesian(ylim = c(0, 200)) +
+  coord_cartesian(ylim = c(0, 300)) +
   labs(title = "Total used - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
        y = "Total used (h)") +
@@ -821,13 +987,13 @@ ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategor
 
 ### SPECIES
 
-**USAGE RATE**
+**TOTAL SURVEY EFFORT** (%) *- TOTAL AVAILABLE -*
 
 ```{r sp rou, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
   facet_wrap(~speciesEN) +
-  coord_cartesian(ylim = c(0, 40)) + #200 if total_used_t
+  coord_cartesian(ylim = c(0, 30)) + #300 if total_used_t
   scale_fill_manual(values = custom_colors, guide = "none") +  
   labs(title = "Rate of Use - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
@@ -841,13 +1007,13 @@ ggplot(balance_table, aes(x = tideCategory, y = total_rate_use, fill = tideCateg
 
 **Legend**: Find the values of the Usage rate (or rate of use) across each shorebirds species detected within the Motus array and for each tide category.
 
-**TOTAL USED**
+**TOTAL DETECTED** (hours) *- TOTAL USED -*
 
 ```{r sp hours, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 explore <- ggplot(balance_table, aes(x = tideCategory, y = total_used_t, fill = tideCategory)) + # or total_used_t
   geom_boxplot(outlier.shape = NA) +
   facet_wrap(~speciesEN) +
-  coord_cartesian(ylim = c(0, 200)) + 
+  coord_cartesian(ylim = c(0, 300)) + 
   scale_fill_manual(values = custom_colors, guide = "none") +  
   labs(title = "Total used - Total acquired data for tagged population depending Tide and Time",
        x = "Tide Category",
@@ -858,3 +1024,303 @@ explore
 ```
 
 **Legend**: Find the total of hours (or total uses) each species has been recorded within the Motus array and for each tide category.
+
+### SITES
+
+**TOTAL DETECTED** (hours) *- TOTAL USED -*
+
+```{r summary table sp lvl, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉTAPE 1 — Summaries au niveau receiver
+# ══════════════════════════════════════════════════════════════════════════════
+
+recv_summary_available <- available_bird_recv_time %>%
+  group_by(speciesEN, recvDeployName) %>%
+  summarise(
+    n_birds              = n_distinct(Band.ID),
+    total_hours          = sum(duration_h, na.rm = TRUE),
+    hours_Nocturnal_Low  = sum(duration_h[tideCategory == "Nocturnal_Low"],  na.rm = TRUE),
+    hours_Nocturnal_High = sum(duration_h[tideCategory == "Nocturnal_High"], na.rm = TRUE),
+    hours_Diurnal_Low    = sum(duration_h[tideCategory == "Diurnal_Low"],    na.rm = TRUE),
+    hours_Diurnal_High   = sum(duration_h[tideCategory == "Diurnal_High"],   na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    pct_Nocturnal_Low  = hours_Nocturnal_Low  / total_hours * 100,
+    pct_Nocturnal_High = hours_Nocturnal_High / total_hours * 100,
+    pct_Diurnal_Low    = hours_Diurnal_Low    / total_hours * 100,
+    pct_Diurnal_High   = hours_Diurnal_High   / total_hours * 100
+  )
+
+recv_summary_used <- used_bird_recv_time %>%
+  group_by(speciesEN, recvDeployName) %>%
+  summarise(
+    n_birds              = n_distinct(Band.ID),
+    total_hours          = sum(duration_h, na.rm = TRUE),
+    hours_Nocturnal_Low  = sum(duration_h[tideCategory == "Nocturnal_Low"],  na.rm = TRUE),
+    hours_Nocturnal_High = sum(duration_h[tideCategory == "Nocturnal_High"], na.rm = TRUE),
+    hours_Diurnal_Low    = sum(duration_h[tideCategory == "Diurnal_Low"],    na.rm = TRUE),
+    hours_Diurnal_High   = sum(duration_h[tideCategory == "Diurnal_High"],   na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  mutate(
+    pct_Nocturnal_Low  = hours_Nocturnal_Low  / total_hours * 100,
+    pct_Nocturnal_High = hours_Nocturnal_High / total_hours * 100,
+    pct_Diurnal_Low    = hours_Diurnal_Low    / total_hours * 100,
+    pct_Diurnal_High   = hours_Diurnal_High   / total_hours * 100
+  )
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉTAPE 2 — JOIN receiver-level (colonnes brutes _used/_avail conservées)
+# ══════════════════════════════════════════════════════════════════════════════
+
+recv_combined <- recv_summary_used %>%
+  left_join(recv_summary_available, by = c("speciesEN", "recvDeployName"),
+            suffix = c("_used", "_avail")) %>%
+  mutate(
+    # Colonnes formatées pour affichage
+    total_hours          = paste0(round(total_hours_used, 1), " / ", round(total_hours_avail, 1), " (",round((total_hours_used * 100)/total_hours_avail, 1), " %)"),
+
+    hours_Nocturnal_Low  = paste0(round(hours_Nocturnal_Low_used,  1), " / ", round(hours_Nocturnal_Low_avail,  1),
+                                  " (", round(hours_Nocturnal_Low_used  * 100 / hours_Nocturnal_Low_avail,  1), " %)"),
+    hours_Nocturnal_High = paste0(round(hours_Nocturnal_High_used, 1), " / ", round(hours_Nocturnal_High_avail, 1),
+                                  " (", round(hours_Nocturnal_High_used * 100 / hours_Nocturnal_High_avail, 1), " %)"),
+    hours_Diurnal_Low    = paste0(round(hours_Diurnal_Low_used,    1), " / ", round(hours_Diurnal_Low_avail,    1),
+                                  " (", round(hours_Diurnal_Low_used    * 100 / hours_Diurnal_Low_avail,    1), " %)"),
+    hours_Diurnal_High   = paste0(round(hours_Diurnal_High_used,   1), " / ", round(hours_Diurnal_High_avail,   1),
+                                  " (", round(hours_Diurnal_High_used   * 100 / hours_Diurnal_High_avail,   1), " %)"),
+
+    pct_Nocturnal_Low    = paste0(round(pct_Nocturnal_Low_used,  1)),
+    pct_Nocturnal_High   = paste0(round(pct_Nocturnal_High_used, 1)),
+    pct_Diurnal_Low      = paste0(round(pct_Diurnal_Low_used,    1)),
+    pct_Diurnal_High     = paste0(round(pct_Diurnal_High_used,   1))
+  ) %>%
+  select(speciesEN, recvDeployName, n_birds_used, total_hours, 
+         hours_Nocturnal_Low, hours_Nocturnal_High, hours_Diurnal_Low, hours_Diurnal_High,
+         pct_Nocturnal_Low, pct_Nocturnal_High, pct_Diurnal_Low, pct_Diurnal_High,
+         # Colonnes brutes pour seuils gt
+         pct_Nocturnal_Low_used, pct_Nocturnal_High_used,
+         pct_Diurnal_Low_used,   pct_Diurnal_High_used,
+         # Colonnes brutes pour recalcul species total
+         total_hours_used, total_hours_avail,
+         hours_Nocturnal_Low_used,  hours_Nocturnal_Low_avail,
+         hours_Nocturnal_High_used, hours_Nocturnal_High_avail,
+         hours_Diurnal_Low_used,    hours_Diurnal_Low_avail,
+         hours_Diurnal_High_used,   hours_Diurnal_High_avail)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉTAPE 3 — Species TOTAL recalculé DEPUIS recv_combined (receivers filtrés)
+# ══════════════════════════════════════════════════════════════════════════════
+
+n_birds_species <- used_bird_recv_time %>%
+  group_by(speciesEN) %>%
+  summarise(n_birds_used = n_distinct(Band.ID), .groups = "drop")
+
+species_combined <- recv_combined %>%
+  group_by(speciesEN) %>%
+  summarise(
+    total_hours_used_sum  = sum(total_hours_used,          na.rm = TRUE),
+    total_hours_avail_sum = sum(total_hours_avail,         na.rm = TRUE),
+    hours_NL_used  = sum(hours_Nocturnal_Low_used,         na.rm = TRUE),
+    hours_NL_avail = sum(hours_Nocturnal_Low_avail,        na.rm = TRUE),
+    hours_NH_used  = sum(hours_Nocturnal_High_used,        na.rm = TRUE),
+    hours_NH_avail = sum(hours_Nocturnal_High_avail,       na.rm = TRUE),
+    hours_DL_used  = sum(hours_Diurnal_Low_used,           na.rm = TRUE),
+    hours_DL_avail = sum(hours_Diurnal_Low_avail,          na.rm = TRUE),
+    hours_DH_used  = sum(hours_Diurnal_High_used,          na.rm = TRUE),
+    hours_DH_avail = sum(hours_Diurnal_High_avail,         na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  
+  left_join(n_birds_species, by = "speciesEN") %>%
+
+  mutate(
+    recvDeployName = "TOTAL",
+
+    total_hours          = paste0(round(total_hours_used_sum, 1), " / ", round(total_hours_avail_sum, 1), " (", round((total_hours_used_sum * 100)/total_hours_avail_sum, 1), " %)"),
+
+    hours_Nocturnal_Low  = paste0(round(hours_NL_used, 1), " / ", round(hours_NL_avail, 1),
+                                  " (", round(hours_NL_used * 100 / hours_NL_avail, 1), " %)"),
+    hours_Nocturnal_High = paste0(round(hours_NH_used, 1), " / ", round(hours_NH_avail, 1),
+                                  " (", round(hours_NH_used * 100 / hours_NH_avail, 1), " %)"),
+    hours_Diurnal_Low    = paste0(round(hours_DL_used, 1), " / ", round(hours_DL_avail, 1),
+                                  " (", round(hours_DL_used * 100 / hours_DL_avail, 1), " %)"),
+    hours_Diurnal_High   = paste0(round(hours_DH_used, 1), " / ", round(hours_DH_avail, 1),
+                                  " (", round(hours_DH_used * 100 / hours_DH_avail, 1), " %)"),
+
+    pct_Nocturnal_Low    = paste0(round(hours_NL_used / total_hours_used_sum * 100, 1)),
+    pct_Nocturnal_High   = paste0(round(hours_NH_used / total_hours_used_sum * 100, 1)),
+    pct_Diurnal_Low      = paste0(round(hours_DL_used / total_hours_used_sum * 100, 1)),
+    pct_Diurnal_High     = paste0(round(hours_DH_used / total_hours_used_sum * 100, 1)),
+
+    # Brutes pour seuils gt
+    pct_Nocturnal_Low_used  = hours_NL_used / total_hours_used_sum * 100,
+    pct_Nocturnal_High_used = hours_NH_used / total_hours_used_sum * 100,
+    pct_Diurnal_Low_used    = hours_DL_used / total_hours_used_sum * 100,
+    pct_Diurnal_High_used   = hours_DH_used / total_hours_used_sum * 100
+  ) %>%
+  select(speciesEN, recvDeployName, n_birds_used, total_hours,
+         hours_Nocturnal_Low, hours_Nocturnal_High, hours_Diurnal_Low, hours_Diurnal_High,
+         pct_Nocturnal_Low, pct_Nocturnal_High, pct_Diurnal_Low, pct_Diurnal_High,
+         pct_Nocturnal_Low_used, pct_Nocturnal_High_used,
+         pct_Diurnal_Low_used,   pct_Diurnal_High_used)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉTAPE 4 — BIND + arrange
+# ══════════════════════════════════════════════════════════════════════════════
+
+# Réduire recv_combined aux colonnes finales seulement avant le bind
+recv_combined_final <- recv_combined %>%
+  select(speciesEN, recvDeployName, n_birds_used, total_hours, 
+         hours_Nocturnal_Low, hours_Nocturnal_High, hours_Diurnal_Low, hours_Diurnal_High,
+         pct_Nocturnal_Low, pct_Nocturnal_High, pct_Diurnal_Low, pct_Diurnal_High,
+         pct_Nocturnal_Low_used, pct_Nocturnal_High_used,
+         pct_Diurnal_Low_used,   pct_Diurnal_High_used)
+
+final_table <- bind_rows(species_combined, recv_combined_final) %>%
+  arrange(speciesEN, desc(recvDeployName == "TOTAL")) %>%
+  mutate(across(
+    c(hours_Nocturnal_Low, hours_Nocturnal_High, hours_Diurnal_Low, hours_Diurnal_High),
+    ~ sub("^0(\\.0)? / ", "<  1 / ", .x)
+  ))
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ÉTAPE 5 — GT TABLE
+# ══════════════════════════════════════════════════════════════════════════════
+
+final_table %>%
+  mutate(
+    speciesEN      = toupper(speciesEN),
+    recvDeployName = ifelse(recvDeployName == "TOTAL", "Total", recvDeployName)
+  ) %>%
+  gt(groupname_col = "speciesEN", rowname_col = "recvDeployName") %>%
+
+  tab_header(
+    title    = md("**Species Site Use Summary**"),
+    subtitle = md("*Detected / Survey effort (Hours) per Tide Categories*")
+  ) %>%
+
+  tab_spanner(label = "Hours per Tide Category",
+              columns = c(hours_Nocturnal_Low, hours_Nocturnal_High,
+                          hours_Diurnal_Low, hours_Diurnal_High)) %>%
+  tab_spanner(label = "Detection per Tide Category (%)",
+              columns = c(pct_Nocturnal_Low, pct_Nocturnal_High,
+                          pct_Diurnal_Low, pct_Diurnal_High)) %>%
+
+  cols_label(
+    n_birds_used         = md("**N Birds**"),
+    total_hours          = md("**Total Hours**<br><span style='font-weight:normal;font-size:10px;'>Detected / Survey effort</span>"),
+    hours_Nocturnal_Low  = "Noct. Low",
+    hours_Nocturnal_High = "Noct. High",
+    hours_Diurnal_Low    = "Diur. Low",
+    hours_Diurnal_High   = "Diur. High",
+    pct_Nocturnal_Low    = "Noct. Low",
+    pct_Nocturnal_High   = "Noct. High",
+    pct_Diurnal_Low      = "Diur. Low",
+    pct_Diurnal_High     = "Diur. High"
+  ) %>%
+
+  cols_hide(columns = c(pct_Nocturnal_Low_used, pct_Nocturnal_High_used,
+                        pct_Diurnal_Low_used,   pct_Diurnal_High_used)) %>%
+
+  cols_align(align = "right",
+             columns = c(n_birds_used, total_hours, 
+                         hours_Nocturnal_Low, hours_Nocturnal_High,
+                         hours_Diurnal_Low, hours_Diurnal_High,
+                         pct_Nocturnal_Low, pct_Nocturnal_High,
+                         pct_Diurnal_Low, pct_Diurnal_High)) %>%
+
+  # ── TOTAL rows: grey + bold ───────────────────────────────────────────────
+  tab_style(
+    style     = list(cell_fill(color = "#E8E8E8"), cell_text(weight = "bold")),
+    locations = cells_body(rows = recvDeployName == "Total")
+  ) %>%
+  tab_style(
+    style     = list(cell_fill(color = "#E8E8E8"), cell_text(weight = "bold")),
+    locations = cells_stub(rows = recvDeployName == "Total")
+  ) %>%
+
+  # ── pct >= 20%: bold blue ─────────────────────────────────────────────────
+  tab_style(
+    style     = cell_text(weight = "bold", color = "#1A6FA3"),
+    locations = cells_body(columns = pct_Nocturnal_Low,  rows = pct_Nocturnal_Low_used  >= 20)
+  ) %>%
+  tab_style(
+    style     = cell_text(weight = "bold", color = "#1A6FA3"),
+    locations = cells_body(columns = pct_Nocturnal_High, rows = pct_Nocturnal_High_used >= 20)
+  ) %>%
+  tab_style(
+    style     = cell_text(weight = "bold", color = "#1A6FA3"),
+    locations = cells_body(columns = pct_Diurnal_Low,    rows = pct_Diurnal_Low_used    >= 20)
+  ) %>%
+  tab_style(
+    style     = cell_text(weight = "bold", color = "#1A6FA3"),
+    locations = cells_body(columns = pct_Diurnal_High,   rows = pct_Diurnal_High_used   >= 20)
+  ) %>%
+
+  # ── N Birds / Total Hours / Rate Use: fond distingué ─────────────────────
+  tab_style(
+    style     = list(cell_fill(color = "#DDE3EA"),
+                     cell_text(weight = "bold", size = px(11), color = "#2C3E50")),
+    locations = cells_column_labels(columns = c(n_birds_used, total_hours))
+  ) %>%
+
+  # ── Group headers ─────────────────────────────────────────────────────────
+  tab_style(
+    style     = list(cell_fill(color = "#2C3E50"),
+                     cell_text(color = "white", weight = "bold", size = px(13))),
+    locations = cells_row_groups()
+  ) %>%
+
+  # ── Spanners ──────────────────────────────────────────────────────────────
+  tab_style(
+    style     = cell_text(weight = "bold", color = "#2C3E50"),
+    locations = cells_column_spanners()
+  ) %>%
+
+  # ── Column labels ─────────────────────────────────────────────────────────
+  tab_style(
+    style     = list(cell_fill(color = "#F0F4F8"),
+                     cell_text(weight = "bold", size = px(11))),
+    locations = cells_column_labels()
+  ) %>%
+
+  # ── Stub ──────────────────────────────────────────────────────────────────
+  tab_style(
+    style     = cell_text(color = "#555555", size = px(11)),
+    locations = cells_stub()
+  ) %>%
+
+  tab_options(
+    table.font.names                  = "Source Sans Pro, Arial, sans-serif",
+    table.font.size                   = px(12),
+    table.border.top.color            = "#2C3E50",
+    table.border.top.width            = px(2),
+    table.border.bottom.color         = "#2C3E50",
+    table.border.bottom.width         = px(2),
+    heading.background.color          = "#FAFAFA",
+    heading.border.bottom.color       = "#2C3E50",
+    column_labels.border.top.color    = "transparent",
+    column_labels.border.bottom.color = "#2C3E50",
+    column_labels.border.bottom.width = px(2),
+    row_group.border.top.color        = "#2C3E50",
+    row_group.border.bottom.color     = "#CCCCCC",
+    stub.border.color                 = "#DDDDDD",
+    row.striping.include_table_body   = TRUE,
+    row.striping.background_color     = "#FAFAFA",
+    data_row.padding                  = px(5),
+    table.width                       = pct(100)
+  ) %>%
+
+  opt_row_striping() %>%
+  opt_table_font(font = google_font("Source Sans Pro"))
+
+```
+
+**Legend**: Summary for each species and per Motus station of the number of hours a species has been detected and the number of hours the station has been listening while the species had at least one individual with an activated tag on (survey effort). *NA* are when the group holds individuals that are detected less than one hour total.
+
+::: blockquote-red
+The only remaining limitation is the high number of hours sharing the same date and time across several Motus stations, for the survey effort. Which is not realistic since the birds can be at only one place at once.
+:::

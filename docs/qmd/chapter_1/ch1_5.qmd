@@ -5,8 +5,8 @@ title: "Survey effort"
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source the script into that environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"), 
-                   output = tempfile(fileext = ".R"), 
-                   quiet = TRUE))
+                   output = tempfile(fileext = ".R"),   
+                   quiet = TRUE))       
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
@@ -106,7 +106,7 @@ head(recv.act)
 
 -   `pulseCount`: Quantifies the number of radio pulses measured on each antenna over each hour period `hourBin` but does not necessary correspond to a known VHF tag detection. It can be any other VHF signal, even simple noise - [*documentation*](https://docs.motus.org/en/stations/station-inspection/up-time-and-detectability#antenna-pulses)
 -   `numTags`: Represents the total number of unique tags detected. This, given a context, as typically a specific site, or within a batch, or for a set of detections.
--   `deviceID`: Raspberry Pi processor ID. A small electronic part of the receiver that plays the role of an embarked computer.
+-   `deviceID`: Raspberry Pi processor ID. A small electronic part of the receiver that plays the role of a small computer.
 -   `ant`: Port of antenna the `activity` has been recorded.
 
 **How the data are recorded in this table?**
@@ -115,11 +115,13 @@ head(recv.act)
 
 -   When a **station is listening**, the table has either values or *NA* for `pulseCount` or/and for `numTags` variables. For example:
 
-    -   No noise has been recorded but one or several tags have been recorded: `pulseCount` = 0 or is *NA* and `numTags` \> 1
+    -   No noise has been recorded but one or several tags have been recorded: `pulseCount` = 0 or is *NA* and `numTags` \> 0
 
     -   No tag has been recorded but noise happened: `pulseCount` \> 0 and `numTags` = 0 or is *NA*
 
--   When a **station is** **not listening**, there is no row at all in the table (no data recorded).
+    -   Tag and noise have been recorded: `pulseCount` \> 0 and `numTags` \> 0
+
+-   When a **station is** **not listening** (or there is no noise and no tags in the surrounding - assumed negligible), there is no row at all in the table (no data recorded).
 
 **Keep in mind** **we can miss the hours where no tag or noise are happening within the environment BUT the antenna is still operational and being "listening".** In such a case, let's further assume than the antenna is not working or listening. Indeed, an environment with "no noise" condition during more than an hour may be extremely rare and very unlikely.
 
@@ -281,7 +283,7 @@ motus_survey_h <- ggplot(recv_hours %>%
 ```
 
 ::: column-body-outset-right
-```{r motus_survey_h, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
+```{r motus_survey_h, echo = FALSE,  message = FALSE, warning = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
 motus_survey_h
 ```
 :::
@@ -351,7 +353,7 @@ motus_survey_d <- motus_survey_d +
 ```
 
 ::: column-body-outset-right
-```{r motus_survey_d, echo = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
+```{r motus_survey_d, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 6, out.width = "100%"}
 motus_survey_d
 ```
 :::
@@ -419,3 +421,7 @@ ggplot() +
 :::
 
 ***Legend:*** *The band in grey represents the operational period for each MOTUS station, when the antenna is actually listening. When no grey, the station is "OFF" and not operational. Every dot is at least one detection for one tag. Every MOTUS station has a contribution value at the survey effort (%), i.e: Curlew Point station contributed* `r uptime_summary$cont_listening_eff[uptime_summary$Station=="Curlew Point"]` % *at the total operational period for every stations within our local MOTUS array (operational survey effort).*
+
+## Condition of detections
+
+Find in [Chapter 1 \> Station usage - hours \> Condition detections](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html#detection-conditions) the number of hours a species have been detected and where, depending the four categories of tide (Low, High, Day, Night).

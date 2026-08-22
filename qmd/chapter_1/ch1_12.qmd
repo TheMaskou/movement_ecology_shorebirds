@@ -1,5 +1,5 @@
 ---
-title: "Final analysis (OBP method)"
+title: "Station usage - hours (OBP method)"
 format: html
 ---
 
@@ -40,6 +40,7 @@ library(purrr)
 library(patchwork)
 library(mixtools)
 library(lubridate)
+library(data.table)
 ```
 
 ```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
@@ -75,7 +76,9 @@ tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 
 ```
 
-## Relative Signal Strength Indicator (RSSI) 
+## Relative Signal Strength Indicator (RSSI)
+
+Both the antenna location and the centre of its range are coarse-scale localisations of tag position. An extension of this method is to further account for shifts in location estimates by modelling the relationship between distance from the mast and RSSI values using the density distribution of RSSI values. If we assume 1) a circular radiation pattern with constant detection probability inside the theoretical range of the antenna (\~0.5 km for omni and \~ 3km for 3-Yagi and H-antenna?) and decreasing detection probability at distances beyond the theoretical range; and 2) that birds (detections) were randomly distributed throughout the possible detectability space of the antenna, then we would predict RSSI values to be positively skewed and have a modal value corresponding to detections at the perimeter of the nominal range (being the RSSI isopleth with the greatest surface area and constant detection probability). Not capable of estimating a clear relation between distance and RSSI values, as radio wave ranges varies a lot depending landscape and weather, we simply can assume the higher the RSSI value is the closer the bird is.
 
 ::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
 <figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
@@ -84,13 +87,16 @@ tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 
 <figcaption style="margin-top: 1em; font-style: italic;">
 
-Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)
+Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth \~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)
+
 </figcaption>
 
 </figure>
 :::
 
-```{r rssi, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+The distribution of RSSI for our data is shown below (e.g., RSSI \~70/100/\>143 indicates the bird is likely in the far/medium/close range of the antenna's detection capability).
+
+```{r rssi, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = FALSE}
 
 ggplot(data_all, aes(x = sigPositive, y = speciesEN, fill = speciesEN)) +
   geom_density_ridges(alpha = 0.7, na.rm = TRUE) +
@@ -104,60 +110,58 @@ ggplot(data_all, aes(x = sigPositive, y = speciesEN, fill = speciesEN)) +
 
 ### Filter true detections
 
-Motus protocols group detections at a receiver into runs of detections. A run is defined as a series of detections without a gap between sequential detections of more than 60 missed detections [(Motus 2022)](https://docs.motus.org/en/tags/tag-aliasing).   
+Motus protocols group detections at a receiver into runs of detections. A run is defined as a series of detections (hit) without a gap between sequential detections of more than 60 missed detections [(Motus 2022)](https://docs.motus.org/en/tags/tag-aliasing).
 
-The tags used in our project emit radio bursts at a different set intervals so the gaps to define a new run vary:  
- - 13.1 min (= 13.1 sec x 60) ==> NTQB2-4-2
- - 13.1 min (= 13.1 sec x 60) ==> NTQB2-6-1
- - 7.1 min (= 7.1  sec x 60)  ==> NTQB2-6-2
- 
+The tags used in our project emit radio bursts at a different set intervals so the gaps to define a new run vary:\
+- 13.1 min (= 13.1 sec x 60) ==\> NTQB2-4-2
+
+\- 13.1 min (= 13.1 sec x 60) ==\> NTQB2-6-1
+
+\- 7.1 min (= 7.1 sec x 60) ==\> NTQB2-6-2
+
+\*NOTE: this part must be investigated in the future as it is mostly to avoid overlaps in detecting same tags from two antennas of a similar receiver\*
+
 ```{r filter true detection, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
- 
- 
+
+# TO BE ADDRESSED
+
 ```
 
+### Detection threshold
 
-### Detection treshold
+To define independent observations, we needed a time gap that separates a bird leaving a site from just briefly dropping out of antenna range (e.g., by turning away or moving behind vegetation). Short gaps likely mean the bird is still present; long gaps likely mean it has left. We analysed the distribution of time gaps between successive detection runs of the same bird at the same station, and across all individuals, and used this to choose a cut-off separating "same visit" from "new visit". A three-component mixture model (MIXTOOLS 2.0.0.1) was fitted to the gap durations, distinguishing short gaps (same visit) from medium/long gaps (new visit). Gaps were truncated to 5 min – 30 hours to remove noise from very short or very long outliers, and each gap was classified by whichever distribution best matched it.
 
-To define independent observations, we needed a time gap that separates a bird leaving a site from just briefly dropping out of antenna range (e.g., by turning away or moving behind vegetation). Short gaps likely mean the bird is still present; long gaps likely mean it has left. We analysed the distribution of time gaps between successive detection runs of the same bird at the same station, and across all individuals, and used this to choose a cut-off separating "same visit" from "new visit". A three-component mixture model (MIXTOOLS 2.0.0.1) was fitted to the gap durations, distinguishing short gaps (same visit) from medium/long gaps (new visit). Gaps were truncated to 5 min – 30 hours to remove noise from very short or very long outliers, and each gap was classified by whichever distribution best matched it. 
+**1. Build run-level summary** (one row per run) from hits. A "run" is already identified by runID in data_all [(see Motus documentation - Chapter 3)](https://motuswts.github.io/motus/articles/03-accessing-data.html). We need the start/end time of each run, per individual and per station.
 
-```{r gap inclusion, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
-
-
-# ---------------------------------------------------------------
-# 1. Build run-level summary (one row per run) from your hit data
-# ---------------------------------------------------------------
-# A "run" is already identified by runID in data_all. We need the
-# start/end time of each run, per individual, per station.
-
+```{r run , message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = TRUE}
 runs <- data_all %>%
-  group_by(Band.ID, recvDeployName, runID) %>%
+  group_by(speciesEN, Band.ID, recvDeployName, runID) %>%
   summarise(
     runStart = min(timeAus, na.rm = TRUE),
     runEnd   = max(timeAus, na.rm = TRUE),
-    .groups = "drop"
-  )
+    n_detect = n(), 
+    .groups = "drop")
+```
 
-# ---------------------------------------------------------------
-# 2. Compute gaps between successive runs of the same individual
-#    at the same antenna/site
-# ---------------------------------------------------------------
+**2. Compute gaps** between successive runs of the same individual at the same antenna/site.
+
+```{r gap inclusion, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = TRUE}
 gaps <- runs %>%
   arrange(Band.ID, recvDeployName, runStart) %>%
   group_by(Band.ID, recvDeployName) %>%
   mutate(
     prevRunEnd = lag(runEnd),
     gapSec     = runStart - prevRunEnd,
-    gapHours   = as.numeric(gapSec) / 3600
-  ) %>%
+    gapHours   = as.numeric(gapSec) / 3600) %>%
   ungroup() %>%
   filter(!is.na(gapHours)) %>%
-  
-  filter(gapHours > 0) # we are not dealing with overlap yet
+  filter(gapHours > 0) # we are not dealing with overlaps yet (simultaneous detection of the same tag from two or more antenna)
+```
 
-# ---------------------------------------------------------------
-# 3. Truncate gaps to (0.3, 96) hours for mixture model fitting                  /!\ WHAT TO CHOOSE HERE /!\
-# ---------------------------------------------------------------
+**3. Truncate gaps** (hours) for mixture model fitting. ::: blockquote-yellow **NOTE:** Below are values you should choose based on your own data and on the ecological plausibility of your system. :::
+
+```{r gap selection, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
+
 gap_trunc <- gaps %>%
   filter(gapHours > 0.3,     # ~5 minutes                   
          gapHours < 96)      # 5 hours
@@ -170,6 +174,10 @@ ggplot(gap_trunc, aes(x = gapHours, y = after_stat(density))) +
   scale_x_continuous(breaks = seq(0, 96, 5)) + # 5h
   labs(x = "Gap Duration (hours)", y = "density") +
   theme_minimal(base_size = 13) +
+   annotate("rect", 
+           xmin = 0, xmax = 30, 
+           ymin = 0, ymax = Inf,   # spans full height of the plot
+           fill = NA, color = "red", linewidth = 1) +
   theme(panel.grid.minor = element_blank()) 
 
 ggplot(gap_trunc %>% filter(gapHours < 30), aes(x = gapHours, y = after_stat(density))) +
@@ -179,6 +187,10 @@ ggplot(gap_trunc %>% filter(gapHours < 30), aes(x = gapHours, y = after_stat(den
   scale_x_continuous(breaks = seq(0, 30, 1)) + # 1h
   labs(x = "Gap Duration (hours)", y = "density") +
   theme_minimal(base_size = 13) +
+   annotate("rect", 
+           xmin = 0, xmax = 15, 
+           ymin = 0, ymax = Inf,   # spans full height of the plot
+           fill = NA, color = "red", linewidth = 1) +
   theme(panel.grid.minor = element_blank())
 
 ggplot(gap_trunc %>% filter(gapHours < 15), aes(x = gapHours, y = after_stat(density))) +
@@ -188,11 +200,18 @@ ggplot(gap_trunc %>% filter(gapHours < 15), aes(x = gapHours, y = after_stat(den
   scale_x_continuous(breaks = seq(0, 15, 1)) + # 1h
   labs(x = "Gap Duration (hours)", y = "density") +
   theme_minimal(base_size = 13) +
-  theme(panel.grid.minor = element_blank()) # /!\ I SELECT SUBJECTIVELY 1h AS TRESHOLD - conservative as 2h could be /!\
+   annotate("rect", 
+           xmin = 0, xmax = 2, 
+           ymin = 0, ymax = Inf,   # spans full height of the plot
+           fill = NA, color = "red", linewidth = 1) +
+  theme(panel.grid.minor = element_blank())    # /!\ BASED ON VISUAL GRAPH, I SELECT SUBJECTIVELY 1h AS TRESHOLD - conservative as 2h could be /!\
 
-# ---------------------------------------------------------------
-# 4. Fit a 3-component normal mixture model
-# ---------------------------------------------------------------
+```
+
+**4. Fit a 3-component normal mixture model**. Now we have visually explored how data is distributed to select a gap threshold value, we might use statistical model to assess this value more systematical and based on the data only, besides visual selection accounting for ecologically plausibility.
+
+```{r gap selection 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE,, include = TRUE}
+
 gap_trunc <- gaps %>%
   filter(gapHours > 0.3,     # ~5 minutes                   
          gapHours < 30) %>%  # 30 hours
@@ -204,166 +223,177 @@ mix_model <- normalmixEM(
   gap_trunc,
   k = 3,
   maxit = 5000,
-  epsilon = 1e-08
-)
+  epsilon = 1e-08)
 
 summary(mix_model)
 
-# ---------------------------------------------------------------
-# 5. Classify each gap to the component with highest posterior prob
-# ---------------------------------------------------------------
+```
+
+**6. Find the threshold value,** the cut-point: the gap value where classification switches from "Non-independent" to an "Independent" class (i.e. where posterior prob of the non-independent component drops below 0.5 as gap duration increases). We will first classify each gap to the component with highest posterior probability, and order components by their mean, so component 1 = shortest-gap (non-independent), 2 = medium, 3 = long (independent).
+
+```{r gap selection 3, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
 posteriors <- mix_model$posterior
 classification <- apply(posteriors, 1, which.max)
-
-# Order components by their mean, so component 1 = shortest-gap
-# (non-independent), 2 = medium, 3 = long (independent)
 comp_order <- order(mix_model$mu)
 comp_labels <- c("Non-independent", "Independent (medium)", "Independent (long)")
 names(comp_labels) <- as.character(comp_order)
 
 class_df <- data.frame(
   gapHours = gap_trunc,
-  component = comp_labels[as.character(classification)]
-)
+  component = comp_labels[as.character(classification)])
 
-# ---------------------------------------------------------------
-# 6. Find the cut-point: the gap value where classification
-#    switches from "Non-independent" to an "Independent" class
-#    (i.e. where posterior prob of the non-independent component
-#    drops below 0.5 as gap duration increases)
-# ---------------------------------------------------------------
 nonindep_comp <- comp_order[1]
 
 cutpoint_df <- data.frame(
   gapHours = gap_trunc,
-  p_nonindep = posteriors[, nonindep_comp]
-) %>%
+  p_nonindep = posteriors[, nonindep_comp]) %>%
   arrange(gapHours)
 
 # first point where posterior probability of non-independence < 0.5
 cutpoint <- cutpoint_df$gapHours[which(cutpoint_df$p_nonindep < 0.5)[1]]
-cat("Cut-point (hours):", round(cutpoint, 2), "\n")
+cat("Threshold value or Cut-point (hours):", round(cutpoint, 2), "\n")
 
-# ---------------------------------------------------------------
-# 7. Build density curves for each component (scaled by lambda)
-#    to overlay on the histogram
-# ---------------------------------------------------------------
+# Plot
 x_grid <- seq(0, 30, length.out = 500)
 
 dens_df <- do.call(rbind, lapply(seq_along(mix_model$mu), function(i) {
   data.frame(
     x = x_grid,
     y = mix_model$lambda[i] * dnorm(x_grid, mix_model$mu[i], mix_model$sigma[i]),
-    component = comp_labels[as.character(i)]
-  )
+    component = comp_labels[as.character(i)])
 }))
 
-# assign colours matching the appendix figure
 comp_colors <- c(
   "Non-independent"      = "darkred",
   "Independent (medium)" = "lightblue",
-  "Independent (long)"   = "darkgreen"
-)
+  "Independent (long)"   = "darkgreen")
 
-# ---------------------------------------------------------------
-# 8. Plot: histogram of truncated gaps + mixture density curves
-#    + vertical cut-point line
-# ---------------------------------------------------------------
 ggplot() +
   geom_histogram(
     data = data.frame(gapHours = gap_trunc),
     aes(x = gapHours, y = after_stat(density)),
-    binwidth = 1, fill = "grey30", color = "white", boundary = 0
-  ) +
+    binwidth = 1, fill = "grey30", color = "white", boundary = 0) +
   geom_line(
     data = dens_df,
     aes(x = x, y = y, color = component),
-    linewidth = 1
-  ) +
-  geom_vline(xintercept = cutpoint, color = "black", linewidth = 0.6) +
+    linewidth = 1) +
+  geom_vline(xintercept = cutpoint, color = "red", linewidth = 0.6) +
   scale_color_manual(values = comp_colors) +
   scale_x_continuous(breaks = seq(0, 30, 2)) +
   labs(
     x = "Gap Duration (hours)",
     y = "density",
-    color = NULL
-  ) +
+    color = NULL) +
   theme_minimal(base_size = 13) +
   theme(
     legend.position = "none",
-    panel.grid.minor = element_blank()
-  )
+    panel.grid.minor = element_blank())
 
 ```
 
 ### Define used time (hours)
 
-```{r site use, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = FALSE}
+Now, we decide to merge into one and unique continuous detection, all the tags (birds) detected per a same antenna, including gaps under a duration of 1 (one) hour. Although the model is highlighting a value of `r  round(cutpoint, 2)`, we decided to remain conservative.
 
-used_bird_recv_time <- runs %>%
+**Once detection data summarised as described above, we can see, overall, how long birds stay around one Motus station** - see plot below.
+
+```{r site use, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
+
+visit_duration <- runs %>%
+  arrange(Band.ID, recvDeployName, runStart) %>%
+  group_by(Band.ID, recvDeployName) %>%
+  mutate(
+    gapHours = as.numeric(runStart - lag(runEnd)) / 3600,
+    new_visit = is.na(gapHours) | gapHours >= 1,                 # TRUE = starts a new visit
+    visitID = cumsum(new_visit)) %>%
+  group_by(Band.ID, speciesEN, recvDeployName, visitID) %>%
+  summarise(
+    visitStart = min(runStart),
+    visitEnd   = max(runEnd),
+    n_detect   = sum(n_detect),                                  # total hits/detection across merged runs
+    n_runs     = n(),                                            # how many runs got merged into this visit
+    .groups = "drop") %>%
   
-  left_join(data_all %>% select(Band.ID, recvDeployName, runID, tideCategory, speciesEN),
-            by = c("Band.ID", "recvDeployName", "runID")) %>%
-  mutate(duration_h = difftime(runEnd, runStart, units = "hours")) %>%
-  
-  group_by(Band.ID, speciesEN, recvDeployName, tideCategory)  %>%
-  summarise(duration_h = sum(duration_h)) %>%
-  
-  mutate(tideDiel = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal"),
-         tideHighLow = if_else(grepl("High", tideCategory), "High", "Low"))
+  mutate(duration_h = round(as.numeric(visitEnd - visitStart) / 3600, 2))    # visit duration in hours
+
+
+ggplot(visit_duration %>%
+         filter(duration_h < 20),
+       aes(x = duration_h, y = after_stat(count))) +
+  geom_histogram(binwidth = 0.5, 
+                 fill = "grey30", 
+                 color = "white") +
+  scale_x_continuous(breaks = seq(0, 20, 1)) + # 1h
+  labs(x = "Visit Duration (hours)", y = "Count (n)") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank())    
 
 ```
 
+\*Note Newcastle NSW tides are turning \~6h cycles between high/low, and our birds seem to mostly visits any site less than 3 hours. An early descriptive sign of site use very tide dependent, as they would stay about 3 hours in the same area, around the highest/lowest point of the tide line, before to leave site, as the tide might be rising or receiving.\*
 
+```{r site use filter, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, include = FALSE}
+ggplot(visit_duration %>%
+         filter(duration_h > 20),
+       aes(x = duration_h, y = after_stat(count))) +
+  geom_histogram(binwidth = 25, 
+                 boundary = 20,       
+                 fill = "grey30", 
+                 color = "white") +
+  scale_x_continuous(breaks = sort(c(20, seq(500, 3000, 500)))) +
+  coord_cartesian(xlim = c(0, 3000)) +
+  labs(x = "Visit Duration (hours)", y = "Count (n)") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank())
+```
 
+To avoid inflating site use duration estimates with the very few **individuals showing more than 25 hours of continuous presence in the same area, we excluded these cases**. Such extended duration likely reflect a dropped tag rather than genuine site fidelity. Verifying each case individually would be time-consuming, so we treat this as a working assumption for now; should this pattern become more frequent in future data, it would warrant closer investigation.
 
+```{r site use filter 2, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = TRUE}
+visit_duration <- visit_duration %>%
+         filter(duration_h < 25)
+```
 
+**It remains to attribute at each visit period a tide category.**
 
+```{r site use tide, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = TRUE}
+# Convert to dt
+tide_dt  <- as.data.table(tide_data %>% 
+                            select(tideDateTimeAus, day_night, high_low, tideHeight, tideCategory))
+visit_dt <- as.data.table(visit_duration)
 
+# Sort both datetime col
+setkey(tide_dt, tideDateTimeAus)
+setorder(visit_dt, visitStart)
 
+# Rolling join: for each visitStart, find the tideDateTimeAus closest in time
+visit_duration <- tide_dt[visit_dt, 
+                          on = .(tideDateTimeAus = visitStart), 
+                          roll = "nearest"]
 
+# Rename the matched tide time column back for clarity, and restore visitStart
+setnames(visit_duration, "tideDateTimeAus", "visitStart")
 
+```
 
+**Let's finalise the table giving data for detection relative to the *trio* bird-station-tide.**
 
+```{r site use final table, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = TRUE}
 
+used_bird_recv_time <- visit_duration %>%
+  group_by(Band.ID, speciesEN, recvDeployName, tideCategory, day_night, high_low) %>%
+  summarise(duration_h = sum(duration_h), 
+            .groups = "drop")
 
+```
 
+### Define available time (hours)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-##
-
-            TO BE CONTINUED
-
-
-### Define available time per site
-
-Now tide data ready to be processed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.
+Now used time addressed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.
 
 Available time for each Motus stations is accessed with `activity` table: each row is a dated record of noise or a tag detected *- see [Survey effort \> Activity table](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#activity-table)*.
 
-We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity, and expand this period in hours.
-
-<br>
+We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity (noise or detection).
 
 ```{r Available vs Used RECV AVAILABLE, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 
@@ -419,11 +449,12 @@ recv_hours <- recv_hours %>%
   select(!recvDeployName) 
 recv_hours$recvDeployName <- sub("_SG-.*", "", recv_hours$SernoStation)
 
+
 ```
 
 <br>
 
-We now how the complete temporal coverage, expanded in hours, for each Motus station.
+We now how the complete temporal coverage, expanded in hours and for each Motus station so it matches with our used time dataset.
 
 However, due to some temporary failures or maintenance *(see [Survey effort \> Operational periods](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#operational-periods))*, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substrate these off-hours to the complete temporal coverage.
 
@@ -523,9 +554,7 @@ total_recv_tide_data <- tide_data_df %>%
 
 <br>
 
-**Temporal coverage for each station is now reduced to its operational periods**, and ready to be processed.
-
-We now assign each bird its own available time period, spanning from its tagging date to its last Motus detection, and expanded to hourly resolution too.
+Temporal coverage for each station is now reduced to its operational periods. **We now assign each bird its own available time period**, spanning from its tagging date to its last Motus detection, and expanded to hourly resolution too.
 
 <br>
 
@@ -584,7 +613,7 @@ tide_values <- tide_data[available_bird_recv_time$tideIndex, c("tideCategory")]
 
 # Merge tide categories to available_bird_recv_time and factorise the variables
 available_bird_recv_time <- available_bird_recv_time %>%
-  mutate(tideCategory = as_factor(tide_values$tideCategory))
+  mutate(tideCategory = forcats::as_factor(tide_values$tideCategory))
 
 # FINALISE AVAILABLE TIME 
 available_bird_recv_time <- available_bird_recv_time %>%
@@ -594,17 +623,74 @@ available_bird_recv_time <- available_bird_recv_time %>%
   mutate(tideDiel = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal"),
          tideHighLow = if_else(grepl("High", tideCategory), "High", "Low")) %>%
   select(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, duration_h)
-
-
 ```
 
 ::: blockquote-blue
-**The *available* time is now defined** for each bird across each Motus station, taking into account the periods where stations where ON only. The *available* periods are expanded in hours and the tide condition is associated.
+**The *available* time is now defined** for each bird across each Motus station, taking into account the periods where stations where ON only. In the data, the *available* periods are expanded in hours and the tide condition is associated. While most of the couple station listening-bird tagged are potentially detectable between 0 and 1000 hours; note two small peaks around 2700 and 4000 hours of detectability potential as it might be relative to the oldest couple ON.
 :::
 
+```{r Available plot, message = FALSE, warning = FALSE, echo = TRUE, include = FALSE,, eval = TRUE }
+ggplot() +
+  geom_histogram(
+    data = available_bird_recv_time,
+    aes(x = duration_h, y = after_stat(count)),
+    binwidth = 100, 
+    fill = "grey30", 
+    color = "white", 
+    boundary = 0) +
+  scale_x_continuous(breaks = seq(0, 4000, 500)) +
+  labs(
+    x = "Listening Duration for a typical Motus station (hours per birds) [all data]",
+    y = "Count (n)",
+    color = NULL) +
+     annotate("rect", 
+           xmin = 0, xmax = 1000, 
+           ymin = 0, ymax = Inf,   # spans full height of the plot
+           fill = NA, color = "red", linewidth = 1) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
 
+ggplot() +
+  geom_histogram(
+    data = available_bird_recv_time %>%
+      filter(duration_h < 1000),
+    aes(x = duration_h, y = after_stat(count)),
+    binwidth = 100, 
+    fill = "grey30", 
+    color = "white", 
+    boundary = 0) +
+  scale_x_continuous(breaks = seq(0, 1000, 100)) +
+  labs(
+    x = "Listening Duration for a typical Motus station (hours per birds) [0-1000 hours]",
+    y = "Count (n)",
+    color = NULL) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none",
+        panel.grid.minor = element_blank())
 
-## Usage rate per site
+ggplot() +
+  geom_histogram(
+    data = available_bird_recv_time %>%
+      filter(duration_h > 1000),
+    aes(x = duration_h, y = after_stat(count)),
+    binwidth = 100, 
+    fill = "grey30", 
+    color = "white", 
+    boundary = 0) +
+  scale_x_continuous(breaks = seq(0, 4000, 1000)) +
+  labs(
+    x = "Listening Duration for a typical Motus station (hours per birds) [1000-Inf hours]",
+    y = "Count (n)",
+    color = NULL) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank())
+
+```
+
+### Define rate of Use (%)
 
 Now that the *used* and *available* time have been determined for each individual and for each Motus station, we can relate these two elements together with the **Usage rate** (or rate of use).
 
@@ -614,75 +700,44 @@ $$
 $$
 :::
 
-Some cases may happen where the *time used* was over the *available*. It may occur because multiplying each bird detection by its pulse interval duration overestimates the actual time used. For example, if a bird is detected twice with a 13-second pulse interval—once at second 1 and again at second 14—this results in 2 detections over 14 seconds. However, simply multiplying the detections by the pulse interval (2 × 13 seconds) incorrectly estimates the total time used as 26 seconds.\
-<br>
+```{r final table, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE}
+use_rate_plot <- used_bird_recv_time %>%
+      rename(used_h = duration_h)%>%
+  
+  left_join(available_bird_recv_time %>%
+      rename(available_h = duration_h),   
+    by = c("Band.ID", "speciesEN", "recvDeployName", "tideCategory")) %>%
+  
+  mutate(rate_use = (used_h / available_h) * 100) %>%
+  select(Band.ID, speciesEN, recvDeployName, tideCategory, 
+         tideDiel, tideHighLow, used_h, available_h, rate_use)
 
-```{r potential error, message = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
-table((used_bird_recv_time  %>% 
-         filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
-used_bird_recv_time %>% 
-  filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew") %>%
-  select(tideCategory, duration_h)
-
-
-table((available_bird_recv_time  %>% 
-         filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew"))$tideCategory)
-available_bird_recv_time %>% 
-  filter(recvDeployName == "Curlew Point", speciesEN == "Far Eastern Curlew") %>%
-  select(tideCategory, duration_h)
 ```
 
-```{r above hundred, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+```{r potential error, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 
-figure_plot <- left_join(available_bird_recv_time %>% 
-                           group_by(recvDeployName, Band.ID, speciesEN) %>%
-                           rename(available_t = "duration_h"),
-                         used_bird_recv_time %>%
-                           rename(used_t = "duration_h")) %>%
-  mutate(rate_use = used_t*100/available_t)
-
-
-
-
-above <- figure_plot %>%
-  filter(rate_use > 100)
-above  %>%
- ungroup() %>% 
-  gt() %>%
-  tab_style(
-    style = cell_text(weight = "bold"),
-    locations = cells_column_labels() ) 
-
-above100 <- above %>%
-  filter(rate_use > 100 & rate_use < 140)
-above140 <- above %>%
-  filter(rate_use >= 140)
+above <- use_rate_plot %>%
+  filter(rate_use > 100) %>%
+  nrow()
 
 ```
 
 ::: blockquote-yellow
-**Note:** We decided to force **n = `r nrow(above100)`** out of `r nrow(figure_plot)` cases where the *rate used* was between 100 and 140 % to equal 100 %.\
-And we decided to remove **n = `r nrow(above140)`** cases where the *rate used* was over 140 %, considering the tag might simply have fell of the bird within the vicinity of the station.\
-Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. *- See table above.*
+**Note**: A very few cases (n = `r above`) where the *time used* was over the *time* *available* has been excluded from the data. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated.
 :::
 
-```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r potential error 2, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 
-figure_plot <- figure_plot %>%
-  
-  mutate(rate_use = ifelse(rate_use > 100 & rate_use < 140, 100, rate_use)) %>% # force 100-140 rate values to equal 100 %
-  mutate(rate_use = ifelse(rate_use >= 140, NA, rate_use)) %>%                  # remove rates above 140 %
-  
-  mutate(speciesType = factor(shorebird_class[speciesEN], 
-                               levels = c("migratory", "resident"))) %>%
-  
-  filter(!speciesEN %in% c("Masked Lapwing")) 
+use_rate_plot %>%
+  filter(rate_use > 100) %>%
+  select(Band.ID, speciesEN, recvDeployName, tideCategory, rate_use)
 
+```
 
+```{r potential error filtered, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE}
 
-  
-#  filter(speciesEN %in% c("Pacific Golden-Plover", "Curlew Sandpiper", "Bar-tailed Godwit")) %>%
-#  filter(!recvDeployName %in% c("Corrie Island", "Davies Point", "Swan Pond"))
+use_rate_plot <- use_rate_plot %>%
+  filter(rate_use < 100)
 
 ```
 
@@ -690,18 +745,23 @@ figure_plot <- figure_plot %>%
 **Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.
 :::
 
-Now, everything is ready to format the data for plot and to visualise the results for **Usage rate** and **Hourly usage** across the Motus stations of our local array.
+```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 
-```{r tool, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+figure_plot <- use_rate_plot %>%
+  mutate(speciesType = factor(shorebird_class[speciesEN], 
+                               levels = c("migratory", "resident"))) %>%
+  
+  filter(!speciesEN %in% c("Masked Lapwing")) 
+
+```
+
+```{r tool, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 # Track size sample
 counts <- used_bird_recv_time %>%
       group_by(speciesEN) %>%
       summarise(n = n_distinct(Band.ID)) %>%
       mutate(label = paste0(speciesEN, " (n = ", n, ")"))
 label_vec <- setNames(counts$label, counts$speciesEN)
-```
-
-```{r 4 Used rate PLOT, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 
 # Tide and species groupings
 tide_levels <- c("Low", "High")
@@ -753,7 +813,7 @@ plots_used_rate <- purrr::cross2(tide_levels, species_types) %>%
 
 ```
 
-```{r stats for plots, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
+```{r stats for plots, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 # General function to provide one table with stats values
 make_summary_table <- function(tide_level, species_type) {
@@ -788,7 +848,10 @@ low_migratory <- make_summary_table("Low", "migratory")
 low_resident <- make_summary_table("Low", "resident")
 ```
 
-### RESIDENT BIRDS
+
+### Results
+
+### Resident species
 
 ::::: panel-tabset
 ##### High Tide
@@ -849,7 +912,7 @@ low_resident  %>%
 :::
 :::::
 
-### MIGRATORY BIRDS
+### Migrant species
 
 ::::: panel-tabset
 ##### High Tide

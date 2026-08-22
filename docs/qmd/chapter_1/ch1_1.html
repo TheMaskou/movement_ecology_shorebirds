@@ -177,6 +177,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Station usage - hours</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_12.html">
+ <span class="dropdown-text">Station usage - hours (OBP method)</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_8.html">
  <span class="dropdown-text">Signal strength</span></a>
   </li>  
@@ -375,6 +379,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_7.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Station usage - hours</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../qmd/chapter_1/ch1_12.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Station usage - hours (OBP method)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -964,8 +974,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Once loaded in your <em>R environment,</em> the file will display five objects:</p>
 <ul>
 <li><p><code>sql.motus</code>: raw motus file from which you can call multiple tables (see <a href="https://motuswts.github.io/motus/articles/03-accessing-data.html">documentation</a>)</p></li>
-<li><p><code>data_all</code>: contains all the raw detections for each Lotek nanotags</p></li>
-<li><p><code>recv</code>: contains all the details for each receiver of the Motus array</p></li>
+<li><p><code>df.alltags</code>: contains all the raw detections for each Lotek nanotags</p></li>
+<li><p><code>df.recvDeps</code>: contains all the details for each receiver of the Motus array</p></li>
+<li><p><code>recv.act</code>: activity table for each receiver of the Motus array</p></li>
 <li><p><code>spreadsheet</code>: contains all the capture events details provided for each trapped individual</p></li>
 <li><p><code>tideData</code>: tidal details for Newcastle, NSW</p></li>
 </ul>
