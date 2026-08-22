@@ -73,7 +73,16 @@ Tidal cycles primarily drive shorebird movements between foraging and roosting s
 -   The Research Project is funded by many institutions that may also collaborate with us as the Hunter Local Land Services, Hunter Bird Observers Club, Department of Planning and Environment, National Parks and Wildlife Services, Wettenhall Environment Trust, Bird Life Australia, Australian and Pacific Science Foundation, Cumberland Birds Observers Club, Digital Earth Australia, and Griffith University.
 
 ::: {style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 2rem; margin: 2rem auto 0; padding: 2rem; background: white; border-radius: 50px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); max-width: 1200px;"}
-![](/material/cboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/dccew.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/lls.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/hboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/off.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/apsf.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/dea.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/uog.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/bla.png){style="height: 60px; width: auto; filter: brightness(1.1);"} ![](/material/wet.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
+![](/material/cboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/dccew.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/lls.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/off.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/hboc.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
+![](/material/apsf.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/dea.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/uog.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
+![](/material/bla.png){style="height: 60px; width: auto; filter: brightness(1.1);"} 
+![](/material/wet.png){style="height: 60px; width: auto; filter: brightness(1.1);"}
 :::
 ::::
 

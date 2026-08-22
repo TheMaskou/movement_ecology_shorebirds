@@ -11,7 +11,7 @@ format: html
 
 -   [2026 Travel Grant - Bird Life Australia](https://birdlife.org.au/awards/student-research-and-travel-grant/) - (AUD 1 000)
 
--   [2026 Research Grant - Wettenhall Environment Trust](https://wettenhall.org.au/)  - (AUD 15 000)
+-   [2026 Research Grant - Wettenhall Environment Trust](https://wettenhall.org.au/) - (AUD 15 000)
 
 -   [2025 Research Grant - Oatley Flora & Fauna Conservation Society](https://www.oatleyflorafauna.org.au/) - *(AUD 2 000)*
 

@@ -22,5 +22,3 @@ format: html
 -   2025 June - [Motus automated telemetry uncovers mightatory shorebirds habitat selection, supporting adaptative land management](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQA9fmHl4hBvTZ2nyICgXKAzAZh4FQPAJ0gJTsKCioBWNBQ?e=XymyZC), Ecological Society of Australia (ESA), Adelaide, SA, **Abstract**.
 
 -   2025 October - [MOTUS automated telemetry does not quite yet reveal habitat use from estuarine shorebirds](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQDk0spslustTp0ergZ4X-llAbruqNFNHZ1Ov51KZTSM9dw?e=WlUjbj), Ecological Society of Australia (ESA), Adelaide, SA, **Presentation**.
-
--   2025 December - [Motus automated telemetry uncovers migratory shorebirds habitat selection, supporting adaptative land management](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQC03Ixxv9JVQbO0Dc54VFp1AV7yVYGuGDgrqaE84gdb6q4?e=jnlvIx), World Biodiversity Forum, Davos, CHF, **Abstract**.

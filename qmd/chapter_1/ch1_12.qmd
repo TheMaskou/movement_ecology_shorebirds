@@ -106,7 +106,7 @@ ggplot(data_all, aes(x = sigPositive, y = speciesEN, fill = speciesEN)) +
 
 ```
 
-## Defining observation events based on detection gap threshold
+## Site use adjusted for detection gap threshold
 
 ### Filter true detections
 
@@ -847,7 +847,6 @@ high_resident <- make_summary_table("High", "resident")
 low_migratory <- make_summary_table("Low", "migratory")
 low_resident <- make_summary_table("Low", "resident")
 ```
-
 
 ### Results
 

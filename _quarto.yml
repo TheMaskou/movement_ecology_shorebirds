@@ -28,7 +28,7 @@ execute:
   freeze: auto #auto use cache results, false rerun everything
 
 website:
-  title: "Movement Ecology - Shorebirds"
+  title: "Home"
 
   comments:
     hypothesis: true
@@ -40,7 +40,7 @@ website:
     logo: logo.png
         
     right:     
-      - text: "PhD Project"
+      - text: "Project"
         href: qmd/myphd.qmd
         
       - sidebar:chapter1
