@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-08-22">
+<meta name="dcterms.date" content="2026-08-24">
 
 <title>Station usage - hours (OBP method) – Home</title>
 <style>
@@ -477,7 +477,6 @@ window.Quarto = {
   <li><a href="#relative-signal-strength-indicator-rssi" id="toc-relative-signal-strength-indicator-rssi" class="nav-link active" data-scroll-target="#relative-signal-strength-indicator-rssi">Relative Signal Strength Indicator (RSSI)</a></li>
   <li><a href="#site-use-adjusted-for-detection-gap-threshold" id="toc-site-use-adjusted-for-detection-gap-threshold" class="nav-link" data-scroll-target="#site-use-adjusted-for-detection-gap-threshold">Site use adjusted for detection gap threshold</a>
   <ul class="collapse">
-  <li><a href="#filter-true-detections" id="toc-filter-true-detections" class="nav-link" data-scroll-target="#filter-true-detections">Filter true detections</a></li>
   <li><a href="#detection-threshold" id="toc-detection-threshold" class="nav-link" data-scroll-target="#detection-threshold">Detection threshold</a></li>
   <li><a href="#define-used-time-hours" id="toc-define-used-time-hours" class="nav-link" data-scroll-target="#define-used-time-hours">Define used time (hours)</a></li>
   <li><a href="#define-available-time-hours" id="toc-define-available-time-hours" class="nav-link" data-scroll-target="#define-available-time-hours">Define available time (hours)</a></li>
@@ -505,7 +504,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-08-22</p>
+      <p class="date">2026-08-24</p>
     </div>
   </div>
   
@@ -564,19 +563,19 @@ window.Quarto = {
 </figcaption>
 </figure>
 </div>
-<p>The distribution of RSSI for our data is shown below (e.g., RSSI ~70/100/&gt;143 indicates the bird is likely in the far/medium/close range of the antenna’s detection capability).</p>
+<p>The distribution of RSSI for our data is shown below (e.g., RSSI ~70/100/&gt;140 indicates the bird is likely in the far/medium/close range of the antenna’s detection capability).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_12_files/figure-html/rssi-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 <section id="site-use-adjusted-for-detection-gap-threshold" class="level2">
 <h2 class="anchored" data-anchor-id="site-use-adjusted-for-detection-gap-threshold">Site use adjusted for detection gap threshold</h2>
-<section id="filter-true-detections" class="level3">
-<h3 class="anchored" data-anchor-id="filter-true-detections">Filter true detections</h3>
-<p>Motus protocols group detections at a receiver into runs of detections. A run is defined as a series of detections (hit) without a gap between sequential detections of more than 60 missed detections <a href="https://docs.motus.org/en/tags/tag-aliasing">(Motus 2022)</a>.</p>
-<p>The tags used in our project emit radio bursts at a different set intervals so the gaps to define a new run vary:<br>
-- 13.1 min (= 13.1 sec x 60) ==&gt; NTQB2-4-2</p>
-<p>- 13.1 min (= 13.1 sec x 60) ==&gt; NTQB2-6-1</p>
-<p>- 7.1 min (= 7.1 sec x 60) ==&gt; NTQB2-6-2</p>
-<p>*NOTE: this part must be investigated in the future as it is mostly to avoid overlaps in detecting same tags from two antennas of a similar receiver*</p>
-</section>
 <section id="detection-threshold" class="level3">
 <h3 class="anchored" data-anchor-id="detection-threshold">Detection threshold</h3>
 <p>To define independent observations, we needed a time gap that separates a bird leaving a site from just briefly dropping out of antenna range (e.g., by turning away or moving behind vegetation). Short gaps likely mean the bird is still present; long gaps likely mean it has left. We analysed the distribution of time gaps between successive detection runs of the same bird at the same station, and across all individuals, and used this to choose a cut-off separating “same visit” from “new visit”. A three-component mixture model (MIXTOOLS 2.0.0.1) was fitted to the gap durations, distinguishing short gaps (same visit) from medium/long gaps (new visit). Gaps were truncated to 5 min – 30 hours to remove noise from very short or very long outliers, and each gap was classified by whichever distribution best matched it.</p>
@@ -597,11 +596,10 @@ window.Quarto = {
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, recvDeployName) <span class="sc">%&gt;%</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">prevRunEnd =</span> <span class="fu">lag</span>(runEnd),</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gapSec     =</span> runStart <span class="sc">-</span> prevRunEnd,</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">gapHours   =</span> <span class="fu">as.numeric</span>(gapSec) <span class="sc">/</span> <span class="dv">3600</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gapHours)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gapHours <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="co"># we are not dealing with overlaps yet (simultaneous detection of the same tag from two or more antenna)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">gapHours   =</span> <span class="fu">round</span>(<span class="fu">as.numeric</span>(<span class="fu">difftime</span>(runStart, prevRunEnd, <span class="at">units =</span> <span class="st">"hours"</span>)), <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(gapHours)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(gapHours <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="co"># we are not dealing with overlaps yet (simultaneous detection of the same tag from two or more antenna)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>3. Truncate gaps</strong> (hours) for mixture model fitting. ::: blockquote-yellow <strong>NOTE:</strong> Below are values you should choose based on your own data and on the ecological plausibility of your system. :::</p>
 <div class="cell">
@@ -642,16 +640,16 @@ window.Quarto = {
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">maxit =</span> <span class="dv">5000</span>,</span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">epsilon =</span> <span class="fl">1e-08</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>number of iterations= 152 </code></pre>
+<pre><code>number of iterations= 150 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mix_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>summary of normalmixEM object:
          comp 1   comp 2     comp 3
-lambda 0.326980 0.585617  0.0874027
-mu     0.687097 9.256618 23.9154865
-sigma  0.349015 6.135651  0.4630448
-loglik at estimate:  -12867.37 </code></pre>
+lambda 0.324799 0.587364  0.0878374
+mu     0.696852 9.275983 23.9154082
+sigma  0.352310 6.131985  0.4628914
+loglik at estimate:  -12830.01 </code></pre>
 </div>
 </div>
 <p><strong>6. Find the threshold value,</strong> the cut-point: the gap value where classification switches from “Non-independent” to an “Independent” class (i.e.&nbsp;where posterior prob of the non-independent component drops below 0.5 as gap duration increases). We will first classify each gap to the component with highest posterior probability, and order components by their mean, so component 1 = shortest-gap (non-independent), 2 = medium, 3 = long (independent).</p>
@@ -667,7 +665,7 @@ loglik at estimate:  -12867.37 </code></pre>
 </section>
 <section id="define-used-time-hours" class="level3">
 <h3 class="anchored" data-anchor-id="define-used-time-hours">Define used time (hours)</h3>
-<p>Now, we decide to merge into one and unique continuous detection, all the tags (birds) detected per a same antenna, including gaps under a duration of 1 (one) hour. Although the model is highlighting a value of 1.56, we decided to remain conservative.</p>
+<p>Now, we decide to merge into one and unique continuous detection, all the tags (birds) detected per a same antenna, including gaps under a duration of 1 (one) hour. Although the model is highlighting a value of 1.57, we decided to remain conservative.</p>
 <p><strong>Once detection data summarised as described above, we can see, overall, how long birds stay around one Motus station</strong> - see plot below.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -679,36 +677,57 @@ loglik at estimate:  -12867.37 </code></pre>
 </div>
 </div>
 <p>*Note Newcastle NSW tides are turning ~6h cycles between high/low, and our birds seem to mostly visits any site less than 3 hours. An early descriptive sign of site use very tide dependent, as they would stay about 3 hours in the same area, around the highest/lowest point of the tide line, before to leave site, as the tide might be rising or receiving.*</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_12_files/figure-html/site use filter-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 <p>To avoid inflating site use duration estimates with the very few <strong>individuals showing more than 25 hours of continuous presence in the same area, we excluded these cases</strong>. Such extended duration likely reflect a dropped tag rather than genuine site fidelity. Verifying each case individually would be time-consuming, so we treat this as a working assumption for now; should this pattern become more frequent in future data, it would warrant closer investigation.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>visit_duration <span class="ot">&lt;-</span> visit_duration <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>         <span class="fu">filter</span>(duration_h <span class="sc">&lt;</span> <span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>It remains to attribute at each visit period a tide category.</strong></p>
+<p><strong>It remains to attribute at each visit period a tide category.</strong> We expand each visit into hourly bins spanning <code>visitStart</code> to <code>visitEnd</code> (<code>visit_duration</code> itself is untouched). Then, we compute exact overlap (in hours) between each hourly bin and the actual visit window.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert to dt</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tide_dt  <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(tide_data <span class="sc">%&gt;%</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">select</span>(tideDateTimeAus, day_night, high_low, tideHeight, tideCategory))</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>visit_dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(visit_duration)</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Sort both datetime col</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(tide_dt, tideDateTimeAus)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="fu">setorder</span>(visit_dt, visitStart)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Rolling join: for each visitStart, find the tideDateTimeAus closest in time</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>visit_duration <span class="ot">&lt;-</span> tide_dt[visit_dt, </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                          on <span class="ot">=</span> .(<span class="at">tideDateTimeAus =</span> visitStart), </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>                          roll <span class="ot">=</span> <span class="st">"nearest"</span>]</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Rename the matched tide time column back for clarity, and restore visitStart</span></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(visit_duration, <span class="st">"tideDateTimeAus"</span>, <span class="st">"visitStart"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>visit_hours <span class="ot">&lt;-</span> visit_duration <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="at">from =</span> <span class="fu">floor_date</span>(visitStart, <span class="st">"hour"</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">to   =</span> <span class="fu">floor_date</span>(visitEnd, <span class="st">"hour"</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">by   =</span> <span class="st">"hour"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> <span class="fu">c</span>(hour_dt)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>visit_hours <span class="ot">&lt;-</span> visit_hours <span class="sc">%&gt;%</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">bin_start     =</span> hour_dt,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">bin_end       =</span> hour_dt <span class="sc">+</span> <span class="fu">hours</span>(<span class="dv">1</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">overlap_start =</span> <span class="fu">pmax</span>(visitStart, bin_start),</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">overlap_end   =</span> <span class="fu">pmin</span>(visitEnd, bin_end),</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">overlap_h     =</span> <span class="fu">as.numeric</span>(<span class="fu">difftime</span>(overlap_end, overlap_start, <span class="at">units =</span> <span class="st">"hours"</span>))</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(overlap_h <span class="sc">&gt;</span> <span class="dv">0</span>)   <span class="co"># drops bins with no actual overlap</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Attach nearest tide category to each hourly bin</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>tide_dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(tide_data)[, .(tideDateTimeAus, tideCategory)]</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(tide_dt, tideDateTimeAus)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>vh_dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(visit_hours)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(vh_dt, hour_dt)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>visit_hours_tide <span class="ot">&lt;-</span> tide_dt[vh_dt, on <span class="ot">=</span> .(<span class="at">tideDateTimeAus =</span> hour_dt), roll <span class="ot">=</span> <span class="st">"nearest"</span>]</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(visit_hours_tide, <span class="st">"tideDateTimeAus"</span>, <span class="st">"hour_dt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Let’s finalise the table giving data for detection relative to the <em>trio</em> bird-station-tide.</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>used_bird_recv_time <span class="ot">&lt;-</span> visit_duration <span class="sc">%&gt;%</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, speciesEN, recvDeployName, tideCategory, day_night, high_low) <span class="sc">%&gt;%</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_h =</span> <span class="fu">sum</span>(duration_h), </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>used_bird_recv_time <span class="ot">&lt;-</span> visit_hours_tide <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideDiel =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Diurnal"</span>, tideCategory), <span class="st">"Diurnal"</span>, <span class="st">"Nocturnal"</span>),</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideHighLow =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"High"</span>, tideCategory), <span class="st">"High"</span>, <span class="st">"Low"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_h =</span> <span class="fu">sum</span>(overlap_h), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="define-available-time-hours" class="level3">
@@ -773,90 +792,35 @@ loglik at estimate:  -12867.37 </code></pre>
 <p><br></p>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Distinguish station from mixed recv + Giving operational variable (= TRUE when existing values from act table)</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv.act <span class="sc">%&gt;%</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>              <span class="fu">distinct</span>(recvDeployName, hour_dt) <span class="sc">%&gt;%</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"recvDeployName"</span>, <span class="st">"hour_dt"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(operational), <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># /!\ Due to unknown error? Have to set this manually</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">case_when</span>(</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    recvDeployName <span class="sc">==</span> <span class="st">"Fullerton Entrance"</span> <span class="sc">&amp;</span> </span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>      hour_dt <span class="sc">&gt;</span> <span class="fu">as.POSIXct</span>(<span class="st">"2023-04-02"</span>) <span class="sc">&amp;</span> </span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      hour_dt <span class="sc">&lt;</span> <span class="fu">as.POSIXct</span>(<span class="st">"2023-04-05"</span>) <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> operational))</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary table                                                                     </span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>off_runs <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span> </span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(recvDeployName, hour_dt) <span class="sc">%&gt;%</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName) <span class="sc">%&gt;%</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">off_run_id =</span> <span class="fu">consecutive_id</span>(operational <span class="sc">==</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(operational <span class="sc">==</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName, off_run_id) <span class="sc">%&gt;%</span></span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">start_off =</span> <span class="fu">min</span>(hour_dt),</span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">end_off =</span> <span class="fu">max</span>(hour_dt),</span>
-<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">tot_off_hours =</span> <span class="fu">n</span>(),</span>
-<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(tot_off_hours <span class="sc">&gt;</span> <span class="dv">24</span>)</span>
-<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Unique recvDeployNames from off_runs</span></span>
-<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>recv_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(recv_hours<span class="sc">$</span>recvDeployName)</span>
-<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Split tide_data into a named list with one element per recvDeployName</span></span>
-<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>tide_data_list <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(recv_names)), recv_names)</span>
-<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a>tide_data <span class="ot">&lt;-</span> tide_data <span class="sc">%&gt;%</span></span>
-<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rename</span>(<span class="at">timeAus =</span> <span class="st">"tideDateTimeAus"</span>)</span>
-<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(name <span class="cf">in</span> recv_names) {</span>
-<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get off intervals for this recvDeployName</span></span>
-<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a>  intervals <span class="ot">&lt;-</span> off_runs <span class="sc">%&gt;%</span></span>
-<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
-<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(start_off, end_off)</span>
-<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get deployment start and end dates for this recvDeployName</span></span>
-<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a>  deploy <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
-<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
-<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">lisStart =</span> <span class="fu">min</span>(lisStart, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">lisEnd =</span> <span class="fu">max</span>(lisEnd, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Filter tide_data by deployment period</span></span>
-<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a>  td <span class="ot">&lt;-</span> tide_data <span class="sc">%&gt;%</span></span>
-<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(timeAus <span class="sc">&gt;=</span> deploy<span class="sc">$</span>lisStart <span class="sc">&amp;</span> timeAus <span class="sc">&lt;=</span> deploy<span class="sc">$</span>lisEnd) <span class="sc">%&gt;%</span></span>
-<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">recvDeployName =</span> name) </span>
-<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(<span class="fu">nrow</span>(intervals) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Vectorized exclusion of off intervals</span></span>
-<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>    is_in_off <span class="ot">&lt;-</span> <span class="fu">sapply</span>(td<span class="sc">$</span>timeAus, <span class="cf">function</span>(t) {</span>
-<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>      <span class="fu">any</span>(t <span class="sc">&gt;=</span> intervals<span class="sc">$</span>start_off <span class="sc">&amp;</span> t <span class="sc">&lt;=</span> intervals<span class="sc">$</span>end_off)</span>
-<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a>    })</span>
-<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>    td <span class="ot">&lt;-</span> td[<span class="sc">!</span>is_in_off, ]</span>
-<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>  tide_data_list[[name]] <span class="ot">&lt;-</span> td</span>
-<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a>tide_data_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tide_data_list) <span class="sc">%&gt;%</span></span>
-<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">round_date</span>(timeAus, <span class="at">unit =</span> <span class="st">"hour"</span>))            <span class="co"># AVAILABLE TIME (tide categories covering same time as recv survey effort) </span></span>
-<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a><span class="co"># Finalise data set for receiver ON with tidal data, per hour</span></span>
-<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>total_recv_tide_data <span class="ot">&lt;-</span> tide_data_df <span class="sc">%&gt;%</span></span>
-<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(recvDeployName) <span class="sc">%&gt;%</span></span>
-<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Expand per hour bin</span></span>
-<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">hour_seq =</span> <span class="fu">list</span>(<span class="fu">seq</span>(<span class="fu">min</span>(hour_dt), <span class="fu">max</span>(hour_dt), <span class="at">by =</span> <span class="st">"hour"</span>)), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(hour_seq) <span class="sc">%&gt;%</span></span>
-<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">hour_dt =</span> hour_seq) <span class="sc">%&gt;%</span></span>
-<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Match tide data to hourly grid</span></span>
-<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Hours WITHOUT tide data get NA values across all columns but we'll deal with this later</span></span>
-<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(tide_data_df, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"recvDeployName"</span>, <span class="st">"hour_dt"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">any_of</span>(<span class="st">"operational"</span>)) <span class="sc">%&gt;%</span>   <span class="co"># drop if it already exists, no-op if it doesn't</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(recv.act <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">distinct</span>(recvDeployName, hour_dt) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"recvDeployName"</span>, <span class="st">"hour_dt"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">if_else</span>(<span class="fu">is.na</span>(operational), <span class="cn">FALSE</span>, <span class="cn">TRUE</span>))</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># /!\ Due to unknown error? Have to set this manually</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>recv_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">operational =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    recvDeployName <span class="sc">==</span> <span class="st">"Fullerton Entrance"</span> <span class="sc">&amp;</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      hour_dt <span class="sc">&gt;</span> <span class="fu">as.POSIXct</span>(<span class="st">"2023-04-02"</span>) <span class="sc">&amp;</span> </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>      hour_dt <span class="sc">&lt;</span> <span class="fu">as.POSIXct</span>(<span class="st">"2023-04-05"</span>) <span class="sc">~</span> <span class="cn">FALSE</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> operational))</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Only the hours the station was actually ON — computed once, no regeneration of gaps</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>valid_station_hours <span class="ot">&lt;-</span> recv_hours <span class="sc">%&gt;%</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(operational <span class="sc">==</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(recvDeployName, hour_dt)</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Attach nearest tide category directly (this also folds in the Point 7 fix —</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>tide_dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(tide_data)[, .(tideDateTimeAus, tideCategory)]</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(tide_dt, tideDateTimeAus)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>vsh_dt <span class="ot">&lt;-</span> <span class="fu">as.data.table</span>(valid_station_hours)</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(vsh_dt, hour_dt)</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>valid_station_hours_tide <span class="ot">&lt;-</span> tide_dt[vsh_dt, on <span class="ot">=</span> .(<span class="at">tideDateTimeAus =</span> hour_dt), roll <span class="ot">=</span> <span class="st">"nearest"</span>]</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(valid_station_hours_tide, <span class="st">"tideDateTimeAus"</span>, <span class="st">"hour_dt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 <p>Temporal coverage for each station is now reduced to its operational periods. <strong>We now assign each bird its own available time period</strong>, spanning from its tagging date to its last Motus detection, and expanded to hourly resolution too.</p>
 <p><br></p>
@@ -864,8 +828,8 @@ loglik at estimate:  -12867.37 </code></pre>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>period_sp <span class="ot">&lt;-</span> data_all  <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID) <span class="sc">%&gt;%</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(<span class="at">DateAUS.Trap =</span> <span class="fu">first</span>(DateAUS.Trap), </span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">last_dateAus =</span> <span class="fu">max</span>(dateAus),</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">speciesEN =</span> speciesEN) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">last_dateAus =</span> <span class="fu">max</span>(timeAus),</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">speciesEN =</span> <span class="fu">first</span>(speciesEN)) <span class="sc">%&gt;%</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Expand one row per hours to each individual across its whole period (this is the available time)</span></span>
@@ -879,51 +843,58 @@ loglik at estimate:  -12867.37 </code></pre>
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() </span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Duplicate in as many list as many stations</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>recv_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(recv_hours<span class="sc">$</span>recvDeployName)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>recv_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(valid_station_hours_tide<span class="sc">$</span>recvDeployName)</span>
 <span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>bird_data_list <span class="ot">&lt;-</span> <span class="fu">setNames</span>(<span class="fu">vector</span>(<span class="st">"list"</span>, <span class="fu">length</span>(recv_names)), recv_names)</span>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(name <span class="cf">in</span> recv_names) {</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  valid_hours_recv <span class="ot">&lt;-</span> total_recv_tide_data <span class="sc">%&gt;%</span></span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(hour_dt)</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  valid_hours_bird_recv <span class="ot">&lt;-</span> bird_hours <span class="sc">%&gt;%</span></span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(hour_dt <span class="sc">%in%</span> valid_hours_recv)</span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  valid_hours_bird_recv<span class="sc">$</span>name <span class="ot">&lt;-</span> name</span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  bird_data_list[[name]] <span class="ot">&lt;-</span> valid_hours_bird_recv</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>} </span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="co"># ADD TIDE TO AVAILABLE TIME</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a><span class="co"># The NA cols left over before from recv table, now also filtered out based on available time coming from bird periods table</span></span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>get.tideIndex <span class="ot">&lt;-</span> <span class="cf">function</span>(time){<span class="fu">return</span>(<span class="fu">which.min</span>(<span class="fu">abs</span>(tide_data<span class="sc">$</span>timeAus <span class="sc">-</span> time)))}</span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>available_bird_recv_time <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(bird_data_list) <span class="sc">%&gt;%</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">force_tz</span>(hour_dt, <span class="st">"Australia/Sydney"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Remove rows with ANY NA</span></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="sc">!</span><span class="fu">is.na</span>(.))) <span class="sc">%&gt;%</span></span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideIndex =</span> purrr<span class="sc">::</span><span class="fu">map_dbl</span>(hour_dt, get.tideIndex))</span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract tide categories thanks to tide index (row order in available_bird_recv_time)</span></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>tide_values <span class="ot">&lt;-</span> tide_data[available_bird_recv_time<span class="sc">$</span>tideIndex, <span class="fu">c</span>(<span class="st">"tideCategory"</span>)]</span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge tide categories to available_bird_recv_time and factorise the variables</span></span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a>available_bird_recv_time <span class="ot">&lt;-</span> available_bird_recv_time <span class="sc">%&gt;%</span></span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideCategory =</span> forcats<span class="sc">::</span><span class="fu">as_factor</span>(tide_values<span class="sc">$</span>tideCategory))</span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a><span class="co"># FINALISE AVAILABLE TIME </span></span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a>available_bird_recv_time <span class="ot">&lt;-</span> available_bird_recv_time <span class="sc">%&gt;%</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">recvDeployName =</span> name) <span class="sc">%&gt;%</span></span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, speciesEN, recvDeployName, tideCategory)  <span class="sc">%&gt;%</span></span>
-<span id="cb13-59"><a href="#cb13-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_h =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb13-60"><a href="#cb13-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideDiel =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Diurnal"</span>, tideCategory), <span class="st">"Diurnal"</span>, <span class="st">"Nocturnal"</span>),</span>
-<span id="cb13-61"><a href="#cb13-61" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideHighLow =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"High"</span>, tideCategory), <span class="st">"High"</span>, <span class="st">"Low"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb13-62"><a href="#cb13-62" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, duration_h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  valid_hours_recv <span class="ot">&lt;-</span> valid_station_hours_tide <span class="sc">%&gt;%</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(recvDeployName <span class="sc">==</span> name) <span class="sc">%&gt;%</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pull</span>(hour_dt)</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  valid_hours_bird_recv <span class="ot">&lt;-</span> bird_hours <span class="sc">%&gt;%</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(hour_dt <span class="sc">%in%</span> valid_hours_recv)</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>  valid_hours_bird_recv<span class="sc">$</span>name <span class="ot">&lt;-</span> name</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  bird_data_list[[name]] <span class="ot">&lt;-</span> valid_hours_bird_recv</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a><span class="co"># # FINALISE AVAILABLE TIME </span></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>available_bird_recv_time <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(bird_data_list) <span class="sc">%&gt;%</span></span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">hour_dt =</span> <span class="fu">force_tz</span>(hour_dt, <span class="st">"Australia/Sydney"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">if_all</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="sc">!</span><span class="fu">is.na</span>(.))) <span class="sc">%&gt;%</span></span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">recvDeployName =</span> name) <span class="sc">%&gt;%</span></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(valid_station_hours_tide, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"recvDeployName"</span>, <span class="st">"hour_dt"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(tideCategory)) <span class="sc">%&gt;%</span>    <span class="co"># bird-hours the station wasn't actually ON for get dropped here</span></span>
+<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Band.ID, speciesEN, recvDeployName, tideCategory) <span class="sc">%&gt;%</span></span>
+<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_h =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">tideDiel =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"Diurnal"</span>, tideCategory), <span class="st">"Diurnal"</span>, <span class="st">"Nocturnal"</span>),</span>
+<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>         <span class="at">tideHighLow =</span> <span class="fu">if_else</span>(<span class="fu">grepl</span>(<span class="st">"High"</span>, tideCategory), <span class="st">"High"</span>, <span class="st">"Low"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, duration_h)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="blockquote-blue">
 <p><strong>The <em>available</em> time is now defined</strong> for each bird across each Motus station, taking into account the periods where stations where ON only. In the data, the <em>available</em> periods are expanded in hours and the tide condition is associated. While most of the couple station listening-bird tagged are potentially detectable between 0 and 1000 hours; note two small peaks around 2700 and 4000 hours of detectability potential as it might be relative to the oldest couple ON.</p>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_12_files/figure-html/Available plot-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_12_files/figure-html/Available plot-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_12_files/figure-html/Available plot-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 </section>
 <section id="define-rate-of-use" class="level3">
@@ -936,15 +907,16 @@ loglik at estimate:  -12867.37 </code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>use_rate_plot <span class="ot">&lt;-</span> used_bird_recv_time <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">used_h =</span> duration_h)<span class="sc">%&gt;%</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(available_bird_recv_time <span class="sc">%&gt;%</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">available_h =</span> duration_h),   </span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Band.ID"</span>, <span class="st">"speciesEN"</span>, <span class="st">"recvDeployName"</span>, <span class="st">"tideCategory"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate_use =</span> (used_h <span class="sc">/</span> available_h) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, speciesEN, recvDeployName, tideCategory, </span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>         tideDiel, tideHighLow, used_h, available_h, rate_use)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>tideDiel, <span class="sc">-</span>tideHighLow) <span class="sc">%&gt;%</span>   <span class="co"># drop here, keep the copy from available_bird_recv_time</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">used_h =</span> duration_h) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(available_bird_recv_time <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      <span class="fu">rename</span>(<span class="at">available_h =</span> duration_h),   </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Band.ID"</span>, <span class="st">"speciesEN"</span>, <span class="st">"recvDeployName"</span>, <span class="st">"tideCategory"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rate_use =</span> (used_h <span class="sc">/</span> available_h) <span class="sc">*</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, speciesEN, recvDeployName, tideCategory, </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>         tideDiel, tideHighLow, used_h, available_h, rate_use)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="blockquote-yellow">
 <p><strong>Note</strong>: A very few cases (n = 2) where the <em>time used</em> was over the <em>time</em> <em>available</em> has been excluded from the data. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated.</p>
@@ -954,8 +926,8 @@ loglik at estimate:  -12867.37 </code></pre>
 <pre><code># A tibble: 2 × 5
   Band.ID speciesEN         recvDeployName tideCategory   rate_use
   &lt;fct&gt;   &lt;chr&gt;             &lt;chr&gt;          &lt;fct&gt;             &lt;dbl&gt;
-1 7176824 Bar-tailed Godwit Curlew Point   Nocturnal_High     101.
-2 7394040 Bar-tailed Godwit Curlew Point   Diurnal_Low        324.</code></pre>
+1 7176824 Bar-tailed Godwit Curlew Point   Nocturnal_High     151.
+2 7394040 Bar-tailed Godwit Curlew Point   Diurnal_High       115.</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1468,13 +1440,13 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">4.3</td>
-<td class="gt_row gt_right" headers="q1">5.0</td>
-<td class="gt_row gt_right" headers="median">5.7</td>
-<td class="gt_row gt_right" headers="q3">6.4</td>
-<td class="gt_row gt_right" headers="max">7.1</td>
-<td class="gt_row gt_right" headers="mean">5.7</td>
-<td class="gt_row gt_right" headers="sd">2.0</td>
+<td class="gt_row gt_right" headers="min">4.1</td>
+<td class="gt_row gt_right" headers="q1">5.8</td>
+<td class="gt_row gt_right" headers="median">7.6</td>
+<td class="gt_row gt_right" headers="q3">9.3</td>
+<td class="gt_row gt_right" headers="max">11.0</td>
+<td class="gt_row gt_right" headers="mean">7.6</td>
+<td class="gt_row gt_right" headers="sd">4.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -1493,14 +1465,14 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">2.3</td>
-<td class="gt_row gt_right" headers="q1">4.6</td>
-<td class="gt_row gt_right" headers="median">24.2</td>
-<td class="gt_row gt_right" headers="q3">37.4</td>
-<td class="gt_row gt_right" headers="max">53.3</td>
-<td class="gt_row gt_right" headers="mean">24.4</td>
-<td class="gt_row gt_right" headers="sd">21.7</td>
+<td class="gt_row gt_right" headers="n_individual">4</td>
+<td class="gt_row gt_right" headers="min">2.8</td>
+<td class="gt_row gt_right" headers="q1">6.3</td>
+<td class="gt_row gt_right" headers="median">26.3</td>
+<td class="gt_row gt_right" headers="q3">48.4</td>
+<td class="gt_row gt_right" headers="max">58.1</td>
+<td class="gt_row gt_right" headers="mean">28.4</td>
+<td class="gt_row gt_right" headers="sd">27.4</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -1508,89 +1480,115 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">1.3</td>
-<td class="gt_row gt_right" headers="median">1.6</td>
-<td class="gt_row gt_right" headers="q3">6.1</td>
-<td class="gt_row gt_right" headers="max">18.8</td>
-<td class="gt_row gt_right" headers="mean">5.8</td>
-<td class="gt_row gt_right" headers="sd">8.7</td>
+<td class="gt_row gt_right" headers="q1">2.7</td>
+<td class="gt_row gt_right" headers="median">3.3</td>
+<td class="gt_row gt_right" headers="q3">9.9</td>
+<td class="gt_row gt_right" headers="max">29.3</td>
+<td class="gt_row gt_right" headers="mean">9.2</td>
+<td class="gt_row gt_right" headers="sd">13.4</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
+<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">1</td>
+<td class="gt_row gt_right" headers="min">2.2</td>
+<td class="gt_row gt_right" headers="q1">2.2</td>
+<td class="gt_row gt_right" headers="median">2.2</td>
+<td class="gt_row gt_right" headers="q3">2.2</td>
+<td class="gt_row gt_right" headers="max">2.2</td>
+<td class="gt_row gt_right" headers="mean">2.2</td>
+<td class="gt_row gt_right" headers="sd">NA</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
+<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">1</td>
+<td class="gt_row gt_right" headers="min">0.4</td>
+<td class="gt_row gt_right" headers="q1">0.4</td>
+<td class="gt_row gt_right" headers="median">0.4</td>
+<td class="gt_row gt_right" headers="q3">0.4</td>
+<td class="gt_row gt_right" headers="max">0.4</td>
+<td class="gt_row gt_right" headers="mean">0.4</td>
+<td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Ramsar Road</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.7</td>
-<td class="gt_row gt_right" headers="q1">1.8</td>
+<td class="gt_row gt_right" headers="min">2.9</td>
+<td class="gt_row gt_right" headers="q1">2.9</td>
+<td class="gt_row gt_right" headers="median">3.0</td>
+<td class="gt_row gt_right" headers="q3">3.0</td>
+<td class="gt_row gt_right" headers="max">3.0</td>
+<td class="gt_row gt_right" headers="mean">3.0</td>
+<td class="gt_row gt_right" headers="sd">0.1</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
+<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">1.2</td>
+<td class="gt_row gt_right" headers="q1">1.5</td>
 <td class="gt_row gt_right" headers="median">1.8</td>
-<td class="gt_row gt_right" headers="q3">1.8</td>
-<td class="gt_row gt_right" headers="max">1.8</td>
+<td class="gt_row gt_right" headers="q3">2.1</td>
+<td class="gt_row gt_right" headers="max">2.5</td>
 <td class="gt_row gt_right" headers="mean">1.8</td>
-<td class="gt_row gt_right" headers="sd">0.0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
-<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.1</td>
-<td class="gt_row gt_right" headers="q1">2.0</td>
-<td class="gt_row gt_right" headers="median">2.8</td>
-<td class="gt_row gt_right" headers="q3">3.7</td>
-<td class="gt_row gt_right" headers="max">4.5</td>
-<td class="gt_row gt_right" headers="mean">2.8</td>
-<td class="gt_row gt_right" headers="sd">2.4</td>
+<td class="gt_row gt_right" headers="sd">0.9</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">1.9</td>
-<td class="gt_row gt_right" headers="median">2.8</td>
-<td class="gt_row gt_right" headers="q3">3.7</td>
-<td class="gt_row gt_right" headers="max">4.6</td>
-<td class="gt_row gt_right" headers="mean">2.8</td>
-<td class="gt_row gt_right" headers="sd">2.6</td>
+<td class="gt_row gt_right" headers="min">1.2</td>
+<td class="gt_row gt_right" headers="q1">4.2</td>
+<td class="gt_row gt_right" headers="median">7.2</td>
+<td class="gt_row gt_right" headers="q3">10.2</td>
+<td class="gt_row gt_right" headers="max">13.2</td>
+<td class="gt_row gt_right" headers="mean">7.2</td>
+<td class="gt_row gt_right" headers="sd">8.4</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.7</td>
-<td class="gt_row gt_right" headers="q1">2.4</td>
-<td class="gt_row gt_right" headers="median">4.1</td>
-<td class="gt_row gt_right" headers="q3">5.8</td>
-<td class="gt_row gt_right" headers="max">7.5</td>
-<td class="gt_row gt_right" headers="mean">4.1</td>
-<td class="gt_row gt_right" headers="sd">4.8</td>
+<td class="gt_row gt_right" headers="min">0.8</td>
+<td class="gt_row gt_right" headers="q1">3.5</td>
+<td class="gt_row gt_right" headers="median">6.3</td>
+<td class="gt_row gt_right" headers="q3">9.1</td>
+<td class="gt_row gt_right" headers="max">11.8</td>
+<td class="gt_row gt_right" headers="mean">6.3</td>
+<td class="gt_row gt_right" headers="sd">7.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">6.0</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">6.8</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">7.5</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.2</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.0</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">7.5</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.1</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.2</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.0</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.9</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">10.8</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">11.7</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.9</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">1.0</td>
-<td class="gt_row gt_right" headers="median">1.0</td>
-<td class="gt_row gt_right" headers="q3">1.0</td>
-<td class="gt_row gt_right" headers="max">1.0</td>
-<td class="gt_row gt_right" headers="mean">1.0</td>
+<td class="gt_row gt_right" headers="min">1.4</td>
+<td class="gt_row gt_right" headers="q1">1.4</td>
+<td class="gt_row gt_right" headers="median">1.4</td>
+<td class="gt_row gt_right" headers="q3">1.4</td>
+<td class="gt_row gt_right" headers="max">1.4</td>
+<td class="gt_row gt_right" headers="mean">1.4</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -1598,26 +1596,26 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">10.0</td>
-<td class="gt_row gt_right" headers="q1">14.0</td>
+<td class="gt_row gt_right" headers="min">10.5</td>
+<td class="gt_row gt_right" headers="q1">14.3</td>
 <td class="gt_row gt_right" headers="median">18.0</td>
-<td class="gt_row gt_right" headers="q3">24.8</td>
-<td class="gt_row gt_right" headers="max">31.6</td>
-<td class="gt_row gt_right" headers="mean">19.9</td>
-<td class="gt_row gt_right" headers="sd">10.9</td>
+<td class="gt_row gt_right" headers="q3">30.7</td>
+<td class="gt_row gt_right" headers="max">43.3</td>
+<td class="gt_row gt_right" headers="mean">24.0</td>
+<td class="gt_row gt_right" headers="sd">17.2</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">23.3</td>
-<td class="gt_row gt_right" headers="q1">23.9</td>
-<td class="gt_row gt_right" headers="median">24.5</td>
-<td class="gt_row gt_right" headers="q3">25.4</td>
-<td class="gt_row gt_right" headers="max">26.4</td>
-<td class="gt_row gt_right" headers="mean">24.7</td>
-<td class="gt_row gt_right" headers="sd">1.5</td>
+<td class="gt_row gt_right" headers="min">18.8</td>
+<td class="gt_row gt_right" headers="q1">19.5</td>
+<td class="gt_row gt_right" headers="median">20.3</td>
+<td class="gt_row gt_right" headers="q3">28.3</td>
+<td class="gt_row gt_right" headers="max">36.4</td>
+<td class="gt_row gt_right" headers="mean">25.2</td>
+<td class="gt_row gt_right" headers="sd">9.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
@@ -1637,12 +1635,12 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">3.9</td>
-<td class="gt_row gt_right" headers="q1">3.9</td>
-<td class="gt_row gt_right" headers="median">3.9</td>
-<td class="gt_row gt_right" headers="q3">3.9</td>
-<td class="gt_row gt_right" headers="max">3.9</td>
-<td class="gt_row gt_right" headers="mean">3.9</td>
+<td class="gt_row gt_right" headers="min">0.7</td>
+<td class="gt_row gt_right" headers="q1">0.7</td>
+<td class="gt_row gt_right" headers="median">0.7</td>
+<td class="gt_row gt_right" headers="q3">0.7</td>
+<td class="gt_row gt_right" headers="max">0.7</td>
+<td class="gt_row gt_right" headers="mean">0.7</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -1664,25 +1662,25 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">1.3</td>
-<td class="gt_row gt_right" headers="median">2.5</td>
-<td class="gt_row gt_right" headers="q3">3.1</td>
-<td class="gt_row gt_right" headers="max">3.7</td>
-<td class="gt_row gt_right" headers="mean">2.1</td>
-<td class="gt_row gt_right" headers="sd">1.9</td>
+<td class="gt_row gt_right" headers="q1">0.5</td>
+<td class="gt_row gt_right" headers="median">1.0</td>
+<td class="gt_row gt_right" headers="q3">1.5</td>
+<td class="gt_row gt_right" headers="max">2.0</td>
+<td class="gt_row gt_right" headers="mean">1.0</td>
+<td class="gt_row gt_right" headers="sd">1.0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">14.3</td>
-<td class="gt_row gt_right" headers="q1">15.2</td>
-<td class="gt_row gt_right" headers="median">16.2</td>
-<td class="gt_row gt_right" headers="q3">17.4</td>
-<td class="gt_row gt_right" headers="max">18.6</td>
-<td class="gt_row gt_right" headers="mean">16.3</td>
-<td class="gt_row gt_right" headers="sd">2.1</td>
+<td class="gt_row gt_right" headers="min">13.7</td>
+<td class="gt_row gt_right" headers="q1">14.7</td>
+<td class="gt_row gt_right" headers="median">15.6</td>
+<td class="gt_row gt_right" headers="q3">19.0</td>
+<td class="gt_row gt_right" headers="max">22.3</td>
+<td class="gt_row gt_right" headers="mean">17.2</td>
+<td class="gt_row gt_right" headers="sd">4.5</td>
 </tr>
 </tbody>
 </table>
@@ -2182,168 +2180,194 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.9</td>
-<td class="gt_row gt_right" headers="median">1.9</td>
-<td class="gt_row gt_right" headers="q3">2.8</td>
-<td class="gt_row gt_right" headers="max">3.8</td>
-<td class="gt_row gt_right" headers="mean">1.9</td>
-<td class="gt_row gt_right" headers="sd">2.7</td>
+<td class="gt_row gt_right" headers="q1">0.3</td>
+<td class="gt_row gt_right" headers="median">0.5</td>
+<td class="gt_row gt_right" headers="q3">0.8</td>
+<td class="gt_row gt_right" headers="max">1.1</td>
+<td class="gt_row gt_right" headers="mean">0.5</td>
+<td class="gt_row gt_right" headers="sd">0.7</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.8</td>
-<td class="gt_row gt_right" headers="q1">0.8</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.3</td>
+<td class="gt_row gt_right" headers="q1">0.5</td>
 <td class="gt_row gt_right" headers="median">0.8</td>
-<td class="gt_row gt_right" headers="q3">0.8</td>
-<td class="gt_row gt_right" headers="max">0.8</td>
+<td class="gt_row gt_right" headers="q3">1.0</td>
+<td class="gt_row gt_right" headers="max">1.2</td>
 <td class="gt_row gt_right" headers="mean">0.8</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="sd">0.6</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">4.4</td>
-<td class="gt_row gt_right" headers="median">7.5</td>
-<td class="gt_row gt_right" headers="q3">9.7</td>
-<td class="gt_row gt_right" headers="max">23.4</td>
-<td class="gt_row gt_right" headers="mean">9.2</td>
-<td class="gt_row gt_right" headers="sd">8.6</td>
+<td class="gt_row gt_right" headers="min">2.8</td>
+<td class="gt_row gt_right" headers="q1">8.9</td>
+<td class="gt_row gt_right" headers="median">12.4</td>
+<td class="gt_row gt_right" headers="q3">27.1</td>
+<td class="gt_row gt_right" headers="max">32.7</td>
+<td class="gt_row gt_right" headers="mean">16.8</td>
+<td class="gt_row gt_right" headers="sd">12.6</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.7</td>
-<td class="gt_row gt_right" headers="q1">2.4</td>
-<td class="gt_row gt_right" headers="median">6.2</td>
-<td class="gt_row gt_right" headers="q3">9.4</td>
-<td class="gt_row gt_right" headers="max">10.2</td>
-<td class="gt_row gt_right" headers="mean">5.8</td>
-<td class="gt_row gt_right" headers="sd">4.2</td>
+<td class="gt_row gt_right" headers="min">1.1</td>
+<td class="gt_row gt_right" headers="q1">5.0</td>
+<td class="gt_row gt_right" headers="median">7.2</td>
+<td class="gt_row gt_right" headers="q3">17.7</td>
+<td class="gt_row gt_right" headers="max">56.3</td>
+<td class="gt_row gt_right" headers="mean">17.5</td>
+<td class="gt_row gt_right" headers="sd">22.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">6.9</td>
-<td class="gt_row gt_right" headers="q1">6.9</td>
-<td class="gt_row gt_right" headers="median">6.9</td>
-<td class="gt_row gt_right" headers="q3">6.9</td>
-<td class="gt_row gt_right" headers="max">6.9</td>
-<td class="gt_row gt_right" headers="mean">6.9</td>
+<td class="gt_row gt_right" headers="min">2.7</td>
+<td class="gt_row gt_right" headers="q1">2.7</td>
+<td class="gt_row gt_right" headers="median">2.7</td>
+<td class="gt_row gt_right" headers="q3">2.7</td>
+<td class="gt_row gt_right" headers="max">2.7</td>
+<td class="gt_row gt_right" headers="mean">2.7</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
-<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">1.8</td>
-<td class="gt_row gt_right" headers="median">2.5</td>
-<td class="gt_row gt_right" headers="q3">3.2</td>
-<td class="gt_row gt_right" headers="max">4.0</td>
-<td class="gt_row gt_right" headers="mean">2.5</td>
-<td class="gt_row gt_right" headers="sd">2.1</td>
+<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">1</td>
+<td class="gt_row gt_right" headers="min">2.2</td>
+<td class="gt_row gt_right" headers="q1">2.2</td>
+<td class="gt_row gt_right" headers="median">2.2</td>
+<td class="gt_row gt_right" headers="q3">2.2</td>
+<td class="gt_row gt_right" headers="max">2.2</td>
+<td class="gt_row gt_right" headers="mean">2.2</td>
+<td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Ramsar Road</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">3.5</td>
-<td class="gt_row gt_right" headers="q1">3.5</td>
-<td class="gt_row gt_right" headers="median">3.5</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">2.4</td>
+<td class="gt_row gt_right" headers="q1">2.8</td>
+<td class="gt_row gt_right" headers="median">3.1</td>
 <td class="gt_row gt_right" headers="q3">3.5</td>
-<td class="gt_row gt_right" headers="max">3.5</td>
-<td class="gt_row gt_right" headers="mean">3.5</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="max">3.8</td>
+<td class="gt_row gt_right" headers="mean">3.1</td>
+<td class="gt_row gt_right" headers="sd">1.0</td>
 </tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
+<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">1.0</td>
+<td class="gt_row gt_right" headers="median">2.1</td>
+<td class="gt_row gt_right" headers="q3">3.1</td>
+<td class="gt_row gt_right" headers="max">4.1</td>
+<td class="gt_row gt_right" headers="mean">2.1</td>
+<td class="gt_row gt_right" headers="sd">2.9</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.4</td>
-<td class="gt_row gt_right" headers="q1">4.0</td>
-<td class="gt_row gt_right" headers="median">6.6</td>
-<td class="gt_row gt_right" headers="q3">9.2</td>
-<td class="gt_row gt_right" headers="max">11.8</td>
-<td class="gt_row gt_right" headers="mean">6.6</td>
-<td class="gt_row gt_right" headers="sd">7.4</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Pied Stilt</td>
-<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Swan Pond</td>
-<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.6</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.1</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.5</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.9</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.3</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.5</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.2</td>
+<td class="gt_row gt_right" headers="min">1.6</td>
+<td class="gt_row gt_right" headers="q1">7.7</td>
+<td class="gt_row gt_right" headers="median">13.8</td>
+<td class="gt_row gt_right" headers="q3">19.9</td>
+<td class="gt_row gt_right" headers="max">26.1</td>
+<td class="gt_row gt_right" headers="mean">13.8</td>
+<td class="gt_row gt_right" headers="sd">17.3</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
+<td class="gt_row gt_left" headers="Station">Swan Pond</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.7</td>
+<td class="gt_row gt_right" headers="min">0.5</td>
 <td class="gt_row gt_right" headers="q1">1.6</td>
-<td class="gt_row gt_right" headers="median">2.5</td>
-<td class="gt_row gt_right" headers="q3">3.5</td>
-<td class="gt_row gt_right" headers="max">4.4</td>
-<td class="gt_row gt_right" headers="mean">2.5</td>
-<td class="gt_row gt_right" headers="sd">2.6</td>
+<td class="gt_row gt_right" headers="median">2.6</td>
+<td class="gt_row gt_right" headers="q3">3.6</td>
+<td class="gt_row gt_right" headers="max">4.6</td>
+<td class="gt_row gt_right" headers="mean">2.6</td>
+<td class="gt_row gt_right" headers="sd">2.9</td>
 </tr>
 <tr class="odd">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Red-necked Avocet</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.2</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.1</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.0</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.7</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.0</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.5</td>
+</tr>
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.2</td>
+<td class="gt_row gt_right" headers="min">0.5</td>
 <td class="gt_row gt_right" headers="q1">0.5</td>
-<td class="gt_row gt_right" headers="median">0.8</td>
-<td class="gt_row gt_right" headers="q3">1.0</td>
-<td class="gt_row gt_right" headers="max">1.3</td>
-<td class="gt_row gt_right" headers="mean">0.8</td>
-<td class="gt_row gt_right" headers="sd">0.8</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
-<td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">2.4</td>
-<td class="gt_row gt_right" headers="q1">3.9</td>
-<td class="gt_row gt_right" headers="median">5.4</td>
-<td class="gt_row gt_right" headers="q3">6.6</td>
-<td class="gt_row gt_right" headers="max">7.8</td>
-<td class="gt_row gt_right" headers="mean">5.2</td>
-<td class="gt_row gt_right" headers="sd">2.7</td>
+<td class="gt_row gt_right" headers="median">0.6</td>
+<td class="gt_row gt_right" headers="q3">0.7</td>
+<td class="gt_row gt_right" headers="max">0.7</td>
+<td class="gt_row gt_right" headers="mean">0.6</td>
+<td class="gt_row gt_right" headers="sd">0.2</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">3</td>
+<td class="gt_row gt_right" headers="min">7.9</td>
+<td class="gt_row gt_right" headers="q1">8.9</td>
+<td class="gt_row gt_right" headers="median">10.0</td>
+<td class="gt_row gt_right" headers="q3">11.0</td>
+<td class="gt_row gt_right" headers="max">11.9</td>
+<td class="gt_row gt_right" headers="mean">9.9</td>
+<td class="gt_row gt_right" headers="sd">2.0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
+<td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">0.1</td>
-<td class="gt_row gt_right" headers="q1">2.2</td>
-<td class="gt_row gt_right" headers="median">4.4</td>
+<td class="gt_row gt_right" headers="min">3.1</td>
+<td class="gt_row gt_right" headers="q1">4.5</td>
+<td class="gt_row gt_right" headers="median">5.8</td>
+<td class="gt_row gt_right" headers="q3">5.9</td>
+<td class="gt_row gt_right" headers="max">6.0</td>
+<td class="gt_row gt_right" headers="mean">5.0</td>
+<td class="gt_row gt_right" headers="sd">1.6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
+<td class="gt_row gt_left" headers="Station">Swan Pond</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">1</td>
+<td class="gt_row gt_right" headers="min">4.5</td>
+<td class="gt_row gt_right" headers="q1">4.5</td>
+<td class="gt_row gt_right" headers="median">4.5</td>
 <td class="gt_row gt_right" headers="q3">4.5</td>
-<td class="gt_row gt_right" headers="max">4.6</td>
-<td class="gt_row gt_right" headers="mean">3.0</td>
-<td class="gt_row gt_right" headers="sd">2.5</td>
+<td class="gt_row gt_right" headers="max">4.5</td>
+<td class="gt_row gt_right" headers="mean">4.5</td>
+<td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
@@ -2352,24 +2376,24 @@ Low Tide Resident birds
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">0.0</td>
-<td class="gt_row gt_right" headers="mean">0.0</td>
-<td class="gt_row gt_right" headers="sd">0.0</td>
+<td class="gt_row gt_right" headers="median">0.1</td>
+<td class="gt_row gt_right" headers="q3">0.1</td>
+<td class="gt_row gt_right" headers="max">0.1</td>
+<td class="gt_row gt_right" headers="mean">0.1</td>
+<td class="gt_row gt_right" headers="sd">0.1</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.1</td>
-<td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">0.5</td>
-<td class="gt_row gt_right" headers="max">0.9</td>
-<td class="gt_row gt_right" headers="mean">0.3</td>
-<td class="gt_row gt_right" headers="sd">0.5</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.4</td>
+<td class="gt_row gt_right" headers="median">0.8</td>
+<td class="gt_row gt_right" headers="q3">2.6</td>
+<td class="gt_row gt_right" headers="max">4.5</td>
+<td class="gt_row gt_right" headers="mean">1.8</td>
+<td class="gt_row gt_right" headers="sd">2.4</td>
 </tr>
 </tbody>
 </table>
@@ -2875,40 +2899,40 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">6</td>
-<td class="gt_row gt_right" headers="min">0.2</td>
-<td class="gt_row gt_right" headers="q1">24.2</td>
-<td class="gt_row gt_right" headers="median">37.9</td>
-<td class="gt_row gt_right" headers="q3">44.6</td>
-<td class="gt_row gt_right" headers="max">48.0</td>
-<td class="gt_row gt_right" headers="mean">31.7</td>
-<td class="gt_row gt_right" headers="sd">18.3</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
+<td class="gt_row gt_right" headers="min">1.6</td>
+<td class="gt_row gt_right" headers="q1">45.2</td>
+<td class="gt_row gt_right" headers="median">52.3</td>
+<td class="gt_row gt_right" headers="q3">63.6</td>
+<td class="gt_row gt_right" headers="max">67.9</td>
+<td class="gt_row gt_right" headers="mean">46.1</td>
+<td class="gt_row gt_right" headers="sd">26.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.6</td>
-<td class="gt_row gt_right" headers="q1">8.2</td>
-<td class="gt_row gt_right" headers="median">8.7</td>
-<td class="gt_row gt_right" headers="q3">11.2</td>
-<td class="gt_row gt_right" headers="max">34.3</td>
-<td class="gt_row gt_right" headers="mean">12.6</td>
-<td class="gt_row gt_right" headers="sd">12.8</td>
+<td class="gt_row gt_right" headers="min">0.7</td>
+<td class="gt_row gt_right" headers="q1">7.9</td>
+<td class="gt_row gt_right" headers="median">9.5</td>
+<td class="gt_row gt_right" headers="q3">15.8</td>
+<td class="gt_row gt_right" headers="max">35.7</td>
+<td class="gt_row gt_right" headers="mean">13.9</td>
+<td class="gt_row gt_right" headers="sd">13.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">1.7</td>
-<td class="gt_row gt_right" headers="max">3.3</td>
-<td class="gt_row gt_right" headers="mean">1.1</td>
-<td class="gt_row gt_right" headers="sd">1.9</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">2.0</td>
+<td class="gt_row gt_right" headers="median">3.9</td>
+<td class="gt_row gt_right" headers="q3">44.8</td>
+<td class="gt_row gt_right" headers="max">85.7</td>
+<td class="gt_row gt_right" headers="mean">29.9</td>
+<td class="gt_row gt_right" headers="sd">48.4</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
@@ -2916,25 +2940,25 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">0.2</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
-<td class="gt_row gt_right" headers="mean">0.1</td>
-<td class="gt_row gt_right" headers="sd">0.1</td>
+<td class="gt_row gt_right" headers="q3">0.4</td>
+<td class="gt_row gt_right" headers="max">53.4</td>
+<td class="gt_row gt_right" headers="mean">9.0</td>
+<td class="gt_row gt_right" headers="sd">21.7</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">6.3</td>
-<td class="gt_row gt_right" headers="q1">6.5</td>
-<td class="gt_row gt_right" headers="median">6.8</td>
-<td class="gt_row gt_right" headers="q3">7.1</td>
-<td class="gt_row gt_right" headers="max">7.3</td>
-<td class="gt_row gt_right" headers="mean">6.8</td>
-<td class="gt_row gt_right" headers="sd">0.8</td>
+<td class="gt_row gt_right" headers="min">2.9</td>
+<td class="gt_row gt_right" headers="q1">3.5</td>
+<td class="gt_row gt_right" headers="median">4.0</td>
+<td class="gt_row gt_right" headers="q3">4.6</td>
+<td class="gt_row gt_right" headers="max">5.1</td>
+<td class="gt_row gt_right" headers="mean">4.0</td>
+<td class="gt_row gt_right" headers="sd">1.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
@@ -2942,51 +2966,51 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.1</td>
-<td class="gt_row gt_right" headers="q1">0.4</td>
-<td class="gt_row gt_right" headers="median">56.5</td>
-<td class="gt_row gt_right" headers="q3">59.0</td>
-<td class="gt_row gt_right" headers="max">71.8</td>
-<td class="gt_row gt_right" headers="mean">37.5</td>
-<td class="gt_row gt_right" headers="sd">34.6</td>
+<td class="gt_row gt_right" headers="q1">1.3</td>
+<td class="gt_row gt_right" headers="median">56.4</td>
+<td class="gt_row gt_right" headers="q3">57.3</td>
+<td class="gt_row gt_right" headers="max">64.5</td>
+<td class="gt_row gt_right" headers="mean">35.9</td>
+<td class="gt_row gt_right" headers="sd">32.3</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">5.1</td>
-<td class="gt_row gt_right" headers="q1">21.3</td>
-<td class="gt_row gt_right" headers="median">26.1</td>
-<td class="gt_row gt_right" headers="q3">27.1</td>
-<td class="gt_row gt_right" headers="max">27.9</td>
-<td class="gt_row gt_right" headers="mean">21.5</td>
-<td class="gt_row gt_right" headers="sd">9.5</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Sandpiper</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">15.1</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">33.2</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">48.9</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">53.4</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">54.4</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">41.0</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">16.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">12.1</td>
-<td class="gt_row gt_right" headers="q1">27.0</td>
-<td class="gt_row gt_right" headers="median">38.0</td>
-<td class="gt_row gt_right" headers="q3">39.6</td>
-<td class="gt_row gt_right" headers="max">41.8</td>
-<td class="gt_row gt_right" headers="mean">31.7</td>
-<td class="gt_row gt_right" headers="sd">12.4</td>
+<td class="gt_row gt_right" headers="min">2.2</td>
+<td class="gt_row gt_right" headers="q1">12.7</td>
+<td class="gt_row gt_right" headers="median">13.0</td>
+<td class="gt_row gt_right" headers="q3">14.9</td>
+<td class="gt_row gt_right" headers="max">21.9</td>
+<td class="gt_row gt_right" headers="mean">12.9</td>
+<td class="gt_row gt_right" headers="sd">7.1</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Sandpiper</td>
-<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Fullerton Entrance</td>
-<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.1</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.1</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.6</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.1</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.6</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.0</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
+<td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">4</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="median">0.1</td>
+<td class="gt_row gt_right" headers="q3">0.7</td>
+<td class="gt_row gt_right" headers="max">2.5</td>
+<td class="gt_row gt_right" headers="mean">0.7</td>
+<td class="gt_row gt_right" headers="sd">1.2</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -2996,10 +3020,10 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.1</td>
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">1.2</td>
-<td class="gt_row gt_right" headers="max">4.6</td>
-<td class="gt_row gt_right" headers="mean">1.2</td>
-<td class="gt_row gt_right" headers="sd">2.3</td>
+<td class="gt_row gt_right" headers="q3">0.3</td>
+<td class="gt_row gt_right" headers="max">1.0</td>
+<td class="gt_row gt_right" headers="mean">0.3</td>
+<td class="gt_row gt_right" headers="sd">0.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -3022,7 +3046,7 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">0.1</td>
+<td class="gt_row gt_right" headers="q3">0.0</td>
 <td class="gt_row gt_right" headers="max">0.1</td>
 <td class="gt_row gt_right" headers="mean">0.0</td>
 <td class="gt_row gt_right" headers="sd">0.0</td>
@@ -3036,9 +3060,9 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
+<td class="gt_row gt_right" headers="max">0.1</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
-<td class="gt_row gt_right" headers="sd">0.1</td>
+<td class="gt_row gt_right" headers="sd">0.0</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -3047,7 +3071,7 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.1</td>
 <td class="gt_row gt_right" headers="q1">0.2</td>
-<td class="gt_row gt_right" headers="median">0.2</td>
+<td class="gt_row gt_right" headers="median">0.3</td>
 <td class="gt_row gt_right" headers="q3">0.3</td>
 <td class="gt_row gt_right" headers="max">0.3</td>
 <td class="gt_row gt_right" headers="mean">0.2</td>
@@ -3062,47 +3086,47 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
-<td class="gt_row gt_right" headers="max">1.5</td>
-<td class="gt_row gt_right" headers="mean">0.4</td>
-<td class="gt_row gt_right" headers="sd">0.7</td>
+<td class="gt_row gt_right" headers="max">0.3</td>
+<td class="gt_row gt_right" headers="mean">0.1</td>
+<td class="gt_row gt_right" headers="sd">0.1</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">0.1</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
+<td class="gt_row gt_right" headers="q3">0.2</td>
+<td class="gt_row gt_right" headers="max">0.3</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
 <td class="gt_row gt_right" headers="sd">0.1</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">2.1</td>
-<td class="gt_row gt_right" headers="q1">2.1</td>
-<td class="gt_row gt_right" headers="median">2.1</td>
-<td class="gt_row gt_right" headers="q3">2.1</td>
-<td class="gt_row gt_right" headers="max">2.1</td>
-<td class="gt_row gt_right" headers="mean">2.1</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Eurasian Whimbrel</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">2.8</td>
-<td class="gt_row gt_right" headers="q1">2.8</td>
-<td class="gt_row gt_right" headers="median">2.8</td>
-<td class="gt_row gt_right" headers="q3">2.8</td>
-<td class="gt_row gt_right" headers="max">2.8</td>
-<td class="gt_row gt_right" headers="mean">2.8</td>
+<td class="gt_row gt_right" headers="min">3.9</td>
+<td class="gt_row gt_right" headers="q1">3.9</td>
+<td class="gt_row gt_right" headers="median">3.9</td>
+<td class="gt_row gt_right" headers="q3">3.9</td>
+<td class="gt_row gt_right" headers="max">3.9</td>
+<td class="gt_row gt_right" headers="mean">3.9</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -3113,7 +3137,7 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="min">2.1</td>
 <td class="gt_row gt_right" headers="q1">2.2</td>
 <td class="gt_row gt_right" headers="median">2.3</td>
-<td class="gt_row gt_right" headers="q3">2.4</td>
+<td class="gt_row gt_right" headers="q3">2.3</td>
 <td class="gt_row gt_right" headers="max">2.4</td>
 <td class="gt_row gt_right" headers="mean">2.3</td>
 <td class="gt_row gt_right" headers="sd">0.2</td>
@@ -3127,7 +3151,7 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
+<td class="gt_row gt_right" headers="max">0.1</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
 <td class="gt_row gt_right" headers="sd">0.1</td>
 </tr>
@@ -3136,26 +3160,26 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">1.3</td>
-<td class="gt_row gt_right" headers="q1">1.3</td>
-<td class="gt_row gt_right" headers="median">1.3</td>
-<td class="gt_row gt_right" headers="q3">1.3</td>
-<td class="gt_row gt_right" headers="max">1.3</td>
-<td class="gt_row gt_right" headers="mean">1.3</td>
+<td class="gt_row gt_right" headers="min">0.9</td>
+<td class="gt_row gt_right" headers="q1">0.9</td>
+<td class="gt_row gt_right" headers="median">0.9</td>
+<td class="gt_row gt_right" headers="q3">0.9</td>
+<td class="gt_row gt_right" headers="max">0.9</td>
+<td class="gt_row gt_right" headers="mean">0.9</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">3.8</td>
-<td class="gt_row gt_right" headers="q1">3.8</td>
-<td class="gt_row gt_right" headers="median">3.8</td>
-<td class="gt_row gt_right" headers="q3">3.8</td>
-<td class="gt_row gt_right" headers="max">3.8</td>
-<td class="gt_row gt_right" headers="mean">3.8</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Far Eastern Curlew</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
@@ -3175,12 +3199,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.7</td>
-<td class="gt_row gt_right" headers="q1">0.7</td>
-<td class="gt_row gt_right" headers="median">0.7</td>
-<td class="gt_row gt_right" headers="q3">0.7</td>
-<td class="gt_row gt_right" headers="max">0.7</td>
-<td class="gt_row gt_right" headers="mean">0.7</td>
+<td class="gt_row gt_right" headers="min">1.3</td>
+<td class="gt_row gt_right" headers="q1">1.3</td>
+<td class="gt_row gt_right" headers="median">1.3</td>
+<td class="gt_row gt_right" headers="q3">1.3</td>
+<td class="gt_row gt_right" headers="max">1.3</td>
+<td class="gt_row gt_right" headers="mean">1.3</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -3188,12 +3212,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">21.3</td>
-<td class="gt_row gt_right" headers="q1">21.3</td>
-<td class="gt_row gt_right" headers="median">21.3</td>
-<td class="gt_row gt_right" headers="q3">21.3</td>
-<td class="gt_row gt_right" headers="max">21.3</td>
-<td class="gt_row gt_right" headers="mean">21.3</td>
+<td class="gt_row gt_right" headers="min">40.6</td>
+<td class="gt_row gt_right" headers="q1">40.6</td>
+<td class="gt_row gt_right" headers="median">40.6</td>
+<td class="gt_row gt_right" headers="q3">40.6</td>
+<td class="gt_row gt_right" headers="max">40.6</td>
+<td class="gt_row gt_right" headers="mean">40.6</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
@@ -3201,12 +3225,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">13.1</td>
-<td class="gt_row gt_right" headers="q1">13.1</td>
-<td class="gt_row gt_right" headers="median">13.1</td>
-<td class="gt_row gt_right" headers="q3">13.1</td>
-<td class="gt_row gt_right" headers="max">13.1</td>
-<td class="gt_row gt_right" headers="mean">13.1</td>
+<td class="gt_row gt_right" headers="min">11.0</td>
+<td class="gt_row gt_right" headers="q1">11.0</td>
+<td class="gt_row gt_right" headers="median">11.0</td>
+<td class="gt_row gt_right" headers="q3">11.0</td>
+<td class="gt_row gt_right" headers="max">11.0</td>
+<td class="gt_row gt_right" headers="mean">11.0</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -3214,26 +3238,26 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">2.9</td>
-<td class="gt_row gt_right" headers="q1">2.9</td>
-<td class="gt_row gt_right" headers="median">2.9</td>
-<td class="gt_row gt_right" headers="q3">2.9</td>
-<td class="gt_row gt_right" headers="max">2.9</td>
-<td class="gt_row gt_right" headers="mean">2.9</td>
+<td class="gt_row gt_right" headers="min">2.6</td>
+<td class="gt_row gt_right" headers="q1">2.6</td>
+<td class="gt_row gt_right" headers="median">2.6</td>
+<td class="gt_row gt_right" headers="q3">2.6</td>
+<td class="gt_row gt_right" headers="max">2.6</td>
+<td class="gt_row gt_right" headers="mean">2.6</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">13</td>
-<td class="gt_row gt_right" headers="min">2.6</td>
-<td class="gt_row gt_right" headers="q1">4.6</td>
-<td class="gt_row gt_right" headers="median">10.1</td>
-<td class="gt_row gt_right" headers="q3">16.2</td>
-<td class="gt_row gt_right" headers="max">42.7</td>
-<td class="gt_row gt_right" headers="mean">13.2</td>
-<td class="gt_row gt_right" headers="sd">12.0</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.5</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5.1</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.5</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">38.4</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">71.1</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">23.6</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">22.1</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3241,38 +3265,38 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">12</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">1.7</td>
-<td class="gt_row gt_right" headers="median">6.7</td>
-<td class="gt_row gt_right" headers="q3">29.6</td>
-<td class="gt_row gt_right" headers="max">47.0</td>
-<td class="gt_row gt_right" headers="mean">16.0</td>
-<td class="gt_row gt_right" headers="sd">17.7</td>
+<td class="gt_row gt_right" headers="q1">1.5</td>
+<td class="gt_row gt_right" headers="median">3.5</td>
+<td class="gt_row gt_right" headers="q3">10.1</td>
+<td class="gt_row gt_right" headers="max">16.8</td>
+<td class="gt_row gt_right" headers="mean">5.9</td>
+<td class="gt_row gt_right" headers="sd">5.7</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
+<td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">0.2</td>
-<td class="gt_row gt_right" headers="max">0.4</td>
-<td class="gt_row gt_right" headers="mean">0.1</td>
-<td class="gt_row gt_right" headers="sd">0.1</td>
+<td class="gt_row gt_right" headers="q3">0.3</td>
+<td class="gt_row gt_right" headers="max">3.4</td>
+<td class="gt_row gt_right" headers="mean">0.7</td>
+<td class="gt_row gt_right" headers="sd">1.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.1</td>
-<td class="gt_row gt_right" headers="median">0.2</td>
-<td class="gt_row gt_right" headers="q3">0.3</td>
-<td class="gt_row gt_right" headers="max">0.6</td>
-<td class="gt_row gt_right" headers="mean">0.2</td>
-<td class="gt_row gt_right" headers="sd">0.2</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
+<td class="gt_row gt_right" headers="median">0.4</td>
+<td class="gt_row gt_right" headers="q3">0.7</td>
+<td class="gt_row gt_right" headers="max">5.4</td>
+<td class="gt_row gt_right" headers="mean">1.4</td>
+<td class="gt_row gt_right" headers="sd">2.3</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3280,103 +3304,103 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">1.1</td>
+<td class="gt_row gt_right" headers="q1">1.3</td>
 <td class="gt_row gt_right" headers="median">2.8</td>
-<td class="gt_row gt_right" headers="q3">8.6</td>
-<td class="gt_row gt_right" headers="max">14.1</td>
-<td class="gt_row gt_right" headers="mean">5.1</td>
-<td class="gt_row gt_right" headers="sd">5.8</td>
+<td class="gt_row gt_right" headers="q3">5.5</td>
+<td class="gt_row gt_right" headers="max">9.4</td>
+<td class="gt_row gt_right" headers="mean">3.7</td>
+<td class="gt_row gt_right" headers="sd">3.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">7</td>
+<td class="gt_row gt_right" headers="n_individual">8</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.1</td>
-<td class="gt_row gt_right" headers="median">0.9</td>
-<td class="gt_row gt_right" headers="q3">1.3</td>
-<td class="gt_row gt_right" headers="max">1.7</td>
-<td class="gt_row gt_right" headers="mean">0.8</td>
-<td class="gt_row gt_right" headers="sd">0.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">4.9</td>
-<td class="gt_row gt_right" headers="median">8.8</td>
-<td class="gt_row gt_right" headers="q3">12.7</td>
-<td class="gt_row gt_right" headers="max">16.6</td>
-<td class="gt_row gt_right" headers="mean">8.8</td>
-<td class="gt_row gt_right" headers="sd">11.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">8.4</td>
-<td class="gt_row gt_right" headers="median">16.7</td>
-<td class="gt_row gt_right" headers="q3">25.1</td>
-<td class="gt_row gt_right" headers="max">33.5</td>
-<td class="gt_row gt_right" headers="mean">16.7</td>
-<td class="gt_row gt_right" headers="sd">23.7</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">0.1</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
-<td class="gt_row gt_right" headers="mean">0.1</td>
-<td class="gt_row gt_right" headers="sd">0.1</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">3.1</td>
-<td class="gt_row gt_right" headers="q1">3.1</td>
-<td class="gt_row gt_right" headers="median">3.1</td>
-<td class="gt_row gt_right" headers="q3">3.1</td>
-<td class="gt_row gt_right" headers="max">3.1</td>
-<td class="gt_row gt_right" headers="mean">3.1</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Swan Pond</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.4</td>
 <td class="gt_row gt_right" headers="q1">0.4</td>
+<td class="gt_row gt_right" headers="median">0.8</td>
+<td class="gt_row gt_right" headers="q3">1.5</td>
+<td class="gt_row gt_right" headers="max">2.6</td>
+<td class="gt_row gt_right" headers="mean">1.0</td>
+<td class="gt_row gt_right" headers="sd">0.9</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.6</td>
+<td class="gt_row gt_right" headers="q1">10.2</td>
+<td class="gt_row gt_right" headers="median">19.7</td>
+<td class="gt_row gt_right" headers="q3">29.3</td>
+<td class="gt_row gt_right" headers="max">38.8</td>
+<td class="gt_row gt_right" headers="mean">19.7</td>
+<td class="gt_row gt_right" headers="sd">27.0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">4.9</td>
+<td class="gt_row gt_right" headers="median">9.8</td>
+<td class="gt_row gt_right" headers="q3">14.6</td>
+<td class="gt_row gt_right" headers="max">19.5</td>
+<td class="gt_row gt_right" headers="mean">9.8</td>
+<td class="gt_row gt_right" headers="sd">13.8</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
 <td class="gt_row gt_right" headers="median">0.4</td>
-<td class="gt_row gt_right" headers="q3">0.4</td>
-<td class="gt_row gt_right" headers="max">0.4</td>
+<td class="gt_row gt_right" headers="q3">0.6</td>
+<td class="gt_row gt_right" headers="max">0.8</td>
 <td class="gt_row gt_right" headers="mean">0.4</td>
+<td class="gt_row gt_right" headers="sd">0.6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station">Ramsar Road</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">1</td>
+<td class="gt_row gt_right" headers="min">4.1</td>
+<td class="gt_row gt_right" headers="q1">4.1</td>
+<td class="gt_row gt_right" headers="median">4.1</td>
+<td class="gt_row gt_right" headers="q3">4.1</td>
+<td class="gt_row gt_right" headers="max">4.1</td>
+<td class="gt_row gt_right" headers="mean">4.1</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station">Swan Pond</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">3</td>
+<td class="gt_row gt_right" headers="min">0.2</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
+<td class="gt_row gt_right" headers="median">0.2</td>
+<td class="gt_row gt_right" headers="q3">1.4</td>
+<td class="gt_row gt_right" headers="max">2.5</td>
+<td class="gt_row gt_right" headers="mean">1.0</td>
+<td class="gt_row gt_right" headers="sd">1.4</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">3</td>
+<td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.1</td>
-<td class="gt_row gt_right" headers="q3">0.3</td>
-<td class="gt_row gt_right" headers="max">0.5</td>
-<td class="gt_row gt_right" headers="mean">0.2</td>
-<td class="gt_row gt_right" headers="sd">0.2</td>
+<td class="gt_row gt_right" headers="median">0.2</td>
+<td class="gt_row gt_right" headers="q3">1.1</td>
+<td class="gt_row gt_right" headers="max">3.2</td>
+<td class="gt_row gt_right" headers="mean">0.9</td>
+<td class="gt_row gt_right" headers="sd">1.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3887,27 +3911,27 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.8</td>
-<td class="gt_row gt_right" headers="median">0.8</td>
-<td class="gt_row gt_right" headers="q3">13.6</td>
-<td class="gt_row gt_right" headers="max">71.7</td>
-<td class="gt_row gt_right" headers="mean">17.4</td>
-<td class="gt_row gt_right" headers="sd">30.9</td>
+<td class="gt_row gt_right" headers="n_individual">6</td>
+<td class="gt_row gt_right" headers="min">0.3</td>
+<td class="gt_row gt_right" headers="q1">2.1</td>
+<td class="gt_row gt_right" headers="median">7.6</td>
+<td class="gt_row gt_right" headers="q3">14.1</td>
+<td class="gt_row gt_right" headers="max">60.6</td>
+<td class="gt_row gt_right" headers="mean">15.4</td>
+<td class="gt_row gt_right" headers="sd">22.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">4</td>
-<td class="gt_row gt_right" headers="min">0.2</td>
-<td class="gt_row gt_right" headers="q1">2.4</td>
-<td class="gt_row gt_right" headers="median">5.2</td>
-<td class="gt_row gt_right" headers="q3">7.4</td>
-<td class="gt_row gt_right" headers="max">7.8</td>
-<td class="gt_row gt_right" headers="mean">4.6</td>
-<td class="gt_row gt_right" headers="sd">3.6</td>
+<td class="gt_row gt_right" headers="n_individual">6</td>
+<td class="gt_row gt_right" headers="min">1.0</td>
+<td class="gt_row gt_right" headers="q1">3.6</td>
+<td class="gt_row gt_right" headers="median">7.6</td>
+<td class="gt_row gt_right" headers="q3">12.2</td>
+<td class="gt_row gt_right" headers="max">97.5</td>
+<td class="gt_row gt_right" headers="mean">21.6</td>
+<td class="gt_row gt_right" headers="sd">37.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
@@ -3916,24 +3940,24 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.0</td>
+<td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.4</td>
-<td class="gt_row gt_right" headers="max">63.9</td>
-<td class="gt_row gt_right" headers="mean">12.9</td>
-<td class="gt_row gt_right" headers="sd">28.5</td>
+<td class="gt_row gt_right" headers="max">54.9</td>
+<td class="gt_row gt_right" headers="mean">11.1</td>
+<td class="gt_row gt_right" headers="sd">24.5</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">3</td>
+<td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">0.8</td>
-<td class="gt_row gt_right" headers="max">1.5</td>
-<td class="gt_row gt_right" headers="mean">0.5</td>
-<td class="gt_row gt_right" headers="sd">0.9</td>
+<td class="gt_row gt_right" headers="median">0.8</td>
+<td class="gt_row gt_right" headers="q3">13.6</td>
+<td class="gt_row gt_right" headers="max">50.0</td>
+<td class="gt_row gt_right" headers="mean">12.9</td>
+<td class="gt_row gt_right" headers="sd">24.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
@@ -3951,69 +3975,82 @@ Low Tide Migratory birds
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">0.0</td>
-<td class="gt_row gt_right" headers="mean">0.0</td>
+<td class="gt_row gt_right" headers="min">0.2</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
+<td class="gt_row gt_right" headers="median">0.2</td>
+<td class="gt_row gt_right" headers="q3">0.2</td>
+<td class="gt_row gt_right" headers="max">0.2</td>
+<td class="gt_row gt_right" headers="mean">0.2</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">3.6</td>
-<td class="gt_row gt_right" headers="q1">28.2</td>
-<td class="gt_row gt_right" headers="median">29.7</td>
-<td class="gt_row gt_right" headers="q3">31.2</td>
-<td class="gt_row gt_right" headers="max">36.6</td>
-<td class="gt_row gt_right" headers="mean">25.9</td>
-<td class="gt_row gt_right" headers="sd">12.9</td>
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
+<td class="gt_row gt_left" headers="Station">Tomago</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">3</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">1.5</td>
+<td class="gt_row gt_right" headers="median">3.0</td>
+<td class="gt_row gt_right" headers="q3">4.8</td>
+<td class="gt_row gt_right" headers="max">6.7</td>
+<td class="gt_row gt_right" headers="mean">3.3</td>
+<td class="gt_row gt_right" headers="sd">3.3</td>
 </tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Sandpiper</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13.0</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.7</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">39.8</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">41.2</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">47.4</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">35.2</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13.2</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">17.9</td>
-<td class="gt_row gt_right" headers="q1">23.7</td>
-<td class="gt_row gt_right" headers="median">31.6</td>
-<td class="gt_row gt_right" headers="q3">36.6</td>
-<td class="gt_row gt_right" headers="max">38.0</td>
-<td class="gt_row gt_right" headers="mean">29.6</td>
-<td class="gt_row gt_right" headers="sd">8.6</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Sandpiper</td>
-<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Fullerton Entrance</td>
-<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.1</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.0</td>
+<td class="gt_row gt_right" headers="min">5.5</td>
+<td class="gt_row gt_right" headers="q1">13.4</td>
+<td class="gt_row gt_right" headers="median">17.5</td>
+<td class="gt_row gt_right" headers="q3">18.0</td>
+<td class="gt_row gt_right" headers="max">20.7</td>
+<td class="gt_row gt_right" headers="mean">15.0</td>
+<td class="gt_row gt_right" headers="sd">5.9</td>
 </tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
+<td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">4</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="median">0.0</td>
+<td class="gt_row gt_right" headers="q3">0.5</td>
+<td class="gt_row gt_right" headers="max">1.8</td>
+<td class="gt_row gt_right" headers="mean">0.5</td>
+<td class="gt_row gt_right" headers="sd">0.9</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">0.2</td>
-<td class="gt_row gt_right" headers="q1">0.2</td>
+<td class="gt_row gt_right" headers="q1">0.3</td>
 <td class="gt_row gt_right" headers="median">0.3</td>
-<td class="gt_row gt_right" headers="q3">0.8</td>
-<td class="gt_row gt_right" headers="max">2.3</td>
-<td class="gt_row gt_right" headers="mean">0.8</td>
-<td class="gt_row gt_right" headers="sd">1.0</td>
+<td class="gt_row gt_right" headers="q3">1.0</td>
+<td class="gt_row gt_right" headers="max">2.9</td>
+<td class="gt_row gt_right" headers="mean">0.9</td>
+<td class="gt_row gt_right" headers="sd">1.3</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Ramsar Road</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
@@ -4026,7 +4063,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="mean">0.0</td>
 <td class="gt_row gt_right" headers="sd">0.0</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Ramsar Road</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
@@ -4039,20 +4076,20 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="mean">0.1</td>
 <td class="gt_row gt_right" headers="sd">0.0</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
 <td class="gt_row gt_right" headers="max">0.1</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
 <td class="gt_row gt_right" headers="sd">0.0</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
@@ -4060,64 +4097,64 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.2</td>
 <td class="gt_row gt_right" headers="q1">0.3</td>
 <td class="gt_row gt_right" headers="median">0.3</td>
-<td class="gt_row gt_right" headers="q3">0.3</td>
+<td class="gt_row gt_right" headers="q3">0.4</td>
 <td class="gt_row gt_right" headers="max">0.4</td>
 <td class="gt_row gt_right" headers="mean">0.3</td>
 <td class="gt_row gt_right" headers="sd">0.1</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
+<td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
 <td class="gt_row gt_right" headers="max">0.3</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
 <td class="gt_row gt_right" headers="sd">0.1</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">4</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.1</td>
-<td class="gt_row gt_right" headers="q1">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
 <td class="gt_row gt_right" headers="median">0.2</td>
 <td class="gt_row gt_right" headers="q3">0.2</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
-<td class="gt_row gt_right" headers="mean">0.1</td>
-<td class="gt_row gt_right" headers="sd">0.0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">5.6</td>
-<td class="gt_row gt_right" headers="q1">5.6</td>
-<td class="gt_row gt_right" headers="median">5.6</td>
-<td class="gt_row gt_right" headers="q3">5.6</td>
-<td class="gt_row gt_right" headers="max">5.6</td>
-<td class="gt_row gt_right" headers="mean">5.6</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="max">1.7</td>
+<td class="gt_row gt_right" headers="mean">0.5</td>
+<td class="gt_row gt_right" headers="sd">0.7</td>
 </tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Eurasian Whimbrel</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">9.2</td>
-<td class="gt_row gt_right" headers="q1">9.2</td>
-<td class="gt_row gt_right" headers="median">9.2</td>
-<td class="gt_row gt_right" headers="q3">9.2</td>
-<td class="gt_row gt_right" headers="max">9.2</td>
-<td class="gt_row gt_right" headers="mean">9.2</td>
+<td class="gt_row gt_right" headers="min">10.0</td>
+<td class="gt_row gt_right" headers="q1">10.0</td>
+<td class="gt_row gt_right" headers="median">10.0</td>
+<td class="gt_row gt_right" headers="q3">10.0</td>
+<td class="gt_row gt_right" headers="max">10.0</td>
+<td class="gt_row gt_right" headers="mean">10.0</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
@@ -4126,11 +4163,11 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.2</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
+<td class="gt_row gt_right" headers="max">0.3</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
-<td class="gt_row gt_right" headers="sd">0.1</td>
+<td class="gt_row gt_right" headers="sd">0.2</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
@@ -4138,25 +4175,25 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.2</td>
 <td class="gt_row gt_right" headers="median">0.4</td>
-<td class="gt_row gt_right" headers="q3">0.5</td>
-<td class="gt_row gt_right" headers="max">0.7</td>
+<td class="gt_row gt_right" headers="q3">0.6</td>
+<td class="gt_row gt_right" headers="max">0.8</td>
 <td class="gt_row gt_right" headers="mean">0.4</td>
-<td class="gt_row gt_right" headers="sd">0.5</td>
+<td class="gt_row gt_right" headers="sd">0.6</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.3</td>
-<td class="gt_row gt_right" headers="q1">0.3</td>
-<td class="gt_row gt_right" headers="median">0.3</td>
-<td class="gt_row gt_right" headers="q3">0.3</td>
-<td class="gt_row gt_right" headers="max">0.3</td>
-<td class="gt_row gt_right" headers="mean">0.3</td>
+<td class="gt_row gt_right" headers="min">0.6</td>
+<td class="gt_row gt_right" headers="q1">0.6</td>
+<td class="gt_row gt_right" headers="median">0.6</td>
+<td class="gt_row gt_right" headers="q3">0.6</td>
+<td class="gt_row gt_right" headers="max">0.6</td>
+<td class="gt_row gt_right" headers="mean">0.6</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
@@ -4169,72 +4206,72 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="mean">1.1</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.8</td>
-<td class="gt_row gt_right" headers="q1">0.8</td>
-<td class="gt_row gt_right" headers="median">0.8</td>
-<td class="gt_row gt_right" headers="q3">0.8</td>
-<td class="gt_row gt_right" headers="max">0.8</td>
-<td class="gt_row gt_right" headers="mean">0.8</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Far Eastern Curlew</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Fullerton Entrance</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">2.7</td>
-<td class="gt_row gt_right" headers="q1">2.7</td>
-<td class="gt_row gt_right" headers="median">2.7</td>
-<td class="gt_row gt_right" headers="q3">2.7</td>
-<td class="gt_row gt_right" headers="max">2.7</td>
-<td class="gt_row gt_right" headers="mean">2.7</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">41.8</td>
-<td class="gt_row gt_right" headers="q1">41.8</td>
-<td class="gt_row gt_right" headers="median">41.8</td>
-<td class="gt_row gt_right" headers="q3">41.8</td>
-<td class="gt_row gt_right" headers="max">41.8</td>
-<td class="gt_row gt_right" headers="mean">41.8</td>
+<td class="gt_row gt_right" headers="min">6.0</td>
+<td class="gt_row gt_right" headers="q1">6.0</td>
+<td class="gt_row gt_right" headers="median">6.0</td>
+<td class="gt_row gt_right" headers="q3">6.0</td>
+<td class="gt_row gt_right" headers="max">6.0</td>
+<td class="gt_row gt_right" headers="mean">6.0</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">27.0</td>
-<td class="gt_row gt_right" headers="q1">27.0</td>
-<td class="gt_row gt_right" headers="median">27.0</td>
-<td class="gt_row gt_right" headers="q3">27.0</td>
-<td class="gt_row gt_right" headers="max">27.0</td>
-<td class="gt_row gt_right" headers="mean">27.0</td>
+<td class="gt_row gt_right" headers="min">34.8</td>
+<td class="gt_row gt_right" headers="q1">34.8</td>
+<td class="gt_row gt_right" headers="median">34.8</td>
+<td class="gt_row gt_right" headers="q3">34.8</td>
+<td class="gt_row gt_right" headers="max">34.8</td>
+<td class="gt_row gt_right" headers="mean">34.8</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
+<td class="gt_row gt_left" headers="Station">Milhams Pond</td>
+<td class="gt_row gt_left" headers="condition">Nocturnal</td>
+<td class="gt_row gt_right" headers="n_individual">1</td>
+<td class="gt_row gt_right" headers="min">73.5</td>
+<td class="gt_row gt_right" headers="q1">73.5</td>
+<td class="gt_row gt_right" headers="median">73.5</td>
+<td class="gt_row gt_right" headers="q3">73.5</td>
+<td class="gt_row gt_right" headers="max">73.5</td>
+<td class="gt_row gt_right" headers="mean">73.5</td>
+<td class="gt_row gt_right" headers="sd">NA</td>
+</tr>
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.2</td>
-<td class="gt_row gt_right" headers="q1">0.2</td>
-<td class="gt_row gt_right" headers="median">0.2</td>
-<td class="gt_row gt_right" headers="q3">0.2</td>
-<td class="gt_row gt_right" headers="max">0.2</td>
-<td class="gt_row gt_right" headers="mean">0.2</td>
+<td class="gt_row gt_right" headers="min">0.4</td>
+<td class="gt_row gt_right" headers="q1">0.4</td>
+<td class="gt_row gt_right" headers="median">0.4</td>
+<td class="gt_row gt_right" headers="q3">0.4</td>
+<td class="gt_row gt_right" headers="max">0.4</td>
+<td class="gt_row gt_right" headers="mean">0.4</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
@@ -4247,85 +4284,85 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="mean">0.5</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">13</td>
-<td class="gt_row gt_right" headers="min">3.4</td>
-<td class="gt_row gt_right" headers="q1">6.0</td>
-<td class="gt_row gt_right" headers="median">12.8</td>
-<td class="gt_row gt_right" headers="q3">21.5</td>
-<td class="gt_row gt_right" headers="max">43.9</td>
-<td class="gt_row gt_right" headers="mean">15.6</td>
-<td class="gt_row gt_right" headers="sd">11.7</td>
-</tr>
 <tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
+<td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.2</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.7</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.1</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">36.3</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">67.9</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">24.7</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.6</td>
+</tr>
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">13</td>
+<td class="gt_row gt_right" headers="n_individual">12</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.9</td>
-<td class="gt_row gt_right" headers="median">7.6</td>
-<td class="gt_row gt_right" headers="q3">25.1</td>
-<td class="gt_row gt_right" headers="max">62.5</td>
-<td class="gt_row gt_right" headers="mean">16.2</td>
-<td class="gt_row gt_right" headers="sd">19.7</td>
+<td class="gt_row gt_right" headers="q1">1.9</td>
+<td class="gt_row gt_right" headers="median">5.4</td>
+<td class="gt_row gt_right" headers="q3">14.6</td>
+<td class="gt_row gt_right" headers="max">29.5</td>
+<td class="gt_row gt_right" headers="mean">8.6</td>
+<td class="gt_row gt_right" headers="sd">8.8</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.1</td>
-<td class="gt_row gt_right" headers="median">0.2</td>
-<td class="gt_row gt_right" headers="q3">0.3</td>
-<td class="gt_row gt_right" headers="max">0.6</td>
-<td class="gt_row gt_right" headers="mean">0.2</td>
-<td class="gt_row gt_right" headers="sd">0.2</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
+<td class="gt_row gt_right" headers="median">0.3</td>
+<td class="gt_row gt_right" headers="q3">0.6</td>
+<td class="gt_row gt_right" headers="max">4.7</td>
+<td class="gt_row gt_right" headers="mean">1.0</td>
+<td class="gt_row gt_right" headers="sd">1.8</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.1</td>
-<td class="gt_row gt_right" headers="q1">0.2</td>
-<td class="gt_row gt_right" headers="median">0.9</td>
-<td class="gt_row gt_right" headers="q3">1.0</td>
-<td class="gt_row gt_right" headers="max">6.7</td>
-<td class="gt_row gt_right" headers="mean">1.8</td>
+<td class="gt_row gt_right" headers="min">0.2</td>
+<td class="gt_row gt_right" headers="q1">0.3</td>
+<td class="gt_row gt_right" headers="median">1.0</td>
+<td class="gt_row gt_right" headers="q3">1.2</td>
+<td class="gt_row gt_right" headers="max">4.4</td>
+<td class="gt_row gt_right" headers="mean">1.4</td>
+<td class="gt_row gt_right" headers="sd">1.7</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
+<td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
+<td class="gt_row gt_left" headers="condition">Diurnal</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
+<td class="gt_row gt_right" headers="min">1.8</td>
+<td class="gt_row gt_right" headers="q1">2.3</td>
+<td class="gt_row gt_right" headers="median">4.4</td>
+<td class="gt_row gt_right" headers="q3">5.2</td>
+<td class="gt_row gt_right" headers="max">8.8</td>
+<td class="gt_row gt_right" headers="mean">4.5</td>
 <td class="gt_row gt_right" headers="sd">2.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.6</td>
-<td class="gt_row gt_right" headers="q1">1.3</td>
-<td class="gt_row gt_right" headers="median">2.9</td>
-<td class="gt_row gt_right" headers="q3">3.3</td>
-<td class="gt_row gt_right" headers="max">4.4</td>
-<td class="gt_row gt_right" headers="mean">2.5</td>
-<td class="gt_row gt_right" headers="sd">1.6</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
-<td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">3</td>
+<td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.5</td>
-<td class="gt_row gt_right" headers="median">1.0</td>
-<td class="gt_row gt_right" headers="q3">1.8</td>
-<td class="gt_row gt_right" headers="max">2.5</td>
-<td class="gt_row gt_right" headers="mean">1.2</td>
+<td class="gt_row gt_right" headers="q1">0.1</td>
+<td class="gt_row gt_right" headers="median">0.4</td>
+<td class="gt_row gt_right" headers="q3">0.7</td>
+<td class="gt_row gt_right" headers="max">3.1</td>
+<td class="gt_row gt_right" headers="mean">0.8</td>
 <td class="gt_row gt_right" headers="sd">1.2</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
@@ -4333,77 +4370,77 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">9.3</td>
-<td class="gt_row gt_right" headers="max">18.6</td>
-<td class="gt_row gt_right" headers="mean">6.2</td>
-<td class="gt_row gt_right" headers="sd">10.7</td>
+<td class="gt_row gt_right" headers="q3">18.9</td>
+<td class="gt_row gt_right" headers="max">37.9</td>
+<td class="gt_row gt_right" headers="mean">12.6</td>
+<td class="gt_row gt_right" headers="sd">21.9</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">61.1</td>
-<td class="gt_row gt_right" headers="q1">61.1</td>
-<td class="gt_row gt_right" headers="median">61.1</td>
-<td class="gt_row gt_right" headers="q3">61.1</td>
-<td class="gt_row gt_right" headers="max">61.1</td>
-<td class="gt_row gt_right" headers="mean">61.1</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.5</td>
+<td class="gt_row gt_right" headers="q1">8.1</td>
+<td class="gt_row gt_right" headers="median">15.7</td>
+<td class="gt_row gt_right" headers="q3">23.3</td>
+<td class="gt_row gt_right" headers="max">30.9</td>
+<td class="gt_row gt_right" headers="mean">15.7</td>
+<td class="gt_row gt_right" headers="sd">21.5</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Ramsar Road</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.1</td>
-<td class="gt_row gt_right" headers="q1">0.6</td>
-<td class="gt_row gt_right" headers="median">1.1</td>
-<td class="gt_row gt_right" headers="q3">1.6</td>
-<td class="gt_row gt_right" headers="max">2.1</td>
-<td class="gt_row gt_right" headers="mean">1.1</td>
-<td class="gt_row gt_right" headers="sd">1.4</td>
+<td class="gt_row gt_right" headers="q1">0.5</td>
+<td class="gt_row gt_right" headers="median">1.0</td>
+<td class="gt_row gt_right" headers="q3">1.4</td>
+<td class="gt_row gt_right" headers="max">1.9</td>
+<td class="gt_row gt_right" headers="mean">1.0</td>
+<td class="gt_row gt_right" headers="sd">1.3</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Ramsar Road</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.9</td>
-<td class="gt_row gt_right" headers="q1">1.8</td>
-<td class="gt_row gt_right" headers="median">2.7</td>
-<td class="gt_row gt_right" headers="q3">3.6</td>
-<td class="gt_row gt_right" headers="max">4.6</td>
-<td class="gt_row gt_right" headers="mean">2.7</td>
-<td class="gt_row gt_right" headers="sd">2.6</td>
+<td class="gt_row gt_right" headers="q1">3.1</td>
+<td class="gt_row gt_right" headers="median">5.4</td>
+<td class="gt_row gt_right" headers="q3">7.7</td>
+<td class="gt_row gt_right" headers="max">10.0</td>
+<td class="gt_row gt_right" headers="mean">5.4</td>
+<td class="gt_row gt_right" headers="sd">6.4</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">0.0</td>
-<td class="gt_row gt_right" headers="mean">0.0</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="n_individual">2</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.7</td>
+<td class="gt_row gt_right" headers="median">1.2</td>
+<td class="gt_row gt_right" headers="q3">1.8</td>
+<td class="gt_row gt_right" headers="max">2.4</td>
+<td class="gt_row gt_right" headers="mean">1.2</td>
+<td class="gt_row gt_right" headers="sd">1.6</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.1</td>
-<td class="gt_row gt_right" headers="median">0.4</td>
-<td class="gt_row gt_right" headers="q3">3.5</td>
-<td class="gt_row gt_right" headers="max">12.3</td>
-<td class="gt_row gt_right" headers="mean">3.2</td>
-<td class="gt_row gt_right" headers="sd">6.0</td>
+<td class="gt_row gt_right" headers="median">0.2</td>
+<td class="gt_row gt_right" headers="q3">0.9</td>
+<td class="gt_row gt_right" headers="max">2.6</td>
+<td class="gt_row gt_right" headers="mean">0.8</td>
+<td class="gt_row gt_right" headers="sd">1.2</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
@@ -4416,7 +4453,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="mean">0.0</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_left" headers="Station">Windeyers</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
