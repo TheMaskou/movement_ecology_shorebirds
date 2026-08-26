@@ -76,6 +76,21 @@ tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 
 ```
 
+::: blockquote-yellow
+**Note**: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see [Fullerton Entrance]()).
+:::  
+
+
+```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = FALSE}
+
+data_all <- data_all %>%
+  filter(recvDeployName != "Fullerton Entrance")
+
+recv <- recv %>%
+  filter(recvDeployName != "Fullerton Entrance")
+
+```
+
 ## Relative Signal Strength Indicator (RSSI)
 
 Both the antenna location and the centre of its range are coarse-scale localisations of tag position. An extension of this method is to further account for shifts in location estimates by modelling the relationship between distance from the mast and RSSI values using the density distribution of RSSI values. If we assume 1) a circular radiation pattern with constant detection probability inside the theoretical range of the antenna (\~0.5 km for omni and \~ 3km for 3-Yagi and H-antenna?) and decreasing detection probability at distances beyond the theoretical range; and 2) that birds (detections) were randomly distributed throughout the possible detectability space of the antenna, then we would predict RSSI values to be positively skewed and have a modal value corresponding to detections at the perimeter of the nominal range (being the RSSI isopleth with the greatest surface area and constant detection probability). Not capable of estimating a clear relation between distance and RSSI values, as radio wave ranges varies a lot depending landscape and weather, we simply can assume the higher the RSSI value is the closer the bird is.
