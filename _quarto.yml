@@ -77,7 +77,7 @@ website:
             - qmd/chapter_1/ch1_6.qmd  # Estuary Usage
             - qmd/chapter_1/ch1_7.qmd  # Station Usage rate
             - qmd/chapter_1/ch1_12.qmd # Station Usage rate (OBP method)
-            - qmd/chapter_1/ch1_12.qmd # Fullerton Entrance (Fly-by vs Site Use)
+            - qmd/chapter_1/ch1_13.qmd # Fullerton Entrance (Fly-by vs Site Use)
             - qmd/chapter_1/ch1_8.qmd  # Signal strength
             - qmd/chapter_1/ch1_10.qmd # Shannon indix
             

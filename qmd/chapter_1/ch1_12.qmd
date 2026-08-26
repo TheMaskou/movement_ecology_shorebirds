@@ -77,7 +77,7 @@ tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 ```
 
 ::: blockquote-yellow
-**Note**: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see [Fullerton Entrance]()).
+**Note**: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see [Fullerton Entrance (Fly-by vs Site Use)]()).
 :::  
 
 
