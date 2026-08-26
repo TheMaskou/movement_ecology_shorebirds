@@ -81,7 +81,7 @@ tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 :::  
 
 
-```{r my data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = FALSE}
+```{r my data filter, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE, results = 'hide', include = FALSE}
 
 data_all <- data_all %>%
   filter(recvDeployName != "Fullerton Entrance")
