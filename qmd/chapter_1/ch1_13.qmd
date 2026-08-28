@@ -1,8 +1,7 @@
 ---
-title: "Fullerton Entrance (Fly-by vs Site Use)"
+title: "Site use - hours (Fullerton case)"
 format: html
 ---
-
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
 **Why this station is treated differently**
@@ -11,18 +10,16 @@ Fullerton Entrance carries a single directional Yagi antenna (6-elements). Unlik
 
 Therefore, a tag detection at Fullerton Entrance station is either:
 
--   **fly-by**, the bird briefly fly by (in front of) the antenna, probably traveling between the estuary (roost?) and Fullerton mudflat (foraging?)  
+-   **fly-by**, the bird briefly fly by (in front of) the antenna, probably traveling between the estuary (roost?) and Fullerton mudflat (foraging?)
 
 -   **site use** - the bird is actually sitting by the antenna itself, either roosting or foraging, using the site.
 
 Since we cannot detect birds directly on Fullerton mudflat, we use fly-by detections at Fullerton Entrance station and their direction (another station → Fullerton Entrance or another station → Fullerton Entrance) as an **indirect proxy for mudflat use**.
 :::
 
-  
-## Set-up  
+## Set-up
 
-As we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.  
-
+As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
 
 ```{r setup, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source Station usage - hours (OBP method) script into this environment
@@ -41,8 +38,7 @@ library(lubridate)
 library(gt)
 ```
 
-
-Now, we pre-fill some **key-values** we need to set-up the workflow.  
+Now, we pre-fill some **key-values** we need to set-up the workflow.
 
 ```{r fc visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 focal_station    <- "Fullerton Entrance"   # the directional antenna
@@ -60,7 +56,6 @@ fc_visits <- visit_duration %>%
 ## Separate fly-by & site use
 
 A very short visit (seconds to a couple of minutes) most likely reflects a bird flying by the antenna; while a longer visit likely reflects a bird actually using the site covered by antenna's range coverage. We use the same mixture-model approach as for the detection-gap threshold (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)), but here fitted to **visit durations** at Fullerton Entrance only, to find a data-driven cut-off between "flyby" and "actual use".
-
 
 **Fit a 2-component mixture model** on log-transformed visit duration (component 1 = short/flyby, component 2 = long/actual use), and find the cut-point where the posterior probability of belonging to the "flyby" component drops below 0.5.
 
@@ -83,7 +78,7 @@ cut_df <- data.frame(duration_h = fc_visits$duration_h, p_short = post_short) %>
 flyby_cutpoint_h <- cut_df$duration_h[which(cut_df$p_short < 0.5)[1]] # /!\ the value chosen here (0.5) finds the first duration in hour (smallest) where it has less than 50 % probability to be a fly-by /!\
 ```
 
-Under `r flyby_cutpoint_h` hours (~ `r round(flyby_cutpoint_h * 60)` min), a detection at Fullerton Entrance is considered as a *fly-by* and above as a *site use*. So, let's classify and visualise.
+Under `r flyby_cutpoint_h` hours (\~ `r round(flyby_cutpoint_h * 60)` min), a detection at Fullerton Entrance is considered as a *fly-by* and above as a *site use*. So, let's classify and visualise.
 
 ```{r fc classify visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 fc_visits <- fc_visits %>%
@@ -95,11 +90,21 @@ ggplot(fc_visits, aes(x = duration_h, fill = visit_type)) +
   geom_histogram(binwidth = 0.1, color = "white", boundary = 0) +
   geom_vline(xintercept = flyby_cutpoint_h, color = "red", linetype = "dashed", linewidth = 0.7) +
   scale_fill_manual(values = c(flyby = "#E7298A", actual_use = "#66A61E")) +
-  coord_cartesian(xlim = c(0, 5)) +
+  coord_cartesian(xlim = c(0, 10)) +
   labs(x = "Visit duration (hours)", y = "Count", fill = "Visit type",
        title = paste("Flyby vs actual-use classification -", focal_station),
        subtitle = paste0("Cut-point = ", round(flyby_cutpoint_h * 60, 1), " min (mixture model)")) +
   theme_minimal(base_size = 13)
+
+ggplot(fc_visits %>%
+         filter(duration_h > flyby_cutpoint_h), aes(x = duration_h, fill = visit_type)) +
+  geom_histogram(binwidth = 0.1, color = "white", boundary = 0) +
+  coord_cartesian(xlim = c(0, 10)) +
+  labs(x = "Visit duration (hours)", y = "Count", fill = "Visit type",
+       title = paste("Actual-use distribution -", focal_station),
+       subtitle = paste0("Visit during more than ", round(flyby_cutpoint_h * 60, 1), " min (cut-point from mixture model)")) +
+  theme_minimal(base_size = 13)
+
 ```
 
 ## Infer the direction of each flyby

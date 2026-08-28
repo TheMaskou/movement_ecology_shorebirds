@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-08-27">
+<meta name="dcterms.date" content="2026-08-28">
 
-<title>Station usage - hours (OBP method) – Home</title>
+<title>Site use - hours (OBP method) – Home</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -203,15 +203,15 @@ window.Quarto = {
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_7.html">
- <span class="dropdown-text">Station usage - hours</span></a>
+ <span class="dropdown-text">Site use - hours (initial method)</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_12.html">
- <span class="dropdown-text">Station usage - hours (OBP method)</span></a>
+ <span class="dropdown-text">Site use - hours (OBP method)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_12.html">
- <span class="dropdown-text">Station usage - hours (OBP method)</span></a>
+    <a class="dropdown-item" href="../../qmd/chapter_1/ch1_13.html">
+ <span class="dropdown-text">Site use - hours (Fullerton case)</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_1/ch1_8.html">
@@ -329,7 +329,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_12.html">Station usage - hours (OBP method)</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_12.html">Site use - hours (OBP method)</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -411,19 +411,19 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_7.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Station usage - hours</span></a>
+ <span class="menu-text">Site use - hours (initial method)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../../qmd/chapter_1/ch1_12.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Station usage - hours (OBP method)</span></a>
+ <span class="menu-text">Site use - hours (OBP method)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../qmd/chapter_1/ch1_12.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Station usage - hours (OBP method)</span></a>
+  <a href="../../qmd/chapter_1/ch1_13.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Site use - hours (Fullerton case)</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -501,9 +501,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_12.html">Station usage - hours (OBP method)</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_6.html">Analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_1/ch1_12.html">Site use - hours (OBP method)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Station usage - hours (OBP method)</h1>
+<h1 class="title">Site use - hours (OBP method)</h1>
 </div>
 
 
@@ -514,7 +514,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-08-27</p>
+      <p class="date">2026-08-28</p>
     </div>
   </div>
   
@@ -563,7 +563,7 @@ window.Quarto = {
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="blockquote-yellow">
-<p><strong>Note</strong>: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see <a href="">Fullerton Entrance</a>).</p>
+<p><strong>Note</strong>: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_13.html">Fullerton Entrance (Fly-by vs Site Use)</a>).</p>
 </div>
 <section id="relative-signal-strength-indicator-rssi" class="level2">
 <h2 class="anchored" data-anchor-id="relative-signal-strength-indicator-rssi">Relative Signal Strength Indicator (RSSI)</h2>
@@ -936,11 +936,12 @@ loglik at estimate:  -12830.01 </code></pre>
 </div>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 5
-  Band.ID speciesEN         recvDeployName tideCategory   rate_use
-  &lt;fct&gt;   &lt;chr&gt;             &lt;chr&gt;          &lt;fct&gt;             &lt;dbl&gt;
-1 7176824 Bar-tailed Godwit Curlew Point   Nocturnal_High     151.
-2 7394040 Bar-tailed Godwit Curlew Point   Diurnal_High       115.</code></pre>
+<pre><code># A tibble: 2 × 9
+  Band.ID speciesEN      recvDeployName tideCategory tideDiel tideHighLow used_h
+  &lt;fct&gt;   &lt;chr&gt;          &lt;chr&gt;          &lt;fct&gt;        &lt;chr&gt;    &lt;chr&gt;        &lt;dbl&gt;
+1 7176824 Bar-tailed Go… Curlew Point   Nocturnal_H… Nocturn… High          6.03
+2 7394040 Bar-tailed Go… Curlew Point   Diurnal_High Diurnal  High          6.91
+# ℹ 2 more variables: available_h &lt;dbl&gt;, rate_use &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -958,6 +959,8 @@ loglik at estimate:  -12830.01 </code></pre>
 </section>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>
+<p><strong>The plot below shows you how much each species have been detected over the array, by night and by day.</strong> First displayed overall. Second displayed per condition and showing individual variation.</p>
+<p><img src="ch1_12_files/figure-html/4 Used rate tot-1.png" class="img-fluid" width="672"><img src="ch1_12_files/figure-html/4 Used rate tot-2.png" class="img-fluid" width="672"></p>
 </section>
 <section id="resident-species" class="level3">
 <h3 class="anchored" data-anchor-id="resident-species">Resident species</h3>
@@ -978,23 +981,23 @@ High Tide Resident birds
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="vyzesyyich" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vyzesyyich table {
+<div id="zesyyichzg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zesyyichzg table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vyzesyyich thead, #vyzesyyich tbody, #vyzesyyich tfoot, #vyzesyyich tr, #vyzesyyich td, #vyzesyyich th {
+#zesyyichzg thead, #zesyyichzg tbody, #zesyyichzg tfoot, #zesyyichzg tr, #zesyyichzg td, #zesyyichzg th {
   border-style: none;
 }
 
-#vyzesyyich p {
+#zesyyichzg p {
   margin: 0;
   padding: 0;
 }
 
-#vyzesyyich .gt_table {
+#zesyyichzg .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1020,12 +1023,12 @@ High Tide Resident birds
   border-left-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_caption {
+#zesyyichzg .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vyzesyyich .gt_title {
+#zesyyichzg .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1037,7 +1040,7 @@ High Tide Resident birds
   border-bottom-width: 0;
 }
 
-#vyzesyyich .gt_subtitle {
+#zesyyichzg .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1049,7 +1052,7 @@ High Tide Resident birds
   border-top-width: 0;
 }
 
-#vyzesyyich .gt_heading {
+#zesyyichzg .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1061,13 +1064,13 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_bottom_border {
+#zesyyichzg .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_col_headings {
+#zesyyichzg .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1082,7 +1085,7 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_col_heading {
+#zesyyichzg .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1102,7 +1105,7 @@ High Tide Resident birds
   overflow-x: hidden;
 }
 
-#vyzesyyich .gt_column_spanner_outer {
+#zesyyichzg .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1114,15 +1117,15 @@ High Tide Resident birds
   padding-right: 4px;
 }
 
-#vyzesyyich .gt_column_spanner_outer:first-child {
+#zesyyichzg .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vyzesyyich .gt_column_spanner_outer:last-child {
+#zesyyichzg .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vyzesyyich .gt_column_spanner {
+#zesyyichzg .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1134,11 +1137,11 @@ High Tide Resident birds
   width: 100%;
 }
 
-#vyzesyyich .gt_spanner_row {
+#zesyyichzg .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vyzesyyich .gt_group_heading {
+#zesyyichzg .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1164,7 +1167,7 @@ High Tide Resident birds
   text-align: left;
 }
 
-#vyzesyyich .gt_empty_group_heading {
+#zesyyichzg .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1179,15 +1182,15 @@ High Tide Resident birds
   vertical-align: middle;
 }
 
-#vyzesyyich .gt_from_md > :first-child {
+#zesyyichzg .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vyzesyyich .gt_from_md > :last-child {
+#zesyyichzg .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vyzesyyich .gt_row {
+#zesyyichzg .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1206,7 +1209,7 @@ High Tide Resident birds
   overflow-x: hidden;
 }
 
-#vyzesyyich .gt_stub {
+#zesyyichzg .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1219,7 +1222,7 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#vyzesyyich .gt_stub_row_group {
+#zesyyichzg .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1233,15 +1236,15 @@ High Tide Resident birds
   vertical-align: top;
 }
 
-#vyzesyyich .gt_row_group_first td {
+#zesyyichzg .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vyzesyyich .gt_row_group_first th {
+#zesyyichzg .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vyzesyyich .gt_summary_row {
+#zesyyichzg .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1251,16 +1254,16 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#vyzesyyich .gt_first_summary_row {
+#zesyyichzg .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_first_summary_row.thick {
+#zesyyichzg .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vyzesyyich .gt_last_summary_row {
+#zesyyichzg .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1270,7 +1273,7 @@ High Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_grand_summary_row {
+#zesyyichzg .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1280,7 +1283,7 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#vyzesyyich .gt_first_grand_summary_row {
+#zesyyichzg .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1290,7 +1293,7 @@ High Tide Resident birds
   border-top-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_last_grand_summary_row_top {
+#zesyyichzg .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1300,11 +1303,11 @@ High Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_striped {
+#zesyyichzg .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vyzesyyich .gt_table_body {
+#zesyyichzg .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1313,7 +1316,7 @@ High Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_footnotes {
+#zesyyichzg .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1327,7 +1330,7 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_footnote {
+#zesyyichzg .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1336,7 +1339,7 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#vyzesyyich .gt_sourcenotes {
+#zesyyichzg .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1350,7 +1353,7 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#vyzesyyich .gt_sourcenote {
+#zesyyichzg .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1358,72 +1361,72 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#vyzesyyich .gt_left {
+#zesyyichzg .gt_left {
   text-align: left;
 }
 
-#vyzesyyich .gt_center {
+#zesyyichzg .gt_center {
   text-align: center;
 }
 
-#vyzesyyich .gt_right {
+#zesyyichzg .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vyzesyyich .gt_font_normal {
+#zesyyichzg .gt_font_normal {
   font-weight: normal;
 }
 
-#vyzesyyich .gt_font_bold {
+#zesyyichzg .gt_font_bold {
   font-weight: bold;
 }
 
-#vyzesyyich .gt_font_italic {
+#zesyyichzg .gt_font_italic {
   font-style: italic;
 }
 
-#vyzesyyich .gt_super {
+#zesyyichzg .gt_super {
   font-size: 65%;
 }
 
-#vyzesyyich .gt_footnote_marks {
+#zesyyichzg .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vyzesyyich .gt_asterisk {
+#zesyyichzg .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vyzesyyich .gt_indent_1 {
+#zesyyichzg .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vyzesyyich .gt_indent_2 {
+#zesyyichzg .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vyzesyyich .gt_indent_3 {
+#zesyyichzg .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vyzesyyich .gt_indent_4 {
+#zesyyichzg .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vyzesyyich .gt_indent_5 {
+#zesyyichzg .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vyzesyyich .katex-display {
+#zesyyichzg .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vyzesyyich div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zesyyichzg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1717,23 +1720,23 @@ Low Tide Resident birds
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="zgjisdnqkg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#zgjisdnqkg table {
+<div id="jisdnqkgul" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jisdnqkgul table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#zgjisdnqkg thead, #zgjisdnqkg tbody, #zgjisdnqkg tfoot, #zgjisdnqkg tr, #zgjisdnqkg td, #zgjisdnqkg th {
+#jisdnqkgul thead, #jisdnqkgul tbody, #jisdnqkgul tfoot, #jisdnqkgul tr, #jisdnqkgul td, #jisdnqkgul th {
   border-style: none;
 }
 
-#zgjisdnqkg p {
+#jisdnqkgul p {
   margin: 0;
   padding: 0;
 }
 
-#zgjisdnqkg .gt_table {
+#jisdnqkgul .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1759,12 +1762,12 @@ Low Tide Resident birds
   border-left-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_caption {
+#jisdnqkgul .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#zgjisdnqkg .gt_title {
+#jisdnqkgul .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1776,7 +1779,7 @@ Low Tide Resident birds
   border-bottom-width: 0;
 }
 
-#zgjisdnqkg .gt_subtitle {
+#jisdnqkgul .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1788,7 +1791,7 @@ Low Tide Resident birds
   border-top-width: 0;
 }
 
-#zgjisdnqkg .gt_heading {
+#jisdnqkgul .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1800,13 +1803,13 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_bottom_border {
+#jisdnqkgul .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_col_headings {
+#jisdnqkgul .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1821,7 +1824,7 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_col_heading {
+#jisdnqkgul .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1841,7 +1844,7 @@ Low Tide Resident birds
   overflow-x: hidden;
 }
 
-#zgjisdnqkg .gt_column_spanner_outer {
+#jisdnqkgul .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1853,15 +1856,15 @@ Low Tide Resident birds
   padding-right: 4px;
 }
 
-#zgjisdnqkg .gt_column_spanner_outer:first-child {
+#jisdnqkgul .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#zgjisdnqkg .gt_column_spanner_outer:last-child {
+#jisdnqkgul .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#zgjisdnqkg .gt_column_spanner {
+#jisdnqkgul .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1873,11 +1876,11 @@ Low Tide Resident birds
   width: 100%;
 }
 
-#zgjisdnqkg .gt_spanner_row {
+#jisdnqkgul .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#zgjisdnqkg .gt_group_heading {
+#jisdnqkgul .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1903,7 +1906,7 @@ Low Tide Resident birds
   text-align: left;
 }
 
-#zgjisdnqkg .gt_empty_group_heading {
+#jisdnqkgul .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1918,15 +1921,15 @@ Low Tide Resident birds
   vertical-align: middle;
 }
 
-#zgjisdnqkg .gt_from_md > :first-child {
+#jisdnqkgul .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#zgjisdnqkg .gt_from_md > :last-child {
+#jisdnqkgul .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#zgjisdnqkg .gt_row {
+#jisdnqkgul .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1945,7 +1948,7 @@ Low Tide Resident birds
   overflow-x: hidden;
 }
 
-#zgjisdnqkg .gt_stub {
+#jisdnqkgul .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1958,7 +1961,7 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#zgjisdnqkg .gt_stub_row_group {
+#jisdnqkgul .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1972,15 +1975,15 @@ Low Tide Resident birds
   vertical-align: top;
 }
 
-#zgjisdnqkg .gt_row_group_first td {
+#jisdnqkgul .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#zgjisdnqkg .gt_row_group_first th {
+#jisdnqkgul .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#zgjisdnqkg .gt_summary_row {
+#jisdnqkgul .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1990,16 +1993,16 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#zgjisdnqkg .gt_first_summary_row {
+#jisdnqkgul .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_first_summary_row.thick {
+#jisdnqkgul .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#zgjisdnqkg .gt_last_summary_row {
+#jisdnqkgul .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2009,7 +2012,7 @@ Low Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_grand_summary_row {
+#jisdnqkgul .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2019,7 +2022,7 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#zgjisdnqkg .gt_first_grand_summary_row {
+#jisdnqkgul .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2029,7 +2032,7 @@ Low Tide Resident birds
   border-top-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_last_grand_summary_row_top {
+#jisdnqkgul .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2039,11 +2042,11 @@ Low Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_striped {
+#jisdnqkgul .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#zgjisdnqkg .gt_table_body {
+#jisdnqkgul .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2052,7 +2055,7 @@ Low Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_footnotes {
+#jisdnqkgul .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2066,7 +2069,7 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_footnote {
+#jisdnqkgul .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2075,7 +2078,7 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#zgjisdnqkg .gt_sourcenotes {
+#jisdnqkgul .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2089,7 +2092,7 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#zgjisdnqkg .gt_sourcenote {
+#jisdnqkgul .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2097,72 +2100,72 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#zgjisdnqkg .gt_left {
+#jisdnqkgul .gt_left {
   text-align: left;
 }
 
-#zgjisdnqkg .gt_center {
+#jisdnqkgul .gt_center {
   text-align: center;
 }
 
-#zgjisdnqkg .gt_right {
+#jisdnqkgul .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#zgjisdnqkg .gt_font_normal {
+#jisdnqkgul .gt_font_normal {
   font-weight: normal;
 }
 
-#zgjisdnqkg .gt_font_bold {
+#jisdnqkgul .gt_font_bold {
   font-weight: bold;
 }
 
-#zgjisdnqkg .gt_font_italic {
+#jisdnqkgul .gt_font_italic {
   font-style: italic;
 }
 
-#zgjisdnqkg .gt_super {
+#jisdnqkgul .gt_super {
   font-size: 65%;
 }
 
-#zgjisdnqkg .gt_footnote_marks {
+#jisdnqkgul .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#zgjisdnqkg .gt_asterisk {
+#jisdnqkgul .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#zgjisdnqkg .gt_indent_1 {
+#jisdnqkgul .gt_indent_1 {
   text-indent: 5px;
 }
 
-#zgjisdnqkg .gt_indent_2 {
+#jisdnqkgul .gt_indent_2 {
   text-indent: 10px;
 }
 
-#zgjisdnqkg .gt_indent_3 {
+#jisdnqkgul .gt_indent_3 {
   text-indent: 15px;
 }
 
-#zgjisdnqkg .gt_indent_4 {
+#jisdnqkgul .gt_indent_4 {
   text-indent: 20px;
 }
 
-#zgjisdnqkg .gt_indent_5 {
+#jisdnqkgul .gt_indent_5 {
   text-indent: 25px;
 }
 
-#zgjisdnqkg .katex-display {
+#jisdnqkgul .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#zgjisdnqkg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jisdnqkgul div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2438,23 +2441,23 @@ High Tide Migratory birds
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="ulojmgiijw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ulojmgiijw table {
+<div id="ojmgiijwug" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ojmgiijwug table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ulojmgiijw thead, #ulojmgiijw tbody, #ulojmgiijw tfoot, #ulojmgiijw tr, #ulojmgiijw td, #ulojmgiijw th {
+#ojmgiijwug thead, #ojmgiijwug tbody, #ojmgiijwug tfoot, #ojmgiijwug tr, #ojmgiijwug td, #ojmgiijwug th {
   border-style: none;
 }
 
-#ulojmgiijw p {
+#ojmgiijwug p {
   margin: 0;
   padding: 0;
 }
 
-#ulojmgiijw .gt_table {
+#ojmgiijwug .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2480,12 +2483,12 @@ High Tide Migratory birds
   border-left-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_caption {
+#ojmgiijwug .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ulojmgiijw .gt_title {
+#ojmgiijwug .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2497,7 +2500,7 @@ High Tide Migratory birds
   border-bottom-width: 0;
 }
 
-#ulojmgiijw .gt_subtitle {
+#ojmgiijwug .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2509,7 +2512,7 @@ High Tide Migratory birds
   border-top-width: 0;
 }
 
-#ulojmgiijw .gt_heading {
+#ojmgiijwug .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -2521,13 +2524,13 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_bottom_border {
+#ojmgiijwug .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_col_headings {
+#ojmgiijwug .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2542,7 +2545,7 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_col_heading {
+#ojmgiijwug .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2562,7 +2565,7 @@ High Tide Migratory birds
   overflow-x: hidden;
 }
 
-#ulojmgiijw .gt_column_spanner_outer {
+#ojmgiijwug .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2574,15 +2577,15 @@ High Tide Migratory birds
   padding-right: 4px;
 }
 
-#ulojmgiijw .gt_column_spanner_outer:first-child {
+#ojmgiijwug .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ulojmgiijw .gt_column_spanner_outer:last-child {
+#ojmgiijwug .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ulojmgiijw .gt_column_spanner {
+#ojmgiijwug .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2594,11 +2597,11 @@ High Tide Migratory birds
   width: 100%;
 }
 
-#ulojmgiijw .gt_spanner_row {
+#ojmgiijwug .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ulojmgiijw .gt_group_heading {
+#ojmgiijwug .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2624,7 +2627,7 @@ High Tide Migratory birds
   text-align: left;
 }
 
-#ulojmgiijw .gt_empty_group_heading {
+#ojmgiijwug .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2639,15 +2642,15 @@ High Tide Migratory birds
   vertical-align: middle;
 }
 
-#ulojmgiijw .gt_from_md > :first-child {
+#ojmgiijwug .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ulojmgiijw .gt_from_md > :last-child {
+#ojmgiijwug .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ulojmgiijw .gt_row {
+#ojmgiijwug .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2666,7 +2669,7 @@ High Tide Migratory birds
   overflow-x: hidden;
 }
 
-#ulojmgiijw .gt_stub {
+#ojmgiijwug .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2679,7 +2682,7 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#ulojmgiijw .gt_stub_row_group {
+#ojmgiijwug .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2693,15 +2696,15 @@ High Tide Migratory birds
   vertical-align: top;
 }
 
-#ulojmgiijw .gt_row_group_first td {
+#ojmgiijwug .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ulojmgiijw .gt_row_group_first th {
+#ojmgiijwug .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ulojmgiijw .gt_summary_row {
+#ojmgiijwug .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2711,16 +2714,16 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#ulojmgiijw .gt_first_summary_row {
+#ojmgiijwug .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_first_summary_row.thick {
+#ojmgiijwug .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ulojmgiijw .gt_last_summary_row {
+#ojmgiijwug .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2730,7 +2733,7 @@ High Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_grand_summary_row {
+#ojmgiijwug .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2740,7 +2743,7 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#ulojmgiijw .gt_first_grand_summary_row {
+#ojmgiijwug .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2750,7 +2753,7 @@ High Tide Migratory birds
   border-top-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_last_grand_summary_row_top {
+#ojmgiijwug .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2760,11 +2763,11 @@ High Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_striped {
+#ojmgiijwug .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ulojmgiijw .gt_table_body {
+#ojmgiijwug .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2773,7 +2776,7 @@ High Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_footnotes {
+#ojmgiijwug .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2787,7 +2790,7 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_footnote {
+#ojmgiijwug .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2796,7 +2799,7 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#ulojmgiijw .gt_sourcenotes {
+#ojmgiijwug .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2810,7 +2813,7 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ulojmgiijw .gt_sourcenote {
+#ojmgiijwug .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2818,72 +2821,72 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#ulojmgiijw .gt_left {
+#ojmgiijwug .gt_left {
   text-align: left;
 }
 
-#ulojmgiijw .gt_center {
+#ojmgiijwug .gt_center {
   text-align: center;
 }
 
-#ulojmgiijw .gt_right {
+#ojmgiijwug .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ulojmgiijw .gt_font_normal {
+#ojmgiijwug .gt_font_normal {
   font-weight: normal;
 }
 
-#ulojmgiijw .gt_font_bold {
+#ojmgiijwug .gt_font_bold {
   font-weight: bold;
 }
 
-#ulojmgiijw .gt_font_italic {
+#ojmgiijwug .gt_font_italic {
   font-style: italic;
 }
 
-#ulojmgiijw .gt_super {
+#ojmgiijwug .gt_super {
   font-size: 65%;
 }
 
-#ulojmgiijw .gt_footnote_marks {
+#ojmgiijwug .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ulojmgiijw .gt_asterisk {
+#ojmgiijwug .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ulojmgiijw .gt_indent_1 {
+#ojmgiijwug .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ulojmgiijw .gt_indent_2 {
+#ojmgiijwug .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ulojmgiijw .gt_indent_3 {
+#ojmgiijwug .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ulojmgiijw .gt_indent_4 {
+#ojmgiijwug .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ulojmgiijw .gt_indent_5 {
+#ojmgiijwug .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ulojmgiijw .katex-display {
+#ojmgiijwug .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ulojmgiijw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ojmgiijwug div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3450,23 +3453,23 @@ Low Tide Migratory birds
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="ugufybehlm" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ugufybehlm table {
+<div id="ufybehlmra" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ufybehlmra table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ugufybehlm thead, #ugufybehlm tbody, #ugufybehlm tfoot, #ugufybehlm tr, #ugufybehlm td, #ugufybehlm th {
+#ufybehlmra thead, #ufybehlmra tbody, #ufybehlmra tfoot, #ufybehlmra tr, #ufybehlmra td, #ufybehlmra th {
   border-style: none;
 }
 
-#ugufybehlm p {
+#ufybehlmra p {
   margin: 0;
   padding: 0;
 }
 
-#ugufybehlm .gt_table {
+#ufybehlmra .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3492,12 +3495,12 @@ Low Tide Migratory birds
   border-left-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_caption {
+#ufybehlmra .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ugufybehlm .gt_title {
+#ufybehlmra .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3509,7 +3512,7 @@ Low Tide Migratory birds
   border-bottom-width: 0;
 }
 
-#ugufybehlm .gt_subtitle {
+#ufybehlmra .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3521,7 +3524,7 @@ Low Tide Migratory birds
   border-top-width: 0;
 }
 
-#ugufybehlm .gt_heading {
+#ufybehlmra .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -3533,13 +3536,13 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_bottom_border {
+#ufybehlmra .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_col_headings {
+#ufybehlmra .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3554,7 +3557,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_col_heading {
+#ufybehlmra .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3574,7 +3577,7 @@ Low Tide Migratory birds
   overflow-x: hidden;
 }
 
-#ugufybehlm .gt_column_spanner_outer {
+#ufybehlmra .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3586,15 +3589,15 @@ Low Tide Migratory birds
   padding-right: 4px;
 }
 
-#ugufybehlm .gt_column_spanner_outer:first-child {
+#ufybehlmra .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ugufybehlm .gt_column_spanner_outer:last-child {
+#ufybehlmra .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ugufybehlm .gt_column_spanner {
+#ufybehlmra .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3606,11 +3609,11 @@ Low Tide Migratory birds
   width: 100%;
 }
 
-#ugufybehlm .gt_spanner_row {
+#ufybehlmra .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ugufybehlm .gt_group_heading {
+#ufybehlmra .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3636,7 +3639,7 @@ Low Tide Migratory birds
   text-align: left;
 }
 
-#ugufybehlm .gt_empty_group_heading {
+#ufybehlmra .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3651,15 +3654,15 @@ Low Tide Migratory birds
   vertical-align: middle;
 }
 
-#ugufybehlm .gt_from_md > :first-child {
+#ufybehlmra .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ugufybehlm .gt_from_md > :last-child {
+#ufybehlmra .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ugufybehlm .gt_row {
+#ufybehlmra .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3678,7 +3681,7 @@ Low Tide Migratory birds
   overflow-x: hidden;
 }
 
-#ugufybehlm .gt_stub {
+#ufybehlmra .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3691,7 +3694,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#ugufybehlm .gt_stub_row_group {
+#ufybehlmra .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3705,15 +3708,15 @@ Low Tide Migratory birds
   vertical-align: top;
 }
 
-#ugufybehlm .gt_row_group_first td {
+#ufybehlmra .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ugufybehlm .gt_row_group_first th {
+#ufybehlmra .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ugufybehlm .gt_summary_row {
+#ufybehlmra .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3723,16 +3726,16 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#ugufybehlm .gt_first_summary_row {
+#ufybehlmra .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_first_summary_row.thick {
+#ufybehlmra .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ugufybehlm .gt_last_summary_row {
+#ufybehlmra .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3742,7 +3745,7 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_grand_summary_row {
+#ufybehlmra .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3752,7 +3755,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#ugufybehlm .gt_first_grand_summary_row {
+#ufybehlmra .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3762,7 +3765,7 @@ Low Tide Migratory birds
   border-top-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_last_grand_summary_row_top {
+#ufybehlmra .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3772,11 +3775,11 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_striped {
+#ufybehlmra .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ugufybehlm .gt_table_body {
+#ufybehlmra .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3785,7 +3788,7 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_footnotes {
+#ufybehlmra .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3799,7 +3802,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_footnote {
+#ufybehlmra .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3808,7 +3811,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#ugufybehlm .gt_sourcenotes {
+#ufybehlmra .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3822,7 +3825,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#ugufybehlm .gt_sourcenote {
+#ufybehlmra .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3830,72 +3833,72 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#ugufybehlm .gt_left {
+#ufybehlmra .gt_left {
   text-align: left;
 }
 
-#ugufybehlm .gt_center {
+#ufybehlmra .gt_center {
   text-align: center;
 }
 
-#ugufybehlm .gt_right {
+#ufybehlmra .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ugufybehlm .gt_font_normal {
+#ufybehlmra .gt_font_normal {
   font-weight: normal;
 }
 
-#ugufybehlm .gt_font_bold {
+#ufybehlmra .gt_font_bold {
   font-weight: bold;
 }
 
-#ugufybehlm .gt_font_italic {
+#ufybehlmra .gt_font_italic {
   font-style: italic;
 }
 
-#ugufybehlm .gt_super {
+#ufybehlmra .gt_super {
   font-size: 65%;
 }
 
-#ugufybehlm .gt_footnote_marks {
+#ufybehlmra .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ugufybehlm .gt_asterisk {
+#ufybehlmra .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ugufybehlm .gt_indent_1 {
+#ufybehlmra .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ugufybehlm .gt_indent_2 {
+#ufybehlmra .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ugufybehlm .gt_indent_3 {
+#ufybehlmra .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ugufybehlm .gt_indent_4 {
+#ufybehlmra .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ugufybehlm .gt_indent_5 {
+#ufybehlmra .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ugufybehlm .katex-display {
+#ufybehlmra .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ugufybehlm div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ufybehlmra div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

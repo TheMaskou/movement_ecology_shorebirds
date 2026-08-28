@@ -1,5 +1,5 @@
 ---
-title: "Station usage - hours (OBP method)"
+title: "Site use - hours (OBP method)"
 format: html
 ---
 
@@ -78,8 +78,7 @@ tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 
 ::: blockquote-yellow
 **Note**: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see [Fullerton Entrance (Fly-by vs Site Use)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_13.html)).
-:::  
-
+:::
 
 ```{r my data filter, message = FALSE, warning = FALSE, eval = FALSE, echo = TRUE, results = 'hide', include = FALSE}
 
@@ -667,7 +666,8 @@ above <- use_rate_plot %>%
 
 use_rate_plot %>%
   filter(rate_use > 100) %>%
-  select(Band.ID, speciesEN, recvDeployName, tideCategory, rate_use)
+  mutate(used_h = round(used_h, 4),
+         available_h = round (available_h, 4))
 
 ```
 
@@ -786,6 +786,76 @@ low_resident <- make_summary_table("Low", "resident")
 ```
 
 ### Results
+
+**The plot below shows you how much each species have been detected over the array, by night and by day.** First displayed overall. Second displayed per condition and showing individual variation.
+
+```{r 4 Used rate tot, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+library(dplyr)
+library(ggplot2)
+
+# Per-bird mean rate_use by species and tide/diel category
+per_bird <- use_rate_plot %>%
+  group_by(Band.ID, speciesEN, tideDiel) %>%
+  summarise(rate_use = mean(rate_use, na.rm = TRUE), .groups = "drop")
+
+# Per-bird "Undetected" category
+other_per_bird <- per_bird %>%
+  group_by(Band.ID, speciesEN) %>%
+  summarise(rate_use = 100 - sum(rate_use, na.rm = TRUE), .groups = "drop") %>%
+  mutate(tideDiel = "Undetected")
+
+# Combine per-bird data (this was missing)
+per_bird_full <- bind_rows(per_bird, other_per_bird) %>%
+  mutate(tideDiel = factor(tideDiel, levels = c("Undetected", "Diurnal", "Nocturnal")))
+
+# --- Stacked bar (species-level means, from per-bird data) ---
+plot_data_full <- per_bird_full %>%
+  group_by(speciesEN, tideDiel) %>%
+  summarise(mean_rate_use = mean(rate_use, na.rm = TRUE), .groups = "drop")
+
+ggplot(plot_data_full, aes(x = speciesEN, y = mean_rate_use, fill = tideDiel)) +
+  geom_bar(stat = "identity", position = "stack", width = 0.7) +
+  scale_fill_manual(values = c("Nocturnal" = "#2C3E50",
+                                "Diurnal" = "#F4A300",
+                                "Undetected" = "#B0B0B0"),
+                     name = "Tide period",
+                     breaks = c("Nocturnal", "Diurnal", "Undetected")) +
+  labs(x = "Species", y = "Use rate (%)",
+       title = "Use rate by species (day vs night vs undetected)") +
+  theme_minimal(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+
+# --- Dodged bars + individual points (per-bird variation) ---
+summary_data <- per_bird_full %>%
+  group_by(speciesEN, tideDiel) %>%
+  summarise(mean_rate = mean(rate_use, na.rm = TRUE),
+            se = sd(rate_use, na.rm = TRUE) / sqrt(sum(!is.na(rate_use))),
+            .groups = "drop")
+
+ggplot() +
+  geom_bar(data = summary_data,
+           aes(x = speciesEN, y = mean_rate, fill = tideDiel),
+           stat = "identity", position = position_dodge(width = 0.8), width = 0.7) +
+  geom_errorbar(data = summary_data,
+                aes(x = speciesEN, ymin = pmax(mean_rate - se, 0), ymax = mean_rate + se,
+                    group = tideDiel),
+                position = position_dodge(width = 0.8), width = 0.2) +
+  geom_point(data = per_bird_full,
+             aes(x = speciesEN, y = rate_use, group = tideDiel),
+             position = position_jitterdodge(dodge.width = 0.8, jitter.width = 0.15),
+             size = 1.2, alpha = 0.4, color = "black") +
+  scale_fill_manual(values = c("Nocturnal" = "#2C3E50",
+                                "Diurnal" = "#F4A300",
+                                "Undetected" = "#B0B0B0"),
+                     name = "Tide period") +
+  labs(x = "Species", y = "Use rate (%)",
+       title = "Use rate by species (day vs night vs undetected)",
+       subtitle = "Bars = mean ± SE, points = individual birds") +
+  theme_minimal(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top")
+```
 
 ### Resident species
 
