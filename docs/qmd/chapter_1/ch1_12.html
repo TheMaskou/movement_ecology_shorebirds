@@ -109,6 +109,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     document.body.classList.add('hypothesis-enabled');
   });
 </script>
+<link href="../../site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="../../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
+<script src="../../site_libs/datatables-binding-0.34.0/datatables.js"></script>
+
+<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="../../site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<link href="../../site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+
+<script src="../../site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+
+<link href="../../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="../../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -935,27 +955,23 @@ loglik at estimate:  -12830.01 </code></pre>
 <p><strong>Note</strong>: A very few cases (n = 2) where the <em>time used</em> was over the <em>time</em> <em>available</em> has been excluded from the data. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated.</p>
 </div>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 9
-  Band.ID speciesEN      recvDeployName tideCategory tideDiel tideHighLow used_h
-  &lt;fct&gt;   &lt;chr&gt;          &lt;chr&gt;          &lt;fct&gt;        &lt;chr&gt;    &lt;chr&gt;        &lt;dbl&gt;
-1 7176824 Bar-tailed Go… Curlew Point   Nocturnal_H… Nocturn… High          6.03
-2 7394040 Bar-tailed Go… Curlew Point   Diurnal_High Diurnal  High          6.91
-# ℹ 2 more variables: available_h &lt;dbl&gt;, rate_use &lt;dbl&gt;</code></pre>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-7598595affc4f25ab85b" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-7598595affc4f25ab85b">{"x":{"filter":"none","vertical":false,"data":[["1","2"],["7176824","7394040"],["Bar-tailed Godwit","Bar-tailed Godwit"],["Curlew Point","Curlew Point"],["Nocturnal_High","Diurnal_High"],["Nocturnal","Diurnal"],["High","High"],[6.0281,6.9088],[4,6],[150.7014472236236,115.1465208331744]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Band.ID<\/th>\n      <th>speciesEN<\/th>\n      <th>recvDeployName<\/th>\n      <th>tideCategory<\/th>\n      <th>tideDiel<\/th>\n      <th>tideHighLow<\/th>\n      <th>used_h<\/th>\n      <th>available_h<\/th>\n      <th>rate_use<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[7,8,9]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Band.ID","targets":1},{"name":"speciesEN","targets":2},{"name":"recvDeployName","targets":3},{"name":"tideCategory","targets":4},{"name":"tideDiel","targets":5},{"name":"tideHighLow","targets":6},{"name":"used_h","targets":7},{"name":"available_h","targets":8},{"name":"rate_use","targets":9}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>use_rate_plot <span class="ot">&lt;-</span> use_rate_plot <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rate_use <span class="sc">&lt;</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>use_rate_plot <span class="ot">&lt;-</span> use_rate_plot <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rate_use <span class="sc">&lt;</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="blockquote-yellow">
 <p><strong>Note:</strong> We filtered out Masked Lapwing from the analysis, since they have too few data.</p>
 </div>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>figure_plot <span class="ot">&lt;-</span> use_rate_plot <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesType =</span> <span class="fu">factor</span>(shorebird_class[speciesEN], </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"migratory"</span>, <span class="st">"resident"</span>))) <span class="sc">%&gt;%</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>speciesEN <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Masked Lapwing"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>figure_plot <span class="ot">&lt;-</span> use_rate_plot <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">speciesType =</span> <span class="fu">factor</span>(shorebird_class[speciesEN], </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"migratory"</span>, <span class="st">"resident"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>speciesEN <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Masked Lapwing"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="results" class="level3">
 <h3 class="anchored" data-anchor-id="results">Results</h3>

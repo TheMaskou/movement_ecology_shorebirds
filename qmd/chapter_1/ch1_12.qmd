@@ -667,7 +667,8 @@ above <- use_rate_plot %>%
 use_rate_plot %>%
   filter(rate_use > 100) %>%
   mutate(used_h = round(used_h, 4),
-         available_h = round (available_h, 4))
+         available_h = round(available_h, 4)) %>%
+  DT::datatable()
 
 ```
 
