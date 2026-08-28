@@ -666,11 +666,17 @@ above <- use_rate_plot %>%
 
 use_rate_plot %>%
   filter(rate_use > 100) %>%
-  mutate(used_h = round(used_h, 4),
-         available_h = round(available_h, 4)) %>%
+  mutate(used_h = round(used_h, 2),
+         available_h = round(available_h, 2),
+         rate_use = round(rate_use, 2)) %>%
   DT::datatable()
 
 ```
+
++----------+
+| \        |
+| Nocturna |
++----------+
 
 ```{r potential error filtered, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE}
 
