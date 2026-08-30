@@ -16,7 +16,7 @@ Movement & Spatial Ecology of Australian Shorebirds
 :::
 
 ::: {.title-overlay style="background: linear-gradient(135deg, rgba(15,25,55,0.67), rgba(25,45,85,0.67)); color: white; padding: 3rem 2rem; text-align: center; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;"}
-This Research Project is conducted within the [**Center for Conservation Science**](https://www.csrg.site/our-group) by Maxime Marini (PhD candidate), Andrea S. Griffin (Associate Professor) and many other [collaborators](https://themaskou.github.io/movement_ecology_shorebirds/qmd/myphd.html).
+This Research Project is conducted within the [**Center for Conservation Science**](https://www.csrg.site/our-group) by Maxime Marini (PhD candidate), Andrea S. Griffin (Associate Professor), Christopher J. Owers (Doctor) and many other [collaborators](https://themaskou.github.io/movement_ecology_shorebirds/qmd/myphd.html).
 
 \~
 

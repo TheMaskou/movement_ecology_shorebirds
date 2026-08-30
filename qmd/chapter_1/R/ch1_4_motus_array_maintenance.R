@@ -401,7 +401,7 @@ map_maintenance <- leaflet(popup_data, height = map_height,
   addLegend(
     position = "bottomright",
     colors   = c(marker_fill_green, marker_fill_yellow, marker_fill_red, marker_fill_default),
-    labels   = c("Power ON &amp; Wi-Fi on", "Power ON &amp; Wi-Fi OFF",
+    labels   = c("Power ON &amp; Wi-Fi ON", "Power ON &amp; Wi-Fi OFF",
                   "Power OFF / removed", "Unknown / no data"),
     title    = "Departure Status",
     opacity  = marker_fill_opacity
