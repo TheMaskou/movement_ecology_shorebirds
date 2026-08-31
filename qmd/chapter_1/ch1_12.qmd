@@ -298,7 +298,7 @@ visit_duration <- runs %>%
   group_by(Band.ID, recvDeployName) %>%
   mutate(
     gapHours = round(as.numeric(runStart - lag(runEnd))  / 3600, 2),
-    new_visit = is.na(gapHours) | gapHours >= 1,                 # TRUE = starts a new visit
+    new_visit = is.na(gapHours) | gapHours >= 1,                 # <-- HERE IS THE THRESHOLD VALUE TO SET A "NEW VISIT" (TRUE when gapHours >= 1) 
     visitID = cumsum(new_visit)) %>%
   group_by(Band.ID, speciesEN, recvDeployName, visitID) %>%
   summarise(

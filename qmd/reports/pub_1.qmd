@@ -27,6 +27,14 @@ format: html
 
 -   [2026_Virtual_Motus_Workshop](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQCtzPadfDgoRqsyECdzyM7RAd2MVTvX9XaqM7U44dhsJdo?e=FeVVr2)
 
+## Druid & Ecotopia
+
+-   [Druid resources](https://druid.tech/resources/)
+
+-   [Ecotopia server](https://www.ecotopiago.com/#/login)
+
+-   [Quick start guide](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQBY4SJi7AMrRrptwoiLbFhFAXxBIpRScHloCshbbS-Wiuo?e=lhDQ5l)
+
 ## Miscellaneous
 
 -   [Tide_forecasts_for_Newcastle_NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)
