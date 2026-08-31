@@ -90,9 +90,9 @@ recv <- recv %>%
 
 ```
 
-## Site use adjusted for detection gap threshold
+# Site use adjusted for detection gap threshold
 
-### Detection threshold
+## Detection threshold
 
 To define independent observations, we needed a time gap that separates a bird leaving a site from just briefly dropping out of antenna range (e.g., by turning away or moving behind vegetation). Short gaps likely mean the bird is still present; long gaps likely mean it has left. We analysed the distribution of time gaps between successive detection runs of the same bird at the same station, and across all individuals, and used this to choose a cut-off separating "same visit" from "new visit". A three-component mixture model (MIXTOOLS 2.0.0.1) was fitted to the gap durations, distinguishing short gaps (same visit) from medium/long gaps (new visit). Gaps were truncated to 5 min – 30 hours to remove noise from very short or very long outliers, and each gap was classified by whichever distribution best matched it.
 
@@ -255,7 +255,7 @@ ggplot() +
 
 ```
 
-### Define used time (hours)
+## Define used time (hours)
 
 Now, we decide to merge into one and unique continuous detection, all the tags (birds) detected per a same antenna, including gaps under a duration of 1 (one) hour. Although the model is highlighting a value of `r  round(cutpoint, 2)`, we decided to remain conservative.
 
@@ -363,7 +363,7 @@ used_bird_recv_time <- visit_hours_tide %>%
 
 ```
 
-### Define available time (hours)
+## Define available time (hours)
 
 Now used time addressed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.
 
@@ -595,7 +595,7 @@ ggplot() +
 
 ```
 
-### Define rate of Use (%)
+## Define rate of Use (%)
 
 Now that the *used* and *available* time have been determined for each individual and for each Motus station, we can relate these two elements together with the **Usage rate** (or rate of use).
 
@@ -669,7 +669,7 @@ figure_plot <- use_rate_plot %>%
 
 ```
 
-### Results
+## Results
 
 **The plot below shows you how much each species have been detected over the array, by night and by day.** First displayed overall. Second displayed per condition and showing individual variation.
 

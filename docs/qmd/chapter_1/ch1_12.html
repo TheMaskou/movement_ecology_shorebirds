@@ -510,9 +510,11 @@ window.Quarto = {
   <li><a href="#define-used-time-hours" id="toc-define-used-time-hours" class="nav-link" data-scroll-target="#define-used-time-hours">Define used time (hours)</a></li>
   <li><a href="#define-available-time-hours" id="toc-define-available-time-hours" class="nav-link" data-scroll-target="#define-available-time-hours">Define available time (hours)</a></li>
   <li><a href="#define-rate-of-use" id="toc-define-rate-of-use" class="nav-link" data-scroll-target="#define-rate-of-use">Define rate of Use (%)</a></li>
-  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+  <ul class="collapse">
   <li><a href="#resident-species" id="toc-resident-species" class="nav-link" data-scroll-target="#resident-species">Resident species</a></li>
   <li><a href="#migrant-species" id="toc-migrant-species" class="nav-link" data-scroll-target="#migrant-species">Migrant species</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 </nav>
@@ -584,10 +586,10 @@ window.Quarto = {
 <div class="blockquote-yellow">
 <p><strong>Note</strong>: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_13.html">Fullerton Entrance (Fly-by vs Site Use)</a>).</p>
 </div>
-<section id="site-use-adjusted-for-detection-gap-threshold" class="level2">
-<h2 class="anchored" data-anchor-id="site-use-adjusted-for-detection-gap-threshold">Site use adjusted for detection gap threshold</h2>
-<section id="detection-threshold" class="level3">
-<h3 class="anchored" data-anchor-id="detection-threshold">Detection threshold</h3>
+<section id="site-use-adjusted-for-detection-gap-threshold" class="level1">
+<h1>Site use adjusted for detection gap threshold</h1>
+<section id="detection-threshold" class="level2">
+<h2 class="anchored" data-anchor-id="detection-threshold">Detection threshold</h2>
 <p>To define independent observations, we needed a time gap that separates a bird leaving a site from just briefly dropping out of antenna range (e.g., by turning away or moving behind vegetation). Short gaps likely mean the bird is still present; long gaps likely mean it has left. We analysed the distribution of time gaps between successive detection runs of the same bird at the same station, and across all individuals, and used this to choose a cut-off separating “same visit” from “new visit”. A three-component mixture model (MIXTOOLS 2.0.0.1) was fitted to the gap durations, distinguishing short gaps (same visit) from medium/long gaps (new visit). Gaps were truncated to 5 min – 30 hours to remove noise from very short or very long outliers, and each gap was classified by whichever distribution best matched it.</p>
 <p><strong>1. Build run-level summary</strong> (one row per run) from hits. A “run” is already identified by runID in data_all <a href="https://motuswts.github.io/motus/articles/03-accessing-data.html">(see Motus documentation - Chapter 3)</a>. We need the start/end time of each run, per individual and per station.</p>
 <div class="cell">
@@ -673,8 +675,8 @@ loglik at estimate:  -12830.01 </code></pre>
 </div>
 </div>
 </section>
-<section id="define-used-time-hours" class="level3">
-<h3 class="anchored" data-anchor-id="define-used-time-hours">Define used time (hours)</h3>
+<section id="define-used-time-hours" class="level2">
+<h2 class="anchored" data-anchor-id="define-used-time-hours">Define used time (hours)</h2>
 <p>Now, we decide to merge into one and unique continuous detection, all the tags (birds) detected per a same antenna, including gaps under a duration of 1 (one) hour. Although the model is highlighting a value of 1.57, we decided to remain conservative.</p>
 <p><strong>Once detection data summarised as described above, we can see, overall, how long birds stay around one Motus station</strong> - see plot below.</p>
 <div class="cell">
@@ -740,8 +742,8 @@ loglik at estimate:  -12830.01 </code></pre>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">duration_h =</span> <span class="fu">sum</span>(overlap_h), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="define-available-time-hours" class="level3">
-<h3 class="anchored" data-anchor-id="define-available-time-hours">Define available time (hours)</h3>
+<section id="define-available-time-hours" class="level2">
+<h2 class="anchored" data-anchor-id="define-available-time-hours">Define available time (hours)</h2>
 <p>Now used time addressed, we need to define for each individual (birds) and across each Motus stations, what was the amount of time available for the four tide categories.</p>
 <p>Available time for each Motus stations is accessed with <code>activity</code> table: each row is a dated record of noise or a tag detected <em>- see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#activity-table">Survey effort &gt; Activity table</a></em>.</p>
 <p>We need to extract the temporal coverage of each station, starting from deployment date to the last recorded activity (noise or detection).</p>
@@ -907,8 +909,8 @@ loglik at estimate:  -12830.01 </code></pre>
 </div>
 </div>
 </section>
-<section id="define-rate-of-use" class="level3">
-<h3 class="anchored" data-anchor-id="define-rate-of-use">Define rate of Use (%)</h3>
+<section id="define-rate-of-use" class="level2">
+<h2 class="anchored" data-anchor-id="define-rate-of-use">Define rate of Use (%)</h2>
 <p>Now that the <em>used</em> and <em>available</em> time have been determined for each individual and for each Motus station, we can relate these two elements together with the <strong>Usage rate</strong> (or rate of use).</p>
 <div style="overflow-x: auto; width: 100%;">
 <p><span class="math display">\[
@@ -961,11 +963,10 @@ Nocturna</td>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>speciesEN <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Masked Lapwing"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
-<section id="results" class="level3">
-<h3 class="anchored" data-anchor-id="results">Results</h3>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
 <p><strong>The plot below shows you how much each species have been detected over the array, by night and by day.</strong> First displayed overall. Second displayed per condition and showing individual variation.</p>
 <p><img src="ch1_12_files/figure-html/4 Used rate tot-1.png" class="img-fluid" width="672"><img src="ch1_12_files/figure-html/4 Used rate tot-2.png" class="img-fluid" width="672"></p>
-</section>
 <section id="resident-species" class="level3">
 <h3 class="anchored" data-anchor-id="resident-species">Resident species</h3>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -4498,6 +4499,7 @@ Low Tide Migratory birds
 </div>
 
 
+</section>
 </section>
 </section>
 
