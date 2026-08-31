@@ -90,7 +90,6 @@ recv <- recv %>%
 
 ```
 
-
 ## Site use adjusted for detection gap threshold
 
 ### Detection threshold
@@ -670,7 +669,6 @@ figure_plot <- use_rate_plot %>%
 
 ```
 
-
 ### Results
 
 **The plot below shows you how much each species have been detected over the array, by night and by day.** First displayed overall. Second displayed per condition and showing individual variation.
@@ -701,10 +699,9 @@ ggplot(plot_data_full, aes(x = speciesEN, y = mean_rate_use, fill = tideDiel)) +
   scale_fill_manual(values = c("Nocturnal" = "#2C3E50",
                                 "Diurnal" = "#F4A300",
                                 "Undetected" = "#B0B0B0"),
-                     name = "Tide period",
                      breaks = c("Nocturnal", "Diurnal", "Undetected")) +
   labs(x = "Species", y = "Use rate (%)",
-       title = "Use rate by species (day vs night vs undetected)") +
+       title = "Use rate by species") +
   theme_minimal(base_size = 13) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "top")
@@ -730,10 +727,9 @@ ggplot() +
              size = 1.2, alpha = 0.4, color = "black") +
   scale_fill_manual(values = c("Nocturnal" = "#2C3E50",
                                 "Diurnal" = "#F4A300",
-                                "Undetected" = "#B0B0B0"),
-                     name = "Tide period") +
+                                "Undetected" = "#B0B0B0")) +
   labs(x = "Species", y = "Use rate (%)",
-       title = "Use rate by species (day vs night vs undetected)",
+       title = "Use rate by species",
        subtitle = "Bars = mean ± SE, points = individual birds") +
   theme_minimal(base_size = 13) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
