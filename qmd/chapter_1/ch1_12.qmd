@@ -90,35 +90,6 @@ recv <- recv %>%
 
 ```
 
-## Relative Signal Strength Indicator (RSSI)
-
-Both the antenna location and the centre of its range are coarse-scale localisations of tag position. An extension of this method is to further account for shifts in location estimates by modelling the relationship between distance from the mast and RSSI values using the density distribution of RSSI values. If we assume 1) a circular radiation pattern with constant detection probability inside the theoretical range of the antenna (\~0.5 km for omni and \~ 3km for 3-Yagi and H-antenna?) and decreasing detection probability at distances beyond the theoretical range; and 2) that birds (detections) were randomly distributed throughout the possible detectability space of the antenna, then we would predict RSSI values to be positively skewed and have a modal value corresponding to detections at the perimeter of the nominal range (being the RSSI isopleth with the greatest surface area and constant detection probability). Not capable of estimating a clear relation between distance and RSSI values, as radio wave ranges varies a lot depending landscape and weather, we simply can assume the higher the RSSI value is the closer the bird is.
-
-::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
-<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
-
-<img src="../../material/rssi_obp_schema.png" alt="Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)" style="width: 100%; height: auto; display: block;"/>
-
-<figcaption style="margin-top: 1em; font-style: italic;">
-
-Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth \~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)
-
-</figcaption>
-
-</figure>
-:::
-
-The distribution of RSSI for our data is shown below (e.g., RSSI \~70/100/\>140 indicates the bird is likely in the far/medium/close range of the antenna's detection capability).
-
-```{r rssi, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = TRUE}
-
-ggplot(data_all, aes(x = sigPositive, y = speciesEN, fill = speciesEN)) +
-  geom_density_ridges(alpha = 0.7, na.rm = TRUE) +
-  facet_wrap(~ recvDeployName) +
-  theme_minimal() +
-  theme(legend.position = "none")
-
-```
 
 ## Site use adjusted for detection gap threshold
 
@@ -699,107 +670,12 @@ figure_plot <- use_rate_plot %>%
 
 ```
 
-```{r tool, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-# Track size sample
-counts <- data_all %>%
-      group_by(speciesEN) %>%
-      summarise(n = n_distinct(Band.ID)) %>%
-      mutate(label = paste0(speciesEN, " (n = ", n, ")"))
-label_vec <- setNames(counts$label, counts$speciesEN)
-
-# Tide and species groupings
-tide_levels <- c("Low", "High")
-species_types <- unique(shorebird_class)  
-
-# Simplified function - no min_n_nonzero check
-make_plot <- function(tide_level, species_type) {
-  data_sub <- figure_plot %>%
-    filter(tideHighLow == tide_level) %>%
-    mutate(species_class = shorebird_class[speciesEN]) %>%
-    filter(species_class == species_type)
-  
-  p <- ggplot(data_sub,
-              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
-                  y    = rate_use,
-                  fill = tideDiel))
-  
-  # Always add boxplot for all available data
-  p <- p + 
-    geom_boxplot(outlier.shape = NA,
-                 varwidth = FALSE,
-                 position = position_dodge(width = 0.8, preserve = "single")) +
-    
-    # Always show individual points
-    geom_point(aes(shape = tideDiel), 
-               position = position_dodge(width = 0.8),
-               alpha = 1, size = 1.5,
-               show.legend = FALSE) +
-    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
-    
-    facet_wrap(~ speciesEN,
-               labeller = labeller(speciesEN = label_vec)) +
-    labs(x     = "Receiver Deployment",
-         y     = "Rate of Use (%)",
-         title = paste(ifelse(species_type == "migratory",
-                              "Migratory species", "Resident species"),
-                       "during", tide_level, "tide")) +
-    coord_cartesian(ylim = c(0, 100)) +
-    theme_minimal() +
-    scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  
-  return(p)
-}
-
-# Generate all plots
-plots_used_rate <- purrr::cross2(tide_levels, species_types) %>%
-  purrr::map(~ make_plot(.x[[1]], .x[[2]]))
-
-```
-
-```{r stats for plots, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-
-# General function to provide one table with stats values
-make_summary_table <- function(tide_level, species_type) {
-  data_sub <- figure_plot %>%
-    filter(tideHighLow == tide_level) %>%
-    mutate(species_class = shorebird_class[speciesEN]) %>%
-    filter(species_class == species_type)
-  
-  summary_table <- data_sub %>%
-    group_by(speciesEN, recvDeployName, tideDiel) %>%
-    summarise(
-      n_individual = n_distinct(Band.ID),
-      min = round(min(rate_use, na.rm = TRUE), 1),
-      q1 = round(quantile(rate_use, 0.25, na.rm = TRUE),1),
-      median = round(median(rate_use, na.rm = TRUE),1),
-      q3 = round(quantile(rate_use, 0.75, na.rm = TRUE),1),
-      max = round(max(rate_use, na.rm = TRUE),1),
-      mean = round(mean(rate_use, na.rm = TRUE),1),
-      sd = round(sd(rate_use, na.rm = TRUE),1),
-      .groups = 'drop'
-    ) %>%
-    arrange(speciesEN, recvDeployName, tideDiel) %>%
-    rename(Species = "speciesEN", Station = "recvDeployName", condition = "tideDiel")
-  
-  return(summary_table)
-}
-
-# One table per conditions
-high_migratory <- make_summary_table("High", "migratory")
-high_resident <- make_summary_table("High", "resident")
-low_migratory <- make_summary_table("Low", "migratory")
-low_resident <- make_summary_table("Low", "resident")
-```
 
 ### Results
 
 **The plot below shows you how much each species have been detected over the array, by night and by day.** First displayed overall. Second displayed per condition and showing individual variation.
 
 ```{r 4 Used rate tot, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
-library(dplyr)
-library(ggplot2)
-
 # Per-bird mean rate_use by species and tide/diel category
 per_bird <- use_rate_plot %>%
   group_by(Band.ID, speciesEN, tideDiel) %>%
@@ -864,6 +740,153 @@ ggplot() +
         legend.position = "top")
 ```
 
+```{r tool, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+# Track size sample
+counts <- data_all %>%
+      group_by(speciesEN) %>%
+      summarise(n = n_distinct(Band.ID)) %>%
+      mutate(label = paste0(speciesEN, " (n = ", n, ")"))
+label_vec <- setNames(counts$label, counts$speciesEN)
+
+# Tide and species groupings
+tide_levels <- c("Low", "High")
+species_types <- unique(shorebird_class)  
+
+# Simplified function - no min_n_nonzero check
+make_plot <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  p <- ggplot(data_sub,
+              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
+                  y    = rate_use,
+                  fill = tideDiel))
+  
+  # Always add boxplot for all available data
+  p <- p + 
+    geom_boxplot(outlier.shape = NA,
+                 varwidth = FALSE,
+                 position = position_dodge(width = 0.8, preserve = "single")) +
+    
+    # Always show individual points
+    geom_point(aes(shape = tideDiel), 
+               position = position_dodge(width = 0.8),
+               alpha = 1, size = 1.5,
+               show.legend = FALSE) +
+    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+    
+    facet_wrap(~ speciesEN,
+               labeller = labeller(speciesEN = label_vec)) +
+    labs(x     = "Receiver Deployment",
+         y     = "Rate of Use (%)",
+         title = paste(ifelse(species_type == "migratory",
+                              "Migratory species", "Resident species"),
+                       "during", tide_level, "tide")) +
+    coord_cartesian(ylim = c(0, 100)) +
+    theme_minimal() +
+    scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  return(p)
+}
+
+# Generate all plots
+plots_used_rate <- purrr::cross2(tide_levels, species_types) %>%
+  purrr::map(~ make_plot(.x[[1]], .x[[2]]))
+
+
+
+
+
+
+
+
+make_plot_v <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  p <- ggplot(data_sub,
+              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
+                  y    = rate_use,
+                  fill = tideDiel))
+  
+  # Violin plot instead
+  p <- p + 
+    geom_violin(outlier.shape = NA,
+                trim = TRUE,
+                varwidth = FALSE,
+                scale = "width",
+                width = 0.8,
+                position = position_dodge(width = 1.2, preserve = "single"),
+                alpha = 0.7) +
+    
+    # Always show individual points
+    geom_point(aes(shape = tideDiel), 
+               position = position_dodge(width = 0.8),
+               alpha = 1, size = 1.5,
+               show.legend = FALSE) +
+    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+    
+    facet_wrap(~ speciesEN,
+               labeller = labeller(speciesEN = label_vec)) +
+    labs(x     = "Receiver Deployment",
+         y     = "Rate of Use (%)",
+         title = paste(ifelse(species_type == "migratory",
+                              "Migratory species", "Resident species"),
+                       "during", tide_level, "tide")) +
+    coord_cartesian(ylim = c(0, 100)) +
+    theme_minimal() +
+    scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  return(p)
+}
+
+# Generate all plots
+plots_used_rate_v <- purrr::cross2(tide_levels, species_types) %>%
+  purrr::map(~ make_plot_v(.x[[1]], .x[[2]]))
+
+```
+
+```{r stats for plots, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+# General function to provide one table with stats values
+make_summary_table <- function(tide_level, species_type) {
+  data_sub <- figure_plot %>%
+    filter(tideHighLow == tide_level) %>%
+    mutate(species_class = shorebird_class[speciesEN]) %>%
+    filter(species_class == species_type)
+  
+  summary_table <- data_sub %>%
+    group_by(speciesEN, recvDeployName, tideDiel) %>%
+    summarise(
+      n_individual = n_distinct(Band.ID),
+      min = round(min(rate_use, na.rm = TRUE), 1),
+      q1 = round(quantile(rate_use, 0.25, na.rm = TRUE),1),
+      median = round(median(rate_use, na.rm = TRUE),1),
+      q3 = round(quantile(rate_use, 0.75, na.rm = TRUE),1),
+      max = round(max(rate_use, na.rm = TRUE),1),
+      mean = round(mean(rate_use, na.rm = TRUE),1),
+      sd = round(sd(rate_use, na.rm = TRUE),1),
+      .groups = 'drop'
+    ) %>%
+    arrange(speciesEN, recvDeployName, tideDiel) %>%
+    rename(Species = "speciesEN", Station = "recvDeployName", condition = "tideDiel")
+  
+  return(summary_table)
+}
+
+# One table per conditions
+high_migratory <- make_summary_table("High", "migratory")
+high_resident <- make_summary_table("High", "resident")
+low_migratory <- make_summary_table("Low", "migratory")
+low_resident <- make_summary_table("Low", "resident")
+```
+
 ### Resident species
 
 ::::: panel-tabset
@@ -871,6 +894,7 @@ ggplot() +
 
 ```{r 4 Used rate 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[4]]
+plots_used_rate_v[[4]]
 ```
 
 ::: {.callout-tip collapse="true" title="High Tide Resident birds"}
@@ -900,6 +924,8 @@ high_resident  %>%
 ```{r 4 Used rate 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 plots_used_rate[[3]]
+plots_used_rate_v[[3]]
+
 ```
 
 ::: {.callout-tip collapse="true" title="Low Tide Resident birds"}
@@ -932,6 +958,8 @@ low_resident  %>%
 
 ```{r 4 Used rate 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[2]]
+plots_used_rate_v[[2]]
+
 ```
 
 ::: {.callout-tip collapse="true" title="High Tide Migratory birds"}
@@ -961,6 +989,8 @@ high_migratory  %>%
 ```{r 4 Used rate 4, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 plots_used_rate[[1]]
+plots_used_rate_v[[1]]
+
 ```
 
 ::: {.callout-tip collapse="true" title="Low Tide Migratory birds"}

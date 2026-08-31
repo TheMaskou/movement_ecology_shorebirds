@@ -17,15 +17,15 @@ Therefore, a tag detection at Fullerton Entrance station is either:
 Since we cannot detect birds directly on Fullerton mudflat, we use fly-by detections at Fullerton Entrance station and their direction (another station → Fullerton Entrance or another station → Fullerton Entrance) as an **indirect proxy for mudflat use**.
 :::
 
-## Set-up
+## Set-up data
 
 As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
 
-```{r setup, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+```{r set-up 1, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source Station usage - hours (OBP method) script into this environment
 source(knitr::purl(here::here("qmd", "chapter_1", "ch1_12.qmd"),
                    output = tempfile(fileext = ".R"),
-                   quiet = TRUE))
+                   quiet = FALSE))
 ```
 
 ```{r local packages, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
@@ -36,6 +36,8 @@ library(data.table)
 library(mixtools)
 library(lubridate)
 library(gt)
+library(lubridate)
+library(ggpattern)
 ```
 
 Now, we pre-fill some **key-values** we need to set-up the workflow.
@@ -53,7 +55,7 @@ fc_visits <- visit_duration %>%
   mutate(duration_min = duration_h * 60)
 ```
 
-## Separate fly-by & site use
+## When is it a fly-by?
 
 A very short visit (seconds to a couple of minutes) most likely reflects a bird flying by the antenna; while a longer visit likely reflects a bird actually using the site covered by antenna's range coverage. We use the same mixture-model approach as for the detection-gap threshold (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)), but here fitted to **visit durations** at Fullerton Entrance only, to find a data-driven cut-off between "flyby" and "actual use".
 
@@ -107,11 +109,13 @@ ggplot(fc_visits %>%
 
 ```
 
-## Infer the direction of each flyby
+## Fly-by direction
 
-For flyby events specifically, we want to know whether the bird was **heading to** the mudflat (last seen leaving the roost area, i.e. detected at another station shortly *before* the flyby) or **coming from** the mudflat (detected at another station shortly *after* the flyby). If both are true, the bird is treated as a `return_flight` seen at Fullerton Entrance on the way out and back; if neither, the direction is `unknown` and resolved separately using tide state (see below).
+For flyby events specifically, we want to know whether the bird was **heading to the mudflat** (last seen leaving the roost area, i.e. detected at another station shortly *before* the flyby) or **coming from the mudflat** (detected at another station shortly *after* the flyby). To do so, we need to understand what is the right temporal window to consider for defining the "shortly after" or "shortly before", and to rely on inference only when the detection into anothe Motus station is beyond this value.
 
-```{r fc flyby set, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+Let's start by splitting the data-set accordingly before to estimate the direction of a fly-by depending on the tide: toward the mudflat of Fullerton cove if the fly-by is detected during a falling tide, and inversly if detected during a rising tide.
+
+```{r flyby set, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 flyby_visits <- fc_visits %>% filter(visit_type == "flyby")
 
 all_visits_dt   <- as.data.table(visit_duration)
@@ -119,160 +123,232 @@ other_visits_dt <- all_visits_dt[recvDeployName != focal_station]
 flyby_dt        <- as.data.table(flyby_visits)
 ```
 
-**BEFORE match** - closest other-station visit that ended within `flyby_window_min` minutes *before* the flyby started.
+```{r classification: infer, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
-```{r fc before match, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-before_cand <- other_visits_dt[flyby_dt,
-                               on = "Band.ID",
-                               allow.cartesian = TRUE,
-                               .(Band.ID, visitID = i.visitID,
-                                 fc_start = i.visitStart,
-                                 other_station = x.recvDeployName,
-                                 other_end = x.visitEnd)]
-
-before_cand <- before_cand[!is.na(other_end) &
-                             other_end <= fc_start &
-                             as.numeric(difftime(fc_start, other_end, units = "mins")) <= flyby_window_min]
-
-# Keep only the closest (most recent) match per flyby event
-before_flag <- before_cand[order(Band.ID, visitID, -as.numeric(other_end))][
-  , .SD[1], by = .(Band.ID, visitID)][
-  , .(Band.ID, visitID, before_station = other_station, before_end = other_end)]
-```
-
-**AFTER match** - closest other-station visit that started within `flyby_window_min` minutes *after* the flyby ended (mirror image of the BEFORE match above).
-
-```{r fc after match, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-after_cand <- other_visits_dt[flyby_dt,
-                              on = "Band.ID",
-                              allow.cartesian = TRUE,
-                              .(Band.ID, visitID = i.visitID,
-                                fc_end = i.visitEnd,
-                                other_station = x.recvDeployName,
-                                other_start = x.visitStart)]
-
-after_cand <- after_cand[!is.na(other_start) &
-                           other_start >= fc_end &
-                           as.numeric(difftime(other_start, fc_end, units = "mins")) <= flyby_window_min]
-
-# Keep only the closest (earliest) match per flyby event
-after_flag <- after_cand[order(Band.ID, visitID, as.numeric(other_start))][
-  , .SD[1], by = .(Band.ID, visitID)][
-  , .(Band.ID, visitID, after_station = other_station, after_start = other_start)]
-```
-
-**Classify direction** from the presence/absence of a BEFORE and/or AFTER match.
-
-```{r fc direction, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-flyby_direction <- flyby_visits %>%
-  left_join(as.data.frame(before_flag), by = c("Band.ID", "visitID")) %>%
-  left_join(as.data.frame(after_flag),  by = c("Band.ID", "visitID")) %>%
-  mutate(
-    has_before = !is.na(before_end),
-    has_after  = !is.na(after_start),
-    direction = case_when(
-      has_before & has_after  ~ "return_flight",
-      has_before & !has_after ~ "to_mudflat",
-      !has_before & has_after ~ "from_mudflat",
-      TRUE                    ~ "unknown"))
-```
-
-### Resolving the "unknown" flybys with tide state
-
-For flybys with no other-station match on either side, direction cannot be resolved from detections alone. As a fallback, we look at the tide state around the flyby: if the tide is rising toward High in the following hours, the bird is more likely heading *from* the mudflat (leaving as it floods); if it is falling toward Low, the bird is more likely heading *to* the mudflat (arriving as it drains).
-
-```{r fc tide setup, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-tide_dt <- as.data.table(tide_data)[, .(tideDateTimeAus, tideCategory)]
-setkey(tide_dt, tideDateTimeAus)
-
-infer_tide_direction <- function(start_time, lookahead_h = tide_lookahead_h) {
-  hrs    <- seq(from = start_time, by = "hour", length.out = lookahead_h + 1)
-  hrs_dt <- data.table(hour_dt = hrs)
-  matched <- tide_dt[hrs_dt, on = .(tideDateTimeAus = hour_dt), roll = "nearest"]
-  n_high <- sum(grepl("High", matched$tideCategory))
-  n_low  <- sum(grepl("Low",  matched$tideCategory))
-  if (n_high > n_low) return("from_mudflat_tide")
-  if (n_low > n_high) return("to_mudflat_tide")
-  "ambiguous_tide"
-}
-
-unknown_flyby <- flyby_direction %>%
-  filter(direction == "unknown") %>%
+flyby_dt <- flyby_dt %>%
+  
   rowwise() %>%
-  mutate(inferred_direction = infer_tide_direction(visitStart)) %>%
-  ungroup()
-
-flyby_direction <- flyby_direction %>%
-  left_join(unknown_flyby %>% select(Band.ID, visitID, inferred_direction),
-            by = c("Band.ID", "visitID")) %>%
-  mutate(direction_final = if_else(direction == "unknown" & !is.na(inferred_direction),
-                                    inferred_direction, direction))
-```
-
-```{r fc unknown flyby plot, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-unknown_flyby %>%
-  mutate(hour_of_day = hour(visitStart) + minute(visitStart) / 60) %>%
-  ggplot(aes(x = hour_of_day, fill = inferred_direction)) +
-  geom_histogram(binwidth = 1, color = "white", boundary = 0) +
-  scale_x_continuous(breaks = seq(0, 24, 2)) +
-  labs(x = "Hour of day (local)", y = "Count",
-       fill = "Tide-inferred direction",
-       title = "Tide-inferred direction of unresolved flybys, by time of day") +
-  theme_minimal(base_size = 13)
-```
-
-We simplify `direction_final` into a broader `direction_class` (from / to / return / other) for plotting.
-
-```{r fc direction class, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-flyby_direction <- flyby_direction %>%
+  
   mutate(
-    direction_class = case_when(
-      direction_final %in% c("from_mudflat", "from_mudflat_tide") ~ "from",
-      direction_final %in% c("to_mudflat", "to_mudflat_tide")     ~ "to",
-      direction_final == "return_flight"                          ~ "return",
-      TRUE                                                        ~ "other"),
-    direction_class = factor(direction_class, levels = c("from", "to", "return", "other")))
+    next_tide = list(
+      tide_data %>%
+        filter(tideDateTimeAus >= visitStart,
+               tideDateTimeAus <= visitStart + lubridate::hours(10)) %>%
+        slice_min(tideDateTimeAus, n = 1)), # takes the next tide peak from NSW forecast
+    
+    nearestNextDiel = next_tide$day_night[1],
+    nearestNextTide = next_tide$high_low[1]) %>%
+  
+  ungroup() %>%
+  select(-next_tide) %>%
+  
+  mutate(
+    direction = case_when(
+      nearestNextTide == "High" ~ "From mudflat (rising tide)",
+      nearestNextTide == "Low"  ~ "To mudflat (falling tide)",
+      TRUE ~ NA_character_ ))
+
+
+barplot(table(flyby_dt$direction, useNA = "ifany"),
+        main = "Inferred flyby direction based on next tide",
+        ylab = "Count of flybys")
+
 ```
 
-```{r fc direction class plot, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-ggplot(flyby_direction, aes(x = direction_class, fill = direction_class)) +
-  geom_bar() +
-  facet_wrap(~ speciesEN) +
-  labs(x = "Direction class", y = "Number of flyby events",
-       title = paste("Direction of flyby detections at", focal_station)) +
-  theme_minimal(base_size = 13) +
-  theme(legend.position = "none",
-        axis.text.x = element_text(angle = 30, hjust = 1),
-        strip.text = element_text(face = "bold"))
+For each fly-by detected at Fullerton Entrance, we then look for a **confirming detection at another Motus station**: if the tide was rising, we check for the *closest following* detection after Fullerton Entrance; if the tide was falling, we check for the *closest preceding* detection before Fullerton Entrance.
+
+```{r classification: verified, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+
+flyby_dt <- flyby_dt %>%
+  
+  rowwise() %>%
+  
+  mutate(
+    .band    = Band.ID,
+    .start   = visitStart,
+    .station = recvDeployName,
+    
+    other_visit = list(
+      if (!is.na(direction) && direction == "From mudflat (rising tide)") {
+        all_visits_dt %>%
+          filter(Band.ID == .band,
+                 recvDeployName != .station,
+                 visitStart >= .start) %>%
+          slice_min(visitStart, n = 1)
+      } else if (!is.na(direction) && direction == "To mudflat (falling tide)") {
+        all_visits_dt %>%
+          filter(Band.ID == .band,
+                 recvDeployName != .station,
+                 visitStart <= .start) %>%
+          slice_max(visitStart, n = 1)
+      } else {
+        all_visits_dt %>% filter(FALSE)
+      }
+    ),
+    side_detection = other_visit$recvDeployName[1],
+    delay = as.numeric(abs(difftime(.start, other_visit$visitStart[1], units = "mins")))
+  ) %>%
+  ungroup() %>%
+  select(-other_visit, -.band, -.start, -.station)
+
 ```
 
-## Step 3 - Combine flyby and site-use classifications
+We then look at the **distribution of the delay** between a detectiona at Fullerton entrance and another Motus station, in order to identify a temporal window we can use as a cut-off for concluding that *"the bird flew continuously between the fly-by detection at Fullerton Entrance and the next detection at another Motus station"* (or, in the reverse case, between a detection at another station and the fly-by at Fullerton entrance during a falling tide).
 
-We now bring `visit_type` (flyby / actual_use) and `direction_final` back together into a single table covering **all** Fullerton Entrance visits, so that "site use" sits alongside the flyby directions as one classification.
+We first filter out any extreme tail in the data, then visualise the distribution to estimate how many underlying components it contains.
 
-```{r fc classified, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+```{r delay tail, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+flyby_dt %>%
+  arrange(desc(delay)) %>%
+  select(Band.ID, visitStart, direction, side_detection, delay) %>%
+  head(20) %>%
+  DT::datatable()
+```
+
+```{r filter and plot, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+flyby_dt_trimmed  <- flyby_dt %>% 
+  filter(flyby_dt$delay < 4000)
+
+hist(flyby_dt_trimmed$delay,
+     breaks = 50,
+     main  = "Delay to (or period before) nearest next site detection",
+     xlab  = "Delay (minutes)")
+```
+
+**Visually,** we can estimate that the overall temporal window for continuous flights between the Fullerton entrance and another Motus station is about 10 minutes. However, we can fit an N-mixture model to confirm this.
+
+```{r extract cutpoint delay, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+
+delay_vals <- na.omit(flyby_dt_trimmed$delay)
+set.seed(1)  # EM is stochastic in its starting values
+mix <- normalmixEM(delay_vals, 
+                   k = 2)
+plot(mix, which = 2)
+
+# order components so mu1 < mu2 (short-delay vs long-delay cluster)
+ord    <- order(mix$mu)
+mu     <- mix$mu[ord]
+sigma  <- mix$sigma[ord]
+lambda <- mix$lambda[ord]
+
+# find where the two weighted densities cross, between the two means
+f <- function(x) lambda[1]*dnorm(x, mu[1], sigma[1]) - lambda[2]*dnorm(x, mu[2], sigma[2])
+flyby_window_min <- uniroot(f, lower = mu[1], upper = mu[2])$root
+flyby_window_min
+
+```
+
+With a statistically determined **threshold**, any delay between a detection at the Fullerton entrance and a another Motus station that is shorter than `r flyby_window_min` ​ minutes will be treated as a *verified* flight direction for the bird. Beyond this value, a continuous flight is not considered realistic, and detections at other Motus stations cannot be trusted to infer the bird’s flight direction. See below for the distribution of these results.
+
+```{r fc flyby set, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+flyby_dt <- flyby_dt %>%
+  mutate(retained_cut = case_when(
+    # is.na(delay)                    ~ "inferred_only",
+    delay <= flyby_window_min       ~ "Verified by another Motus station detection",
+    TRUE                            ~ "Inferred only from tide data"))
+```
+
+```{r plot directions, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+bp_data <- t(table(flyby_dt$direction, flyby_dt$retained_cut))
+
+bp <- barplot(bp_data,
+              beside = TRUE,
+              legend.text = FALSE,
+              main = paste0("Direction by confirmation \nwith another detection before ",
+                             round(flyby_window_min, 1), " min (cutpoint)"),
+              ylab = "Count of flybys")
+
+legend("bottom",
+       inset = c(0, -0.37),
+       legend = rownames(bp_data),
+       fill = gray.colors(nrow(bp_data)),
+       xpd = TRUE,
+       bty = "n")
+
+```
+
+Looking through the time of the detection for each fly-by, we have been curious to look at the temporal distribution of the fly-by depending the directions to see whether it was tide dependent only or also relying on the time of the day. See below.
+
+```{r hours distribution, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+
+flyby_dt %>%
+  
+  mutate(hour_bin = hour(visitStart)) %>%
+  count(hour_bin, direction, retained_cut) %>%
+  
+  ggplot(aes(x = hour_bin, y = n, fill = direction, pattern = retained_cut)) +
+  
+  geom_col_pattern(
+    width = 0.9, color = "black", linewidth = 0.3,
+    pattern_fill = "white", pattern_colour = "black",
+    pattern_density = 0.05, pattern_spacing = 0.02, pattern_angle = 45) +
+  
+  scale_fill_manual(
+    values = c("From mudflat (rising tide)" = "white",
+               "To mudflat (falling tide)"  = "grey70"),
+    name = "Direction of the flyby",
+    guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
+  
+  scale_pattern_manual(
+    values = c("Verified by another Motus station detection" = "stripe",
+               "Inferred only from tide data" = "none"),
+    name = "Classification",
+    guide = guide_legend(override.aes = list(fill = "white", pattern_fill = "white"), order = 2)) +
+  
+  scale_x_continuous(breaks = seq(0, 24, 2), expand = expansion(mult = c(0.01, 0.01))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  
+  labs(
+    x = "Hour of day",
+    y = "Count of flybys",
+    title = "Flyby detections at Fullerton Cove",
+    subtitle = "Direction inferred from rising/falling tide, sometimes verified by a\npreceding or following detection at another Motus station") +
+  
+  theme_minimal(base_size = 15) +
+  
+  theme(
+    plot.title = element_text(face = "bold", size = 15, margin = margin(b = 4)),
+    plot.subtitle = element_text(color = "grey30", size = 11, margin = margin(b = 12)),
+    axis.title = element_text(face = "bold", size = 12),
+    axis.text = element_text(color = "grey20"),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    legend.position = "bottom",
+    legend.box = "vertical",
+    legend.title = element_text(face = "bold", size = 11),
+    legend.text = element_text(size = 10),
+    legend.margin = margin(t = 8),
+    plot.margin = margin(10, 15, 10, 10))
+```
+
+## Fly-by & Site-use
+
+We now bring `visit_type` (fly-by / actual site use) and the direction back together into a single table covering **all** Fullerton entrance visits, so that "Site use" sits alongside the flyby directions as one classification.
+
+```{r fc classified, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 fc_classified <- fc_visits %>%
   left_join(
-    flyby_direction %>%
-      select(Band.ID, visitID, direction, direction_final),
-    by = c("Band.ID", "visitID")) %>%
-  mutate(direction_final = if_else(visit_type == "actual_use", "site_use", direction_final))
+    flyby_dt %>%
+      select(Band.ID, visitID, direction, side_detection, delay, retained_cut),
+    by = c("Band.ID", "visitID")) 
 ```
 
-::: blockquote-blue
-**Summary of every classified event at Fullerton Entrance** - actual site use plus each flyby-direction category, with the number of events, number of individual birds, and median duration for each.
-:::
+**Summary of every classified event at Fullerton Entrance** - Actual site use plus each fly-by direction categories, with the number, proportion of events, number of individual birds, mean and median duration for each.
 
-```{r fc summary table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'asis'}
+```{r fc summary table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 fc_classified %>%
-  mutate(direction_final = replace_na(direction_final, "NA")) %>%
-  group_by(visit_type, direction_final) %>%
+  mutate(
+    direction    = replace_na(direction, "-"),
+    retained_cut = replace_na(retained_cut, "-")) %>%
+  group_by(visit_type, direction, retained_cut) %>%
   summarise(
-    n_events           = n(),
-    n_birds            = n_distinct(Band.ID),
-    median_duration_h  = round(median(duration_h), 2),
+    n_events             = n(),
+    n_birds              = n_distinct(Band.ID),
+    median_duration_min  = round(median(duration_h*60), 0),
+    mean_duration_min    = round(mean(duration_h*60), 0),
     .groups = "drop") %>%
-  arrange(visit_type, direction_final) %>%
+  mutate(perc_event      = round(100 * n_events / sum(n_events), 1)) %>%
+  arrange(visit_type, direction, retained_cut) %>%
   gt() %>%
   tab_header(title = paste("Summary -", focal_station)) %>%
   opt_align_table_header(align = "left") %>%
@@ -280,8 +356,9 @@ fc_classified %>%
 ```
 
 ```{r fc events by species plot, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
-ggplot(fc_classified %>% mutate(direction_final = replace_na(direction_final, "NA")),
-       aes(x = direction_final, fill = direction_final)) +
+ggplot(fc_classified
+       %>% mutate(direction = replace_na(direction, "Actual site use")), ## Be careful and know your data here
+       aes(x = direction, fill = direction)) +
   geom_bar() +
   facet_wrap(~ speciesEN) +
   labs(x = "Direction", y = "Number of events",
@@ -292,12 +369,14 @@ ggplot(fc_classified %>% mutate(direction_final = replace_na(direction_final, "N
         strip.text = element_text(face = "bold"))
 ```
 
-## Step 4 - Estimate hours spent at the mudflat vs at Fullerton Entrance
+## Rate of use
 
-For `site_use` events, the duration a bird spent at Fullerton Entrance is simply `duration_h` of the visit itself. For `to_mudflat`/`from_mudflat` flybys there is no direct duration - instead we use the surrounding **tide turning point** as a proxy boundary for how long the bird likely remained on the mudflat:
+For actual site use events, the duration a bird spent at Fullerton Entrance is simply `duration_h` of the visit itself.
 
--   `to_mudflat` - from the moment the bird was last seen (`visitEnd`) forward to the *next* tide turning point (i.e. the remainder of the current tide phase).
--   `from_mudflat` - from the *previous* tide turning point back to the moment the bird was detected (`visitStart`) (i.e. how long the current tide phase had already run before the bird arrived).
+For fly-bys there is no direct duration - instead we use the surrounding **tide turning point** as a proxy boundary for how long the bird likely remained on the mudflat:
+
+-   **To mudflat (falling tide)** - from the moment the bird was detected (`visitEnd`) to the *next* tide turning point (i.e. the remainder of the current tide phase).
+-   **From mudflat (rising tide)** - from the *previous* tide turning point back to the moment the bird was detected (`visitStart`) (i.e. how long the current tide phase had already run before the bird arrived for detection).
 
 ```{r fc tide helpers, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 # Nearest tide turning point before / after a given timestamp
@@ -326,24 +405,27 @@ dominant_tide <- function(w_start, w_end) {
 }
 ```
 
-**Build the per-visit duration/tide table**, keeping only `site_use` and mudflat-direction events (return flights and unresolved flybys are excluded, since we cannot bound a mudflat window for them).
+**Build the per-visit duration/tide table**.
 
 ```{r fc plot data, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-plot_data <- fc_classified %>%
-  filter(direction_final %in% c("site_use", "to_mudflat", "to_mudflat_tide",
-                                "from_mudflat", "from_mudflat_tide")) %>%
+plot_data <- fc_classified %>% 
+  mutate(direction = replace_na(direction, "Actual site use")) %>% ## Be careful and know your data here
+  
+  filter(direction %in% c("Actual site use", 
+                          "To mudflat (falling tide)",
+                          "From mudflat (rising tide)")) %>%
   rowwise() %>%
   mutate(
-    category = if_else(direction_final == "site_use",
+    category = if_else(direction == "Actual site use",
                        "Fullerton entrance", "Fullerton mudflat"),
     win_start = case_when(
-      direction_final == "site_use" ~ visitStart,
-      direction_final %in% c("to_mudflat", "to_mudflat_tide")   ~ visitEnd,
-      direction_final %in% c("from_mudflat", "from_mudflat_tide") ~ prev_tide_turn(visitStart)),
+      direction == "Actual site use"                    ~ visitStart,
+      direction == "To mudflat (falling tide)"    ~ visitEnd,
+      direction == "From mudflat (rising tide)"   ~ prev_tide_turn(visitStart)),
     win_end = case_when(
-      direction_final == "site_use" ~ visitEnd,
-      direction_final %in% c("to_mudflat", "to_mudflat_tide")   ~ next_tide_turn(visitEnd),
-      direction_final %in% c("from_mudflat", "from_mudflat_tide") ~ visitStart),
+      direction == "Actual site use"                    ~ visitEnd,
+      direction == "To mudflat (falling tide)"    ~ next_tide_turn(visitEnd),
+      direction == "From mudflat (rising tide)"   ~ visitStart),
     duration_h_final = as.numeric(difftime(win_end, win_start, units = "hours")),
     tideCategory_dom  = dominant_tide(win_start, win_end),
     tideDiel = if_else(grepl("Diurnal", tideCategory_dom), "Diurnal", "Nocturnal")
@@ -351,8 +433,6 @@ plot_data <- fc_classified %>%
   ungroup() %>%
   filter(!is.na(duration_h_final), duration_h_final > 0)
 ```
-
-### Rate of use, referenced to Fullerton Entrance availability
 
 Because "Fullerton mudflat" is an *inferred* location rather than a real receiver, both categories are expressed as a rate against the same denominator: the hours Fullerton Entrance was available (station on + bird tagged and alive), per bird and per diel period. This comes from `available_bird_recv_time`, computed in the previous chapter.
 
@@ -392,4 +472,78 @@ ggplot(plot_summary, aes(x = category, y = rate_use, fill = tideDiel)) +
   theme_minimal() +
   scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+ggplot(plot_summary, aes(x = category, y = rate_use, fill = tideDiel)) +
+  geom_violin(outlier.shape = NA,
+              trim = TRUE,
+              position = position_dodge(width = 0.8, preserve = "single"),
+              alpha = 0.7) +
+  geom_point(aes(shape = tideDiel),
+             position = position_dodge(width = 0.8),
+             alpha = 1, size = 1.5,
+             show.legend = FALSE) +
+  scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
+  facet_wrap(~ speciesEN) +
+  labs(x = "Location", y = "Rate of Use (%)", fill = "Tide period",
+       title = "Rate of use at Fullerton Entrance vs Mudflat") +
+  coord_cartesian(ylim = c(0, 100)) +
+  theme_minimal() +
+  scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+::: {.callout-tip collapse="true" title="See Rate of Use statistics into this table"}
+```{r 4 flyby rate use table, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+# General function to provide one table with stats values
+make_summary_table <- function() {
+  summary_table <- plot_summary %>%
+    group_by(speciesEN, category, tideDiel) %>%
+    summarise(
+      n_individual = n_distinct(Band.ID),
+      min    = round(min(rate_use, na.rm = TRUE), 1),
+      q1     = round(quantile(rate_use, 0.25, na.rm = TRUE), 1),
+      median = round(median(rate_use, na.rm = TRUE), 1),
+      q3     = round(quantile(rate_use, 0.75, na.rm = TRUE), 1),
+      max    = round(max(rate_use, na.rm = TRUE), 1),
+      mean   = round(mean(rate_use, na.rm = TRUE), 1),
+      sd     = round(sd(rate_use, na.rm = TRUE), 1),
+      .groups = 'drop'
+    ) %>%
+    arrange(speciesEN, category, tideDiel) %>%
+    rename(Species = "speciesEN", Location = "category", Condition = "tideDiel")
+  
+  return(summary_table)
+}
+
+# Single table, all species
+rate_use_summary <- make_summary_table()
+
+rate_use_summary %>%
+  gt() %>%
+  tab_header(title = "Statistics - Rate of Use") %>%
+  opt_align_table_header(align = "left") %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(style = "italic"),
+    locations = cells_body(columns = c(Species))) %>%
+  tab_style(
+    style = cell_borders(
+      sides = "top",
+      color = "grey40",
+      weight = px(5)),
+    locations = cells_body(
+      rows = which(!duplicated(rate_use_summary$Species))[-1]))
+```
+:::
+
+::: {.callout-tip collapse="true" title="See raw data into this table"}
+```{r table of plot summary, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+plot_summary %>%
+  DT::datatable()
+
+```
+:::

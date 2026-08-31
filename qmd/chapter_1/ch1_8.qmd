@@ -71,6 +71,8 @@ data_all <- data_all %>%
            toupper())
 ```
 
+# Inferring behaviour
+
 Here, we take the relative **signal strength value** `sigPositive` (a [*derivative*](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables) of the raw values `sig`) to calculate the **Standard Deviation (SD)** (`sig_indiv_tideCat_sd`) for each individual and per tide category. This will inform us about signal strength variation for each individual depending particular conditions (tide category \* day/night \* sites).
 
 Then, we group the SD per species and per site to observe how the variation of the signal strength varies.
@@ -117,3 +119,33 @@ for (species_init in names(plots_list)) {
 :::
 
 **Legend**: The average value of the *signal strength* has been calculated for each individual, so you can see its distribution (boxes on vertical axis) depending the tide condition (horizontal axis) and for each species (tabs).
+
+## Inferring distance (OBP method)
+
+Both the antenna location and the centre of its range are coarse-scale localisations of tag position. An extension of this method is to further account for shifts in location estimates by modelling the relationship between distance from the mast and RSSI values using the density distribution of RSSI values. If we assume 1) a circular radiation pattern with constant detection probability inside the theoretical range of the antenna (\~0.5 km for omni and \~ 3km for 3-Yagi and H-antenna?) and decreasing detection probability at distances beyond the theoretical range; and 2) that birds (detections) were randomly distributed throughout the possible detectability space of the antenna, then we would predict RSSI values to be positively skewed and have a modal value corresponding to detections at the perimeter of the nominal range (being the RSSI isopleth with the greatest surface area and constant detection probability). Not capable of estimating a clear relation between distance and RSSI values, as radio wave ranges varies a lot depending landscape and weather, we simply can assume the higher the RSSI value is the closer the bird is.
+
+::: {style="display: flex; align-items: center; justify-content: center; min-height: 60vh;"}
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;">
+
+<img src="../../material/rssi_obp_schema.png" alt="Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)" style="width: 100%; height: auto; display: block;"/>
+
+<figcaption style="margin-top: 1em; font-style: italic;">
+
+Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth \~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)
+
+</figcaption>
+
+</figure>
+:::
+
+The distribution of RSSI for our data is shown below (e.g., RSSI \~70/100/\>140 indicates the bird is likely in the far/medium/close range of the antenna's detection capability).
+
+```{r rssi, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = TRUE}
+
+ggplot(data_all, aes(x = sigPositive, y = speciesEN, fill = speciesEN)) +
+  ggridges::geom_density_ridges(alpha = 0.7, na.rm = TRUE) +
+  facet_wrap(~ recvDeployName) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```

@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-08-31">
+<meta name="dcterms.date" content="2026-09-01">
 
 <title>Site use - hours (OBP method) – Home</title>
 <style>
@@ -504,8 +504,7 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#relative-signal-strength-indicator-rssi" id="toc-relative-signal-strength-indicator-rssi" class="nav-link active" data-scroll-target="#relative-signal-strength-indicator-rssi">Relative Signal Strength Indicator (RSSI)</a></li>
-  <li><a href="#site-use-adjusted-for-detection-gap-threshold" id="toc-site-use-adjusted-for-detection-gap-threshold" class="nav-link" data-scroll-target="#site-use-adjusted-for-detection-gap-threshold">Site use adjusted for detection gap threshold</a>
+  <li><a href="#site-use-adjusted-for-detection-gap-threshold" id="toc-site-use-adjusted-for-detection-gap-threshold" class="nav-link active" data-scroll-target="#site-use-adjusted-for-detection-gap-threshold">Site use adjusted for detection gap threshold</a>
   <ul class="collapse">
   <li><a href="#detection-threshold" id="toc-detection-threshold" class="nav-link" data-scroll-target="#detection-threshold">Detection threshold</a></li>
   <li><a href="#define-used-time-hours" id="toc-define-used-time-hours" class="nav-link" data-scroll-target="#define-used-time-hours">Define used time (hours)</a></li>
@@ -534,7 +533,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-08-31</p>
+      <p class="date">2026-09-01</p>
     </div>
   </div>
   
@@ -585,28 +584,6 @@ window.Quarto = {
 <div class="blockquote-yellow">
 <p><strong>Note</strong>: As Fullerton Entrance is particular (single directional antenna), we will treat this case particularly and separately (see <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_13.html">Fullerton Entrance (Fly-by vs Site Use)</a>).</p>
 </div>
-<section id="relative-signal-strength-indicator-rssi" class="level2">
-<h2 class="anchored" data-anchor-id="relative-signal-strength-indicator-rssi">Relative Signal Strength Indicator (RSSI)</h2>
-<p>Both the antenna location and the centre of its range are coarse-scale localisations of tag position. An extension of this method is to further account for shifts in location estimates by modelling the relationship between distance from the mast and RSSI values using the density distribution of RSSI values. If we assume 1) a circular radiation pattern with constant detection probability inside the theoretical range of the antenna (~0.5 km for omni and ~ 3km for 3-Yagi and H-antenna?) and decreasing detection probability at distances beyond the theoretical range; and 2) that birds (detections) were randomly distributed throughout the possible detectability space of the antenna, then we would predict RSSI values to be positively skewed and have a modal value corresponding to detections at the perimeter of the nominal range (being the RSSI isopleth with the greatest surface area and constant detection probability). Not capable of estimating a clear relation between distance and RSSI values, as radio wave ranges varies a lot depending landscape and weather, we simply can assume the higher the RSSI value is the closer the bird is.</p>
-<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
-<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
-<p><img src="../../material/rssi_obp_schema.png" alt="Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
-<figcaption style="margin-top: 1em; font-style: italic;">
-<p>Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). <a href="https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf">(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)</a></p>
-</figcaption>
-</figure>
-</div>
-<p>The distribution of RSSI for our data is shown below (e.g., RSSI ~70/100/&gt;140 indicates the bird is likely in the far/medium/close range of the antenna’s detection capability).</p>
-<div class="cell">
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="ch1_12_files/figure-html/rssi-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
 <section id="site-use-adjusted-for-detection-gap-threshold" class="level2">
 <h2 class="anchored" data-anchor-id="site-use-adjusted-for-detection-gap-threshold">Site use adjusted for detection gap threshold</h2>
 <section id="detection-threshold" class="level3">
@@ -995,7 +972,7 @@ Nocturna</td>
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Low Tide</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
-<p><img src="ch1_12_files/figure-html/4 Used rate 1-1.png" class="img-fluid" width="672"></p>
+<p><img src="ch1_12_files/figure-html/4 Used rate 1-1.png" class="img-fluid" width="672"><img src="ch1_12_files/figure-html/4 Used rate 1-2.png" class="img-fluid" width="672"></p>
 <div class="callout callout-style-default callout-tip callout-titled" title="High Tide Resident birds">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1734,7 +1711,7 @@ High Tide Resident birds
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<p><img src="ch1_12_files/figure-html/4 Used rate 2-1.png" class="img-fluid" width="672"></p>
+<p><img src="ch1_12_files/figure-html/4 Used rate 2-1.png" class="img-fluid" width="672"><img src="ch1_12_files/figure-html/4 Used rate 2-2.png" class="img-fluid" width="672"></p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Low Tide Resident birds">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -2455,7 +2432,7 @@ Low Tide Resident birds
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">High Tide</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Low Tide</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
-<p><img src="ch1_12_files/figure-html/4 Used rate 3-1.png" class="img-fluid" width="672"></p>
+<p><img src="ch1_12_files/figure-html/4 Used rate 3-1.png" class="img-fluid" width="672"><img src="ch1_12_files/figure-html/4 Used rate 3-2.png" class="img-fluid" width="672"></p>
 <div class="callout callout-style-default callout-tip callout-titled" title="High Tide Migratory birds">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -3467,7 +3444,7 @@ High Tide Migratory birds
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
-<p><img src="ch1_12_files/figure-html/4 Used rate 4-1.png" class="img-fluid" width="672"></p>
+<p><img src="ch1_12_files/figure-html/4 Used rate 4-1.png" class="img-fluid" width="672"><img src="ch1_12_files/figure-html/4 Used rate 4-2.png" class="img-fluid" width="672"></p>
 <div class="callout callout-style-default callout-tip callout-titled" title="Low Tide Migratory birds">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">

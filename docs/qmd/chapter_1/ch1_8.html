@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-08-19">
+<meta name="dcterms.date" content="2026-09-01">
 
 <title>Signal strength – Home</title>
 <style>
@@ -450,8 +450,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#inferring-behaviour" id="toc-inferring-behaviour" class="nav-link active" data-scroll-target="#inferring-behaviour">Inferring behaviour</a>
+  <ul class="collapse">
+  <li><a href="#inferring-distance-obp-method" id="toc-inferring-distance-obp-method" class="nav-link" data-scroll-target="#inferring-distance-obp-method">Inferring distance (OBP method)</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -469,7 +478,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-08-19</p>
+      <p class="date">2026-09-01</p>
     </div>
   </div>
   
@@ -524,6 +533,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>           <span class="fu">map_chr</span>(<span class="sc">~</span> <span class="fu">str_c</span>(<span class="fu">str_sub</span>(.x, <span class="dv">1</span>, <span class="dv">1</span>), <span class="at">collapse =</span> <span class="st">""</span>)) <span class="sc">%&gt;%</span>    </span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>           <span class="fu">toupper</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="inferring-behaviour" class="level1">
+<h1>Inferring behaviour</h1>
 <p>Here, we take the relative <strong>signal strength value</strong> <code>sigPositive</code> (a <a href="https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_1.html#add-key-variables"><em>derivative</em></a> of the raw values <code>sig</code>) to calculate the <strong>Standard Deviation (SD)</strong> (<code>sig_indiv_tideCat_sd</code>) for each individual and per tide category. This will inform us about signal strength variation for each individual depending particular conditions (tide category * day/night * sites).</p>
 <p>Then, we group the SD per species and per site to observe how the variation of the signal strength varies.</p>
 <p>Then, we can create a list which plots the distribution of the average <em>signal strength</em> <em>SD variation</em> across species.</p>
@@ -580,8 +591,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><strong>Legend</strong>: The average value of the <em>signal strength</em> has been calculated for each individual, so you can see its distribution (boxes on vertical axis) depending the tide condition (horizontal axis) and for each species (tabs).</p>
+<section id="inferring-distance-obp-method" class="level2">
+<h2 class="anchored" data-anchor-id="inferring-distance-obp-method">Inferring distance (OBP method)</h2>
+<p>Both the antenna location and the centre of its range are coarse-scale localisations of tag position. An extension of this method is to further account for shifts in location estimates by modelling the relationship between distance from the mast and RSSI values using the density distribution of RSSI values. If we assume 1) a circular radiation pattern with constant detection probability inside the theoretical range of the antenna (~0.5 km for omni and ~ 3km for 3-Yagi and H-antenna?) and decreasing detection probability at distances beyond the theoretical range; and 2) that birds (detections) were randomly distributed throughout the possible detectability space of the antenna, then we would predict RSSI values to be positively skewed and have a modal value corresponding to detections at the perimeter of the nominal range (being the RSSI isopleth with the greatest surface area and constant detection probability). Not capable of estimating a clear relation between distance and RSSI values, as radio wave ranges varies a lot depending landscape and weather, we simply can assume the higher the RSSI value is the closer the bird is.</p>
+<div style="display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+<figure style="text-align: center; max-width: 950px; width: 90%; margin: 0 auto;" class="figure">
+<p><img src="../../material/rssi_obp_schema.png" alt="Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). [(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)](https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf)" style="width: 100%; height: auto; display: block;" class="figure-img"></p>
+<figcaption style="margin-top: 1em; font-style: italic;">
+<p>Schema 1: Assuming (i) a 5km range and circular radiation pattern with RSSI diminishing with distance; and (ii) a constant detection probability within the range and diminishing detection probability outside this range; then the density distribution of RSSI values would be positively skewed with modal RSSI values associated with transmitters that were detected on the perimeter of the radiation pattern (being the RSSI isopleth ~70 with the largest surface area and constant detection probability) (iii). <a href="https://nre.tas.gov.au/Documents/Orange-bellied%20Parrot%20Telemetry%20-%20Migration%20Tracking%20-%202024%20-%20VHF%20Data%20Processing%20Protocols.pdf">(Orange-bellied Parrot Migration Tracking, VHF DATA PROCESSING PROTOCOLS 2024, Department of Natural Resources and Environment Tasmania)</a></p>
+</figcaption>
+</figure>
+</div>
+<p>The distribution of RSSI for our data is shown below (e.g., RSSI ~70/100/&gt;140 indicates the bird is likely in the far/medium/close range of the antenna’s detection capability).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="ch1_8_files/figure-html/rssi-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <div style="text-align: center; margin-top: 3rem; padding: 1rem; border-top: 1px solid #e0e0e0; color: #7f8c8d; font-size: 0.9rem;">
