@@ -699,7 +699,8 @@ ggplot(plot_data_full, aes(x = speciesEN, y = mean_rate_use, fill = tideDiel)) +
   scale_fill_manual(values = c("Nocturnal" = "#2C3E50",
                                 "Diurnal" = "#F4A300",
                                 "Undetected" = "#B0B0B0"),
-                     breaks = c("Nocturnal", "Diurnal", "Undetected")) +
+                    name = "Period",
+                    breaks = c("Nocturnal", "Diurnal", "Undetected")) +
   labs(x = "Species", y = "Use rate (%)",
        title = "Use rate by species") +
   theme_minimal(base_size = 13) +
@@ -727,7 +728,8 @@ ggplot() +
              size = 1.2, alpha = 0.4, color = "black") +
   scale_fill_manual(values = c("Nocturnal" = "#2C3E50",
                                 "Diurnal" = "#F4A300",
-                                "Undetected" = "#B0B0B0")) +
+                                "Undetected" = "#B0B0B0"),
+                    name = "Period") +
   labs(x = "Species", y = "Use rate (%)",
        title = "Use rate by species",
        subtitle = "Bars = mean ± SE, points = individual birds") +
