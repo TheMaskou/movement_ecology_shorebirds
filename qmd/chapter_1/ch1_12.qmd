@@ -72,7 +72,7 @@ recv.act <- tbl(sql.motus, "activity")  %>%
                              tz = "Australia/Sydney")) 
 
 # Tide
-tide_data <- readRDS(here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
+tide_data <- readRDS(here::here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
 
 ```
 
@@ -184,7 +184,7 @@ gap_trunc <- gaps %>%
 set.seed(123)  # for reproducibility of EM starting values
 
 mix_model <- normalmixEM(
-  gap_trunc,
+  log(gap_trunc +1),         # +1 to avoid log(0), and log() used to compress/scale duration distributions and tails (i.e., lot of short vs few long)
   k = 3,
   maxit = 5000,
   epsilon = 1e-08)
@@ -430,7 +430,7 @@ recv_hours$recvDeployName <- sub("_SG-.*", "", recv_hours$SernoStation)
 
 <br>
 
-We now how the complete temporal coverage, expanded in hours and for each Motus station so it matches with our used time dataset.
+We now have the complete temporal coverage, expanded in hours and for each Motus station so it matches with our used time dataset.
 
 However, due to some temporary failures or maintenance *(see [Survey effort \> Operational periods](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_5.html#operational-periods))*, the actual period a station was operational may be different than the complete temporal coverage. So, we must determine when a station was not operational and substrate these off-hours to the complete temporal coverage.
 
