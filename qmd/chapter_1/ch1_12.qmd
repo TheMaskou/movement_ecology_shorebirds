@@ -115,7 +115,7 @@ gaps <- runs %>%
   arrange(Band.ID, recvDeployName, runStart) %>%
   group_by(Band.ID, recvDeployName) %>%
   mutate(
-    prevRunEnd = lag(runEnd),
+    prevRunEnd = dplyr::lag(runEnd),
     gapHours   = round(as.numeric(difftime(runStart, prevRunEnd, units = "hours")), 2)) %>%
   ungroup() %>%
   filter(!is.na(gapHours)) %>%
@@ -267,7 +267,7 @@ visit_duration <- runs %>%
   arrange(Band.ID, recvDeployName, runStart) %>%
   group_by(Band.ID, recvDeployName) %>%
   mutate(
-    gapHours = round(as.numeric(runStart - lag(runEnd))  / 3600, 2),
+    gapHours = round(as.numeric(runStart - dplyr::lag(runEnd))  / 3600, 2),
     new_visit = is.na(gapHours) | gapHours >= 1,                 # <-- HERE IS THE THRESHOLD VALUE TO SET A "NEW VISIT" (TRUE when gapHours >= 1) 
     visitID = cumsum(new_visit)) %>%
   group_by(Band.ID, speciesEN, recvDeployName, visitID) %>%
@@ -485,9 +485,9 @@ Temporal coverage for each station is now reduced to its operational periods. **
 # Get the monitored period of each bird
 period_sp <- data_all  %>%
   group_by(Band.ID) %>%
-  reframe(DateAUS.Trap = first(DateAUS.Trap), 
+  reframe(DateAUS.Trap = dplyr::first(DateAUS.Trap), 
           last_dateAus = max(timeAus),
-          speciesEN = first(speciesEN)) %>%
+          speciesEN = dplyr::first(speciesEN)) %>%
   unique()
 
 # Expand one row per hours to each individual across its whole period (this is the available time)
@@ -1013,3 +1013,587 @@ low_migratory  %>%
 ```
 :::
 :::::
+
+## *Beta \|* Statistical analysis (GLM)
+
+**EXPLORATORY**
+
+Instead of simple "*the boxplots look different*" we statistically analyse with GLM the data to estimate tidal and circadian cycles effects per species, correctly weighted and accounting for the fact that a same bird may appears many times.
+
+### Additive model (direction \~ tide \* species + diel \* species)
+
+```{r GLM 2 ways, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+# ============================================================================
+# STATISTICAL MODEL OF SITE-USE RATE
+# Question: does rate of use (used_h / available_h) differ by species,
+# depending on tide state (High/Low) and diel period (Diurnal/Nocturnal)?
+# ============================================================================
+
+# --- WHY THIS MODEL AND NOT A BOXPLOT/T-TEST -------------------------------
+# rate_use is a PROPORTION (used_h / available_h) with very unequal
+# denominators: some bird x station x condition combos have available_h = 3h,
+# others have available_h = 2000h. A boxplot / Wilcoxon test on rate_use
+# treats a 100% rate based on 3h exactly the same as a 100% rate based on
+# 500h - which is statistically wrong. A binomial-family model uses
+# available_h as the number of "trials" per row, so noisy/low-effort
+# estimates are automatically down-weighted relative to well-sampled ones.
+# We also add Band.ID as a random effect because the same bird contributes
+# many rows (non-independence across stations/conditions for one individual).
+
+library(dplyr)
+library(ggplot2)
+library(glmmTMB)   # mixed models with beta-binomial family (handles proportion data + overdispersion)
+library(DHARMa)    # residual diagnostics for GLMM(s)
+library(emmeans)   # marginal means & pairwise post-hoc comparisons, back-transformed to % scale
+library(car)       # Anova() omnibus tests
+library(patchwork) # combine plots
+
+# ==== 1. Prepare data ========================================================
+# betabinomial() wants integer-like "successes" and "trials", so we convert
+# hours to minutes and round. This just gives the model finer resolution
+# than whole hours - it does NOT change what used_h/available_h represent.
+model_data <- figure_plot %>%
+  mutate(
+    used_min      = round(used_h * 60),
+    available_min = round(available_h * 60)
+  ) %>%
+  filter(available_min > 0,                  # can't divide by zero exposure
+         used_min <= available_min) %>%       # safety check, should already be true
+  droplevels()                                # drop unused factor levels (e.g. Masked Lapwing already filtered)
+
+# ==== 2. Fit the model =======================================================
+# Fixed effects: speciesEN interacted separately with tideDiel and with
+# tideHighLow, so we can ask "does the day/night effect differ by species?"
+# and "does the tide-height effect differ by species?" without blowing up
+# the model with a full 3-way interaction (keeps it simple, as requested).
+# Random effects: (1|Band.ID) accounts for repeated measures per bird;
+# (1|recvDeployName) accounts for station-to-station baseline differences
+# without spending a fixed-effect parameter per station (partial pooling -
+# more robust than a fixed effect when some stations have very few birds).
+m_site_use <- glmmTMB(
+  cbind(used_min, available_min - used_min) ~
+    speciesEN * tideDiel +
+    speciesEN * tideHighLow +
+    (1 | Band.ID) +
+    (1 | recvDeployName),
+  family = betabinomial(),    # like binomial, but allows extra-binomial variance (very common in ecological count/proportion data)
+  data   = model_data
+)
+
+summary(m_site_use)
+
+# ==== 3. Check the model actually fits reasonably ===========================
+# DHARMa simulates data from the fitted model and compares it to your real
+# data: if the model is adequate, the simulated residuals should look
+# uniform. This is a quick, honest sanity check before trusting any p-value.
+sim_res <- simulateResiduals(m_site_use, n = 500)
+plot(sim_res)                     # QQ-plot + residual-vs-predicted plot
+testDispersion(sim_res)           # formal test: is there still over/under-dispersion left?
+
+# If the dispersion test or QQ-plot looks bad, the most common simple fixes are:
+#   - drop the recvDeployName random effect if it's estimated as ~0 (singular fit warning)
+#   - simplify to speciesEN + tideDiel + tideHighLow (no interactions) if you have
+#     convergence warnings, then only add interactions back one at a time.
+
+# ==== 4. Omnibus test: does each term matter overall? =======================
+# Answers "does species matter at all", "does tideDiel matter at all", etc.,
+# collapsing across factor levels - useful before diving into pairwise
+# comparisons below.
+Anova(m_site_use, type = "II")
+
+# ==== 5. Pairwise comparisons: the actual biological question ===============
+# (a) For each species, is Diurnal use different from Nocturnal use?
+emm_diel <- emmeans(m_site_use, ~ tideDiel | speciesEN, type = "response")
+diel_contrasts <- as.data.frame(pairs(emm_diel))   # keep as object: reused for stars below
+print(diel_contrasts)
+
+# (b) For each species, is High-tide use different from Low-tide use?
+emm_tide <- emmeans(m_site_use, ~ tideHighLow | speciesEN, type = "response")
+tide_contrasts <- as.data.frame(pairs(emm_tide))   # keep as object: reused for stars below
+print(tide_contrasts)
+
+# (c) Optional: are species different from each other overall (within a given
+#     diel/tide condition)? Useful if you want a compact "who uses the array
+#     most" ranking.
+emm_species <- emmeans(m_site_use, ~ speciesEN, type = "response")
+pairs(emm_species)
+
+# ==== 6. Plot MODEL-ESTIMATED rate of use, with significance stars ==========
+
+# --- helper: convert a p-value to conventional significance stars ----------
+p_to_stars <- function(p) {
+  dplyr::case_when(
+    p < 0.001 ~ "***",
+    p < 0.01  ~ "**",
+    p < 0.05  ~ "*",
+    TRUE      ~ "ns"      # "not significant"
+  )
+}
+
+# --- helper: emmeans calls the back-transformed estimate column "prob" for
+# binomial/beta-binomial models, and "response" for Gaussian-family models.
+# This makes downstream code robust to either, so you don't need to remember
+# which one applies for a given model family.
+standardise_response_col <- function(df) {
+  if ("prob" %in% names(df))          df <- df %>% rename(response = prob)
+  else if (!"response" %in% names(df)) stop("No back-transformed estimate column found - check names(df).")
+  df
+}
+
+# ---- 6a. Diel plot ----------------------------------------------------------
+plot_df_diel <- standardise_response_col(as.data.frame(emm_diel))
+
+sig_diel <- diel_contrasts %>%
+  select(speciesEN, p.value) %>%
+  mutate(stars = p_to_stars(p.value))
+
+# one star label per species, placed just above that species' highest CI
+label_y_diel <- plot_df_diel %>%
+  group_by(speciesEN) %>%
+  summarise(y_label = max(asymp.UCL) * 100 + 5, .groups = "drop") %>%
+  left_join(sig_diel, by = "speciesEN")
+
+p_diel <- ggplot(plot_df_diel, aes(x = speciesEN, y = response * 100,
+                                    ymin = asymp.LCL * 100, ymax = asymp.UCL * 100,
+                                    color = tideDiel)) +
+  geom_pointrange(position = position_dodge(width = 0.5), size = 0.6) +
+  geom_text(data = label_y_diel, aes(x = speciesEN, y = y_label, label = stars),
+            inherit.aes = FALSE, size = 4, fontface = "bold") +
+  labs(x = "Species", y = "Model-estimated rate of use (%) [95% CI]",
+       color = "Period",
+       title = "Modelled site-use rate by species and diel period",
+       subtitle = "Beta-binomial GLMM | stars = significance of Diurnal vs Nocturnal per species\n*** p<0.001, ** p<0.01, * p<0.05, ns = not significant") +
+  theme_minimal(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p_diel
+
+# ---- 6b. Tide-height plot, built the same way -------------------------------
+plot_df_tide <- standardise_response_col(as.data.frame(emm_tide))
+
+sig_tide <- tide_contrasts %>%
+  select(speciesEN, p.value) %>%
+  mutate(stars = p_to_stars(p.value))
+
+label_y_tide <- plot_df_tide %>%
+  group_by(speciesEN) %>%
+  summarise(y_label = max(asymp.UCL) * 100 + 5, .groups = "drop") %>%
+  left_join(sig_tide, by = "speciesEN")
+
+p_tide <- ggplot(plot_df_tide, aes(x = speciesEN, y = response * 100,
+                                    ymin = asymp.LCL * 100, ymax = asymp.UCL * 100,
+                                    color = tideHighLow)) +
+  geom_pointrange(position = position_dodge(width = 0.5), size = 0.6) +
+  geom_text(data = label_y_tide, aes(x = speciesEN, y = y_label, label = stars),
+            inherit.aes = FALSE, size = 4, fontface = "bold") +
+  labs(x = "Species", y = "Model-estimated rate of use (%) [95% CI]",
+       color = "Tide",
+       title = "Modelled site-use rate by species and tide height",
+       subtitle = "Beta-binomial GLMM | stars = significance of High vs Low tide per species\n*** p<0.001, ** p<0.01, * p<0.05, ns = not significant") +
+  theme_minimal(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p_tide
+
+# ---- 6c. Combined view -------------------------------------------------------
+p_diel / p_tide     # stacked vertically; use p_diel | p_tide for side-by-side
+
+```
+
+### Mixte model (direction \~ tide \* diel \* species)
+
+```{r GLM 3 ways, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+# ============================================================================
+# THREE-WAY INTERACTION MODEL
+# Question: does the tide-height effect on rate of use depend on BOTH
+# species AND diel period simultaneously? i.e. for each species, do we get
+# four genuinely different estimates - Low Night, Low Day, High Night,
+# High Day - or do some of these collapse into "not significantly different"?
+# ============================================================================
+
+# --- WHY THIS IS A BIGGER ASK THAN THE TWO SEPARATE TWO-WAY MODELS ----------
+# speciesEN * tideDiel * tideHighLow estimates a separate mean for every
+# species x diel x tide combination (4 conditions per species). This needs
+# enough data in EVERY one of those cells to be trustworthy; some species or
+# stations you've already seen are thin (n=1-2 birds), so expect wider CIs,
+# some "ns" results, and possibly convergence warnings for the rarer species.
+# This is the necessary trade-off for asking a more specific question.
+
+library(conflicted)   # makes function-masking conflicts (e.g. select()) fail loudly instead of silently
+library(dplyr)
+library(ggplot2)
+library(glmmTMB)
+library(DHARMa)
+library(emmeans)
+library(car)
+library(multcomp)     # for cld() - compact letter display of pairwise significance; also loads MASS,
+                       # which is what silently masked dplyr::select() before - now handled below
+
+# --- Lock in which version of commonly-masked functions to use. Run this
+# once, right after all libraries are loaded, so it doesn't matter what
+# order packages were loaded in, or what gets loaded later in the session.
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::filter)
+
+# ==== 1. Prepare data =========================================================
+model_data <- figure_plot %>%
+  mutate(
+    used_min      = round(used_h * 60),
+    available_min = round(available_h * 60)
+  ) %>%
+  filter(available_min > 0,                  # can't divide by zero exposure
+         used_min <= available_min) %>%       # safety check, should already be true
+  droplevels()                                # drop unused factor levels (e.g. Masked Lapwing already filtered)
+
+# ==== 2. Fit the 3-way interaction model ======================================
+# Fixed effect: full three-way interaction speciesEN * tideDiel * tideHighLow.
+# Random effects unchanged: Band.ID for repeated measures per bird,
+# recvDeployName for station-level baseline differences.
+m_site_use_3way <- glmmTMB(
+  cbind(used_min, available_min - used_min) ~
+    speciesEN * tideDiel * tideHighLow +
+    (1 | Band.ID) +
+    (1 | recvDeployName),
+  family = betabinomial(),
+  data   = model_data
+)
+
+summary(m_site_use_3way)
+
+# ==== 3. Model fit check =======================================================
+sim_res_3way <- simulateResiduals(m_site_use_3way, n = 500)
+plot(sim_res_3way)
+testDispersion(sim_res_3way)
+
+# If this throws convergence warnings (likely, given thin cells for some
+# species), the simplest fallback is the two separate two-way models -
+# that's the data telling you it can't support this many parameters yet,
+# not a coding error.
+
+# ==== 4. Omnibus test: is the 3-way interaction itself significant? ==========
+# The key new test the two separate two-way models couldn't ask: does the
+# tide-height effect change shape between day and night, and does THAT
+# pattern differ by species? Look at the speciesEN:tideDiel:tideHighLow row.
+Anova(m_site_use_3way, type = "II")
+# If that row is NOT significant, the simpler two-way models remain the
+# better-supported choice - the full 3-way term isn't needed.
+
+# ==== 5. Pairwise comparisons across all 4 conditions per species ============
+# For each species: 4 diel x tide combinations, compared pairwise
+# (6 comparisons per species).
+emm_3way <- emmeans(m_site_use_3way, ~ tideDiel * tideHighLow | speciesEN, type = "response")
+contrasts_3way <- as.data.frame(pairs(emm_3way))
+print(contrasts_3way)
+
+# --- Compact Letter Display (cld): with 4 groups per species, individual
+# stars per pair get cluttered fast. cld assigns a letter to each of the 4
+# conditions per species; conditions sharing NO letter are significantly
+# different, conditions sharing a letter are not. Standard way to summarise
+# >2-group comparisons in one readable tag.
+cld_3way <- cld(emm_3way, Letters = letters, adjust = "tukey") %>%
+  as.data.frame()
+
+# ==== 6. Plot: one panel per species, FOUR estimates per panel ===============
+# (Low Night, Low Day, High Night, High Day) on a single x-axis
+
+# --- helper: emmeans calls the back-transformed estimate column "prob" for
+# binomial/beta-binomial models. Standardise so downstream code doesn't
+# need to remember which name applies.
+standardise_response_col <- function(df) {
+  if ("prob" %in% names(df))          df <- df %>% rename(response = prob)
+  else if (!"response" %in% names(df)) stop("No back-transformed estimate column found - check names(df).")
+  df
+}
+
+# --- helper: collapse tideDiel + tideHighLow into one readable 4-level factor
+combine_condition <- function(df) {
+  df %>%
+    mutate(
+      condition = case_when(
+        tideHighLow == "Low"  & tideDiel == "Nocturnal" ~ "Low Night",
+        tideHighLow == "Low"  & tideDiel == "Diurnal"   ~ "Low Day",
+        tideHighLow == "High" & tideDiel == "Nocturnal" ~ "High Night",
+        tideHighLow == "High" & tideDiel == "Diurnal"   ~ "High Day"
+      ),
+      # fix the order left-to-right so it reads logically rather than alphabetically
+      condition = factor(condition, levels = c("Low Night", "Low Day", "High Night", "High Day"))
+    )
+}
+
+# --- 6a. Build the plotting data: estimates + CIs, with the 4-level condition
+plot_df_3way <- standardise_response_col(as.data.frame(emm_3way)) %>%
+  combine_condition()
+
+# --- 6b. Build the matching letter-label data, same condition encoding
+cld_3way <- cld_3way %>% combine_condition()
+
+# --- 6c. Join significance letters onto the plotting data
+# (select() explicitly namespaced - see note below the script for why)
+plot_df_3way <- plot_df_3way %>%
+  left_join(cld_3way %>% dplyr::select(speciesEN, condition, .group),
+            by = c("speciesEN", "condition"))
+
+# --- 6d. Plot: ONE x-axis with all 4 conditions, one panel per species
+ggplot(plot_df_3way, aes(x = condition, y = response * 100,
+                          ymin = asymp.LCL * 100, ymax = asymp.UCL * 100)) +
+  geom_pointrange(size = 0.6, color = "#6CA0DC") +
+  geom_text(aes(label = trimws(.group), y = asymp.UCL * 100 + 4),
+            size = 3.2, fontface = "bold", color = "#2C3E50") +
+  facet_wrap(~ speciesEN, scales = "free_y") +
+  labs(x = NULL, y = "Model-estimated rate of use (%) [95% CI]",
+       title = "Modelled site-use rate: Low/High tide x Night/Day, per species",
+       subtitle = "Beta-binomial GLMM | letters = Tukey-adjusted compact letter display\nconditions sharing a letter are NOT significantly different",
+       caption = "Letters shared between conditions = no significant difference; letters not shared = significant difference\n (p < 0.05, Tukey-adjusted).") +
+  theme_minimal(base_size = 12) +
+  theme(strip.text = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.caption = element_text(hjust = 0, size = 9, color = "grey30", face = "italic"))
+
+```
+
+### Complete model (direction \~ tide \* diel \* species \* station)
+
+```{r GLM complete, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+# ============================================================================
+# FOUR-WAY MODEL: species x station x tide x diel
+# Question: for each species, does site-use rate differ by station AND by
+# tide/diel condition simultaneously?
+# ============================================================================
+
+# --- IMPORTANT CAVEAT --------------------------------------------------------
+# This is a much larger model than the 3-way one. Many species only visit a
+# handful of stations, and several species-station cells have very few birds
+# (n=1-2, as seen in the earlier summary tables). Expect:
+#   - wide confidence intervals for thin cells
+#   - possible convergence warnings
+#   - some panels essentially uninformative (huge CIs, all "a")
+# This is the model correctly reflecting real data limits, not a bug.
+# If it doesn't converge, the documented fallback is at the bottom.
+
+library(conflicted)
+library(dplyr)
+library(ggplot2)
+library(glmmTMB)
+library(DHARMa)
+library(emmeans)
+library(car)
+library(multcomp)
+
+conflicts_prefer(dplyr::select)
+conflicts_prefer(dplyr::filter)
+
+# ==== 1. Prepare data =========================================================
+model_data <- figure_plot %>%
+  mutate(
+    used_min      = round(used_h * 60),
+    available_min = round(available_h * 60)
+  ) %>%
+  filter(available_min > 0,
+         used_min <= available_min) %>%
+  droplevels()
+
+# ==== 2. Fit the model =========================================================
+# Fixed effect: full 4-way interaction speciesEN * recvDeployName * tideDiel * tideHighLow.
+# Random effect: (1|Band.ID) only - recvDeployName is now a FIXED term (it's
+# part of the interaction we want estimates for), so it's no longer also a
+# random effect (that would double-count it).
+m_site_use_4way <- glmmTMB(
+  cbind(used_min, available_min - used_min) ~
+    speciesEN * recvDeployName * tideDiel * tideHighLow +
+    (1 | Band.ID),
+  family = betabinomial(),
+  data   = model_data
+)
+
+summary(m_site_use_4way)
+
+# --- FALLBACK if the above fails to converge or throws a rank-deficiency
+# warning (very possible given the sparsity noted above): drop the full
+# 4-way interaction down to pairwise interactions only, which is much more
+# parsimonious and usually converges fine, while still letting station
+# effects vary by species and by tide/diel:
+#
+# m_site_use_4way <- glmmTMB(
+#   cbind(used_min, available_min - used_min) ~
+#     speciesEN * recvDeployName +
+#     speciesEN * tideDiel + speciesEN * tideHighLow +
+#     recvDeployName * tideDiel + recvDeployName * tideHighLow +
+#     (1 | Band.ID),
+#   family = betabinomial(),
+#   data   = model_data
+# )
+
+# ==== 3. Model fit check ========================================================
+sim_res_4way <- simulateResiduals(m_site_use_4way, n = 500)
+plot(sim_res_4way)
+testDispersion(sim_res_4way)
+
+# ==== 4. Omnibus test ============================================================
+Anova(m_site_use_4way, type = "II")
+# Look at the speciesEN:recvDeployName:tideDiel:tideHighLow row specifically.
+# If it (or lower-order terms) aren't significant, the simpler 3-way model
+# from before remains the better-supported, more honest choice.
+
+# ==== 5. Get estimates - RESTRICTED TO COMBINATIONS THAT ACTUALLY EXIST ========
+# This step is critical: emmeans by default will produce an estimate for
+# EVERY theoretical species x station x tide x diel combination, including
+# ones with zero real birds (e.g. a species that never visited that station).
+# Those would be pure model extrapolation - not real information. We compute
+# the full grid, then keep only rows matching combinations actually present
+# in model_data.
+emm_4way <- emmeans(m_site_use_4way,
+                     ~ tideDiel * tideHighLow | speciesEN * recvDeployName,
+                     type = "response")
+
+observed_combos <- model_data %>%
+  distinct(speciesEN, recvDeployName, tideDiel, tideHighLow)
+
+emm_4way_df <- as.data.frame(emm_4way) %>%
+  inner_join(observed_combos, by = c("speciesEN", "recvDeployName", "tideDiel", "tideHighLow"))
+
+nrow(as.data.frame(emm_4way))   # theoretical grid size
+nrow(emm_4way_df)               # actual, data-backed grid size - expect this much smaller
+
+# ==== 6. Pairwise comparisons + compact letter display, per species x station ===
+# Same logic as before: for each species x station panel, compare the 4
+# tide/diel conditions pairwise, letters show which pairs are/aren't
+# significantly different. Restricted to observed combos only, same as above.
+contrasts_4way <- as.data.frame(pairs(emm_4way)) %>%
+  semi_join(observed_combos, by = c("speciesEN", "recvDeployName"))
+print(contrasts_4way)
+
+cld_4way <- cld(emm_4way, Letters = letters, adjust = "tukey") %>%
+  as.data.frame() %>%
+  inner_join(observed_combos, by = c("speciesEN", "recvDeployName", "tideDiel", "tideHighLow"))
+
+# ==== 7. Plot: one row per species, one column per station, 4 bars per panel ===
+
+standardise_response_col <- function(df) {
+  if ("prob" %in% names(df))          df <- df %>% rename(response = prob)
+  else if (!"response" %in% names(df)) stop("No back-transformed estimate column found - check names(df).")
+  df
+}
+
+combine_condition <- function(df) {
+  df %>%
+    mutate(
+      condition = case_when(
+        tideHighLow == "Low"  & tideDiel == "Nocturnal" ~ "Low Night",
+        tideHighLow == "Low"  & tideDiel == "Diurnal"   ~ "Low Day",
+        tideHighLow == "High" & tideDiel == "Nocturnal" ~ "High Night",
+        tideHighLow == "High" & tideDiel == "Diurnal"   ~ "High Day"
+      ),
+      condition = factor(condition, levels = c("Low Night", "Low Day", "High Night", "High Day"))
+    )
+}
+
+plot_df_4way <- standardise_response_col(emm_4way_df) %>% combine_condition()
+cld_4way     <- cld_4way %>% combine_condition()
+
+plot_df_4way <- plot_df_4way %>%
+  left_join(cld_4way %>% dplyr::select(speciesEN, recvDeployName, condition, .group),
+            by = c("speciesEN", "recvDeployName", "condition"))
+
+# # facet_grid gives species as rows and station as columns - matches "one
+# # panel per species, split by station" more literally than facet_wrap would,
+# # and keeps species groupings visually clear as row labels down the left.
+# ggplot(plot_df_4way, aes(x = condition, y = response * 100,
+#                           ymin = asymp.LCL * 100, ymax = asymp.UCL * 100)) +
+#   geom_pointrange(size = 0.5, color = "#6CA0DC") +
+#   geom_text(aes(label = trimws(.group), y = asymp.UCL * 100 + 4),
+#             size = 2.8, fontface = "bold", color = "#2C3E50") +
+#   facet_grid(speciesEN ~ recvDeployName, scales = "free_y") +
+#   labs(x = NULL, y = "Model-estimated rate of use (%) [95% CI]",
+#        title = "Modelled site-use rate: Low/High tide x Night/Day, per species and station",
+#        subtitle = "Beta-binomial GLMM | letters = Tukey-adjusted compact letter display",
+#        caption = "Letters shared between conditions = no significant difference; letters not shared = significant difference (p < 0.05, Tukey-adjusted).\nOnly species-station combinations present in the data are shown.") +
+#   theme_minimal(base_size = 10) +
+#   theme(strip.text = element_text(face = "bold", size = 8),
+#         axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+#         plot.caption = element_text(hjust = 0, size = 8, color = "grey30", face = "italic"))
+
+
+# ============================================================================
+# ONE PLOT PER SPECIES, each faceted by recvDeployName
+# Produces a NAMED LIST of ggplot objects, so you can call them individually
+# in a panel-tabset the same way you already use plots_used_rate[[1]] etc.
+# ============================================================================
+
+# --- (assumes plot_df_4way already built exactly as in the previous script:
+#      species x station x tideDiel x tideHighLow estimates, restricted to
+#      observed combinations, with the .group significance letters attached)
+
+standardise_response_col <- function(df) {
+  if ("prob" %in% names(df))          df <- df %>% rename(response = prob)
+  else if (!"response" %in% names(df)) stop("No back-transformed estimate column found - check names(df).")
+  df
+}
+
+combine_condition <- function(df) {
+  df %>%
+    mutate(
+      condition = case_when(
+        tideHighLow == "Low"  & tideDiel == "Nocturnal" ~ "Low Night",
+        tideHighLow == "Low"  & tideDiel == "Diurnal"   ~ "Low Day",
+        tideHighLow == "High" & tideDiel == "Nocturnal" ~ "High Night",
+        tideHighLow == "High" & tideDiel == "Diurnal"   ~ "High Day"
+      ),
+      condition = factor(condition, levels = c("Low Night", "Low Day", "High Night", "High Day"))
+    )
+}
+
+# --- helper: build ONE species' plot, faceted by station -------------------
+make_species_plot <- function(data, sp) {
+  d <- data %>% filter(speciesEN == sp) %>% droplevels()
+
+  ggplot(d, aes(x = condition, y = response * 100,
+                ymin = asymp.LCL * 100, ymax = asymp.UCL * 100)) +
+    geom_pointrange(size = 0.6, color = "#6CA0DC") +
+    geom_text(aes(label = trimws(.group), y = asymp.UCL * 100 + 4),
+              size = 3.2, fontface = "bold", color = "#2C3E50") +
+    facet_wrap(~ recvDeployName) +
+    coord_cartesian(ylim = c(0, 100)) +                   # cap the y-axis at 0-100%
+    labs(x = NULL, y = "Model-estimated rate of use (%) [95% CI]",
+         title = paste("Modelled site-use rate -", sp),
+         subtitle = "Beta-binomial GLMM | letters = Tukey-adjusted compact letter display",
+         caption = "Letters shared between conditions = no significant difference; letters not shared = significant difference (p < 0.05, Tukey-adjusted).\nOnly station x condition combinations present in the data are shown.") +
+    theme_minimal(base_size = 12) +
+    theme(strip.text = element_text(face = "bold"),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          plot.caption = element_text(hjust = 0, size = 8, color = "grey30", face = "italic"))
+}
+
+# --- build the plotting data once (same logic as before) --------------------
+plot_df_4way <- standardise_response_col(emm_4way_df) %>% combine_condition()
+cld_4way_j   <- cld_4way %>% combine_condition()
+
+plot_df_4way <- plot_df_4way %>%
+  left_join(cld_4way_j %>% dplyr::select(speciesEN, recvDeployName, condition, .group),
+            by = c("speciesEN", "recvDeployName", "condition"))
+
+# --- generate the named list: one entry per species --------------------------
+species_list <- sort(unique(plot_df_4way$speciesEN))
+
+species_plots <- setNames(
+  lapply(species_list, function(sp) make_species_plot(plot_df_4way, sp)),
+  species_list
+)
+
+# --- usage in your panel-tabset, e.g.: ---------------------------------------
+# species_plots[["Bar-tailed Godwit"]]
+# species_plots[[1]]   # same thing, by position instead of name
+
+```
+
+::: panel-tabset
+```{r 4 glm per species, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
+
+for (sp in names(species_plots)) {
+  cat("##### ", sp, "\n\n")   # creates one tab, titled with the species name
+  print(species_plots[[sp]])  # renders that species' plot inside the tab
+  cat("\n\n")                 # blank line so the next tab marker is parsed correctly
+}
+```
+:::
