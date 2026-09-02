@@ -265,7 +265,7 @@ Now, we decide to merge into one and unique continuous detection, all the tags (
 
 **Once detection data summarised as described above, we can see, overall, how long birds stay around one Motus station** - see plot below.
 
-```{r site use, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
+```{r site use, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide', include = TRUE}
 
 visit_duration <- runs %>%
   arrange(Band.ID, recvDeployName, runStart) %>%

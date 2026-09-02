@@ -215,7 +215,7 @@ hist(flyby_dt_trimmed$delay,
      xlab  = "Delay (minutes)")
 ```
 
-**Visually,** we can estimate that the overall temporal window for continuous flights between the Fullerton entrance and another Motus station is about 10 minutes. However, we can fit an N-mixture model to confirm this.
+**Visually,** we can estimate that the overall temporal window for continuous flights between the Fullerton entrance and another Motus station is about 100 minutes. However, we can fit an N-mixture model to confirm this.
 
 ```{r extract cutpoint delay, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
