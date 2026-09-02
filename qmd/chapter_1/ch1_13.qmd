@@ -273,7 +273,7 @@ Looking through the time of the detection for each fly-by, we have been curious 
 
 flyby_dt %>%
   
-  mutate(hour_bin = hour(visitStart)) %>%
+  mutate(hour_bin = lubridate::hour(visitStart)) %>%
   count(hour_bin, direction, retained_cut) %>%
   
   ggplot(aes(x = hour_bin, y = n, fill = direction, pattern = retained_cut)) +
@@ -326,7 +326,7 @@ flyby_dt %>%
 
 flyby_dt %>%
   
-  mutate(hour_bin = hour(visitStart)) %>%
+  mutate(hour_bin = lubridate::hour(visitStart)) %>%
   count(speciesEN, hour_bin, direction, retained_cut) %>%
   
   ggplot(aes(x = hour_bin, y = n, fill = direction, pattern = retained_cut)) +
@@ -398,7 +398,7 @@ make_summary_table <- function() {
   summary_table <- flyby_dt %>%
     filter(!is.na(direction)) %>%             # direction NA = tide rule couldn't be evaluated, exclude from per-direction breakdown
     mutate(
-      hour_of_day = hour(visitStart) + minute(visitStart) / 60   # decimal hour, e.g. 14:30 -> 14.5, so mean/median aren't rounded to whole hours before formatting
+      hour_of_day = lubridate::hour(visitStart) + lubridate::minute(visitStart) / 60   # decimal hour, e.g. 14:30 -> 14.5, so mean/median aren't rounded to whole hours before formatting
     ) %>%
 
     group_by(speciesEN, direction) %>%
@@ -533,7 +533,7 @@ fc_classified %>%
 ```{r fc events by species plot, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 ggplot(fc_classified
        %>% mutate(direction = replace_na(direction, "Actual site use")), ## Be careful and know your data here
-       aes(x = direction, fill = direction)) +
+       aes(x = direction)) +
   geom_bar() +
   facet_wrap(~ speciesEN) +
   labs(x = "Direction", y = "Number of events",
@@ -722,3 +722,284 @@ plot_summary %>%
 
 ```
 :::
+
+## *Beta \|* Statistical analysis
+
+**EXPLORATORY**
+
+Instead of just assuming a tide-based guess about which direction birds were flying, we statistically provide a score for how often it's actually right.
+
+```{r GLM direction, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'hide'}
+# ============================================================================
+# VALIDATING THE TIDE-BASED FLYBY DIRECTION RULE
+# ============================================================================
+
+# --- WHY THE CURRENT CHECK IS CIRCULAR ---------------------------------------
+# In the original code, `other_visit` is only searched:
+#   - forward in time IF the tide rule said "From mudflat (rising tide)"
+#   - backward in time IF the tide rule said "To mudflat (falling tide)"
+# So "verified" only means "a detection existed on the side the tide rule
+# told us to look at" - it never checks the OTHER side, so it can't catch
+# cases where the tide rule is wrong. To really validate the rule, we need
+# an independent estimate of direction that does NOT use the tide state,
+# then compare the two.
+
+other_visits_dt <- as.data.table(visit_duration)[recvDeployName != focal_station]
+
+# --- 1. Independently find the closest OTHER-station detection on EACH side --
+# For every flyby at Fullerton, we look both backward and forward in time,
+# regardless of what the tide predicted.
+# NOTE: pulling from flyby_dt (not flyby_visits) here, because `direction`
+# only exists on flyby_dt - it's added by the "classification: infer" chunk
+# and was never present on flyby_visits.
+flyby_check <- flyby_dt %>%
+  dplyr::select(Band.ID, speciesEN, recvDeployName, visitID, visitStart, visitEnd, direction) %>%
+  rowwise() %>%
+  mutate(
+    .band  = Band.ID,
+    .start = visitStart,
+
+    # Closest detection at ANOTHER station BEFORE this flyby (any direction)
+    prev_visit = list(
+      other_visits_dt %>%
+        filter(Band.ID == .band, visitStart <= .start) %>%
+        slice_max(visitStart, n = 1)
+    ),
+    prev_delay = as.numeric(difftime(.start, prev_visit$visitStart[1], units = "mins")),
+
+    # Closest detection at ANOTHER station AFTER this flyby (any direction)
+    next_visit = list(
+      other_visits_dt %>%
+        filter(Band.ID == .band, visitStart >= .start) %>%
+        slice_min(visitStart, n = 1)
+    ),
+    next_delay = as.numeric(difftime(next_visit$visitStart[1], .start, units = "mins"))
+  ) %>%
+  ungroup() %>%
+  dplyr::select(-prev_visit, -next_visit, -.band, -.start)
+
+# --- 2. Turn "closest side" into an EMPIRICAL (tide-independent) direction ---
+# Logic:
+#   - a close detection BEFORE Fullerton => bird was elsewhere, then flew
+#     THROUGH Fullerton => heading TO the mudflat
+#   - a close detection AFTER Fullerton  => bird left Fullerton and was next
+#     seen elsewhere => it had just come FROM the mudflat
+#   - close detections on BOTH sides => ambiguous, can't use as ground truth
+#   - no close detection on either side => can't validate this event at all
+flyby_check <- flyby_check %>%
+  mutate(
+    empirical_direction = case_when(
+      !is.na(prev_delay) & prev_delay <= flyby_window_min &
+      !is.na(next_delay) & next_delay <= flyby_window_min   ~ "Ambiguous",
+      !is.na(prev_delay) & prev_delay <= flyby_window_min   ~ "To mudflat (falling tide)",
+      !is.na(next_delay) & next_delay <= flyby_window_min   ~ "From mudflat (rising tide)",
+      TRUE ~ NA_character_
+    )
+  )
+
+# --- 3. Build the validation set and compute accuracy -------------------------
+# Only events with an unambiguous, independently-determined direction can be
+# used to check the tide rule.
+validation_set <- flyby_check %>%
+  filter(empirical_direction %in% c("To mudflat (falling tide)", "From mudflat (rising tide)"))
+
+n_validated  <- nrow(validation_set)
+n_total_flyby <- nrow(flyby_check)
+
+cat("Flybys with an independently-checkable direction:", n_validated,
+    "out of", n_total_flyby, sprintf("(%.1f%%)", 100 * n_validated / n_total_flyby), "\n")
+
+conf_mat <- table(
+  tide_predicted = validation_set$direction,
+  empirical       = validation_set$empirical_direction
+)
+print(conf_mat)
+
+accuracy <- sum(diag(conf_mat)) / sum(conf_mat)
+cat("Tide-rule accuracy against independently-confirmed direction:",
+    sprintf("%.1f%%", 100 * accuracy), "\n")
+
+# --- 4. (Optional but recommended) report accuracy AS A CAVEAT ON THE RESULTS -
+# Whatever this number comes out to, put it directly in your ch1_13 write-up,
+# e.g.: "Among the n_validated flybys where direction could be independently
+# confirmed, the tide-based rule agreed with the confirmed direction in
+# accuracy%% of cases." This turns an unstated assumption into a quantified,
+# defensible limitation - which is exactly what makes the mudflat rate-of-use
+# results in the last section trustworthy (or flags that they need
+# a bigger grain of salt if accuracy is low, e.g. < 75%).
+
+# --- 5. Optional: does anything beyond tide predict direction better? --------
+# If accuracy is mediocre, check quickly whether hour-of-day adds information
+# beyond tide state alone (birds may have diel roosting patterns on top of
+# tide-driven movement). This stays simple: one small logistic regression,
+# fit only on the validated (ground-truth) subset.
+validation_glm <- validation_set %>%
+  mutate(
+    y         = if_else(empirical_direction == "From mudflat (rising tide)", 1, 0),
+    hour      = lubridate::hour(visitStart),
+    tide_pred = if_else(direction == "From mudflat (rising tide)", 1, 0)
+  )
+
+m_dir_tide_only <- glm(y ~ tide_pred,          data = validation_glm, family = binomial)
+m_dir_plus_hour <- glm(y ~ tide_pred + hour,   data = validation_glm, family = binomial)
+
+AIC(m_dir_tide_only, m_dir_plus_hour)   # lower AIC = better; tells you if hour-of-day is worth adding
+summary(m_dir_plus_hour)
+
+# If m_dir_plus_hour has meaningfully lower AIC and a significant `hour`
+# term, it means tide alone is leaving predictable signal on the table -
+# worth reporting, but NOT necessary to rebuild the whole direction/rate
+# pipeline on; a one-line caveat in the text is enough to keep things simple.
+
+
+
+
+# ============================================================================
+# PLOT: HOUR-OF-DAY EFFECT ON DIRECTION (LOGISTIC MODEL)
+# ============================================================================
+
+# Requires: validation_glm, m_dir_plus_hour (from your GLM code above)
+# Packages: ggplot2, dplyr, lubridate (already in your workflow)
+
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+
+# --- 1. Create a data frame for predicted probabilities across hours ---------
+# Build a grid of hour values (5–20) for each tide prediction state
+hour_seq <- seq(5, 20, by = 0.5)
+
+pred_grid <- expand.grid(
+  hour = hour_seq,
+  tide_pred = c(0, 1)  # 0 = "To mudflat", 1 = "From mudflat"
+) %>%
+  mutate(
+    pred_prob = predict(
+      m_dir_plus_hour,
+      newdata = .,
+      type = "response"
+    ),
+    tide_label = factor(
+      tide_pred,
+      levels = c(0, 1),
+      labels = c("Predicted: To mudflat (falling tide)",
+                 "Predicted: From mudflat (rising tide)")
+    )
+  )
+
+# --- 2. Prepare observed data for plotting -----------------------------------
+plot_data <- validation_glm %>%
+  mutate(
+    hour = lubridate::hour(visitStart),
+    obs_direction = factor(
+      empirical_direction,
+      levels = c("From mudflat (rising tide)", "To mudflat (falling tide)")
+    ),
+    tide_label = factor(
+      tide_pred,
+      levels = c(0, 1),
+      labels = c("Predicted: To mudflat (falling tide)",
+                 "Predicted: From mudflat (rising tide)")
+    )
+  )
+
+# --- 3. Main plot: predicted curves + observed points ------------------------
+p1 <- ggplot() +
+  # Predicted logistic curves
+  geom_line(
+    data = pred_grid,
+    aes(x = hour, y = pred_prob, colour = tide_label),
+    linewidth = 1.2
+  ) +
+  # Observed data points
+  geom_point(
+    data = plot_data,
+    aes(x = hour, y = as.numeric(empirical_direction == "From mudflat (rising tide)"),
+        colour = tide_label),
+    alpha = 0.5, size = 2, position = position_jitter(height = 0, width = 0.15)
+  ) +
+  scale_colour_manual(
+    name = "Tide prediction",
+    values = c("Predicted: To mudflat (falling tide)" = "steelblue",
+               "Predicted: From mudflat (rising tide)" = "firebrick")
+  ) +
+  labs(
+    x = "Hour of day",
+    y = "Probability: From mudflat (rising tide)",
+    title = "Logistic Model: \nDirection vs Hour + Tide Prediction",
+    subtitle = sprintf("AIC = %.2f | Hour β = %.3f (p = %.3f)",
+                       AIC(m_dir_plus_hour),
+                       coef(m_dir_plus_hour)["hour"],
+                       summary(m_dir_plus_hour)$coefficients["hour", "Pr(>|z|)"])
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    legend.position = "top",
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+# --- 4. Optional: observed proportion by hour bins ---------------------------
+# Bin hours into 2-hour intervals for a cleaner summary
+plot_data_binned <- plot_data %>%
+  mutate(
+    hour_bin = cut(
+      hour,
+      breaks = seq(4, 22, by = 2),
+      labels = paste(seq(4, 20, by = 2), seq(6, 22, by = 2), sep = "-"),
+      include.lowest = TRUE
+    )
+  ) %>%
+  group_by(hour_bin, .drop = FALSE) %>%
+  summarise(
+    prop_from_mudflat = mean(empirical_direction == "From mudflat (rising tide)"),
+    n = n(),
+    .groups = "drop"
+  ) %>%
+  filter(n > 0)  # drop empty bins
+
+p2 <- ggplot(plot_data_binned, aes(x = hour_bin, y = prop_from_mudflat)) +
+  geom_col(fill = "steelblue", alpha = 0.7, colour = "black") +
+  geom_text(
+    aes(label = paste0("n=", n)),
+    vjust = -0.3, size = 3.5
+  ) +
+  labs(
+    x = "Hour of day",
+    y = "Proportion: From mudflat (rising tide)",
+    title = "Observed Direction by Time of Day"
+  ) +
+  scale_y_continuous(limits = c(0, 1.05), breaks = seq(0, 1, by = 0.25)) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", colour = "firebrick", linewidth = 1) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.title = element_text(face = "bold"),
+    panel.grid.minor = element_blank()
+  )
+
+# --- 5. Display both plots side-by-side --------------------------------------
+library(patchwork)  # or use gridExtra::grid.arrange(p1, p2, ncol = 2)
+
+p_combined <- p1 + p2 +
+  plot_layout(ncol = 2, widths = c(1.2, 1)) &
+  theme(plot.margin = margin(10, 10, 10, 10))
+
+print(p_combined)
+
+# --- 7. One-line interpretation for your thesis ------------------------------
+# You can extract and report:
+cat(sprintf(
+  "Among %d validated flybys, adding hour to the tide-only model reduced AIC from %.2f to %.2f.\n",
+  nrow(validation_glm),
+  AIC(m_dir_tide_only),
+  AIC(m_dir_plus_hour)
+))
+cat(sprintf(
+  "Hour coefficient: β = %.3f (SE = %.3f, p = %.3f).\n",
+  coef(m_dir_plus_hour)["hour"],
+  summary(m_dir_plus_hour)$coefficients["hour", "Std. Error"],
+  summary(m_dir_plus_hour)$coefficients["hour", "Pr(>|z|)"]
+))
+
+```
