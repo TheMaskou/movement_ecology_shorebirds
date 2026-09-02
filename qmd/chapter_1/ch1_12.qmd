@@ -626,23 +626,24 @@ use_rate_plot <- used_bird_recv_time %>%
 
 ```{r potential error, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 
+
 above <- use_rate_plot %>%
   filter(rate_use > 100) %>%
-  nrow()
+  mutate(used_h = round(used_h, 2),
+         available_h = round(available_h, 2),
+         rate_use = round(rate_use, 2),
+         diff_perc = rate_use - 100,
+         diff_h = round(used_h - available_h, 2)) 
 
 ```
 
 ::: blockquote-yellow
-**Note**: A very few cases (n = `r above`) where the *time used* was over the *time* *available* has been excluded from the data. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated.
+**Note**: A very few cases (n = `r nrow(above)` / `r nrow(use_rate_plot)`) where the *time used* was over the *time* *available* has been re-allocated the value 100%. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated. In average, the difference of time between available and used is `r mean(above$diff_h)` hours (`r mean(above$diff_perc)` % of rate of use difference).
 :::
 
 ```{r potential error 2, message = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
 
-use_rate_plot %>%
-  filter(rate_use > 100) %>%
-  mutate(used_h = round(used_h, 2),
-         available_h = round(available_h, 2),
-         rate_use = round(rate_use, 2)) %>%
+above %>%
   DT::datatable()
 
 ```
@@ -650,12 +651,13 @@ use_rate_plot %>%
 ```{r potential error filtered, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE}
 
 use_rate_plot <- use_rate_plot %>%
-  filter(rate_use < 100)
+  mutate(rate_use = ifelse(rate_use > 100, 100, rate_use))
 
 ```
 
 ::: blockquote-yellow
-**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.
+**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.  
+We also filter out **Fullerton Entrance** station as it needs to be worked separately (see [Site use - hours (Fullerton case)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_13.html))
 :::
 
 ```{r Time Used Rate, message = FALSE, warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
@@ -664,7 +666,8 @@ figure_plot <- use_rate_plot %>%
   mutate(speciesType = factor(shorebird_class[speciesEN], 
                                levels = c("migratory", "resident"))) %>%
   
-  filter(!speciesEN %in% c("Masked Lapwing")) 
+  filter(!speciesEN %in% c("Masked Lapwing"),
+         !recvDeployName %in% c("Fullerton Entrance")) 
 
 ```
 

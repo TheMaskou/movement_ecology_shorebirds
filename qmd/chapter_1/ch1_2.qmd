@@ -373,7 +373,7 @@ table_1_pub
 
 ```
 
-```{r print table, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
+```{r print table, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = FALSE}
 gtsave(
   data = table_1_pub,
   filename =  here::here("material", "table_1.png"),   
@@ -563,4 +563,64 @@ DT::datatable(
     fontWeight = 'bold',
     color = '#808080'  
   )
+```
+
+## Detection data
+
+<!-- ::: {.callout-tip collapse="true" title="See all detection data"} -->
+
+<!-- ```{r 1 Detection data, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE} -->
+
+<!-- data_all %>% -->
+
+<!--   DT::datatable() -->
+
+<!-- ``` -->
+
+<!-- ::: -->
+
+## Tide data
+
+See below how the tide behave in **average** during **summer**.
+
+::: {.callout-tip collapse="true" title="See tide table"}
+```{r 1 Tide table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+tide_data <- readRDS(here::here("qmd", "chapter_1", "data", "tides", "tideData.rds"))
+
+tide_data %>%
+  DT::datatable()
+```
+:::
+
+```{r 1 Tide table curve, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+library(dplyr)
+library(ggplot2)
+library(lubridate)
+
+# Filter to Oct-Mar, extract hour of day, average tide height per hour
+tide_hourly <- tide_data %>%
+  
+  filter(monthNum %in% c(10, 11, 12, 1, 2, 3)) %>%
+  
+  mutate(hour = hour(tideDateTimeAus)) %>% 
+  group_by(hour_bin = floor(hour)) %>%                                     
+  summarise(
+    mean_height = mean(tideHeight, na.rm = TRUE),
+    se_height   = sd(tideHeight, na.rm = TRUE) / sqrt(n()),
+    n           = n(),
+    .groups = "drop")
+
+ggplot(tide_hourly, aes(x = hour_bin, y = mean_height)) +
+  geom_col(fill = "grey70", width = 0.8, alpha = 0.6) +
+  geom_smooth(method = "loess", span = 0.4, color = "#2C3E50", 
+              linewidth = 1.2, se = TRUE, fill = "#2C3E50", alpha = 0.15) +
+  geom_errorbar(aes(ymin = mean_height - se_height, ymax = mean_height + se_height),
+                width = 0.2, color = "grey30") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(x = "Hour of Day", y = "Mean Tide Height (m)",
+       title = "Average Tide Height by Hour of Day",
+       subtitle = "October - March, averaged across all years | error bars = SE") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank())
+
 ```

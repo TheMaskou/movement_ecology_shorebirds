@@ -113,7 +113,7 @@ ggplot(fc_visits %>%
 
 For flyby events specifically, we want to know whether the bird was **heading to the mudflat** (last seen leaving the roost area, i.e. detected at another station shortly *before* the flyby) or **coming from the mudflat** (detected at another station shortly *after* the flyby). To do so, we need to understand what is the right temporal window to consider for defining the "shortly after" or "shortly before", and to rely on inference only when the detection into another Motus station is beyond this value.
 
-Let's start by splitting the data-set accordingly before to estimate the direction of a fly-by depending on the tide: toward the mudflat of Fullerton cove if the fly-by is detected during a falling tide, and inversely if detected during a rising tide.
+Let's start by splitting the data-set accordingly before to estimate the direction of a fly-by depending on the tide: toward the mudflat of Fullerton cove if the fly-by is detected during a dropping tide, and inversely if detected during a rising tide.
 
 ```{r flyby set, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 flyby_visits <- fc_visits %>% filter(visit_type == "flyby")
@@ -145,7 +145,7 @@ flyby_dt <- flyby_dt %>%
   mutate(
     direction = case_when(
       nearestNextTide == "High" ~ "From mudflat (rising tide)",
-      nearestNextTide == "Low"  ~ "To mudflat (falling tide)",
+      nearestNextTide == "Low"  ~ "To mudflat (dropping tide)",
       TRUE ~ NA_character_ ))
 
 
@@ -155,7 +155,7 @@ barplot(table(flyby_dt$direction, useNA = "ifany"),
 
 ```
 
-For each fly-by detected at Fullerton Entrance, we then look for a **confirming detection at another Motus station**: if the tide was rising, we check for the *closest following* detection after Fullerton Entrance; if the tide was falling, we check for the *closest preceding* detection before Fullerton Entrance.
+For each fly-by detected at Fullerton Entrance, we then look for a **confirming detection at another Motus station**: if the tide was rising, we check for the *closest following* detection after Fullerton Entrance; if the tide was dropping, we check for the *closest preceding* detection before Fullerton Entrance.
 
 ```{r classification: verified, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 
@@ -175,7 +175,7 @@ flyby_dt <- flyby_dt %>%
                  recvDeployName != .station,
                  visitStart >= .start) %>%
           slice_min(visitStart, n = 1)
-      } else if (!is.na(direction) && direction == "To mudflat (falling tide)") {
+      } else if (!is.na(direction) && direction == "To mudflat (dropping tide)") {
         all_visits_dt %>%
           filter(Band.ID == .band,
                  recvDeployName != .station,
@@ -193,7 +193,7 @@ flyby_dt <- flyby_dt %>%
 
 ```
 
-We then look at the **distribution of the delay** between a detectiona at Fullerton entrance and another Motus station, in order to identify a temporal window we can use as a cut-off for concluding that *"the bird flew continuously between the fly-by detection at Fullerton Entrance and the next detection at another Motus station"* (or, in the reverse case, between a detection at another station and the fly-by at Fullerton entrance during a falling tide).
+We then look at the **distribution of the delay** between a detectiona at Fullerton entrance and another Motus station, in order to identify a temporal window we can use as a cut-off for concluding that *"the bird flew continuously between the fly-by detection at Fullerton Entrance and the next detection at another Motus station"* (or, in the reverse case, between a detection at another station and the fly-by at Fullerton entrance during a dropping tide).
 
 We first filter out any extreme tail in the data, then visualise the distribution to estimate how many underlying components it contains.
 
@@ -269,7 +269,7 @@ legend("bottom",
 
 Looking through the time of the detection for each fly-by, we have been curious to look at the temporal distribution of the fly-by depending the directions to see whether it was tide dependent only or also relying on the time of the day. See below.
 
-```{r hours distribution, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+```{r hours distribution, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
 
 flyby_dt %>%
   
@@ -285,7 +285,7 @@ flyby_dt %>%
   
   scale_fill_manual(
     values = c("From mudflat (rising tide)" = "white",
-               "To mudflat (falling tide)"  = "grey70"),
+               "To mudflat (dropping tide)"  = "grey70"),
     name = "Direction of the flyby",
     guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
   
@@ -302,7 +302,7 @@ flyby_dt %>%
     x = "Hour of day",
     y = "Count of flybys",
     title = "Flyby detections at Fullerton Cove",
-    subtitle = "Direction inferred from rising/falling tide, sometimes verified by a\npreceding or following detection at another Motus station") +
+    subtitle = "Direction inferred from rising/dropping tide, sometimes verified by a\npreceding or following detection at another Motus station") +
   
   theme_minimal(base_size = 15) +
   
@@ -321,8 +321,47 @@ flyby_dt %>%
     plot.margin = margin(10, 15, 10, 10))
 ```
 
+check confounding effect with **average** tide between Oct-March: 
+
+::: {.callout-tip collapse="true" title="See tide table 2"}
+```{r 1 Tide table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+tide_data %>%
+  DT::datatable()
+```
+:::
+
+```{r 1 Tide table curve 2, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
+
+# Filter to Oct-Mar, extract hour of day, average tide height per hour
+tide_hourly <- tide_data %>%
+  
+  filter(monthNum %in% c(10, 11, 12, 1, 2, 3)) %>%
+  
+  mutate(hour = lubridate::hour(tideDateTimeAus)) %>% 
+  group_by(hour_bin = floor(hour)) %>%                                     
+  summarise(
+    mean_height = mean(tideHeight, na.rm = TRUE),
+    se_height   = sd(tideHeight, na.rm = TRUE) / sqrt(n()),
+    n           = n(),
+    .groups = "drop")
+
+ggplot(tide_hourly, aes(x = hour_bin, y = mean_height)) +
+  geom_col(fill = "grey70", width = 0.8, alpha = 0.6) +
+  geom_smooth(method = "loess", span = 0.4, color = "#2C3E50", 
+              linewidth = 1.2, se = TRUE, fill = "#2C3E50", alpha = 0.15) +
+  geom_errorbar(aes(ymin = mean_height - se_height, ymax = mean_height + se_height),
+                width = 0.2, color = "grey30") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(x = "Hour of Day", y = "Mean Tide Height (m)",
+       title = "Average Tide Height by Hour of Day",
+       subtitle = "October - March, averaged across all years | error bars = SE") +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid.minor = element_blank())
+
+```
+
 ::: {.callout-tip collapse="true" title="See per species"}
-```{r hours distribution per species, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+```{r hours distribution per species, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 flyby_dt %>%
   
@@ -340,7 +379,7 @@ flyby_dt %>%
   
   scale_fill_manual(
     values = c("From mudflat (rising tide)" = "white",
-               "To mudflat (falling tide)"  = "grey70"),
+               "To mudflat (dropping tide)"  = "grey70"),
     name = "Direction of the flyby",
     guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
   
@@ -357,7 +396,7 @@ flyby_dt %>%
     x = "Hour of day",
     y = "Count of flybys",
     title = "Flyby detections at Fullerton Cove",
-    subtitle = "Direction inferred from rising/falling tide, sometimes verified by a\npreceding or following detection at another Motus station") +
+    subtitle = "Direction inferred from rising/dropping tide, sometimes verified by a\npreceding or following detection at another Motus station") +
   
   theme_minimal(base_size = 15) +
   
@@ -378,7 +417,7 @@ flyby_dt %>%
 :::
 
 ::: {.callout-tip collapse="true" title="See for summary data table"}
-```{r hours distribution per species summary data table, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+```{r hours distribution per species summary data table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 library(gt)
 
@@ -488,7 +527,7 @@ flyby_summary %>%
 :::
 
 ::: {.callout-tip collapse="true" title="See for raw data table"}
-```{r hours distribution per species raw data table, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+```{r hours distribution per species raw data table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
 flyby_dt %>%
   DT::datatable()
@@ -550,7 +589,7 @@ For actual site use events, the duration a bird spent at Fullerton Entrance is s
 
 For fly-bys there is no direct duration - instead we use the surrounding **tide turning point** as a proxy boundary for how long the bird likely remained on the mudflat:
 
--   **To mudflat (falling tide)** - from the moment the bird was detected (`visitEnd`) to the *next* tide turning point (i.e. the remainder of the current tide phase).
+-   **To mudflat (dropping tide)** - from the moment the bird was detected (`visitEnd`) to the *next* tide turning point (i.e. the remainder of the current tide phase).
 -   **From mudflat (rising tide)** - from the *previous* tide turning point back to the moment the bird was detected (`visitStart`) (i.e. how long the current tide phase had already run before the bird arrived for detection).
 
 ```{r fc tide helpers, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
@@ -587,7 +626,7 @@ plot_data <- fc_classified %>%
   mutate(direction = replace_na(direction, "Actual site use")) %>% ## Be careful and know your data here
   
   filter(direction %in% c("Actual site use", 
-                          "To mudflat (falling tide)",
+                          "To mudflat (dropping tide)",
                           "From mudflat (rising tide)")) %>%
   rowwise() %>%
   mutate(
@@ -595,11 +634,11 @@ plot_data <- fc_classified %>%
                        "Fullerton entrance", "Fullerton mudflat"),
     win_start = case_when(
       direction == "Actual site use"                    ~ visitStart,
-      direction == "To mudflat (falling tide)"    ~ visitEnd,
+      direction == "To mudflat (dropping tide)"    ~ visitEnd,
       direction == "From mudflat (rising tide)"   ~ prev_tide_turn(visitStart)),
     win_end = case_when(
       direction == "Actual site use"                    ~ visitEnd,
-      direction == "To mudflat (falling tide)"    ~ next_tide_turn(visitEnd),
+      direction == "To mudflat (dropping tide)"    ~ next_tide_turn(visitEnd),
       direction == "From mudflat (rising tide)"   ~ visitStart),
     duration_h_final = as.numeric(difftime(win_end, win_start, units = "hours")),
     tideCategory_dom  = dominant_tide(win_start, win_end),
@@ -737,7 +776,7 @@ Instead of just assuming a tide-based guess about which direction birds were fly
 # --- WHY THE CURRENT CHECK IS CIRCULAR ---------------------------------------
 # In the original code, `other_visit` is only searched:
 #   - forward in time IF the tide rule said "From mudflat (rising tide)"
-#   - backward in time IF the tide rule said "To mudflat (falling tide)"
+#   - backward in time IF the tide rule said "To mudflat (dropping tide)"
 # So "verified" only means "a detection existed on the side the tide rule
 # told us to look at" - it never checks the OTHER side, so it can't catch
 # cases where the tide rule is wrong. To really validate the rule, we need
@@ -791,7 +830,7 @@ flyby_check <- flyby_check %>%
     empirical_direction = case_when(
       !is.na(prev_delay) & prev_delay <= flyby_window_min &
       !is.na(next_delay) & next_delay <= flyby_window_min   ~ "Ambiguous",
-      !is.na(prev_delay) & prev_delay <= flyby_window_min   ~ "To mudflat (falling tide)",
+      !is.na(prev_delay) & prev_delay <= flyby_window_min   ~ "To mudflat (dropping tide)",
       !is.na(next_delay) & next_delay <= flyby_window_min   ~ "From mudflat (rising tide)",
       TRUE ~ NA_character_
     )
@@ -801,7 +840,7 @@ flyby_check <- flyby_check %>%
 # Only events with an unambiguous, independently-determined direction can be
 # used to check the tide rule.
 validation_set <- flyby_check %>%
-  filter(empirical_direction %in% c("To mudflat (falling tide)", "From mudflat (rising tide)"))
+  filter(empirical_direction %in% c("To mudflat (dropping tide)", "From mudflat (rising tide)"))
 
 n_validated  <- nrow(validation_set)
 n_total_flyby <- nrow(flyby_check)
@@ -882,7 +921,7 @@ pred_grid <- expand.grid(
     tide_label = factor(
       tide_pred,
       levels = c(0, 1),
-      labels = c("Predicted: To mudflat (falling tide)",
+      labels = c("Predicted: To mudflat (dropping tide)",
                  "Predicted: From mudflat (rising tide)")
     )
   )
@@ -893,12 +932,12 @@ plot_data <- validation_glm %>%
     hour = lubridate::hour(visitStart),
     obs_direction = factor(
       empirical_direction,
-      levels = c("From mudflat (rising tide)", "To mudflat (falling tide)")
+      levels = c("From mudflat (rising tide)", "To mudflat (dropping tide)")
     ),
     tide_label = factor(
       tide_pred,
       levels = c(0, 1),
-      labels = c("Predicted: To mudflat (falling tide)",
+      labels = c("Predicted: To mudflat (dropping tide)",
                  "Predicted: From mudflat (rising tide)")
     )
   )
@@ -920,7 +959,7 @@ p1 <- ggplot() +
   ) +
   scale_colour_manual(
     name = "Tide prediction",
-    values = c("Predicted: To mudflat (falling tide)" = "steelblue",
+    values = c("Predicted: To mudflat (dropping tide)" = "steelblue",
                "Predicted: From mudflat (rising tide)" = "firebrick")
   ) +
   labs(
