@@ -708,7 +708,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p><strong>Visually,</strong> we can estimate that the overall temporal window for continuous flights between the Fullerton entrance and another Motus station is about 10 minutes. However, we can fit an N-mixture model to confirm this.</p>
+<p><strong>Visually,</strong> we can estimate that the overall temporal window for continuous flights between the Fullerton entrance and another Motus station is about 100 minutes. However, we can fit an N-mixture model to confirm this.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>delay_vals <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(flyby_dt_trimmed<span class="sc">$</span>delay)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)  <span class="co"># EM is stochastic in its starting values</span></span>
