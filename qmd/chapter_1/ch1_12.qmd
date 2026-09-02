@@ -122,7 +122,11 @@ gaps <- runs %>%
   filter(gapHours > 0) # we are not dealing with overlaps yet (simultaneous detection of the same tag from two or more antenna)
 ```
 
-**3. Truncate gaps** (hours) for mixture model fitting. ::: blockquote-yellow **NOTE:** Below are values you should choose based on your own data and on the ecological plausibility of your system. :::
+**3. Truncate gaps** (hours) for mixture model fitting. 
+
+::: blockquote-yellow **NOTE:** 
+Below are values you should choose based on your own data and on the ecological plausibility of your system.
+:::
 
 ```{r gap selection, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
 
@@ -1683,7 +1687,7 @@ species_plots <- setNames(
 ```
 
 ::: panel-tabset
-```{r 4 glm per species, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'hide'}
+```{r 4 glm per species, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'asis'}
 
 for (sp in names(species_plots)) {
   cat("##### ", sp, "\n\n")   # creates one tab, titled with the species name
