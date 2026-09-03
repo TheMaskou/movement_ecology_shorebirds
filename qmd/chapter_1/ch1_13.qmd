@@ -22,7 +22,7 @@ Since we cannot detect birds directly on Fullerton mudflat, we use fly-by detect
 As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
 
 ::: blockquote-blue
-*visit_duration* is then used onward so, the same rule applies in the data-set:  **< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
+*visit_duration* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
 :::
 
 ```{r set-up 1, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
@@ -46,7 +46,6 @@ library(ggpattern)
 
 Now, we pre-fill some **key-values** we need to set-up the workflow.
 
-
 ```{r fc visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 focal_station    <- "Fullerton Entrance"   # the directional antenna
 
@@ -58,6 +57,214 @@ tide_lookahead_h <- 2                      # Period (hours) before/after of an "
 fc_visits <- visit_duration %>%
   filter(recvDeployName == focal_station) %>%
   mutate(duration_min = duration_h * 60)
+
+```
+
+
+```{r fc visits check, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+
+# VISIT COUNT FULLERTON
+fc_visits %>%
+  
+  mutate(hour = lubridate::hour(visitStart)) %>%
+  count(hour) %>%
+  
+  ggplot(aes(x = hour, y = n)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Visit Starts COUNT by Hour of Day - FULLERTON",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+
+# VISIT COUNT ALL
+visit_duration %>%
+  
+  mutate(hour = lubridate::hour(visitStart)) %>%
+  count(hour) %>%
+  
+  ggplot(aes(x = hour, y = n)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Visit Starts COUNT by Hour of Day - ALL",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+
+# DURATION ALL
+visit_duration %>%
+  
+  mutate(hour = lubridate::hour(visitStart)) %>%
+  group_by(hour) %>%
+  summarise(total_duration_h = sum(duration_h, na.rm = TRUE)) %>%
+  
+  ggplot(aes(x = hour, y = total_duration_h)) +
+  
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Sum of HOURS, by Hour of Day - ALL visits",
+       x = "Hour of Day",
+       y = "Total Duration (hours)") +
+  theme_minimal()
+
+# DURATION FULLERTON
+fc_visits %>%
+  
+  mutate(hour = lubridate::hour(visitStart)) %>%
+  group_by(hour) %>%
+  summarise(total_duration_h = sum(duration_h, na.rm = TRUE)) %>%
+  
+  ggplot(aes(x = hour, y = total_duration_h)) +
+  
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Sum of HOURS, by Hour of Day - FULLERTON visits",
+       x = "Hour of Day",
+       y = "Total Duration (hours)") +
+  theme_minimal()
+
+# DATA RAW COUNT ALL
+data_all %>%
+  
+  mutate(hour = lubridate::hour(timeAus)) %>%
+  count(hour) %>%
+  
+  ggplot(aes(x = hour, y = n)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Raw detection COUNT by Hour of Day - ALL",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+# DATA RAW COUNT FULLERTON
+data_all %>%
+  
+  filter(recvDeployName=="Fullerton Entrance") %>%
+  mutate(hour = lubridate::hour(timeAus)) %>%
+  count(hour) %>%
+  
+  ggplot(aes(x = hour, y = n)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Raw detection COUNT by Hour of Day - FULLERTON",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+
+# OLD DURATION TO CHECK - FULLERTON
+data_all %>%
+  
+  filter(recvDeployName == "Fullerton Entrance") %>%
+  mutate(
+    burst_inter = ifelse(tagModel == "NTQB2-6-2", dseconds(7.1), dseconds(13.1)),
+    hour = lubridate::hour(timeAus)) %>%
+  
+  group_by(hour) %>%
+  summarise(total_duration_h = sum(as.numeric(burst_inter), na.rm = TRUE) / 3600) %>%
+  ggplot(aes(x = hour, y = total_duration_h)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Raw detection duration (OLD method) by Hour of Day - Fullerton",
+       x = "Hour of Day",
+       y = "Total Duration (hours)") +
+  theme_minimal()
+
+# OLD DURATION TO CHECK - ALL
+data_all %>%
+  
+  mutate(
+    burst_inter = ifelse(tagModel == "NTQB2-6-2", dseconds(7.1), dseconds(13.1)),
+    hour = lubridate::hour(timeAus)) %>%
+  
+  group_by(hour) %>%
+  summarise(total_duration_h = sum(as.numeric(burst_inter), na.rm = TRUE) / 3600) %>%
+  ggplot(aes(x = hour, y = total_duration_h)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Raw detection duration (OLD method) by Hour of Day - ALL",
+       x = "Hour of Day",
+       y = "Total Duration (hours)") +
+  theme_minimal()
+
+
+## TEST SAMPLE COUNT ALL
+set.seed(123)
+data_all %>% 
+  
+  slice_sample(n = 1000) %>%
+  
+  mutate(hour = lubridate::hour(timeAus)) %>%
+  count(hour) %>%
+  
+  ggplot(aes(x = hour, y = n)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Raw detection COUNT by Hour of Day - ALL - SAMPLE TEST (n = 1000)",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+## TEST SAMPLE DURATION ALL
+set.seed(123)
+data_all %>% 
+  
+  slice_sample(n = 1000) %>%
+  
+  mutate(
+    burst_inter = ifelse(tagModel == "NTQB2-6-2", dseconds(7.1), dseconds(13.1)),
+    hour = lubridate::hour(timeAus)) %>%
+  
+  group_by(hour) %>%
+  summarise(total_duration_h = sum(as.numeric(burst_inter), na.rm = TRUE) / 3600) %>%
+  
+  ggplot(aes(x = hour, y = total_duration_h)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "Raw detection DURATION (old) by Hour of Day - ALL - SAMPLE TEST (n = 1000)",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+
+## TEST SAMPLE DURATION ALL
+set.seed(123)
+visit_duration %>% 
+  
+  slice_sample(n = 1000) %>%
+  
+  mutate(hour = lubridate::hour(visitStart)) %>%
+  group_by(hour) %>%
+  summarise(total_duration_h = sum(duration_h, na.rm = TRUE)) %>%
+
+  ggplot(aes(x = hour, y = total_duration_h)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "DURATION visitStart by Hour of Day - ALL - SAMPLE TEST (n = 1000)",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
+## TEST SAMPLE DURATION ALL
+set.seed(123)
+visit_duration %>% 
+  
+  slice_sample(n = 1000) %>%
+  
+  count(visitStart) %>%
+  mutate(hour = lubridate::hour(visitStart)) %>%
+
+  ggplot(aes(x = hour, y = n)) +
+  geom_col(fill = "steelblue") +
+  scale_x_continuous(breaks = 0:23) +
+  labs(title = "DURATION visitStart by Hour of Day - ALL - SAMPLE TEST (n = 1000)",
+       x = "Hour of Day",
+       y = "Number of Visits") +
+  theme_minimal()
+
 ```
 
 ## When is it a fly-by?
@@ -226,7 +433,7 @@ flyby_dt %>%
        xlab  = "Delay (minutes)") 
 ```
 
-So we **visually** decided to filter out delays of more than 4000 min (~ 2.8 days).
+So we **visually** decided to filter out delays of more than 4000 min (\~ 2.8 days).
 
 ```{r filter and plot, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
 flyby_dt_trimmed  <- flyby_dt %>% 
@@ -273,7 +480,7 @@ flyby_window_min
 
 ```
 
-With a statistically determined **threshold**, any delay between a detection at the Fullerton entrance and a another Motus station that is shorter than `r flyby_window_min` minutes will be treated as a *verified* flight direction for the bird. Beyond this value, a continuous flight inferred from a double-detection data based might not be considered realistic, suggesting detection at another Motus station cannot be trusted to infer the bird’s flight direction. 
+With a statistically determined **threshold**, any delay between a detection at the Fullerton entrance and a another Motus station that is shorter than `r flyby_window_min` minutes will be treated as a *verified* flight direction for the bird. Beyond this value, a continuous flight inferred from a double-detection data based might not be considered realistic, suggesting detection at another Motus station cannot be trusted to infer the bird’s flight direction.
 
 **See below for the distribution of these results.**
 
@@ -339,7 +546,7 @@ names(plot_list) <- species_df$speciesEN
 plot_list
 ```
 
-::::: panel-tabset
+::: panel-tabset
 ##### Resident
 
 ```{r used-rate-resident2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
@@ -363,8 +570,7 @@ for (sp in migratory_species) {
   cat("\n\n")
 }
 ```
-:::::
-
+:::
 
 Looking through the time of the detection for each *fly-bys*, we have been curious to look at the temporal distribution of the fly-by depending the directions to see whether it was tide dependent only or also relying on the time of the day. See below.
 
@@ -422,7 +628,7 @@ flyby_dt %>%
     plot.margin = margin(10, 15, 10, 10))
 ```
 
-check confounding effect with **average** tide between Oct-March: 
+check confounding effect with **average** tide between Oct-March:
 
 ::: {.callout-tip collapse="true" title="See tide table 2"}
 ```{r 1 Tide table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
@@ -563,8 +769,7 @@ names(plot_list_hourly) <- species_df$speciesEN
 
 ```
 
-
-::::: panel-tabset
+::: panel-tabset
 ##### Resident
 
 ```{r used-rate-resident, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
@@ -588,8 +793,7 @@ for (sp in migratory_species) {
   cat("\n\n")
 }
 ```
-:::::
-
+:::
 
 ::: {.callout-tip collapse="true" title="See for summary data table"}
 ```{r hours distribution per species summary data table, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
@@ -1006,7 +1210,6 @@ plot_summary %>%
 ## *Beta \|* Statistical analysis
 
 ::: {.callout-tip collapse="true" title="See exploratory analysis"}
-
 Instead of just assuming a tide-based guess about which direction birds were flying, we statistically provide a score for how often it's actually right.
 
 ```{r GLM direction, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'hide'}
@@ -1283,6 +1486,4 @@ cat(sprintf(
 ))
 
 ```
-
-
 :::
