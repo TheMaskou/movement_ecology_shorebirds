@@ -865,14 +865,16 @@ make_plot <- function(tide_level, species_type) {
                   fill = tideDiel))
   
   # Always add boxplot for all available data
-  p <- p + 
+p <- p + 
     geom_boxplot(outlier.shape = NA,
                  varwidth = FALSE,
                  position = position_dodge(width = 0.8, preserve = "single")) +
     
-    # Always show individual points
+    # Always show individual points, jittered within each dodge group
     geom_point(aes(shape = tideDiel), 
-               position = position_dodge(width = 0.8),
+               position = position_jitterdodge(jitter.width = 0.7,
+                                                jitter.height = 0,
+                                                dodge.width = 0.8),
                alpha = 1, size = 1.5,
                show.legend = FALSE) +
     scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
@@ -895,60 +897,6 @@ make_plot <- function(tide_level, species_type) {
 # Generate all plots
 plots_used_rate <- purrr::cross2(tide_levels, species_types) %>%
   purrr::map(~ make_plot(.x[[1]], .x[[2]]))
-
-
-
-
-
-
-
-
-make_plot_v <- function(tide_level, species_type) {
-  data_sub <- figure_plot %>%
-    filter(tideHighLow == tide_level) %>%
-    mutate(species_class = shorebird_class[speciesEN]) %>%
-    filter(species_class == species_type)
-  
-  p <- ggplot(data_sub,
-              aes(x    = factor(recvDeployName, levels = sort(unique(recvDeployName))),
-                  y    = rate_use,
-                  fill = tideDiel))
-  
-  # Violin plot instead
-  p <- p + 
-    geom_violin(outlier.shape = NA,
-                trim = TRUE,
-                varwidth = FALSE,
-                scale = "width",
-                width = 0.8,
-                position = position_dodge(width = 1.2, preserve = "single"),
-                alpha = 0.7) +
-    
-    # Always show individual points
-    geom_point(aes(shape = tideDiel), 
-               position = position_dodge(width = 0.8),
-               alpha = 1, size = 1.5,
-               show.legend = FALSE) +
-    scale_shape_manual(values = c("Diurnal" = 21, "Nocturnal" = 16)) +
-    
-    facet_wrap(~ speciesEN,
-               labeller = labeller(speciesEN = label_vec)) +
-    labs(x     = "Receiver Deployment",
-         y     = "Rate of Use (%)",
-         title = paste(ifelse(species_type == "migratory",
-                              "Migratory species", "Resident species"),
-                       "during", tide_level, "tide")) +
-    coord_cartesian(ylim = c(0, 100)) +
-    theme_minimal() +
-    scale_fill_manual(values = c("Diurnal" = "white", "Nocturnal" = "darkgrey")) +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-  
-  return(p)
-}
-
-# Generate all plots
-plots_used_rate_v <- purrr::cross2(tide_levels, species_types) %>%
-  purrr::map(~ make_plot_v(.x[[1]], .x[[2]]))
 
 ```
 
@@ -994,7 +942,6 @@ low_resident <- make_summary_table("Low", "resident")
 
 ```{r 4 Used rate 1, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[4]]
-plots_used_rate_v[[4]]
 ```
 
 ::: {.callout-tip collapse="true" title="High Tide Resident birds"}
@@ -1024,7 +971,6 @@ high_resident  %>%
 ```{r 4 Used rate 2, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 plots_used_rate[[3]]
-plots_used_rate_v[[3]]
 
 ```
 
@@ -1058,7 +1004,6 @@ low_resident  %>%
 
 ```{r 4 Used rate 3, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 plots_used_rate[[2]]
-plots_used_rate_v[[2]]
 
 ```
 
@@ -1089,7 +1034,6 @@ high_migratory  %>%
 ```{r 4 Used rate 4, message = FALSE,  warning = FALSE, echo = FALSE, eval = TRUE, results = 'asis'}
 
 plots_used_rate[[1]]
-plots_used_rate_v[[1]]
 
 ```
 
@@ -1118,7 +1062,7 @@ low_migratory  %>%
 
 ## *Beta \|* Statistical analysis (GLM)
 
-**EXPLORATORY**
+::: {.callout-tip collapse="true" title="See exploratory analysis"}
 
 Instead of simple "*the boxplots look different*" we statistically analyse with GLM the data to estimate tidal and circadian cycles effects per species, correctly weighted and accounting for the fact that a same bird may appears many times.
 
@@ -1698,4 +1642,6 @@ for (sp in names(species_plots)) {
   cat("\n\n")                 # blank line so the next tab marker is parsed correctly
 }
 ```
+:::
+
 :::
