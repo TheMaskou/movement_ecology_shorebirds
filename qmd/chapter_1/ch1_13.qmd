@@ -316,8 +316,8 @@ flyby_dt <- flyby_dt %>%
   
   mutate(
     direction = case_when(
-      nearestTideLevel == "High" ~ "Fly-by from mudflat (dropping tide)",
-      nearestTideLevel == "Low"  ~ "Fly-by toward mudflat (dropping tide)",
+      nearestTideLevel == "High" ~ "BACK from mudflat (rising tide)",
+      nearestTideLevel == "Low"  ~ "TO mudflat (dropping tide)",
       TRUE ~ NA_character_ ))
 
 
@@ -340,13 +340,13 @@ flyby_dt <- flyby_dt %>%
     .station = recvDeployName,
     
     other_passage = list(
-      if (direction == "Fly-by from mudflat (dropping tide)") {
+      if (direction == "BACK from mudflat (rising tide)") {
         all_passages_dt %>%
           filter(as.character(Band.ID) == .band,
                  recvDeployName != .station,
                  visitStart >= .start) %>%
           slice_min(visitStart, n = 1, with_ties = FALSE)
-      } else if (direction == "Fly-by toward mudflat (dropping tide)") {
+      } else if (direction == "TO mudflat (dropping tide)") {
         all_passages_dt %>%
           filter(as.character(Band.ID) == .band,
                  recvDeployName != .station,
@@ -490,8 +490,8 @@ plot_list <- purrr::pmap(species_df, function(speciesEN, species_type) {
     ggplot(aes(x = delay_min, fill = direction)) +
     geom_histogram(bins = 30, position = "identity", alpha = 0.6, color = "white") +
     facet_wrap(~ side_detection) +
-    scale_fill_manual(values = c("Fly-by from mudflat (dropping tide)" = "#E69F00",
-                                  "Fly-by toward mudflat (dropping tide)" = "#2C3E50")) +
+    scale_fill_manual(values = c("BACK from mudflat (rising tide)" = "#E69F00",
+                                  "TO mudflat (dropping tide)" = "#2C3E50")) +
     labs(title = speciesEN,
          subtitle = species_type,
          x = "Delay (minutes)",
@@ -549,8 +549,8 @@ flyby_dt %>%
   facet_wrap(~ direction, nrow = 2) +
   
   scale_fill_manual(
-    values = c("Fly-by from mudflat (dropping tide)" = "#E69F00",
-               "Fly-by toward mudflat (dropping tide)" = "#2C3E50"),
+    values = c("BACK from mudflat (rising tide)" = "#E69F00",
+               "TO mudflat (dropping tide)" = "#2C3E50"),
     name = "Direction of the flyby",
     guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
   
@@ -685,8 +685,8 @@ plot_list_hourly <- purrr::pmap(species_df, function(speciesEN, species_type) {
     geom_vline(xintercept = c(5, 20), color = "black", linewidth = 0.7) +
     
     scale_fill_manual(
-      values = c("Fly-by from mudflat (dropping tide)" = "#E69F00",
-                 "Fly-by toward mudflat (dropping tide)" = "#2C3E50"),
+      values = c("BACK from mudflat (rising tide)" = "#E69F00",
+                 "TO mudflat (dropping tide)" = "#2C3E50"),
       name = "Direction of the flyby",
       guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
     
@@ -928,9 +928,9 @@ For visits, the duration a bird spent at Fullerton Entrance is simply duration_h
 
 For fly-bys there is no direct duration: instead, we estimate how long the bird likely remained on the mudflat using either a corroborating detection at another Motus station, or, when none is available, the surrounding tide turning point as a proxy boundary:
 
-Fly-by toward mudflat (dropping tide) — if the bird was subsequently detected at another station near the next tide event, the duration runs from the moment it was detected here (visitEnd) to that corroborating detection (double_detection). Otherwise, the duration runs from visitEnd to the next tide turning point.
+TO mudflat (dropping tide) — if the bird was subsequently detected at another station near the next tide event, the duration runs from the moment it was detected here (visitEnd) to that corroborating detection (double_detection). Otherwise, the duration runs from visitEnd to the next tide turning point.
 
-Fly-by from mudflat (dropping tide) — if the bird was previously detected as a flyby near the last tide event, the duration runs from that corroborating detection to the moment it was detected here (visitStart) (double_detection). Otherwise, the duration runs from the previous tide turning point to visitStart.
+BACK from mudflat (rising tide) — if the bird was previously detected as a flyby near the last tide event, the duration runs from that corroborating detection to the moment it was detected here (visitStart) (double_detection). Otherwise, the duration runs from the previous tide turning point to visitStart.
 
 **Let's first estimate/compute the time spent into Fullerton mudflat for the fly-bys.**
 
@@ -961,7 +961,7 @@ flyby_dt <- flyby_dt %>%
     # Find the closest detection at another station, searched in the
     # correct direction relative to nearestTideTime
     match_visit = list(
-      if (direction == "Fly-by toward mudflat (dropping tide)") {
+      if (direction == "TO mudflat (dropping tide)") {
         # nearestTideTime is AFTER visitStart -> search forward
         all_passages_dt %>%
           filter(as.character(Band.ID) == .band,
@@ -969,7 +969,7 @@ flyby_dt <- flyby_dt %>%
                  visitStart > .start) %>%
           mutate(diff_to_tide = abs(as.numeric(difftime(visitStart, .tide_time, units = "mins")))) %>%
           slice_min(diff_to_tide, n = 1, with_ties = FALSE)
-      } else if (direction == "Fly-by from mudflat (dropping tide)") {
+      } else if (direction == "BACK from mudflat (rising tide)") {
         # nearestTideTime is BEFORE visitStart -> search backward
         all_passages_dt %>%
           filter(as.character(Band.ID) == .band,
@@ -990,8 +990,8 @@ flyby_dt <- flyby_dt %>%
       TRUE                  ~ "single_detection"),
     
     turning_point = case_when(
-      direction == "Fly-by toward mudflat (dropping tide)" ~ next_turning_point(.start),
-      direction == "Fly-by from mudflat (dropping tide)" ~ prev_turning_point(.start),
+      direction == "TO mudflat (dropping tide)" ~ next_turning_point(.start),
+      direction == "BACK from mudflat (rising tide)" ~ prev_turning_point(.start),
       TRUE ~ as.POSIXct(NA) ),
     
     time_used = case_when(
@@ -1029,8 +1029,8 @@ plot_data <- plot_data %>%
   mutate(direction = replace_na(direction, "Visits")) %>%
   
   filter(direction %in% c("Visits", 
-                           "Fly-by toward mudflat (dropping tide)",
-                           "Fly-by from mudflat (dropping tide)")) %>%
+                           "TO mudflat (dropping tide)",
+                           "BACK from mudflat (rising tide)")) %>%
   rowwise() %>%
   mutate(
     category = if_else(direction == "Visits",
@@ -1038,14 +1038,14 @@ plot_data <- plot_data %>%
     
     win_start = case_when(
       direction == "Visits" ~ visitStart,
-      direction == "Fly-by toward mudflat (dropping tide)" ~ visitEnd,
-      direction == "Fly-by from mudflat (dropping tide)" & time_used_type == "double_detection" ~ side_time,
-      direction == "Fly-by from mudflat (dropping tide)" ~ turning_point),
+      direction == "TO mudflat (dropping tide)" ~ visitEnd,
+      direction == "BACK from mudflat (rising tide)" & time_used_type == "double_detection" ~ side_time,
+      direction == "BACK from mudflat (rising tide)" ~ turning_point),
     win_end = case_when(
       direction == "Visits" ~ visitEnd,
-      direction == "Fly-by toward mudflat (dropping tide)" & time_used_type == "double_detection" ~ side_time,
-      direction == "Fly-by toward mudflat (dropping tide)" ~ turning_point,
-      direction == "Fly-by from mudflat (dropping tide)" ~ visitStart),
+      direction == "TO mudflat (dropping tide)" & time_used_type == "double_detection" ~ side_time,
+      direction == "TO mudflat (dropping tide)" ~ turning_point,
+      direction == "BACK from mudflat (rising tide)" ~ visitStart),
     
     tideCategory = dominant_tide(win_start, win_end),
     tideDiel     = if_else(grepl("Diurnal", tideCategory), "Diurnal", "Nocturnal")) %>%
@@ -1168,6 +1168,13 @@ plot_summary %>%
 
 ## *Beta \|* Statistical analysis
 
+
+```{r GLM diel factor, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'hide'}
+
+
+```
+
+
 ::: {.callout-tip collapse="true" title="See exploratory analysis"}
 Instead of just assuming a tide-based guess about which direction birds were flying, we statistically provide a score for how often it's actually right.
 
@@ -1178,8 +1185,8 @@ Instead of just assuming a tide-based guess about which direction birds were fly
 
 # --- WHY THE CURRENT CHECK IS CIRCULAR ---------------------------------------
 # In the original code, `other_passage` is only searched:
-#   - forward in time IF the tide rule said "Fly-by from mudflat (dropping tide)"
-#   - backward in time IF the tide rule said "Fly-by toward mudflat (dropping tide)"
+#   - forward in time IF the tide rule said "BACK from mudflat (rising tide)"
+#   - backward in time IF the tide rule said "TO mudflat (dropping tide)"
 # So "verified" only means "a detection existed on the side the tide rule
 # told us to look at" - it never checks the OTHER side, so it can't catch
 # cases where the tide rule is wrong. To really validate the rule, we need
@@ -1233,8 +1240,8 @@ flyby_check <- flyby_check %>%
     empirical_direction = case_when(
       !is.na(prev_delay) & prev_delay <= flyby_window_min &
       !is.na(next_delay) & next_delay <= flyby_window_min   ~ "Ambiguous",
-      !is.na(prev_delay) & prev_delay <= flyby_window_min   ~ "Fly-by toward mudflat (dropping tide)",
-      !is.na(next_delay) & next_delay <= flyby_window_min   ~ "Fly-by from mudflat (dropping tide)",
+      !is.na(prev_delay) & prev_delay <= flyby_window_min   ~ "TO mudflat (dropping tide)",
+      !is.na(next_delay) & next_delay <= flyby_window_min   ~ "BACK from mudflat (rising tide)",
       TRUE ~ NA_character_
     )
   )
@@ -1243,7 +1250,7 @@ flyby_check <- flyby_check %>%
 # Only events with an unambiguous, independently-determined direction can be
 # used to check the tide rule.
 validation_set <- flyby_check %>%
-  filter(empirical_direction %in% c("Fly-by toward mudflat (dropping tide)", "Fly-by from mudflat (dropping tide)"))
+  filter(empirical_direction %in% c("TO mudflat (dropping tide)", "BACK from mudflat (rising tide)"))
 
 n_validated  <- nrow(validation_set)
 n_total_flyby <- nrow(flyby_check)
@@ -1277,9 +1284,9 @@ cat("Tide-rule accuracy against independently-confirmed direction:",
 # fit only on the validated (ground-truth) subset.
 validation_glm <- validation_set %>%
   mutate(
-    y         = if_else(empirical_direction == "Fly-by from mudflat (dropping tide)", 1, 0),
+    y         = if_else(empirical_direction == "BACK from mudflat (rising tide)", 1, 0),
     hour      = lubridate::hour(visitStart),
-    tide_pred = if_else(direction == "Fly-by from mudflat (dropping tide)", 1, 0)
+    tide_pred = if_else(direction == "BACK from mudflat (rising tide)", 1, 0)
   )
 
 m_dir_tide_only <- glm(y ~ tide_pred,          data = validation_glm, family = binomial)
@@ -1324,8 +1331,8 @@ pred_grid <- expand.grid(
     tide_label = factor(
       tide_pred,
       levels = c(0, 1),
-      labels = c("Predicted: Fly-by toward mudflat (dropping tide)",
-                 "Predicted: Fly-by from mudflat (dropping tide)")
+      labels = c("Predicted: TO mudflat (dropping tide)",
+                 "Predicted: BACK from mudflat (rising tide)")
     )
   )
 
@@ -1335,13 +1342,13 @@ plot_data <- validation_glm %>%
     hour = lubridate::hour(visitStart),
     obs_direction = factor(
       empirical_direction,
-      levels = c("Fly-by from mudflat (dropping tide)", "Fly-by toward mudflat (dropping tide)")
+      levels = c("BACK from mudflat (rising tide)", "TO mudflat (dropping tide)")
     ),
     tide_label = factor(
       tide_pred,
       levels = c(0, 1),
-      labels = c("Predicted: Fly-by toward mudflat (dropping tide)",
-                 "Predicted: Fly-by from mudflat (dropping tide)")
+      labels = c("Predicted: TO mudflat (dropping tide)",
+                 "Predicted: BACK from mudflat (rising tide)")
     )
   )
 
@@ -1356,18 +1363,18 @@ p1 <- ggplot() +
   # Observed data points
   geom_point(
     data = plot_data,
-    aes(x = hour, y = as.numeric(empirical_direction == "Fly-by from mudflat (dropping tide)"),
+    aes(x = hour, y = as.numeric(empirical_direction == "BACK from mudflat (rising tide)"),
         colour = tide_label),
     alpha = 0.5, size = 2, position = position_jitter(height = 0, width = 0.15)
   ) +
   scale_colour_manual(
     name = "Tide prediction",
-    values = c("Predicted: Fly-by toward mudflat (dropping tide)" = "steelblue",
-               "Predicted: Fly-by from mudflat (dropping tide)" = "firebrick")
+    values = c("Predicted: TO mudflat (dropping tide)" = "steelblue",
+               "Predicted: BACK from mudflat (rising tide)" = "firebrick")
   ) +
   labs(
     x = "Hour of day",
-    y = "Probability: Fly-by from mudflat (dropping tide)",
+    y = "Probability: BACK from mudflat (rising tide)",
     title = "Logistic Model: \nDirection vs Hour + Tide Prediction",
     subtitle = sprintf("AIC = %.2f | Hour β = %.3f (p = %.3f)",
                        AIC(m_dir_plus_hour),
@@ -1394,7 +1401,7 @@ plot_data_binned <- plot_data %>%
   ) %>%
   group_by(hour_bin, .drop = FALSE) %>%
   summarise(
-    prop_from_mudflat = mean(empirical_direction == "Fly-by from mudflat (dropping tide)"),
+    prop_from_mudflat = mean(empirical_direction == "BACK from mudflat (rising tide)"),
     n = n(),
     .groups = "drop"
   ) %>%
@@ -1408,7 +1415,7 @@ p2 <- ggplot(plot_data_binned, aes(x = hour_bin, y = prop_from_mudflat)) +
   ) +
   labs(
     x = "Hour of day",
-    y = "Proportion: Fly-by from mudflat (dropping tide)",
+    y = "Proportion: BACK from mudflat (rising tide)",
     title = "Observed Direction by Time of Day"
   ) +
   scale_y_continuous(limits = c(0, 1.05), breaks = seq(0, 1, by = 0.25)) +
@@ -1424,7 +1431,6 @@ p2 <- ggplot(plot_data_binned, aes(x = hour_bin, y = prop_from_mudflat)) +
 library(patchwork)  # or use gridExtra::grid.arrange(p1, p2, ncol = 2)
 
 p_combined <- p1 + p2 +
-  plot_layout(ncol = 2, widths = c(1.2, 1)) &
   theme(plot.margin = margin(10, 10, 10, 10))
 
 print(p_combined)
