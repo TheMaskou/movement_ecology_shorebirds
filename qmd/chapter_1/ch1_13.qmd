@@ -379,6 +379,7 @@ datatable(
   formatStyle("total_h", background = styleColorBar(hour_summary_dt$total_h, "lightblue")) %>%
   formatStyle("median_h", background = styleColorBar(hour_summary_dt$median_h, "lightblue"))
 ```
+:::
 
 ## When is it a fly-by?
 
