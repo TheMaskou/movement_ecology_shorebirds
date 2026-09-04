@@ -60,7 +60,6 @@ fc_passages <- visit_duration %>%
 
 ```
 
-
 ```{r fc visits check, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # ============================================================
@@ -223,6 +222,163 @@ print(plots_hourly[["raw_duration_old_fullerton"]])
 ```
 :::
 
+**Let's now look at the visits and the fly-bys differently, both plotted as function of its duration.** Including birds variation.
+
+```{r fc visits duration check, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
+# ============================================================
+# Horizontal box plot: Hour of Day (y) vs Visit Duration (x),
+# with per-Band.ID variation shown as jittered points
+# ============================================================
+
+add_sun_reference_h <- function(p, dates) {
+  sun_sub <- sun_lookup %>% filter(date %in% unique(as_date(dates)))
+  if (nrow(sun_sub) == 0) return(p)
+
+  sr <- quantile(sun_sub$sunrise_hour, c(0.1, 0.5, 0.9), na.rm = TRUE)
+  ss <- quantile(sun_sub$sunset_hour,  c(0.1, 0.5, 0.9), na.rm = TRUE)
+
+  # Default ascending factor(hour, levels=0:23): "0" is level 1 (bottom),
+  # "23" is level 24 (top). Level h sits at discrete position (h + 1).
+  to_pos <- function(x) x + 1
+
+  p +
+    annotate("rect", ymin = to_pos(sr[1]), ymax = to_pos(sr[3]), xmin = -Inf, xmax = Inf,
+             fill = "orange", alpha = 0.15) +
+    geom_hline(yintercept = to_pos(sr[2]), color = "orange", linewidth = 0.8, alpha = 0.8) +
+    annotate("rect", ymin = to_pos(ss[1]), ymax = to_pos(ss[3]), xmin = -Inf, xmax = Inf,
+             fill = "purple", alpha = 0.15) +
+    geom_hline(yintercept = to_pos(ss[2]), color = "purple", linewidth = 0.8, alpha = 0.8)
+}
+
+plot_hour_box_duration <- function(data, time_col, duration_col, title,
+                                    x_lab = "Visit Duration (hours)",
+                                    y_lab = "Hour of Day",
+                                    show_points = TRUE) {
+
+  df <- data %>%
+    mutate(hour = lubridate::hour(.data[[time_col]]),
+           hour_f = factor(hour, levels = 0:23))   # ascending: 0 bottom, 23 top — no limits() needed
+
+  p <- ggplot(df, aes(x = .data[[duration_col]], y = hour_f)) +
+    geom_boxplot(fill = "steelblue", alpha = 0.5, outlier.shape = NA, width = 0.6)
+
+  if (show_points) {
+    p <- p +
+      geom_jitter(aes(color = Band.ID), height = 0.15, width = 0,
+                  size = 0.8, alpha = 0.4, show.legend = FALSE)
+  }
+
+  p <- p +
+    labs(title = title, x = x_lab, y = y_lab) +
+    theme_minimal()
+
+  add_sun_reference_h(p, data[[time_col]])
+}
+
+plots_hourly[["box_duration_all"]] <- plot_hour_box_duration(
+  visit_duration, "visitStart", "duration_h",
+  title = "Visit Duration by Hour of Day \u2014 All Stations (points = individual Band.ID visits)")
+
+plots_hourly[["box_duration_fullerton"]] <- plot_hour_box_duration(
+  fc_passages, "visitStart", "duration_h",
+  title = "Visit Duration by Hour of Day \u2014 Fullerton Entrance (points = individual Band.ID visits)")
+
+
+
+
+
+
+
+
+plot_hour_box_duration_v <- function(data, time_col, duration_col, title,
+                                    x_lab = "Visit Duration (hours)",
+                                    y_lab = "Hour of Day",
+                                    show_points = TRUE) {
+
+  df <- data %>%
+    mutate(hour = lubridate::hour(.data[[time_col]]),
+           hour_f = factor(hour, levels = 0:23))
+
+  p <- ggplot(df, aes(x = .data[[duration_col]], y = hour_f)) +
+    geom_violin(fill = "steelblue", alpha = 0.5, color = "grey30",
+                orientation = "y", scale = "width", trim = TRUE)
+
+  if (show_points) {
+    p <- p +
+      geom_jitter(aes(color = Band.ID), height = 0.15, width = 0,
+                  size = 0.8, alpha = 0.4, show.legend = FALSE)
+  }
+
+  p <- p +
+    scale_y_discrete(limits = as.character(23:0)) +
+    labs(title = title, x = x_lab, y = y_lab) +
+    theme_minimal()
+
+  add_sun_reference_h(p, data[[time_col]])
+}
+
+plots_hourly[["box_duration_all_v"]] <- plot_hour_box_duration_v(
+  visit_duration, "visitStart", "duration_h",
+  title = "Visit Duration by Hour of Day \u2014 All Stations (with individual variation)")
+
+plots_hourly[["box_duration_fullerton_v"]] <- plot_hour_box_duration_v(
+  fc_passages, "visitStart", "duration_h",
+  title = "Visit Duration by Hour of Day \u2014 Fullerton Entrance (with individual variation)")
+
+```
+
+::: panel-tabset
+##### All stations
+
+```{r hourly-count check, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+print(plots_hourly[["box_duration_all"]])
+print(plots_hourly[["box_duration_all_v"]])
+
+```
+
+##### Fullerton Entrance
+
+```{r hourly-count check2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+print(plots_hourly[["box_duration_fullerton"]])
+print(plots_hourly[["box_duration_fullerton_v"]])
+
+```
+:::
+
+::: {.callout-tip collapse="true" title="See summary statistics of the box-plot and the colplots here"}
+
+```{r hourly-count check table, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+library(DT)
+
+hour_summary_dt <- visit_duration %>%
+  mutate(hour = lubridate::hour(visitStart)) %>%
+  group_by(hour) %>%
+  summarise(
+    n_visits = n(),
+    total_h  = sum(duration_h, na.rm = TRUE),
+    median_h = median(duration_h, na.rm = TRUE),
+    mean_h   = mean(duration_h, na.rm = TRUE),
+    max_h    = max(duration_h, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  arrange(hour) %>%
+  mutate(across(c(total_h, median_h, mean_h, max_h), ~ round(.x, 2)))
+
+datatable(
+  hour_summary_dt %>%  arrange(desc(hour)),
+  rownames = FALSE,
+  colnames = c("Hour of Day", "Number of Visits", "Total Duration (h)",
+               "Median Duration (h)", "Mean Duration (h)", "Max Duration (h)"),
+  options = list(
+    pageLength = 24,
+    order = list(list(0, "asc")),   # sort by total_h (0-indexed column 2) descending
+    dom = "ftip"                     # filter box, table, info, pagination — no length menu clutter
+  ),
+  caption = "Visit duration summary by hour of day"
+) %>%
+  formatStyle("total_h", background = styleColorBar(hour_summary_dt$total_h, "lightblue")) %>%
+  formatStyle("median_h", background = styleColorBar(hour_summary_dt$median_h, "lightblue"))
+```
 
 ## When is it a fly-by?
 
@@ -542,7 +698,7 @@ flyby_dt %>%
   ggplot(aes(x = hour_bin, y = n, fill = direction, pattern = retained_cut)) +
   
   geom_col_pattern(
-    width = 0.9, color = "black", linewidth = 0.3,
+    width = 0.9, color = "black", linewidth = 0.3, alpha = 0.7,
     pattern_fill = "white", pattern_colour = "black",
     pattern_density = 0.05, pattern_spacing = 0.02, pattern_angle = 45) +
   
@@ -553,7 +709,7 @@ flyby_dt %>%
                "TO mudflat (dropping tide)" = "#2C3E50"),
     name = "Direction of the flyby",
     guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
-  
+
   scale_pattern_manual(
     values = c("Verified by another Motus station detection" = "stripe",
                "Inferred only from tide data" = "none"),
@@ -676,7 +832,7 @@ plot_list_hourly <- purrr::pmap(species_df, function(speciesEN, species_type) {
     ggplot(aes(x = hour_bin, y = n, fill = direction, pattern = retained_cut)) +
     
     geom_col_pattern(
-      width = 0.9, color = "black", linewidth = 0.3,
+      width = 0.9, color = "black", linewidth = 0.3, alpha = 0.7,
       pattern_fill = "white", pattern_colour = "black",
       pattern_density = 0.05, pattern_spacing = 0.02, pattern_angle = 45) +
     
@@ -689,7 +845,7 @@ plot_list_hourly <- purrr::pmap(species_df, function(speciesEN, species_type) {
                  "TO mudflat (dropping tide)" = "#2C3E50"),
       name = "Direction of the flyby",
       guide = guide_legend(override.aes = list(pattern = "none"), order = 1)) +
-    
+
     scale_pattern_manual(
       values = c("Verified by another Motus station detection" = "stripe",
                  "Inferred only from tide data" = "none"),
@@ -1168,12 +1324,10 @@ plot_summary %>%
 
 ## *Beta \|* Statistical analysis
 
-
 ```{r GLM diel factor, message = FALSE,  warning = FALSE, echo = TRUE, eval = TRUE, results = 'hide'}
 
 
 ```
-
 
 ::: {.callout-tip collapse="true" title="See exploratory analysis"}
 Instead of just assuming a tide-based guess about which direction birds were flying, we statistically provide a score for how often it's actually right.
