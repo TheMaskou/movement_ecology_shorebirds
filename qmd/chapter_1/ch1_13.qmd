@@ -542,8 +542,6 @@ plot_list <- purrr::pmap(species_df, function(speciesEN, species_type) {
 
 names(plot_list) <- species_df$speciesEN
 
-# To view all plots one after another:
-plot_list
 ```
 
 ::: panel-tabset
