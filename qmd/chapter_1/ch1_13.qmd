@@ -17,13 +17,7 @@ Therefore, a tag detection at Fullerton Entrance station is either:
 Since we cannot detect birds directly on Fullerton mudflat, we use fly-by detections at Fullerton Entrance station and their direction (another station → Fullerton Entrance or another station → Fullerton Entrance) as an **indirect proxy for mudflat use**.
 :::
 
-## Set-up data
-
-As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
-
-::: blockquote-blue
-*visit_duration* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
-:::
+## Descriptive analysis
 
 ```{r set-up 1, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
 # Source Station usage - hours (OBP method) script into this environment
@@ -46,24 +40,39 @@ library(ggpattern)
 
 Now, we pre-fill some **key-values** we need to set-up the workflow.
 
-```{r fc visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
-focal_station    <- "Fullerton Entrance"   # the directional antenna
+```{r station visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
-flyby_window_min <- 30                     # Period (min) before/after detection at Fullerton to look for a detection at another station
+# Real stations, alphabetical
+real_stations <- visit_duration %>%
+  distinct(recvDeployName) %>%
+  arrange(recvDeployName) %>%
+  pull(recvDeployName)
 
-tide_lookahead_h <- 2                      # Period (hours) before/after of an "unknown" flyby detection used to infer direction from tide
+# "All Stations" pinned as the first tab, everything else after
+stations <- c("All Stations", real_stations)
 
-# Keep only Fullerton Entrance data with visit duration (min)
-fc_passages <- visit_duration %>%
-  filter(recvDeployName == focal_station) %>%
-  mutate(duration_min = duration_h * 60)
+# Per-station subsets — "All Stations" just uses the full data, unfiltered
+visit_by_station <- setNames(
+  lapply(stations, function(s) {
+    if (s == "All Stations") visit_duration else filter(visit_duration, recvDeployName == s)
+  }),
+  stations
+)
 
+raw_by_station <- setNames(
+  lapply(stations, function(s) {
+    if (s == "All Stations") data_all else filter(data_all, recvDeployName == s)
+  }),
+  stations
+)
 ```
 
-```{r fc visits check, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
+
+
+```{r station visits check, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
 
 # ============================================================
-# Sunrise/sunset lookup (one row per calendar date) built once from data_all
+# Sunrise/sunset lookup — unchanged
 # ============================================================
 
 sun_lookup <- data_all %>%
@@ -74,14 +83,9 @@ sun_lookup <- data_all %>%
     sunset_hour  = lubridate::hour(sunsetNewc)  + lubridate::minute(sunsetNewc)  / 60 + lubridate::second(sunsetNewc)  / 3600
   )
 
-# ============================================================
-# Overlay helper: adds an orange sunrise band + line and a purple sunset
-# band + line, scaled to whichever dates are actually in the plotted data
-# ============================================================
-
 add_sun_reference <- function(p, dates) {
   sun_sub <- sun_lookup %>% filter(date %in% unique(as_date(dates)))
-  if (nrow(sun_sub) == 0) return(p)   # no matching dates, skip silently
+  if (nrow(sun_sub) == 0) return(p)
 
   sr <- quantile(sun_sub$sunrise_hour, c(0.1, 0.5, 0.9), na.rm = TRUE)
   ss <- quantile(sun_sub$sunset_hour,  c(0.1, 0.5, 0.9), na.rm = TRUE)
@@ -95,8 +99,26 @@ add_sun_reference <- function(p, dates) {
     geom_vline(xintercept = ss[2], color = "purple", linewidth = 0.8, alpha = 0.8)
 }
 
+add_sun_reference_h <- function(p, dates) {
+  sun_sub <- sun_lookup %>% filter(date %in% unique(as_date(dates)))
+  if (nrow(sun_sub) == 0) return(p)
+
+  sr <- quantile(sun_sub$sunrise_hour, c(0.1, 0.5, 0.9), na.rm = TRUE)
+  ss <- quantile(sun_sub$sunset_hour,  c(0.1, 0.5, 0.9), na.rm = TRUE)
+
+  to_pos <- function(x) x + 1
+
+  p +
+    annotate("rect", ymin = to_pos(sr[1]), ymax = to_pos(sr[3]), xmin = -Inf, xmax = Inf,
+             fill = "orange", alpha = 0.15) +
+    geom_hline(yintercept = to_pos(sr[2]), color = "orange", linewidth = 0.8, alpha = 0.8) +
+    annotate("rect", ymin = to_pos(ss[1]), ymax = to_pos(ss[3]), xmin = -Inf, xmax = Inf,
+             fill = "purple", alpha = 0.15) +
+    geom_hline(yintercept = to_pos(ss[2]), color = "purple", linewidth = 0.8, alpha = 0.8)
+}
+
 # ============================================================
-# Reusable plot builders (now sun-aware)
+# Reusable plot builders — unchanged
 # ============================================================
 
 plot_hour_count <- function(data, time_col, title,
@@ -128,7 +150,6 @@ plot_hour_duration <- function(data, time_col, duration_col, title,
   add_sun_reference(p, data[[time_col]])
 }
 
-# "Old method": duration proxy from tag burst interval (seconds) per detection
 plot_hour_duration_burst <- function(data, time_col, title,
                                       x_lab = "Hour of Day", y_lab = "Total Duration (hours)") {
   p <- data %>%
@@ -147,117 +168,13 @@ plot_hour_duration_burst <- function(data, time_col, title,
   add_sun_reference(p, data[[time_col]])
 }
 
-# ============================================================
-# Build the list of plots (unchanged structure, now with sun overlay)
-# ============================================================
-
-plots_hourly <- list()
-
-plots_hourly[["count_fullerton"]] <- plot_hour_count(
-  fc_passages, "visitStart",
-  title = "Count of passages by Hour of Day (1h gap rule applied) \u2014 Fullerton Entrance")
-
-plots_hourly[["count_all"]] <- plot_hour_count(
-  visit_duration, "visitStart",
-  title = "Count of passages by Hour of Day (1h gap rule applied) \u2014 All Stations")
-
-plots_hourly[["duration_all"]] <- plot_hour_duration(
-  visit_duration, "visitStart", "duration_h",
-  title = "Total Visit Duration by Hour of Day \u2014 All Stations")
-
-plots_hourly[["duration_fullerton"]] <- plot_hour_duration(
-  fc_passages, "visitStart", "duration_h",
-  title = "Total Visit Duration by Hour of Day \u2014 Fullerton Entrance")
-
-plots_hourly[["raw_count_all"]] <- plot_hour_count(
-  data_all, "timeAus",
-  title = "Count of passages by Hour of Day (Raw Detections) \u2014 All Stations")
-
-plots_hourly[["raw_count_fullerton"]] <- plot_hour_count(
-  data_all %>% filter(recvDeployName == "Fullerton Entrance"), "timeAus",
-  title = "Count of passages by Hour of Day (Raw Detections) \u2014 Fullerton Entrance")
-
-plots_hourly[["raw_duration_old_fullerton"]] <- plot_hour_duration_burst(
-  data_all %>% filter(recvDeployName == "Fullerton Entrance"), "timeAus",
-  title = "Raw Detection Duration (Old Burst-Interval Method) by Hour of Day \u2014 Fullerton Entrance")
-
-plots_hourly[["raw_duration_old_all"]] <- plot_hour_duration_burst(
-  data_all, "timeAus",
-  title = "Raw Detection Duration (Old Burst-Interval Method) by Hour of Day \u2014 All Stations")
-
-set.seed(123)
-sample_all    <- data_all      %>% slice_sample(n = 1000)
-sample_visits <- visit_duration %>% slice_sample(n = 1000)
-
-plots_hourly[["sample_raw_count_all"]] <- plot_hour_count(
-  sample_all, "timeAus",
-  title = "Raw Detections (Count) by Hour of Day \u2014 Random Sample (n = 1000)")
-
-plots_hourly[["sample_raw_duration_old_all"]] <- plot_hour_duration_burst(
-  sample_all, "timeAus",
-  title = "Raw Detection Duration (Old Method) by Hour of Day \u2014 Random Sample (n = 1000)")
-
-plots_hourly[["sample_visit_duration_all"]] <- plot_hour_duration(
-  sample_visits, "visitStart", "duration_h",
-  title = "Total Visit Duration by Hour of Day \u2014 Random Sample (n = 1000)")
-```
-
-::: panel-tabset
-##### Count
-
-```{r hourly-count, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
-print(plots_hourly[["count_all"]])
-print(plots_hourly[["count_fullerton"]])
-print(plots_hourly[["raw_count_all"]])
-print(plots_hourly[["raw_count_fullerton"]])
-```
-
-##### Duration
-
-```{r hourly-duration, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
-print(plots_hourly[["duration_all"]])
-print(plots_hourly[["duration_fullerton"]])
-print(plots_hourly[["raw_duration_old_all"]])
-print(plots_hourly[["raw_duration_old_fullerton"]])
-```
-:::
-
-**Let's now look at the visits and the fly-bys differently, both plotted as function of its duration.** Including birds variation.
-
-```{r fc visits duration check, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
-# ============================================================
-# Horizontal box plot: Hour of Day (y) vs Visit Duration (x),
-# with per-Band.ID variation shown as jittered points
-# ============================================================
-
-add_sun_reference_h <- function(p, dates) {
-  sun_sub <- sun_lookup %>% filter(date %in% unique(as_date(dates)))
-  if (nrow(sun_sub) == 0) return(p)
-
-  sr <- quantile(sun_sub$sunrise_hour, c(0.1, 0.5, 0.9), na.rm = TRUE)
-  ss <- quantile(sun_sub$sunset_hour,  c(0.1, 0.5, 0.9), na.rm = TRUE)
-
-  # Default ascending factor(hour, levels=0:23): "0" is level 1 (bottom),
-  # "23" is level 24 (top). Level h sits at discrete position (h + 1).
-  to_pos <- function(x) x + 1
-
-  p +
-    annotate("rect", ymin = to_pos(sr[1]), ymax = to_pos(sr[3]), xmin = -Inf, xmax = Inf,
-             fill = "orange", alpha = 0.15) +
-    geom_hline(yintercept = to_pos(sr[2]), color = "orange", linewidth = 0.8, alpha = 0.8) +
-    annotate("rect", ymin = to_pos(ss[1]), ymax = to_pos(ss[3]), xmin = -Inf, xmax = Inf,
-             fill = "purple", alpha = 0.15) +
-    geom_hline(yintercept = to_pos(ss[2]), color = "purple", linewidth = 0.8, alpha = 0.8)
-}
-
 plot_hour_box_duration <- function(data, time_col, duration_col, title,
                                     x_lab = "Visit Duration (hours)",
                                     y_lab = "Hour of Day",
                                     show_points = TRUE) {
-
   df <- data %>%
     mutate(hour = lubridate::hour(.data[[time_col]]),
-           hour_f = factor(hour, levels = 0:23))   # ascending: 0 bottom, 23 top — no limits() needed
+           hour_f = factor(hour, levels = 0:23))
 
   p <- ggplot(df, aes(x = .data[[duration_col]], y = hour_f)) +
     geom_boxplot(fill = "steelblue", alpha = 0.5, outlier.shape = NA, width = 0.6)
@@ -269,117 +186,148 @@ plot_hour_box_duration <- function(data, time_col, duration_col, title,
   }
 
   p <- p +
+    scale_y_discrete(limits = as.character(0:23), drop = FALSE) +   
     labs(title = title, x = x_lab, y = y_lab) +
     theme_minimal()
 
   add_sun_reference_h(p, data[[time_col]])
 }
 
-plots_hourly[["box_duration_all"]] <- plot_hour_box_duration(
-  visit_duration, "visitStart", "duration_h",
-  title = "Visit Duration by Hour of Day \u2014 All Stations (points = individual Band.ID visits)")
 
-plots_hourly[["box_duration_fullerton"]] <- plot_hour_box_duration(
-  fc_passages, "visitStart", "duration_h",
-  title = "Visit Duration by Hour of Day \u2014 Fullerton Entrance (points = individual Band.ID visits)")
+# ============================================================
+# Build one set of plots PER STATION
+# ============================================================
 
+plots_hourly <- list(
+  count             = list(),
+  raw_count         = list(),
+  duration          = list(),
+  raw_duration_old  = list(),
+  box_duration      = list(),
+  box_duration_v    = list()
+)
 
+for (s in stations) {
 
+  plots_hourly$count[[s]] <- plot_hour_count(
+    visit_by_station[[s]], "visitStart",
+    title = paste0("Count of passages by Hour of Day (1h gap rule applied) \u2014 ", s))
 
+  plots_hourly$raw_count[[s]] <- plot_hour_count(
+    raw_by_station[[s]], "timeAus",
+    title = paste0("Count of passages by Hour of Day (Raw Detections) \u2014 ", s))
 
+  plots_hourly$duration[[s]] <- plot_hour_duration(
+    visit_by_station[[s]], "visitStart", "duration_h",
+    title = paste0("Total Visit Duration by Hour of Day \u2014 ", s))
 
+  plots_hourly$raw_duration_old[[s]] <- plot_hour_duration_burst(
+    raw_by_station[[s]], "timeAus",
+    title = paste0("Raw Detection Duration (Old Burst-Interval Method) by Hour of Day \u2014 ", s))
 
-
-plot_hour_box_duration_v <- function(data, time_col, duration_col, title,
-                                    x_lab = "Visit Duration (hours)",
-                                    y_lab = "Hour of Day",
-                                    show_points = TRUE) {
-
-  df <- data %>%
-    mutate(hour = lubridate::hour(.data[[time_col]]),
-           hour_f = factor(hour, levels = 0:23))
-
-  p <- ggplot(df, aes(x = .data[[duration_col]], y = hour_f)) +
-    geom_violin(fill = "steelblue", alpha = 0.5, color = "grey30",
-                orientation = "y", scale = "width", trim = TRUE)
-
-  if (show_points) {
-    p <- p +
-      geom_jitter(aes(color = Band.ID), height = 0.15, width = 0,
-                  size = 0.8, alpha = 0.4, show.legend = FALSE)
-  }
-
-  p <- p +
-    scale_y_discrete(limits = as.character(23:0)) +
-    labs(title = title, x = x_lab, y = y_lab) +
-    theme_minimal()
-
-  add_sun_reference_h(p, data[[time_col]])
+  plots_hourly$box_duration[[s]] <- plot_hour_box_duration(
+    visit_by_station[[s]], "visitStart", "duration_h",
+    title = paste0("Visit Duration by Hour of Day \u2014 ", s, " (points = individual Band.ID visits)"))
 }
-
-plots_hourly[["box_duration_all_v"]] <- plot_hour_box_duration_v(
-  visit_duration, "visitStart", "duration_h",
-  title = "Visit Duration by Hour of Day \u2014 All Stations (with individual variation)")
-
-plots_hourly[["box_duration_fullerton_v"]] <- plot_hour_box_duration_v(
-  fc_passages, "visitStart", "duration_h",
-  title = "Visit Duration by Hour of Day \u2014 Fullerton Entrance (with individual variation)")
-
 ```
 
-::: panel-tabset
-##### All stations
-
-```{r hourly-count check, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
-print(plots_hourly[["box_duration_all"]])
-print(plots_hourly[["box_duration_all_v"]])
-
-```
-
-##### Fullerton Entrance
-
-```{r hourly-count check2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
-print(plots_hourly[["box_duration_fullerton"]])
-print(plots_hourly[["box_duration_fullerton_v"]])
-
-```
-:::
-
-::: {.callout-tip collapse="true" title="See summary statistics of the box-plot and the colplots here"}
 
 ```{r hourly-count check table, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
 library(DT)
 
-hour_summary_dt <- visit_duration %>%
-  mutate(hour = lubridate::hour(visitStart)) %>%
-  group_by(hour) %>%
-  summarise(
-    n_visits = n(),
-    total_h  = sum(duration_h, na.rm = TRUE),
-    median_h = median(duration_h, na.rm = TRUE),
-    mean_h   = mean(duration_h, na.rm = TRUE),
-    max_h    = max(duration_h, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  arrange(hour) %>%
-  mutate(across(c(total_h, median_h, mean_h, max_h), ~ round(.x, 2)))
+build_hour_summary_dt <- function(data, label) {
+  hour_summary <- data %>%
+    mutate(hour = lubridate::hour(visitStart)) %>%
+    group_by(hour) %>%
+    summarise(
+      n_visits = n(),
+      total_h  = sum(duration_h, na.rm = TRUE),
+      median_h = median(duration_h, na.rm = TRUE),
+      mean_h   = mean(duration_h, na.rm = TRUE),
+      max_h    = max(duration_h, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(across(c(total_h, median_h, mean_h, max_h), ~ round(.x, 2)))
 
-datatable(
-  hour_summary_dt %>%  arrange(desc(hour)),
-  rownames = FALSE,
-  colnames = c("Hour of Day", "Number of Visits", "Total Duration (h)",
-               "Median Duration (h)", "Mean Duration (h)", "Max Duration (h)"),
-  options = list(
-    pageLength = 24,
-    order = list(list(0, "asc")),   # sort by total_h (0-indexed column 2) descending
-    dom = "ftip"                     # filter box, table, info, pagination — no length menu clutter
-  ),
-  caption = "Visit duration summary by hour of day"
-) %>%
-  formatStyle("total_h", background = styleColorBar(hour_summary_dt$total_h, "lightblue")) %>%
-  formatStyle("median_h", background = styleColorBar(hour_summary_dt$median_h, "lightblue"))
+  datatable(
+    hour_summary,
+    rownames = FALSE,
+    colnames = c("Hour of Day", "Number of Visits", "Total Duration (h)",
+                 "Median Duration (h)", "Mean Duration (h)", "Max Duration (h)"),
+    options = list(pageLength = 24, order = list(list(0, "asc")), dom = "ftip"),
+    caption = paste0("Visit duration summary by hour of day \u2014 ", label)
+  ) %>%
+    formatStyle("total_h",  background = styleColorBar(hour_summary$total_h, "lightblue")) %>%
+    formatStyle("median_h", background = styleColorBar(hour_summary$median_h, "lightblue"))
+}
+
+summary_tables <- setNames(
+  lapply(stations, function(s) build_hour_summary_dt(visit_by_station[[s]], s)),
+  stations
+)
+```
+
+#### Total count
+
+::: panel-tabset
+
+```{r hourly-count, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+for (s in stations) {
+  cat("##### ", s, "\n\n")
+  print(plots_hourly$count[[s]])
+  cat("\n\n")
+  print(plots_hourly$raw_count[[s]])
+  cat("\n\n")
+}
 ```
 :::
+
+#### Total duration
+
+::: panel-tabset
+```{r hourly-duration, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+for (s in stations) {
+  cat("##### ", s, "\n\n")
+  print(plots_hourly$duration[[s]])
+  cat("\n\n")
+  print(plots_hourly$raw_duration_old[[s]])
+  cat("\n\n")
+}
+```
+:::
+
+### Duration distribution
+
+::: panel-tabset
+
+```{r hourly-distribution, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+for (s in stations) {
+  cat("##### ", s, "\n\n")
+
+  print(plots_hourly$box_duration[[s]])
+  cat("\n\n")
+
+  cat('::: {.callout-tip collapse="true" title="Summary statistics \u2014 ', s, '"}\n\n', sep = "")
+  print(htmltools::tagList(summary_tables[[s]]))
+  cat("\n\n:::\n\n")
+}
+```
+:::
+
+## Set-up data
+
+As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
+
+::: blockquote-blue
+*visit_duration* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
+::: 
+
+```{r fc visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+focal_station    <- "Fullerton Entrance"   # the directional antenna 
+flyby_window_min <- 30                     # Period (min) before/after detection at Fullerton to look for a detection at another station
+tide_lookahead_h <- 2                      # Period (hours) before/after of an "unknown" flyby detection used to infer direction from tide # Keep only Fullerton Entrance data with visit duration (min)
+fc_passages <- visit_duration %>%  filter(recvDeployName == focal_station) %>%  mutate(duration_min = duration_h * 60) 
+```
 
 ## When is it a fly-by?
 
@@ -1030,7 +978,7 @@ flyby_dt %>%
 ```
 :::
 
-## Fly-by & Site-use
+## Fly-by & Visit
 
 We now bring `passage_type` (fly-by / visit) and the direction back together into a single table covering **all** Fullerton entrance visits, so that "visits" sits alongside the flyby directions as one classification.
 

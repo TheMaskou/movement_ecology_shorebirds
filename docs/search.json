@@ -1161,7 +1161,7 @@
     "href": "qmd/chapter_1/ch1_13.html#set-up-data",
     "title": "Site use - hours (Fullerton case)",
     "section": "Set-up data",
-    "text": "Set-up data\nAs we will be re-using some of the data already loaded from previous workflow (see Station usage - hours (OBP method)), we will fetch here some of the objects we will re-use including: visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time.\n\nvisit_duration is then used onward so, the same rule applies in the data-set: &lt; 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap.\n\n\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(data.table)\nlibrary(mixtools)\nlibrary(lubridate)\nlibrary(gt)\nlibrary(lubridate)\nlibrary(ggpattern)\n\nNow, we pre-fill some key-values we need to set-up the workflow.\n\nfocal_station    &lt;- \"Fullerton Entrance\"   # the directional antenna\n\nflyby_window_min &lt;- 30                     # Period (min) before/after detection at Fullerton to look for a detection at another station\n\ntide_lookahead_h &lt;- 2                      # Period (hours) before/after of an \"unknown\" flyby detection used to infer direction from tide\n\n# Keep only Fullerton Entrance data with visit duration (min)\nfc_passages &lt;- visit_duration %&gt;%\n  filter(recvDeployName == focal_station) %&gt;%\n  mutate(duration_min = duration_h * 60)\n\n\nCountDuration\n\n\n\n\n\n\n\n\n\nLet’s now look at the visits and the fly-bys differently, both plotted as function of its duration. Including birds variation.\n\nAll stationsFullerton Entrance\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSee summary statistics of the box-plot and the colplots here",
+    "text": "Set-up data\nAs we will be re-using some of the data already loaded from previous workflow (see Station usage - hours (OBP method)), we will fetch here some of the objects we will re-use including: visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time.\n\nvisit_duration is then used onward so, the same rule applies in the data-set: &lt; 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap.\n\n\nfocal_station    &lt;- \"Fullerton Entrance\"   # the directional antenna \nflyby_window_min &lt;- 30                     # Period (min) before/after detection at Fullerton to look for a detection at another station\ntide_lookahead_h &lt;- 2                      # Period (hours) before/after of an \"unknown\" flyby detection used to infer direction from tide # Keep only Fullerton Entrance data with visit duration (min)\nfc_passages &lt;- visit_duration %&gt;%  filter(recvDeployName == focal_station) %&gt;%  mutate(duration_min = duration_h * 60)",
     "crumbs": [
       "Analysis",
       "Site use - hours (Fullerton case)"
@@ -1330,6 +1330,28 @@
     "crumbs": [
       "Data",
       "Explore"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_13.html#descriptive-analysis",
+    "href": "qmd/chapter_1/ch1_13.html#descriptive-analysis",
+    "title": "Site use - hours (Fullerton case)",
+    "section": "Descriptive analysis",
+    "text": "Descriptive analysis\n\nlibrary(dplyr)\nlibrary(tidyr)\nlibrary(ggplot2)\nlibrary(data.table)\nlibrary(mixtools)\nlibrary(lubridate)\nlibrary(gt)\nlibrary(lubridate)\nlibrary(ggpattern)\n\nNow, we pre-fill some key-values we need to set-up the workflow.\n\n# Real stations, alphabetical\nreal_stations &lt;- visit_duration %&gt;%\n  distinct(recvDeployName) %&gt;%\n  arrange(recvDeployName) %&gt;%\n  pull(recvDeployName)\n\n# \"All Stations\" pinned as the first tab, everything else after\nstations &lt;- c(\"All Stations\", real_stations)\n\n# Per-station subsets — \"All Stations\" just uses the full data, unfiltered\nvisit_by_station &lt;- setNames(\n  lapply(stations, function(s) {\n    if (s == \"All Stations\") visit_duration else filter(visit_duration, recvDeployName == s)\n  }),\n  stations\n)\n\nraw_by_station &lt;- setNames(\n  lapply(stations, function(s) {\n    if (s == \"All Stations\") data_all else filter(data_all, recvDeployName == s)\n  }),\n  stations\n)\n\n\nTotal count\n\nAll StationsCurlew PointFullerton EntranceHexham SwampMilhams PondRamsar RoadSwan PondTomagoWindeyers\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nTotal duration\n\nAll StationsCurlew PointFullerton EntranceHexham SwampMilhams PondRamsar RoadSwan PondTomagoWindeyers\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nDuration distribution\n\nAll StationsCurlew PointFullerton EntranceHexham SwampMilhams PondRamsar RoadSwan PondTomagoWindeyers\n\n\n\n\n\n\n\n\n\nSummary statistics — All Stations\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Curlew Point\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Fullerton Entrance\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Hexham Swamp\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Milhams Pond\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Ramsar Road\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Swan Pond\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Tomago\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSummary statistics — Windeyers",
+    "crumbs": [
+      "Analysis",
+      "Site use - hours (Fullerton case)"
+    ]
+  },
+  {
+    "objectID": "qmd/chapter_1/ch1_13.html#fly-by-visit",
+    "href": "qmd/chapter_1/ch1_13.html#fly-by-visit",
+    "title": "Site use - hours (Fullerton case)",
+    "section": "Fly-by & Visit",
+    "text": "Fly-by & Visit\nWe now bring passage_type (fly-by / visit) and the direction back together into a single table covering all Fullerton entrance visits, so that “visits” sits alongside the flyby directions as one classification.\n\nfc_classified &lt;- fc_passages %&gt;%\n  left_join(\n    flyby_dt %&gt;%\n      select(Band.ID, visitID, direction, side_detection, side_time, delay_min,\n             retained_cut, nearestTideDiel, nearestTideLevel),  \n    by = c(\"Band.ID\", \"visitID\")) \n\nSummary of every classified event at Fullerton Entrance - Visits plus each fly-by direction categories, with the number, proportion of events, number of individual birds, mean and median duration for each.Note the proportion of verified fly-bys must be compared with the inferred fly-bys only (and not against Visits). However, inferred fly-bys might be compared with Visits.\n\n\n\n\n\n\n\n\nSummary - Fullerton Entrance\n\n\npassage_type\ndirection\nretained_cut\nn_events\nn_birds\nmedian_duration_min\nmean_duration_min\nperc_event\n\n\n\n\nflyby\nBACK from mudflat (rising tide)\nInferred only from tide data\n158\n22\n2\n3\n19.1\n\n\nflyby\nBACK from mudflat (rising tide)\nVerified by another Motus station detection\n68\n19\n2\n3\n8.2\n\n\nflyby\nTO mudflat (dropping tide)\nInferred only from tide data\n223\n23\n2\n3\n27.0\n\n\nflyby\nTO mudflat (dropping tide)\nVerified by another Motus station detection\n42\n10\n3\n4\n5.1\n\n\nvisit\n-\n-\n335\n25\n112\n211\n40.6",
+    "crumbs": [
+      "Analysis",
+      "Site use - hours (Fullerton case)"
     ]
   }
 ]
