@@ -296,7 +296,7 @@ for (s in stations) {
 ```
 :::
 
-### Duration distribution
+#### Duration distribution
 
 ::: panel-tabset
 
