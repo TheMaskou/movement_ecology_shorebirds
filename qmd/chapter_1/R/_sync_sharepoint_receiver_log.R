@@ -16,9 +16,9 @@
 
 # 2. Add a new environment variable called SHOREBIRD_SHAREPOINT_PATH, 
 # assigned to the full path to the SharePoint on your computer. 
-# For example, for me (Callum), the full line is:
+# For example, for me (Lily), the full line is:
 
-# SHOREBIRD_SHAREPOINT_PATH = "C:\Users\callu\OneDrive - Student\The University of Newcastle\StudentGroupPhD - Louise Williams and Mattea Taylor - General"
+# SHOREBIRD_SHAREPOINT_PATH = "/home/lily-work/SharePoint-Shorebirds/General"
 
 # 3. Restart R session so the Renviron is reloaded
 
@@ -31,10 +31,13 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 # HERE !!!!
 
 sharepoint_receiver_log_historic <- "motus_receiver_log_historic_callum.xlsx"
-sharepoint_receiver_log_survey123 <- "arcgis-123survey_output_table_raw-manually-updated-callum.xlsx"
+sharepoint_receiver_log_survey123 <- "arcgis-123survey_output_table_raw-from-app-maxime.xlsx"
 
 path_sharepoint_receiver_log_historic <- here::here(dir_sharepoint, "Motus_array_maintenance", sharepoint_receiver_log_historic)
 path_sharepoint_receiver_log_survey123 <- here::here(dir_sharepoint, "Motus_array_maintenance", sharepoint_receiver_log_survey123)
+
+# Destination folder is gitignored, so it may not exist on a fresh clone.
+dir.create(dirname(path_motus_receiver_log_historic), recursive = TRUE, showWarnings = FALSE)
 
 # ==== Copy Files From SharePoint ====
 
