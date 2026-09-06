@@ -38,7 +38,6 @@ library(lubridate)
 library(ggpattern)
 ```
 
-Now, we pre-fill some **key-values** we need to set-up the workflow.
 
 ```{r station visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
@@ -194,17 +193,72 @@ plot_hour_box_duration <- function(data, time_col, duration_col, title,
 }
 
 
+
+plot_hour_count_duration_combo <- function(data, time_col, duration_col, title,
+                                            x_lab      = "Hour of Day",
+                                            y_lab_left  = "Number of Visits",
+                                            y_lab_right = "Visit Duration (hours)",
+                                            show_points = TRUE) {
+  bar_color <- "steelblue"
+  box_color <- "black"
+  df <- data %>%
+    mutate(hour = lubridate::hour(.data[[time_col]]))
+  # Counts per hour — explicitly complete 0:23 so empty hours show as 0, not gaps
+  count_df <- df %>%
+    count(hour, name = "n") %>%
+    right_join(tibble(hour = 0:23), by = "hour") %>%
+    mutate(n = tidyr::replace_na(n, 0)) %>%
+    arrange(hour)
+  # Scale factor maps duration values onto the same numeric range as counts,
+  # so both layers are visible together; sec_axis() undoes the scaling for labels
+  max_count    <- max(count_df$n, na.rm = TRUE)
+  max_duration <- suppressWarnings(max(df[[duration_col]], na.rm = TRUE))
+  if (!is.finite(max_duration) || max_duration == 0) max_duration <- 1
+  scale_factor <- if (max_count == 0) 1 else max_count / max_duration
+
+  p <- ggplot() +
+    geom_col(data = count_df, aes(x = hour, y = n),
+             fill = bar_color, alpha = 0.55, width = 0.8) +
+    geom_boxplot(data = df,
+                 aes(x = hour, y = .data[[duration_col]] * scale_factor, group = hour),
+                 fill = box_color, color = box_color, alpha = 0.25,
+                 outlier.shape = NA, width = 0.5)
+  if (show_points) {
+    p <- p +
+      geom_jitter(data = df,
+                  aes(x = hour, y = .data[[duration_col]] * scale_factor),
+                  width = 0.15, height = 0, size = 0.7, alpha = 0.35, color = box_color)
+  }
+  
+  p <- p +
+    scale_x_continuous(breaks = 0:23, limits = c(-0.5, 23.5)) +
+    scale_y_continuous(
+      name     = y_lab_left,
+      sec.axis = sec_axis(~ . / scale_factor, name = y_lab_right)
+    ) +
+    labs(title = title, x = x_lab) +
+    theme_minimal() +
+    theme(
+      axis.title.y.left  = element_text(color = bar_color, face = "bold"),
+      axis.text.y.left   = element_text(color = bar_color),
+      axis.title.y.right = element_text(color = box_color, face = "bold"),
+      axis.text.y.right  = element_text(color = box_color)
+    )
+  add_sun_reference(p, data[[time_col]])   # x = hour here, so the vertical-band version applies
+}
+
+
 # ============================================================
 # Build one set of plots PER STATION
 # ============================================================
 
 plots_hourly <- list(
-  count             = list(),
-  raw_count         = list(),
-  duration          = list(),
-  raw_duration_old  = list(),
-  box_duration      = list(),
-  box_duration_v    = list()
+  count                = list(),
+  raw_count            = list(),
+  duration             = list(),
+  raw_duration_old     = list(),
+  box_duration         = list(),
+  count_duration_combo = list()    
 )
 
 for (s in stations) {
@@ -228,44 +282,15 @@ for (s in stations) {
   plots_hourly$box_duration[[s]] <- plot_hour_box_duration(
     visit_by_station[[s]], "visitStart", "duration_h",
     title = paste0("Visit Duration by Hour of Day \u2014 ", s, " (points = individual Band.ID visits)"))
+  
+  plots_hourly$count_duration_combo[[s]] <- plot_hour_count_duration_combo(
+    visit_by_station[[s]], "visitStart", "duration_h",
+    title = paste0("Passage Count (bars, left axis) & Visit Duration (boxplots, right axis) \u2014 ", s))
 }
 ```
 
 
-```{r hourly-count check table, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
-library(DT)
-
-build_hour_summary_dt <- function(data, label) {
-  hour_summary <- data %>%
-    mutate(hour = lubridate::hour(visitStart)) %>%
-    group_by(hour) %>%
-    summarise(
-      n_visits = n(),
-      total_h  = sum(duration_h, na.rm = TRUE),
-      median_h = median(duration_h, na.rm = TRUE),
-      mean_h   = mean(duration_h, na.rm = TRUE),
-      max_h    = max(duration_h, na.rm = TRUE),
-      .groups = "drop"
-    ) %>%
-    mutate(across(c(total_h, median_h, mean_h, max_h), ~ round(.x, 2)))
-
-  datatable(
-    hour_summary,
-    rownames = FALSE,
-    colnames = c("Hour of Day", "Number of Visits", "Total Duration (h)",
-                 "Median Duration (h)", "Mean Duration (h)", "Max Duration (h)"),
-    options = list(pageLength = 24, order = list(list(0, "asc")), dom = "ftip"),
-    caption = paste0("Visit duration summary by hour of day \u2014 ", label)
-  ) %>%
-    formatStyle("total_h",  background = styleColorBar(hour_summary$total_h, "lightblue")) %>%
-    formatStyle("median_h", background = styleColorBar(hour_summary$median_h, "lightblue"))
-}
-
-summary_tables <- setNames(
-  lapply(stations, function(s) build_hour_summary_dt(visit_by_station[[s]], s)),
-  stations
-)
-```
+### Exploratory analysis
 
 #### Total count
 
@@ -306,13 +331,66 @@ for (s in stations) {
 
   print(plots_hourly$box_duration[[s]])
   cat("\n\n")
+}
+```
+:::
 
+
+### Exploratory synthesis 
+
+
+
+```{r build-summary-tables, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='hide'}
+library(DT)
+
+build_hour_summary_dt <- function(data, label) {
+  hour_summary <- data %>%
+    mutate(hour = lubridate::hour(visitStart)) %>%
+    group_by(hour) %>%
+    summarise(
+      n_visits = n(),
+      total_h  = sum(duration_h, na.rm = TRUE),
+      median_h = median(duration_h, na.rm = TRUE),
+      mean_h   = mean(duration_h, na.rm = TRUE),
+      max_h    = max(duration_h, na.rm = TRUE),
+      min_h    = min(duration_h, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    mutate(across(c(total_h, median_h, mean_h, max_h, min_h), ~ round(.x, 2)))
+
+  datatable(
+    hour_summary,
+    rownames = FALSE,
+    colnames = c("Hour of Day", "Number of Visits", "Total Duration (h)",
+                 "Median Duration (h)", "Mean Duration (h)", "Max Duration (h)", "Min Duration (h)"),
+    options = list(pageLength = 24, order = list(list(0, "asc")), dom = "ftip"),
+    caption = paste0("Visit duration summary by hour of day \u2014 ", label)
+  ) %>%
+    formatStyle("total_h",  background = styleColorBar(hour_summary$total_h, "lightblue")) %>%
+    formatStyle("median_h", background = styleColorBar(hour_summary$median_h, "lightblue"))
+}
+
+summary_tables <- setNames(
+  lapply(stations, function(s) build_hour_summary_dt(visit_by_station[[s]], s)),
+  stations
+)
+```
+
+::: panel-tabset
+
+```{r hourly-combo, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+for (s in stations) {
+  cat("#### ", s, "\n\n")
+  print(plots_hourly$count_duration_combo[[s]])
+  cat("\n\n")
+  
   cat('::: {.callout-tip collapse="true" title="Summary statistics \u2014 ', s, '"}\n\n', sep = "")
   print(htmltools::tagList(summary_tables[[s]]))
   cat("\n\n:::\n\n")
 }
 ```
 :::
+
 
 ## Set-up data
 
@@ -321,6 +399,8 @@ As **we will be re-using some of the data already loaded from previous workflow 
 ::: blockquote-blue
 *visit_duration* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
 ::: 
+
+Now, we pre-fill some **key-values** we need to set-up the workflow.
 
 ```{r fc visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 focal_station    <- "Fullerton Entrance"   # the directional antenna 
