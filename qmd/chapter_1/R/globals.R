@@ -7,7 +7,6 @@ dir_tides <- here::here("data", "tides")
 dir_sharepoint <- Sys.getenv("SHOREBIRD_SHAREPOINT_PATH", unset = NA)
 
 ## Inputs / raw data ----
-path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
 ### Receiver Array Maintenance Log ----
 # NOTE: Ensure that both of the below files are up-to-date, i.e., have recently
@@ -25,6 +24,12 @@ path_maintenance_log_excel  <- here::here("data", "motus", "array_maintenance", 
 
 # RDS Version (USE THIS FOR FURTHER ANALYSIS as it preserves types and everything perfectly)
 path_maintenance_log <- here::here("data", "motus", "array_maintenance", "receiver_log_complete.rds")
+
+### Shorebird Catching Info ----
+path_shorebird_numbers <- here::here("data", "shorebird_catching", "SHOREBIRD NUMBER TRACKING.xlsx")
+
+### Tide Data
+path_tide_data_spreadsheet <- here::here("data", "tides", "TideDataNewcastle.csv")
 
 ## Path for data files that are imported by other files ----
 path_motus_database <- here::here("data", "motus", "project-294.motus")
