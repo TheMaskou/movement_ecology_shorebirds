@@ -26,8 +26,15 @@ We collected our main data-set thanks to the valuable help of the [**Hunter Bird
 
 \~
 
-**The PhD program is generously donor-funded by Ms Margaret Flynn.**
+**The PhD program of Maxime Marini** (right) **is generously donor-funded by Ms Margaret Flynn** (left).
+
+::: donor-card
+![ ~ ](/margaret.png){alt="Margaret Flynn and Maxime Marini"}
 :::
+
+:::
+
+
 
 ::::: {.aboriginal-acknowledgement style="color: white; padding: 2.5rem; border-radius: 12px; text-align: center; font-weight: bold; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 2rem;"}
 :::: {style="background-color: rgba(0, 0, 0, 0.4); padding: 2rem; border-radius: 8px;"}

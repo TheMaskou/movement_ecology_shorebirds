@@ -184,3 +184,28 @@ body a:not(.navbar a):not(.nav-link):visited {
 /* .callout-tip.callout-collapsed .callout-head {
   background-color: #6c757d !important;
 }
+
+
+
+/* Margaret picture */
+.donor-card {
+  max-width: 260px;
+  margin: 2.5rem auto 0 auto;
+  text-align: center;
+}
+.donor-card figure { margin: 0; }
+.donor-card img {
+  width: 180px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  display: block;
+  margin: 0 auto 1rem auto;
+}
+.donor-card figcaption {
+  font-family: 'Georgia', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(255,255,255,0.9);
+}
