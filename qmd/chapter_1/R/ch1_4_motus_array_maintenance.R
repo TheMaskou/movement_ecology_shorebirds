@@ -5,6 +5,7 @@ library(leaflet.extras)
 library(htmltools)
 library(readr)
 library(here)
+library(openxlsx2)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
@@ -119,8 +120,102 @@ history_fields <- c(
 history_cell_min_width <- "80px"
 history_cell_max_width <- "220px"
 
+## ---- Popup Antenna Table ----
+antenna_section_open <- FALSE    # TRUE = section expanded when the popup opens
+antenna_font_size    <- "12px"
+antenna_max_height   <- "160px"  # scrolls beyond this (no station currently needs it)
+
+# Field -> column header for the antenna table. Edit / reorder / remove entries
+# here to change the table — column order follows this vector's order.
+# Available fields: port, antenna_type, magnetic_bearing, true_bearing,
+# height_m, mount_type, install_date.
+antenna_fields <- c(
+  port         = "Port",
+  antenna_type = "Type",
+  true_bearing = "Bearing (°T)"
+)
+
 # ==== Load Data ====
 maintenance_log <- readRDS(path_maintenance_log)
+
+# ==== Load and Tidy Antenna Log ====
+# Manual per-antenna record (Port#, Type, bearings, ...), one row per antenna.
+# Not yet used anywhere else in the pipeline - loaded here purely to feed the
+# popup's antenna section below.
+#
+# The sheet has two columns literally named "Type" (antenna type, then mount
+# type e.g. Tower/Existing); wb_to_df() returns both as "Type", so
+# make.unique() disambiguates the second to "Type.1" before selecting.
+
+antenna_raw <- wb_to_df(path_antenna_log, sheet = "antennae")
+names(antenna_raw) <- make.unique(names(antenna_raw))
+
+# target_name = source_column_name. Edit here (and antenna_fields, settings
+# above) if the SharePoint sheet's columns are ever renamed/restructured.
+antenna_cols <- c(
+  site             = "Site",
+  install_date     = "Install_Date",
+  removal_date     = "Removal_Date",
+  port             = "Port#",
+  antenna_type     = "Type",
+  magnetic_bearing = "Magnetic_Bearing",
+  true_bearing     = "True_Bearing",
+  height_m         = "Height_m",
+  mount_type       = "Type.1"
+)
+
+missing_antenna_cols <- setdiff(unname(antenna_cols), names(antenna_raw))
+if (length(missing_antenna_cols) > 0) {
+  stop(
+    "antenna_log_motus_294.xlsx ('antennae' sheet) is missing expected ",
+    "column(s): ", toString(missing_antenna_cols), ". Update antenna_cols ",
+    "in ch1_4_motus_array_maintenance.R to match the sheet's current headers."
+  )
+}
+
+## ---- Helper: Canonical Station Name ----
+# The antenna log records site names as they appear on the Motus website,
+# which differ from the maintenance log's station_id for three sites.
+# station_rename (globals.R) already covers those - but the antenna log uses
+# a typographic apostrophe (U+2019) in "Milham’s Pond", so normalise that
+# first to match station_rename's straight-apostrophe key.
+canonical_station <- function(x) {
+  x       <- trimws(gsub("’", "'", as.character(x)))
+  renamed <- unname(unlist(station_rename)[x])
+  ifelse(is.na(renamed), x, renamed)
+}
+
+antenna_log <- antenna_raw |>
+  select(all_of(antenna_cols)) |>
+  mutate(
+    station_id = canonical_station(site),
+    port       = as.integer(port)
+  )
+
+## ---- Coordinate Guard (Antenna Log) ----
+# Warn if any antenna-log site has no match in the maintenance log, as its
+# antennae would otherwise be silently dropped from the popup.
+unmatched_antenna_sites <- setdiff(
+  unique(antenna_log$station_id), unique(maintenance_log$station_id)
+)
+if (length(unmatched_antenna_sites) > 0) {
+  warning(
+    "These antenna log site(s) have no matching station_id in the ",
+    "maintenance log and will be excluded from popups: ",
+    toString(unmatched_antenna_sites)
+  )
+}
+
+# Antennae currently in the field (no removal_date) vs. historically removed
+# (removal_date is empty for every row today, but the column exists for when
+# that changes).
+antenna_active <- antenna_log |>
+  filter(is.na(removal_date)) |>
+  arrange(station_id, port)
+
+antenna_removed_counts <- antenna_log |>
+  filter(!is.na(removal_date)) |>
+  count(station_id, name = "n_removed")
 
 # ==== Load and Attach Station Coordinates ====
 # Coordinates are sourced from receivers.csv for every row (both the
@@ -196,6 +291,22 @@ fmt_cell <- function(field, value) {
   .fmt(value)
 }
 
+## ---- Helper: Format an Antenna-table Cell ----
+# Bearing fields: blank / NA / literal "NA" -> na_placeholder; numeric ->
+# value with a degree sign; anything else (e.g. a "TODO" placeholder still in
+# the spreadsheet) is passed through as typed, so it stays visible rather
+# than silently disappearing. Everything else falls through to .fmt().
+fmt_antenna_cell <- function(field, value) {
+  if (field %in% c("magnetic_bearing", "true_bearing")) {
+    raw <- trimws(as.character(value))
+    if (is.na(value) || raw == "" || toupper(raw) == "NA") return(na_placeholder)
+    num <- suppressWarnings(as.numeric(raw))
+    if (!is.na(num)) return(paste0(htmlEscape(format(num, trim = TRUE)), "°"))
+    return(htmlEscape(raw))
+  }
+  .fmt(value)
+}
+
 ## ---- Helper: Colour-coded Status Token ----
 # Green if the value is "on" (any case); red for everything else, including NA/blank.
 .status_token <- function(x) {
@@ -216,6 +327,65 @@ latest_visit <- function(rows) {
   } else {
     rows |> arrange(desc(visit_date)) |> slice(1)
   }
+}
+
+## ---- Build Antenna Section for One Station ----
+# Collapsible <details> block listing that station's active antennae, driven
+# by antenna_fields (settings, top of script). Native HTML disclosure - no JS
+# library needed, and it degrades to "always open" if unsupported.
+antenna_section_html <- function(sid) {
+  rows      <- antenna_active |> filter(station_id == sid)
+  n_removed <- antenna_removed_counts |> filter(station_id == sid) |> pull(n_removed)
+  n_removed <- if (length(n_removed) == 0) 0 else n_removed
+
+  if (nrow(rows) == 0) {
+    return(paste0(
+      "<div style='font-size:12px;color:", summary_label_color, ";margin:6px 0'>",
+      "Antennae — none recorded</div>"
+    ))
+  }
+
+  removed_line <- if (n_removed > 0) {
+    paste0(
+      "<div style='font-size:11px;color:", summary_label_color, ";margin-top:4px'>",
+      n_removed, " antenna", ifelse(n_removed == 1, "", "e"), " removed — see antenna log</div>"
+    )
+  } else ""
+
+  cell_style <- "padding:3px 6px;vertical-align:top;white-space:nowrap"
+
+  header_cells <- paste0(
+    vapply(antenna_fields, function(label) {
+      paste0("<th style='padding:4px 6px;text-align:left'>", htmlEscape(label), "</th>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  body_rows <- paste0(
+    vapply(seq_len(nrow(rows)), function(i) {
+      r <- rows[i, ]
+      cells <- vapply(names(antenna_fields), function(field) {
+        paste0("<td style='", cell_style, "'>", fmt_antenna_cell(field, r[[field]]), "</td>")
+      }, character(1))
+      paste0("<tr style='border-top:", history_row_border, "'>",
+             paste(cells, collapse = ""), "</tr>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  paste0(
+    "<details", if (antenna_section_open) " open" else "",
+    " style='margin:6px 0;font-size:", antenna_font_size, "'>",
+    "<summary style='cursor:pointer;color:", summary_label_color, ";font-size:12px'>",
+    "Antennae (", nrow(rows), ")</summary>",
+    "<div style='max-height:", antenna_max_height, ";overflow-y:auto;overflow-x:auto;margin-top:4px'>",
+    "<table style='border-collapse:collapse;width:100%;font-size:", antenna_font_size, "'>",
+    "<thead><tr style='background:", history_header_bg, ";color:", history_header_color,
+    ";font-size:11px'>", header_cells, "</tr></thead>",
+    "<tbody>", body_rows, "</tbody></table></div>",
+    removed_line,
+    "</details>"
+  )
 }
 
 ## ---- Build Popup for One Station ----
@@ -311,7 +481,7 @@ build_popup <- function(rows) {
     "</div>"   # close outer div
   )
 
-  paste0(summary_html, history_html)
+  paste0(summary_html, antenna_section_html(latest$station_id), history_html)
 }
 
 # ==== Build Per-station Data for Mapping ====
