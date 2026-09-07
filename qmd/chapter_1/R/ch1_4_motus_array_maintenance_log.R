@@ -44,6 +44,9 @@ log_survey123 <- wb_to_df(
 )
 
 # ==== Import Historic Log ====
+
+# The below is primarily for columns that are empty in the historic log;
+# need to be the same type so the join works
 type_cols_historic <- c(
   deploy_mast = "character",
   deploy_solar = "character",
@@ -54,7 +57,11 @@ type_cols_historic <- c(
   deploy_battery = "character",
   sg_lon = "character",
   sg_lat = "character",
-  sg_alt = "character"
+  sg_alt = "character",
+  sdcard_notes = "character",
+  wifi_notes_arrival = "character",
+  wifi_notes_dep = "character",
+  receiver_replacement_sg_version = "character"
 )
 
 
