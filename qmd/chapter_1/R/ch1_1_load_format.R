@@ -25,7 +25,7 @@ library(DBI)
 library(RSQLite)
 library(forcats)
 library(lubridate)
-library(bioRad)
+#library(bioRad)
 library(purrr)
 library(ggplot2)
 library(tictoc)
@@ -240,7 +240,7 @@ if (nrow(df.new) == 0) {
   
   ## 9. Tide data ----
   tic("9. Tide data")
-  tideData <- read.csv(here("data", "tides", "TideDataNewcastle.csv"))
+  tideData <- read.csv(path_tide_data_spreadsheet)
 
   tideData <- tideData %>% mutate(
     date = dmy(date, tz = "Australia/Sydney"),
