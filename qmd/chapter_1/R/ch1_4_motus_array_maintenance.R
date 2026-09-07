@@ -135,6 +135,37 @@ antenna_fields <- c(
   true_bearing = "Bearing (°T)"
 )
 
+## ---- Antenna Range Overlay ----
+# VERY APPROXIMATE shapes showing the rough form of each antenna type's
+# pattern (round vs. one-way beam vs. two-way beam). These are NOT modelled
+# detection ranges - do not read distances off them.
+
+show_antenna_ranges         <- TRUE   # FALSE = none of the overlay code below runs
+antenna_ranges_shown_on_load <- TRUE  # FALSE = layer starts unticked in the control
+antenna_range_group         <- "Antenna range (approx.)"   # label on the layer toggle
+
+antenna_range_fill_color     <- "#1f77b4"
+antenna_range_fill_opacity   <- 0.15
+antenna_range_border_color   <- "#1f77b4"
+antenna_range_border_weight  <- 1
+antenna_range_border_opacity <- 0.6
+
+# One row per antenna type, matching the antenna log's "Type" column exactly.
+# A type present in the log but missing here is skipped with a warning rather
+# than erroring, so a new/renamed type doesn't silently break the map.
+#   shape         "omni" = circle around the station; "lobe" = directional teardrop
+#   range_m       how far the shape reaches from the station, in metres
+#   beamwidth_deg angular width of the lobe (ignored for "omni"); smaller = narrower
+#   n_lobes       1 = one lobe on the recorded bearing; 2 = plus a mirrored
+#                 lobe 180 degrees opposite (e.g. a bidirectional H antenna)
+antenna_range_spec <- tibble::tribble(
+  ~antenna_type,    ~shape,  ~range_m, ~beamwidth_deg, ~n_lobes,
+  "monopole",       "omni",      1000,             NA,       NA,
+  "H antenna",      "lobe",      2500,             90,        2,
+  "3-element Yagi", "lobe",      4000,             70,        1,
+  "6-element Yagi", "lobe",      6000,             45,        1
+)
+
 # ==== Load Data ====
 maintenance_log <- readRDS(path_maintenance_log)
 
@@ -259,6 +290,166 @@ if (length(missing_coords) > 0) {
     "These station_id values have no match in receivers.csv and will be ",
     "excluded from the map: ", toString(missing_coords)
   )
+}
+
+# ==== Antenna Range Geometry ====
+# VERY APPROXIMATE overlay shapes only - see the settings block above for what
+# each variable controls. Nothing in this section runs unless
+# show_antenna_ranges is TRUE, so the rest of the map is unaffected when it's
+# FALSE.
+if (isTRUE(show_antenna_ranges)) {
+
+  antenna_range_pane <- "antennaRangePane"
+
+  ## ---- Helper: Metres Offset to Lon/Lat ----
+  # Flat-earth approximation (good to well under a metre at these ranges and
+  # this latitude) - avoids pulling in sf/geosphere for a shape that's
+  # explicitly not meant to be read precisely.
+  metres_to_lonlat <- function(lon, lat, dx_m, dy_m) {
+    metres_per_deg_lat <- 111320
+    dlat <- dy_m / metres_per_deg_lat
+    dlon <- dx_m / (metres_per_deg_lat * cos(lat * pi / 180))
+    list(lon = lon + dlon, lat = lat + dlat)
+  }
+
+  ## ---- Helper: Directional Lobe Polygon ----
+  # A teardrop pointing along bearing_deg (clockwise from north), reaching
+  # range_m at the bearing and tapering to 0 at +-180 degrees so it closes
+  # cleanly back on the station. beamwidth_deg sets the taper: radius is half
+  # of range_m at +-(beamwidth_deg / 2) off the bearing.
+  lobe_polygon <- function(lon, lat, bearing_deg, range_m, beamwidth_deg, n_points = 90) {
+    delta_deg      <- seq(-180, 180, length.out = n_points)
+    half_width_rad <- beamwidth_deg * pi / 720
+    taper          <- log(0.5) / log(cos(half_width_rad))
+    r              <- range_m * pmax(cos(delta_deg * pi / 360), 0) ^ taper
+    bearing_rad    <- (bearing_deg + delta_deg) * pi / 180
+    offset         <- metres_to_lonlat(lon, lat, r * sin(bearing_rad), r * cos(bearing_rad))
+    data.frame(lon = offset$lon, lat = offset$lat)
+  }
+
+  ## ---- Helper: Combine Separate Polygons for a Single addPolygons() Call ----
+  # leaflet's addPolygons() draws multiple disjoint shapes from one pair of
+  # lng/lat vectors using the same convention as base R's polygon() - an NA
+  # row marks the break between shapes.
+  combine_polygons <- function(polys) {
+    lng <- unlist(lapply(polys, function(p) c(p$lon, NA)))
+    lat <- unlist(lapply(polys, function(p) c(p$lat, NA)))
+    n   <- length(lng)
+    list(lng = lng[-n], lat = lat[-n])
+  }
+
+  ## ---- Antenna Type -> Range Spec Guard ----
+  unmatched_antenna_range_types <- setdiff(
+    unique(antenna_active$antenna_type), antenna_range_spec$antenna_type
+  )
+  if (length(unmatched_antenna_range_types) > 0) {
+    warning(
+      "These antenna type(s) have no entry in antenna_range_spec and will ",
+      "be excluded from the antenna range overlay: ",
+      toString(unmatched_antenna_range_types)
+    )
+  }
+
+  # Active antennae with known coordinates and a matching spec row. Uses
+  # station_coords (from receivers.csv) rather than the antenna log's own
+  # Latitude/Longitude columns, so shapes originate exactly at the station
+  # marker.
+  antenna_range_base <- antenna_active |>
+    inner_join(antenna_range_spec, by = "antenna_type") |>
+    left_join(station_coords, by = "station_id") |>
+    filter(!is.na(sg_lon), !is.na(sg_lat))
+
+  ## ---- Omnidirectional Antennae ----
+  antenna_omni <- antenna_range_base |>
+    filter(shape == "omni") |>
+    mutate(label = paste0(station_id, " — port ", port, ", ", antenna_type))
+
+  ## ---- Directional Antennae ----
+  # Bearings are parsed defensively (as fmt_antenna_cell() does for the same
+  # column) because a blank cell can read back as "TODO" rather than NA - see
+  # Tomago ports 2-3 in the antenna log.
+  antenna_lobe_rows <- antenna_range_base |>
+    filter(shape == "lobe") |>
+    mutate(bearing_num = suppressWarnings(as.numeric(true_bearing)))
+
+  missing_bearing_antennae <- antenna_lobe_rows |> filter(is.na(bearing_num))
+  if (nrow(missing_bearing_antennae) > 0) {
+    warning(
+      "These antenna(e) have no usable true_bearing and will be excluded ",
+      "from the antenna range overlay: ",
+      toString(paste0(
+        missing_bearing_antennae$station_id, " (port ",
+        missing_bearing_antennae$port, ")"
+      ))
+    )
+  }
+  antenna_lobe_rows <- antenna_lobe_rows |> filter(!is.na(bearing_num))
+
+  # Antennae with n_lobes == 2 (e.g. H antenna) get a second, mirrored lobe
+  # 180 degrees opposite the recorded bearing.
+  antenna_lobe_specs <- bind_rows(
+    antenna_lobe_rows |> mutate(lobe_bearing = bearing_num),
+    antenna_lobe_rows |> filter(n_lobes == 2) |>
+      mutate(lobe_bearing = (bearing_num + 180) %% 360)
+  ) |>
+    mutate(label = paste0(
+      station_id, " — port ", port, ", ", antenna_type,
+      " (", round(lobe_bearing), "°)"
+    ))
+
+  antenna_lobe_polys <- lapply(seq_len(nrow(antenna_lobe_specs)), function(i) {
+    row <- antenna_lobe_specs[i, ]
+    lobe_polygon(row$sg_lon, row$sg_lat, row$lobe_bearing, row$range_m, row$beamwidth_deg)
+  })
+  antenna_lobe_coords <- combine_polygons(antenna_lobe_polys)
+  antenna_lobe_labels <- antenna_lobe_specs$label
+}
+
+## ---- Add Antenna Range Layers to a Map ----
+# No-op when show_antenna_ranges is FALSE - returns the map unchanged, so
+# nothing below this point needs to know the overlay exists.
+add_antenna_ranges <- function(map) {
+  if (!isTRUE(show_antenna_ranges)) return(map)
+
+  map <- map |> addMapPane(antenna_range_pane, zIndex = 350)
+
+  if (nrow(antenna_omni) > 0) {
+    map <- map |> addCircles(
+      data        = antenna_omni,
+      lng         = ~sg_lon,
+      lat         = ~sg_lat,
+      radius      = ~range_m,
+      stroke      = TRUE,
+      color       = antenna_range_border_color,
+      weight      = antenna_range_border_weight,
+      opacity     = antenna_range_border_opacity,
+      fill        = TRUE,
+      fillColor   = antenna_range_fill_color,
+      fillOpacity = antenna_range_fill_opacity,
+      label       = ~label,
+      group       = antenna_range_group,
+      options     = pathOptions(pane = antenna_range_pane)
+    )
+  }
+
+  if (length(antenna_lobe_coords$lng) > 0) {
+    map <- map |> addPolygons(
+      lng         = antenna_lobe_coords$lng,
+      lat         = antenna_lobe_coords$lat,
+      stroke      = TRUE,
+      color       = antenna_range_border_color,
+      weight      = antenna_range_border_weight,
+      opacity     = antenna_range_border_opacity,
+      fill        = TRUE,
+      fillColor   = antenna_range_fill_color,
+      fillOpacity = antenna_range_fill_opacity,
+      label       = antenna_lobe_labels,
+      group       = antenna_range_group,
+      options     = pathOptions(pane = antenna_range_pane)
+    )
+  }
+
+  map
 }
 
 # ==== Build Popup HTML ====
@@ -523,10 +714,17 @@ map_maintenance <- leaflet(popup_data, height = map_height,
     popup        = ~popup,
     popupOptions = popupOptions(maxWidth = popup_max_width, minWidth = popup_min_width)
   ) |>
+  add_antenna_ranges() |>
   addLayersControl(
-    baseGroups = c("Map", "Satellite", "Street (OSM)"),
-    options    = layersControlOptions(collapsed = FALSE)
+    baseGroups    = c("Map", "Satellite", "Street (OSM)"),
+    overlayGroups = if (isTRUE(show_antenna_ranges)) antenna_range_group else character(0),
+    options       = layersControlOptions(collapsed = FALSE)
   ) |>
+  (\(m) if (isTRUE(show_antenna_ranges) && !antenna_ranges_shown_on_load) {
+     hideGroup(m, antenna_range_group)
+   } else {
+     m
+   })() |>
   addLegend(
     position = "bottomright",
     colors   = c(marker_fill_green, marker_fill_yellow, marker_fill_red, marker_fill_default),
