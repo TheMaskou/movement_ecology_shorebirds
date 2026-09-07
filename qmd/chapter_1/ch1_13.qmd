@@ -38,7 +38,6 @@ library(lubridate)
 library(ggpattern)
 ```
 
-
 ```{r station visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
 # Real stations, alphabetical
@@ -65,8 +64,6 @@ raw_by_station <- setNames(
   stations
 )
 ```
-
-
 
 ```{r station visits check, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide'}
 
@@ -194,57 +191,79 @@ plot_hour_box_duration <- function(data, time_col, duration_col, title,
 
 
 
-plot_hour_count_duration_combo <- function(data, time_col, duration_col, title,
-                                            x_lab      = "Hour of Day",
-                                            y_lab_left  = "Number of Visits",
-                                            y_lab_right = "Visit Duration (hours)",
-                                            show_points = TRUE) {
+plot_hour_count_duration_pyramid <- function(data, time_col, duration_col, title,
+                                              y_lab       = "Hour of Day",
+                                              label_left  = "Number of Passage (counts)",
+                                              label_right = "Passage Duration (hours)",
+                                              show_points = TRUE) {
+
   bar_color <- "steelblue"
   box_color <- "black"
+
   df <- data %>%
-    mutate(hour = lubridate::hour(.data[[time_col]]))
+    mutate(hour = lubridate::hour(.data[[time_col]]),
+           hour_f = factor(hour, levels = 0:23))   # keep all 24 hours, even if empty
+
   # Counts per hour — explicitly complete 0:23 so empty hours show as 0, not gaps
   count_df <- df %>%
     count(hour, name = "n") %>%
     right_join(tibble(hour = 0:23), by = "hour") %>%
-    mutate(n = tidyr::replace_na(n, 0)) %>%
+    mutate(n = tidyr::replace_na(n, 0),
+           hour_f = factor(hour, levels = 0:23)) %>%
     arrange(hour)
-  # Scale factor maps duration values onto the same numeric range as counts,
-  # so both layers are visible together; sec_axis() undoes the scaling for labels
+
+  # Scale factor maps duration onto the same numeric range as counts, so both
+  # sides of the pyramid are visually comparable; breaks/labels below undo it
   max_count    <- max(count_df$n, na.rm = TRUE)
   max_duration <- suppressWarnings(max(df[[duration_col]], na.rm = TRUE))
   if (!is.finite(max_duration) || max_duration == 0) max_duration <- 1
   scale_factor <- if (max_count == 0) 1 else max_count / max_duration
 
+  # Build symmetric breaks: negative side in raw count units, positive side in
+  # raw duration units (scaled back to plot coordinates)
+  count_breaks    <- scales::extended_breaks()(c(0, max_count))
+  count_breaks    <- count_breaks[count_breaks >= 0]
+  duration_breaks <- scales::extended_breaks()(c(0, max_duration))
+  duration_breaks <- duration_breaks[duration_breaks >= 0]
+
+  x_breaks <- c(-rev(count_breaks), duration_breaks * scale_factor)
+  x_labels <- c(rev(count_breaks), duration_breaks)
+
   p <- ggplot() +
-    geom_col(data = count_df, aes(x = hour, y = n),
-             fill = bar_color, alpha = 0.55, width = 0.8) +
+    # LEFT side — bars, counts (negative x = leftward)
+    geom_col(data = count_df, aes(x = -n, y = hour_f),
+             fill = bar_color, alpha = 0.65, width = 0.8) +
+    # RIGHT side — boxplots, duration (positive x = rightward)
     geom_boxplot(data = df,
-                 aes(x = hour, y = .data[[duration_col]] * scale_factor, group = hour),
-                 fill = box_color, color = box_color, alpha = 0.25,
-                 outlier.shape = NA, width = 0.5)
+                 aes(x = .data[[duration_col]] * scale_factor, y = hour_f, group = hour_f),
+                 fill = box_color, color = box_color, alpha = 0.2,
+                 outlier.shape = NA, width = 0.6)
+
   if (show_points) {
     p <- p +
       geom_jitter(data = df,
-                  aes(x = hour, y = .data[[duration_col]] * scale_factor),
-                  width = 0.15, height = 0, size = 0.7, alpha = 0.35, color = box_color)
+                  aes(x = .data[[duration_col]] * scale_factor, y = hour_f),
+                  height = 0.15, width = 0, size = 0.7, alpha = 0.15, color = box_color)
   }
-  
+
   p <- p +
-    scale_x_continuous(breaks = 0:23, limits = c(-0.5, 23.5)) +
-    scale_y_continuous(
-      name     = y_lab_left,
-      sec.axis = sec_axis(~ . / scale_factor, name = y_lab_right)
-    ) +
-    labs(title = title, x = x_lab) +
+    geom_vline(xintercept = 0, color = "grey30", linewidth = 0.6) +
+    scale_x_continuous(breaks = x_breaks, labels = x_labels) +
+    scale_y_discrete(limits = as.character(0:23), drop = FALSE) +
+    labs(title = title, x = NULL, y = y_lab) +
     theme_minimal() +
-    theme(
-      axis.title.y.left  = element_text(color = bar_color, face = "bold"),
-      axis.text.y.left   = element_text(color = bar_color),
-      axis.title.y.right = element_text(color = box_color, face = "bold"),
-      axis.text.y.right  = element_text(color = box_color)
-    )
-  add_sun_reference(p, data[[time_col]])   # x = hour here, so the vertical-band version applies
+    theme(axis.text.x = element_text(color = "grey20")) +
+    # Color-coded headers so it's unambiguous which side reads which unit
+    annotate("text", x = -max(count_breaks) * 0.5, y = -1,
+             label = label_left, color = bar_color,
+             fontface = "bold", hjust = 0.5, size = 3.5) +
+    annotate("text", x = max(duration_breaks) * scale_factor * 0.5, y = -1,
+             label = label_right, color = box_color,
+             fontface = "bold", hjust = 0.5, size = 3.5) +
+    coord_cartesian(ylim = c(1, 24), clip = "off") +
+    theme(plot.margin = margin(t = 25, r = 10, b = 25, l = 10))
+
+  add_sun_reference_h(p, data[[time_col]])   # y = hour here, so the horizontal-band version applies
 }
 
 
@@ -258,7 +277,7 @@ plots_hourly <- list(
   duration             = list(),
   raw_duration_old     = list(),
   box_duration         = list(),
-  count_duration_combo = list()    
+  duration_pyramid     = list()    
 )
 
 for (s in stations) {
@@ -283,19 +302,17 @@ for (s in stations) {
     visit_by_station[[s]], "visitStart", "duration_h",
     title = paste0("Visit Duration by Hour of Day \u2014 ", s, " (points = individual Band.ID visits)"))
   
-  plots_hourly$count_duration_combo[[s]] <- plot_hour_count_duration_combo(
+  plots_hourly$duration_pyramid[[s]] <- plot_hour_count_duration_pyramid(
     visit_by_station[[s]], "visitStart", "duration_h",
-    title = paste0("Passage Count (bars, left axis) & Visit Duration (boxplots, right axis) \u2014 ", s))
+    title = paste0("Passage Count (left) vs. Passage Duration (right) by Hour \u2014 ", s))
 }
 ```
-
 
 ### Exploratory analysis
 
 #### Total count
 
 ::: panel-tabset
-
 ```{r hourly-count, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
 for (s in stations) {
   cat("##### ", s, "\n\n")
@@ -324,7 +341,6 @@ for (s in stations) {
 #### Duration distribution
 
 ::: panel-tabset
-
 ```{r hourly-distribution, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
 for (s in stations) {
   cat("##### ", s, "\n\n")
@@ -335,10 +351,15 @@ for (s in stations) {
 ```
 :::
 
+### Exploratory synthesis
 
-### Exploratory synthesis 
+Below is the synthesis of our exploratory descriptive analysis. The **raw data table** (one row = one detection; several consecutive detections = one run) is first processed using the **"one-hour gap" rule**, whereby any gap of *less than one hour between two runs are systematically merged into a single and continuous run*.
 
+We refer to this merged *run* as a **Passage**. At this stage, all data is treated the same way, without distinguishing between Fly-Bys and Visits.
 
+A **Passage** reflects *how many times a bird has been detected by the station* (count), versus *how long it was continuously detected during each passage* (duration). In other words:
+
+-   **How often** *versus* **How long** each detection lasted.
 
 ```{r build-summary-tables, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='hide'}
 library(DT)
@@ -377,11 +398,10 @@ summary_tables <- setNames(
 ```
 
 ::: panel-tabset
-
-```{r hourly-combo, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+```{r hourly-combo, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=8}
 for (s in stations) {
   cat("#### ", s, "\n\n")
-  print(plots_hourly$count_duration_combo[[s]])
+  print(plots_hourly$duration_pyramid[[s]])
   cat("\n\n")
   
   cat('::: {.callout-tip collapse="true" title="Summary statistics \u2014 ', s, '"}\n\n', sep = "")
@@ -391,14 +411,13 @@ for (s in stations) {
 ```
 :::
 
-
 ## Set-up data
 
 As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
 
 ::: blockquote-blue
 *visit_duration* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
-::: 
+:::
 
 Now, we pre-fill some **key-values** we need to set-up the workflow.
 
