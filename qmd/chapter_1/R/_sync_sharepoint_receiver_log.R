@@ -32,9 +32,11 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 sharepoint_receiver_log_historic <- "motus_receiver_log_historic_callum.xlsx"
 sharepoint_receiver_log_survey123 <- "arcgis-123survey_output_table_raw-from-app-maxime.xlsx"
+sharepoint_receiver_list <- "receivers.csv"
 
 path_sharepoint_receiver_log_historic <- here::here(dir_sharepoint, "Motus_array_maintenance", sharepoint_receiver_log_historic)
 path_sharepoint_receiver_log_survey123 <- here::here(dir_sharepoint, "Motus_array_maintenance", sharepoint_receiver_log_survey123)
+path_sharepoint_receiver_list <- here::here(dir_sharepoint, "Motus_array_maintenance", sharepoint_receiver_list)
 
 # Destination folder is gitignored, so it may not exist on a fresh clone.
 dir.create(dirname(path_motus_receiver_log_historic), recursive = TRUE, showWarnings = FALSE)
@@ -45,6 +47,7 @@ dir.create(dirname(path_motus_receiver_log_historic), recursive = TRUE, showWarn
 # will be renamed to whatever is defined in globals.R.
 file.copy(path_sharepoint_receiver_log_historic, path_motus_receiver_log_historic, overwrite = TRUE)
 file.copy(path_sharepoint_receiver_log_survey123, path_motus_receiver_log_survey123, overwrite = TRUE)
+file.copy(path_sharepoint_receiver_list, path_motus_receiver_list, overwrite = TRUE)
 
 # TODO: Implement useful checks to help user
 # if (is.na(dir_sharepoint) || !nzchar(dir_sharepoint)) {

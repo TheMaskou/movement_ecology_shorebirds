@@ -15,6 +15,7 @@ path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIR
 # below.
 path_motus_receiver_log_historic <- here::here("data", "motus", "array_maintenance", "motus_receiver_log_historic.xlsx")
 path_motus_receiver_log_survey123 <- here::here("data", "motus", "array_maintenance", "motus_receiver_log_survey123.xlsx")
+path_motus_receiver_list <- here::here("data", "motus", "receivers.csv")
 
 # The below spreadsheet is generated from the historic + survey123 spreadsheets
 # by the R script qmd/chapter_1/R/ch1_4_motus_array_maintenance_log.R

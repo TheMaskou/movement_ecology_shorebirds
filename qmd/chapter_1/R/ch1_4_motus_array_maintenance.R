@@ -96,8 +96,8 @@ history_fields <- c(
   visit_date                = "Date",
   technician                = "Technician",
   data_downloaded           = "Data DL",
-  station_power_dep         = "Power (dep)",
-  wifi_dep                  = "WiFi (dep)",
+  station_power_departure   = "Power (dep)",
+  wifi_departure            = "WiFi (dep)",
   tag_test_perf_dep         = "Tag Tested",
   tag_test_perf_success_dep = "Test Tag Detected",
   sg_id                     = "Receiver",
@@ -123,15 +123,19 @@ history_cell_max_width <- "220px"
 maintenance_log <- readRDS(path_maintenance_log)
 
 # ==== Load and Attach Station Coordinates ====
-# Coordinates are sourced from receivers_temp.csv for every row (both the
+# Coordinates are sourced from receivers.csv for every row (both the
 # historic and Survey123 entries), replacing the per-row sg_lon / sg_lat
 # columns that were only populated for Survey123 entries.
+#
+# Note that this receivers.csv is sourced from SharePoint, and it must be
+# manually updated in SharePoint when any changes are made (e.g., new receiver
+# deployed at a site).
 #
 # The format in the CSV is e.g. "151.681010702398E" / "32.846728923395S".
 # Conversion: extract the leading number with sub(), then negate if W or S.
 
 station_coords <- read_csv(
-  here::here("data", "motus", "receivers_temp.csv"),
+  here::here("data", "motus", "receivers.csv"),
   show_col_types = FALSE
 ) |>
   filter(station_id != "TEST") |>
@@ -148,7 +152,7 @@ maintenance_log <- maintenance_log |>
   left_join(station_coords, by = "station_id")
 
 ## ---- Coordinate Guard ----
-# Warn if any station_id in the log has no match in receivers_temp.csv, as
+# Warn if any station_id in the log has no match in receivers.csv, as
 # those stations will be silently excluded from the map.
 missing_coords <- maintenance_log |>
   filter(is.na(sg_lon) | is.na(sg_lat)) |>
@@ -157,7 +161,7 @@ missing_coords <- maintenance_log |>
 
 if (length(missing_coords) > 0) {
   warning(
-    "These station_id values have no match in receivers_temp.csv and will be ",
+    "These station_id values have no match in receivers.csv and will be ",
     "excluded from the map: ", toString(missing_coords)
   )
 }
@@ -187,7 +191,7 @@ sg_version_short <- function(x) {
 # Applies field-specific display conversions (WiFi yes/no -> on/off, short
 # SensorGnome version) on top of the generic .fmt() NA/blank handling.
 fmt_cell <- function(field, value) {
-  if (field %in% c("wifi_dep", "wifi_arrival")) return(.fmt(wifi_display(value)))
+  if (field %in% c("wifi_departure", "wifi_arrival")) return(.fmt(wifi_display(value)))
   if (field == "sg_version")                    return(.fmt(sg_version_short(value)))
   .fmt(value)
 }
@@ -253,8 +257,8 @@ build_popup <- function(rows) {
       "<td>", .fmt(latest$visit_date), " (", .fmt(latest$technician), ")</td></tr>",
     "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Status on departure</td>",
-      "<td>Power: ", .status_token(latest$station_power_dep),
-      "  |  WiFi: ", .status_token(wifi_display(latest$wifi_dep)), "</td></tr>",
+      "<td>Power: ", .status_token(latest$station_power_departure),
+      "  |  WiFi: ", .status_token(wifi_display(latest$wifi_departure)), "</td></tr>",
     "<tr><td style='color:", summary_label_color, ";padding:2px 10px 2px 0;white-space:nowrap'>",
       "Last data download</td>",
       "<td>", last_dl_str, "</td></tr>",
@@ -326,7 +330,7 @@ popup_data <- tibble::tibble(
   popup      = sapply(station_groups, build_popup),
   fill_color = sapply(station_groups, \(grp) {
     lv <- latest_visit(grp)
-    marker_fill_for(lv$station_power_dep, wifi_display(lv$wifi_dep))
+    marker_fill_for(lv$station_power_departure, wifi_display(lv$wifi_departure))
   })
 ) |>
   mutate(stroke_color = darken_color(fill_color))
