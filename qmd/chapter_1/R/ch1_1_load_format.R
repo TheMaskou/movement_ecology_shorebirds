@@ -1,5 +1,7 @@
 # ch1_1_load_format.R — Load, clean, and enrich Motus detection data
 #
+# NOTE 7th September: The below dependencies / produces is outdated
+#
 # DEPENDENCIES:
 #   - qmd/chapter_1/R/globals.R (constants: station_rename, tag lists, project number,
 #     species colours, names, classifications)
@@ -29,6 +31,7 @@ library(lubridate)
 library(purrr)
 library(ggplot2)
 library(tictoc)
+library(readxl)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
@@ -179,14 +182,17 @@ if (nrow(df.new) == 0) {
   ## 8. Spreadsheet join (Band.ID) ----
   tic("8. Spreadsheet join")
   # Import spreadsheet from file (ensure is current)
-  spreadsheet <- read.csv(path_shorebird_number_spreadsheet) |> 
+  #spreadsheet <- read.csv(path_shorebird_numbers) |> 
+  spreadsheet <- read_excel(path_shorebird_numbers, 
+                           sheet = "Birds caught") |> 
     # Keep only the tagged ones 
-    filter(Radio.tag. == "Y") %>%      
+    filter(`Radio-tag?` == "Y") %>%      
     
     # Variable names
     rename(DateAUS.Trap = "Date", 
-           motusTagID = "Motus.tag.ID", 
-           speciesEN = "Species") %>%
+           motusTagID = "Motus tag ID", 
+           speciesEN = "Species",
+           Band.ID = "Band ID") %>%
     
     # Value names
     mutate(speciesEN = case_when(
@@ -213,8 +219,8 @@ if (nrow(df.new) == 0) {
   # Join Band ID to new detections, using motusTagID as the join key
   df.new <- left_join(df.new,
                       spreadsheet %>%
-                        filter(Euthanised. != "Y") %>%
-                        select(motusTagID, 
+                        filter(!`Euthanised?` %in% "Y") %>%
+                        select(motusTagID,
                                DateAUS.Trap, 
                                Band.ID, 
                                Bander,
