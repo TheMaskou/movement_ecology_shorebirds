@@ -266,18 +266,100 @@ plot_hour_count_duration_pyramid <- function(data, time_col, duration_col, title
   add_sun_reference_h(p, data[[time_col]])   # y = hour here, so the horizontal-band version applies
 }
 
+plot_hour_count_duration_pyramid_species <- function(data, time_col, duration_col, title,
+                                                       y_lab       = "Hour of Day",
+                                                       label_left  = "Number of Passage (counts)",
+                                                       label_right = "Passage Duration (hours)",
+                                                       show_points = TRUE) {
+
+  bar_color <- "steelblue"
+  box_color <- "black"
+
+  df <- data %>%
+    mutate(hour = lubridate::hour(.data[[time_col]]),
+           hour_f = factor(hour, levels = 0:23))
+
+  # Counts per hour PER SPECIES — explicitly complete 0:23 x species so empty
+  # hours show as 0, not gaps, for every species/hour combination
+  species_list <- sort(unique(df$speciesEN))
+
+  count_df <- df %>%
+    count(speciesEN, hour, name = "n") %>%
+    right_join(
+      tidyr::expand_grid(speciesEN = species_list, hour = 0:23),
+      by = c("speciesEN", "hour")
+    ) %>%
+    mutate(n = tidyr::replace_na(n, 0),
+           hour_f = factor(hour, levels = 0:23)) %>%
+    arrange(speciesEN, hour)
+
+  # Scale factor computed GLOBALLY (across all species) so facets stay
+  # comparable to one another rather than each being independently rescaled
+  max_count    <- max(count_df$n, na.rm = TRUE)
+  max_duration <- suppressWarnings(max(df[[duration_col]], na.rm = TRUE))
+  if (!is.finite(max_duration) || max_duration == 0) max_duration <- 1
+  scale_factor <- if (max_count == 0) 1 else max_count / max_duration
+
+  count_breaks    <- scales::extended_breaks()(c(0, max_count))
+  count_breaks    <- count_breaks[count_breaks >= 0]
+  duration_breaks <- scales::extended_breaks()(c(0, max_duration))
+  duration_breaks <- duration_breaks[duration_breaks >= 0]
+
+  x_breaks <- c(-rev(count_breaks), duration_breaks * scale_factor)
+  x_labels <- c(rev(count_breaks), duration_breaks)
+
+  p <- ggplot() +
+    geom_col(data = count_df, aes(x = -n, y = hour_f),
+             fill = bar_color, alpha = 0.65, width = 0.8) +
+    geom_boxplot(data = df,
+                 aes(x = .data[[duration_col]] * scale_factor, y = hour_f, group = hour_f),
+                 fill = box_color, color = box_color, alpha = 0.2,
+                 outlier.shape = NA, width = 0.6)
+
+  if (show_points) {
+    p <- p +
+      geom_jitter(data = df,
+                  aes(x = .data[[duration_col]] * scale_factor, y = hour_f),
+                  height = 0.15, width = 0, size = 0.6, alpha = 0.12, color = box_color)
+  }
+
+  p <- p +
+    geom_vline(xintercept = 0, color = "grey30", linewidth = 0.6) +
+    scale_x_continuous(breaks = x_breaks, labels = x_labels) +
+    scale_y_discrete(limits = as.character(0:23), drop = FALSE) +
+    facet_wrap(~ speciesEN, ncol = 2) +
+    labs(title = title, x = NULL, y = y_lab) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(color = "grey20", size = 8),
+      axis.text.y = element_text(size = 7),
+      strip.text  = element_text(face = "bold", size = 9)
+    ) +
+    annotate("text", x = -max(count_breaks) * 0.5, y = -1,
+             label = label_left, color = bar_color,
+             fontface = "bold", hjust = 0.5, size = 3) +
+    annotate("text", x = max(duration_breaks) * scale_factor * 0.5, y = -1,
+             label = label_right, color = box_color,
+             fontface = "bold", hjust = 0.5, size = 3) +
+    coord_cartesian(ylim = c(1, 24), clip = "off") +
+    theme(plot.margin = margin(t = 25, r = 10, b = 25, l = 10))
+
+  add_sun_reference_h(p, data[[time_col]])
+}
 
 # ============================================================
 # Build one set of plots PER STATION
 # ============================================================
 
 plots_hourly <- list(
-  count                = list(),
-  raw_count            = list(),
-  duration             = list(),
-  raw_duration_old     = list(),
-  box_duration         = list(),
-  duration_pyramid     = list()    
+  count                    = list(),
+  raw_count                = list(),
+  duration                 = list(),
+  raw_duration_old         = list(),
+  box_duration             = list(),
+  duration_pyramid         = list(),
+  duration_pyramid_species = list()  
+
 )
 
 for (s in stations) {
@@ -305,6 +387,10 @@ for (s in stations) {
   plots_hourly$duration_pyramid[[s]] <- plot_hour_count_duration_pyramid(
     visit_by_station[[s]], "visitStart", "duration_h",
     title = paste0("Passage Count (left) vs. Passage Duration (right) by Hour \u2014 ", s))
+  
+  plots_hourly$duration_pyramid_species[[s]] <- plot_hour_count_duration_pyramid_species(
+    visit_by_station[[s]], "visitStart", "duration_h",
+    title = paste0("Passage Count (left) vs. Passage Duration (right) by Hour & Species \u2014 ", s))
 }
 ```
 
@@ -347,6 +433,61 @@ for (s in stations) {
 
   print(plots_hourly$box_duration[[s]])
   cat("\n\n")
+}
+```
+:::
+
+#### Count/Duration per species
+
+```{r build-summary-tables-SP, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='hide'}
+library(DT)
+build_hour_summary_dt <- function(data, label) {
+  hour_summary <- data %>%
+    mutate(hour = lubridate::hour(visitStart)) %>%
+    group_by(speciesEN, hour) %>%
+    summarise(
+      n_visits = n(),
+      total_h  = sum(duration_h, na.rm = TRUE),
+      median_h = median(duration_h, na.rm = TRUE),
+      mean_h   = mean(duration_h, na.rm = TRUE),
+      max_h    = max(duration_h, na.rm = TRUE),
+      min_h    = min(duration_h, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    arrange(speciesEN, hour) %>%
+    mutate(across(c(total_h, median_h, mean_h, max_h, min_h), ~ round(.x, 2)))
+
+  datatable(
+    hour_summary,
+    rownames = FALSE,
+    colnames = c("Species", "Hour of Day", "Number of Visits", "Total Duration (h)",
+                 "Median Duration (h)", "Mean Duration (h)", "Max Duration (h)", "Min Duration (h)"),
+    filter = "top",
+    options = list(pageLength = 24, order = list(list(0, "asc"), list(1, "asc")), dom = "ftip"),
+    caption = paste0("Visit duration summary by species and hour of day \u2014 ", label)
+  ) %>%
+    formatStyle("total_h",  background = styleColorBar(hour_summary$total_h, "lightblue")) %>%
+    formatStyle("median_h", background = styleColorBar(hour_summary$median_h, "lightblue"))
+}
+
+summary_tables_sp <- setNames(
+  lapply(stations, function(s) build_hour_summary_dt(visit_by_station[[s]], s)),
+  stations
+)
+```
+
+::: panel-tabset
+```{r species-distribution, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
+for (s in stations) {
+  cat("##### ", s, "\n\n")
+
+  print(plots_hourly$duration_pyramid_species[[s]])
+  cat("\n\n")
+  
+    
+  cat('::: {.callout-tip collapse="true" title="Summary statistics \u2014 ', s, '"}\n\n', sep = "")
+  print(htmltools::tagList(summary_tables_sp[[s]]))
+  cat("\n\n:::\n\n")
 }
 ```
 :::
