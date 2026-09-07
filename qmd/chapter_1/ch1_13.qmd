@@ -268,8 +268,8 @@ plot_hour_count_duration_pyramid <- function(data, time_col, duration_col, title
 
 plot_hour_count_duration_pyramid_species <- function(data, time_col, duration_col, title,
                                                        y_lab       = "Hour of Day",
-                                                       label_left  = "Number of Passage (counts)",
-                                                       label_right = "Passage Duration (hours)",
+                                                       label_left  = " ",
+                                                       label_right = " ",
                                                        show_points = TRUE) {
 
   bar_color <- "steelblue"
