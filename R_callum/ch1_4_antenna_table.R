@@ -32,6 +32,8 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 
 sql.motus <- dbConnect(SQLite(), path_motus_database)
 
+path_antenna_table_generated <- here::here("data", "motus", "array_maintenance", "antenna_table_generated.csv")
+
 # ==== Load Tables ====
 
 tbl.recvDeps <- sql.motus |> tbl("recvDeps") |> collect()
