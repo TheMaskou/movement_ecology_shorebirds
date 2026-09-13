@@ -65,9 +65,8 @@ dt_maintenance
 ```
 :::
 
+Below is shown the last 20 detections from the complete array (including noise and test tags), the data is raw and unfiltered.
 
-Below is shown the last 20 detections from the complete array (including noise and test tags), the data is raw and unfiltered.  
-  
 ::: {.callout-note collapse="true" title="Click to view the raw detection data"}
 ```{r Tables rawdata}
 #| message: false
@@ -119,5 +118,4 @@ df.alltags <- df.alltags %>%
 df.alltags
 
 ```
-::: 
-    
+:::
