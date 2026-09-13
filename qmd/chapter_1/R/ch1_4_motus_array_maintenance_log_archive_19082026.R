@@ -31,14 +31,7 @@ type_cols_survey123 <- c(
   receiver_replacement_id = "character",
   tag_test_perf_success_dep = "character",
   tag_test_notes_dep = "character",
-  visit_date = "character",
-  # Renamed departure fields - see "Consolidate Renamed Columns" below
-  station_power_dep = "character",
-  station_power_departure = "character",
-  wifi_dep = "character",
-  wifi_departure = "character",
-  wifi_notes_dep = "character",
-  wifi_notes_departure = "character"
+  visit_date = "character"
 )
 
 # NOTE: At the time of writing, there was only a single worksheet in the 
@@ -50,45 +43,7 @@ log_survey123 <- wb_to_df(
   types = type_cols_survey123
 )
 
-# ==== Consolidate Renamed Columns ====
-# When a Survey123 question is renamed, the export does NOT rename the existing
-# column - it adds a new one and keeps the old. The values for a single quantity
-# therefore end up split across two columns: entries submitted before the rename
-# under the old name, entries after under the new one. Never both in one row.
-#
-# coalesce() takes the first non-NA value per row, collapsing each pair back into
-# a single column under the current (_departure) name. Order is old-then-new-
-# agnostic since the pair is mutually exclusive - the guard below confirms that.
-
-# Guard: a row populated in BOTH columns breaks the mutually-exclusive
-# assumption, and coalesce() would silently discard one of the two values.
-cols_renamed_survey123 <- c(
-  station_power_departure = "station_power_dep",
-  wifi_departure          = "wifi_dep",
-  wifi_notes_departure    = "wifi_notes_dep"
-)
-
-for (col_new in names(cols_renamed_survey123)) {
-  col_old <- cols_renamed_survey123[[col_new]]
-  n_both  <- sum(!is.na(log_survey123[[col_new]]) & !is.na(log_survey123[[col_old]]))
-  if (n_both > 0) {
-    warning(n_both, " row(s) have a value in both ", col_new, " and ", col_old,
-            " - one value will be discarded by coalesce()", immediate. = TRUE)
-  }
-}
-
-log_survey123 <- log_survey123 |>
-  mutate(
-    station_power_departure = coalesce(station_power_departure, station_power_dep),
-    wifi_departure          = coalesce(wifi_departure, wifi_dep),
-    wifi_notes_departure    = coalesce(wifi_notes_departure, wifi_notes_dep)
-  ) |>
-  select(!any_of(unname(cols_renamed_survey123)))
-
 # ==== Import Historic Log ====
-
-# The below is primarily for columns that are empty in the historic log;
-# need to be the same type so the join works
 type_cols_historic <- c(
   deploy_mast = "character",
   deploy_solar = "character",
@@ -99,11 +54,7 @@ type_cols_historic <- c(
   deploy_battery = "character",
   sg_lon = "character",
   sg_lat = "character",
-  sg_alt = "character",
-  sdcard_notes = "character",
-  wifi_notes_arrival = "character",
-  wifi_notes_departure = "character",
-  receiver_replacement_sg_version = "character"
+  sg_alt = "character"
 )
 
 
@@ -173,8 +124,8 @@ if (nrow(type_comparison) > 0) {
 # entry_source records which log each row came from ("historic" / "survey123"),
 # since bind_rows() otherwise leaves no way to tell the two apart afterwards.
 log_complete <- bind_rows(
-  log_historic  |> mutate(entry_source = "historic"),
-  log_survey123 |> mutate(entry_source = "survey123")
+  log_historic  |> mutate(entry_source = "historic",  wifi_notes_arrival = as.character(wifi_notes_arrival)),
+  log_survey123 |> mutate(entry_source = "survey123", wifi_notes_arrival = as.character(wifi_notes_arrival))
 )
 
 # ==== Fix Corries Island Naming Error ====
@@ -182,6 +133,15 @@ log_complete <- bind_rows(
 # instead of "Corrie Island". Historic log already has the correct name.
 log_complete <- log_complete |>
   mutate(station_id = if_else(station_id == "Corries Island", "Corrie Island", station_id))
+
+# ==== Exclude Undated / TBC Entries ====
+log_tbc <- log_complete |>
+  filter(station_id == "TBC")
+
+log_complete <- log_complete |>
+  filter(station_id != "TBC")
+
+message(nrow(log_tbc), " entries with station_id = 'TBC' excluded from log_complete (retained in log_tbc)")
 
 # ==== Parse Dates ====
 # Retain raw character values for debugging (as visit_date_str)
@@ -219,21 +179,12 @@ log_complete <- log_complete |>
   filter(!((station_id == "Davies Point") & (visit_date == ymd("2026-04-29"))))
 message(n_before - nrow(log_complete), " Davies Point test entry/entries removed")
 
-# ==== Exclude TBC Entries ====
-log_tbc <- log_complete |>
-  filter(station_id == "TBC")
-
-log_complete <- log_complete |>
-  filter(station_id != "TBC")
-
-message(nrow(log_tbc), " entries with station_id = 'TBC' excluded from log_complete (retained in log_tbc)")
-
 # ==== Fix Entries With Deprecated Field Names ====
 # The issue is that some of the Survey123 entries were completed before
 # finalising the survey structure.
 # Specifically, "station_status_left" / "station_status_arrival" were used for
 # whether the station was functioning on departure/arrival - these have now
-# been replaced by wifi_departure/station_power_departure and wifi_arrival/
+# been replaced by wifi_dep/station_power_dep and wifi_arrival/
 # station_power_arrival, meaning that for those entries, the new fields had an
 # NA value. Fixed below by deriving the new fields from the deprecated status
 # values (confirmed with Callum 2026-07-08). This is a one-off cleanup - the
@@ -263,17 +214,17 @@ log_complete <- log_complete |>
     .sid = tolower(trimws(as.character(station_id))),
 
     ## Departure (feeds the map)
-    station_power_departure = case_when(
-      !is.na(station_power_departure) ~ station_power_departure,
-      .ssl == "online"                ~ "on",
-      .ssl == "removed"               ~ "removed",
-      TRUE                            ~ station_power_departure
+    station_power_dep = case_when(
+      !is.na(station_power_dep) ~ station_power_dep,
+      .ssl == "online"          ~ "on",
+      .ssl == "removed"         ~ "removed",
+      TRUE                      ~ station_power_dep
     ),
-    wifi_departure = case_when(
-      !is.na(wifi_departure) ~ wifi_departure,
+    wifi_dep = case_when(
+      !is.na(wifi_dep) ~ wifi_dep,
       .ssl == "online"  ~ "yes",
       .ssl == "removed" ~ "no",
-      TRUE              ~ wifi_departure
+      TRUE              ~ wifi_dep
     ),
 
     ## Arrival
@@ -318,21 +269,21 @@ log_deprecated_fields |> select(
   station_status_arrival,
   station_status_left,
   wifi_arrival,
-  wifi_departure,
+  wifi_dep,
   station_power_arrival,
-  station_power_departure
+  station_power_dep
 ) |> datatable()
 
 # Verify that all entries using the deprecated station status fields, now have
-# a value for wifi_departure and station_power_departure (feeds the map, so most important).
+# a value for wifi_dep and station_power_dep (feeds the map, so most important).
 n_dep_unfilled <- log_deprecated_fields |>
   filter(!is.na(station_status_left) &
-         (is.na(wifi_departure) | is.na(station_power_departure))) |>
+         (is.na(wifi_dep) | is.na(station_power_dep))) |>
   nrow()
 
 if (n_dep_unfilled > 0) {
   warning(n_dep_unfilled,
-          " deprecated-field rows still have NA wifi_departure/station_power_departure after fix")
+          " deprecated-field rows still have NA wifi_dep/station_power_dep after fix")
 } else {
   message("All deprecated-field departure statuses filled, yippee")
 }
@@ -370,10 +321,10 @@ if (nrow(duplicates) > 0) {
 
 # ==== Verify Field Value Validity ====
 log_complete |> count(wifi_arrival)
-log_complete |> count(wifi_departure)
+log_complete |> count(wifi_dep)
 
 log_complete |> count(station_power_arrival)
-log_complete |> count(station_power_departure)
+log_complete |> count(station_power_dep)
 
 # ==== Export ====
 openxlsx2::write_xlsx(
