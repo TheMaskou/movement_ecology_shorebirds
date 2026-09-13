@@ -1,6 +1,7 @@
 ---
 title: "Scientific"
 format: html
+toc-location: left
 ---
 
 ## Scientific papers

@@ -1,6 +1,7 @@
 ---
 title: "To-do-list"
 format: html
+toc-location: left
 ---
 
 1.  **\[Motus server\]** Clear and clean issues in the Motus project (motus.org). Add photos and good descriptions/information in all stations.

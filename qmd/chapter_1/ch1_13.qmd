@@ -1,6 +1,7 @@
 ---
 title: "Site use - hours (Fullerton case)"
 format: html
+toc-location: left
 ---
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}

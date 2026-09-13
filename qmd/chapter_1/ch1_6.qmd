@@ -1,6 +1,7 @@
 ---
 title: "Estuary usage - days"
 format: html
+toc-location: left
 ---
 
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}

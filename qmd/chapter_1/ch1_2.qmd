@@ -1,6 +1,7 @@
 ---
 title: "Explore"
 format: html
+toc-location: left
 ---
 
 ```{r 1 packages, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
@@ -566,6 +567,8 @@ DT::datatable(
 ```
 
 ## Detection data
+
+Not displayed as it remains confidential.
 
 <!-- ::: {.callout-tip collapse="true" title="See all detection data"} -->
 

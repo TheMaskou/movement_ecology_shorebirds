@@ -1,6 +1,7 @@
 ---
 title: "Chapter 3"
 format: html
+toc-location: left
 ---
 
 *Coming soon to cinemas...*

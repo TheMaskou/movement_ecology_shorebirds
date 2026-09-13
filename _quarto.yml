@@ -22,10 +22,14 @@ project:
     # - "!qmd/chapter_1/ch1_10.qmd" # Exclude this specific file
     # - "!qmd/chapter_1/ch1_11.qmd" # Exclude this specific file
     # - "!qmd/chapter_1/ch1_12.qmd" # Exclude this specific file
+    - "!qmd/chapter_5/ch5_1.qmd" # Exclude this specific file
+
 
     
 execute:
   freeze: auto #auto use cache results, false rerun everything
+
+sidebar: false 
 
 website:
   title: "Home"

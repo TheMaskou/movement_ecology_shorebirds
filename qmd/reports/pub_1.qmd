@@ -1,6 +1,7 @@
 ---
 title: "Internal documents"
 format: html
+toc-location: left
 ---
 
 ## Protocols

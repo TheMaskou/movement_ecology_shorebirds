@@ -1,6 +1,7 @@
 ---
 title: "Academic"
 format: html
+toc-location: left
 ---
 
 -   [Milestone 2](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQA15MmIEld5QYawcTwL0-GCAceaBysOvIOeiDeDH4J_Ic0?e=EIQavm) - Ph.D plan (Sept., 2025)

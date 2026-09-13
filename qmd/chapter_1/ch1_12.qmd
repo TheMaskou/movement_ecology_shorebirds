@@ -1,6 +1,7 @@
 ---
 title: "Site use - hours (OBP method)"
 format: html
+toc-location: left
 ---
 
 ```{r style legend, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
@@ -122,11 +123,9 @@ gaps <- runs %>%
   filter(gapHours > 0) # we are not dealing with overlaps yet (simultaneous detection of the same tag from two or more antenna)
 ```
 
-**3. Truncate gaps** (hours) for mixture model fitting. 
+**3. Truncate gaps** (hours) for mixture model fitting.
 
-::: blockquote-yellow **NOTE:** 
-Below are values you should choose based on your own data and on the ecological plausibility of your system.
-:::
+::: blockquote-yellow **NOTE:** Below are values you should choose based on your own data and on the ecological plausibility of your system. :::
 
 ```{r gap selection, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
 
@@ -656,7 +655,7 @@ use_rate_plot <- use_rate_plot %>%
 ```
 
 ::: blockquote-yellow
-**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.  
+**Note:** We filtered out Masked Lapwing from the analysis, since they have too few data.\
 We also filter out **Fullerton Entrance** station as it needs to be worked separately (see [Site use - hours (Fullerton case)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_13.html))
 :::
 
@@ -1062,8 +1061,7 @@ low_migratory  %>%
 
 ## *Beta \|* Statistical analysis (GLM)
 
-::: {.callout-tip collapse="true" title="See exploratory analysis"}
-
+:::: {.callout-tip collapse="true" title="See exploratory analysis"}
 Instead of simple "*the boxplots look different*" we statistically analyse with GLM the data to estimate tidal and circadian cycles effects per species, correctly weighted and accounting for the fact that a same bird may appears many times.
 
 ### Additive model (direction \~ tide \* species + diel \* species)
@@ -1643,5 +1641,4 @@ for (sp in names(species_plots)) {
 }
 ```
 :::
-
-:::
+::::
