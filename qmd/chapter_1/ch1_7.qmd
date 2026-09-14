@@ -1,5 +1,5 @@
 ---
-title: "Site use - hours (initial method)"
+title: "Site use - hours (Initial method)"
 format: html
 toc-location: left
 ---

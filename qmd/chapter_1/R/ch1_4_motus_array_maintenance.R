@@ -8,6 +8,10 @@ library(here)
 library(openxlsx2)
 
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
+source(here::here("qmd", "chapter_1", "R", "_sync_sharepoint_data_files.R"))
+source(here::here("qmd", "chapter_1", "R", "_sync_sharepoint_receiver_log.R"))
+source(here::here("qmd", "chapter_1", "R", "ch1_4_motus_array_maintenance_log.R"))
+
 
 # ==== Map Display Settings ====
 # Edit these variables to change how the map looks. All visual properties of
@@ -97,8 +101,8 @@ history_fields <- c(
   visit_date                = "Date",
   technician                = "Technician",
   data_downloaded           = "Data DL",
-  station_power_departure   = "Power (dep)",
-  wifi_departure            = "WiFi (dep)",
+  station_power_departure         = "Power (dep)",
+  wifi_departure                  = "WiFi (dep)",
   tag_test_perf_dep         = "Tag Tested",
   tag_test_perf_success_dep = "Test Tag Detected",
   sg_id                     = "Receiver",
@@ -261,7 +265,7 @@ antenna_removed_counts <- antenna_log |>
 # Conversion: extract the leading number with sub(), then negate if W or S.
 
 station_coords <- read_csv(
-  here::here("data", "motus", "receivers.csv"),
+  here::here("qmd", "chapter_1", "data", "motus", "receivers.csv"),
   show_col_types = FALSE
 ) |>
   filter(station_id != "TEST") |>
@@ -691,8 +695,10 @@ popup_data <- tibble::tibble(
   popup      = sapply(station_groups, build_popup),
   fill_color = sapply(station_groups, \(grp) {
     lv <- latest_visit(grp)
-    marker_fill_for(lv$station_power_departure, wifi_display(lv$wifi_departure))
-  })
+    fill_color = sapply(station_groups, \(grp) {
+      lv <- latest_visit(grp)
+      marker_fill_for(lv$station_power_departure, wifi_display(lv$wifi_departure))
+    })  })
 ) |>
   mutate(stroke_color = darken_color(fill_color))
 
@@ -728,8 +734,8 @@ map_maintenance <- leaflet(popup_data, height = map_height,
   addLegend(
     position = "bottomright",
     colors   = c(marker_fill_green, marker_fill_yellow, marker_fill_red, marker_fill_default),
-    labels   = c("Power on &amp; WiFi on", "Power on, WiFi off",
-                  "Power off / removed", "Unknown / no data"),
+    labels   = c("Power ON &amp; Wi-Fi ON", "Power ON &amp; Wi-Fi OFF",
+                 "Power OFF / removed", "Unknown / no data"),
     title    = "Departure Status",
     opacity  = marker_fill_opacity
   ) |>
@@ -755,3 +761,101 @@ map_maintenance <- leaflet(popup_data, height = map_height,
   ")
 
 map_maintenance
+
+
+
+# ==== Maintenance Table ====
+
+
+## ---- Maintenance Table & Downloads ----
+# The on-page interactive table (dt_maintenance) and the downloadable files are
+# built from a cleaned copy of the log. Columns listed here are dropped from the
+# TABLE and the .xlsx download (they are Survey123 system/calc/debug fields that
+# add noise). The .rds download keeps the FULL log for R users, so nothing is
+# lost there. Edit this vector to show/hide columns.
+table_drop_cols <- c(
+  "globalid", "start", "end", "today",
+  "sg_id_calc", "sg_version_calc", "sg_lon_calc", "sg_lat_calc", "sg_alt_calc",
+  "action", "sg_id_other", "objectid",
+  "CreationDate", "Creator", "EditDate", "Editor",
+  "entry_source", "visit_datetime", "visit_date_str",
+  "Historic Row Source", "technician_other"
+)
+
+table_page_length <- 15   # rows shown per page in the interactive table
+
+# Human-readable column headers. Format: "Label" = "raw_column_name".
+# Columns not listed here keep their raw name. Edit / extend freely.
+# (To see the full list of visible columns and finish the map, run
+#  names(table_data) after the table_data block below has run.)
+col_labels <- c(
+  "Station"            = "station_id",
+  "Visit date"         = "visit_date",
+  "Technician"         = "technician",
+  "Data downloaded"    = "data_downloaded",
+  "Power (dep)"        = "station_power_departure",
+  "WiFi (dep)"         = "wifi_departure",
+  "Power (arr)"        = "station_power_arrival",
+  "WiFi (arr)"         = "wifi_arrival",
+  "Tag tested"         = "tag_test_perf_dep",
+  "Test tag detected"  = "tag_test_perf_success_dep",
+  "Receiver"           = "sg_id",
+  "Version"            = "sg_version",
+  "Issue?"             = "issue_presence",
+  "Issue category"     = "issue_category",
+  "Issue description"  = "issue_description",
+  "Repair?"            = "repair_done",
+  "Repair description" = "repair_description",
+  "Comments"           = "comments",
+  "Data notes"         = "data_notes"
+)
+
+
+
+
+
+# Cleaned, one-row-per-visit table for on-page browsing. station_id + visit_date
+# are moved to the front; the noise columns in table_drop_cols are removed. This
+# same cleaned frame feeds the .xlsx download below.
+# Sort the data itself so the table AND both download files (.xlsx from
+# table_data, .rds from maintenance_log) share the same order. NA dates sort
+# last by default. The map above is already built, so it is unaffected.
+maintenance_log <- maintenance_log |>
+  arrange(desc(visit_date), station_id)
+
+table_data <- maintenance_log |>
+  select(-any_of(table_drop_cols)) |>
+  relocate(station_id, visit_date, .before = 1)
+
+# Plain interactive table: per-column filters, readable headers, horizontal
+# scroll (there are many columns), and the arranged newest-first order.
+dt_maintenance <- DT::datatable(
+  table_data,
+  filter   = "top",
+  rownames = FALSE,
+  colnames = col_labels[col_labels %in% names(table_data)],
+  options  = list(
+    pageLength = table_page_length,
+    scrollX    = TRUE,     # many columns — scroll rather than overflow the page
+    order      = list()    # keep the arranged (newest-first) order on load
+  )
+)
+
+# ==== Downloadable Receiver Log ====
+# Generate the download files into qmd/chapter_1/downloads/ so they land in the
+# published site (docs/) and can be linked from the .qmd. Unlike the browser's
+# client-side DataTables export, these preserve data types:
+#   - .xlsx (openxlsx2): dates -> Excel dates, numbers -> numbers, etc.
+#   - .rds : full-fidelity, full log (all columns) for anyone continuing in R.
+dir_downloads <- here::here("qmd", "chapter_1", "downloads")
+if (!dir.exists(dir_downloads)) dir.create(dir_downloads, recursive = TRUE)
+
+openxlsx2::write_xlsx(
+  table_data,
+  file = file.path(dir_downloads, "receiver_log_complete.xlsx")
+)
+
+saveRDS(
+  maintenance_log,
+  file = file.path(dir_downloads, "receiver_log_complete.rds")
+)

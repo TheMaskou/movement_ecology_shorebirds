@@ -118,7 +118,8 @@ cols_only_in_historic <- setdiff(names(log_historic), names(log_survey123))
 
 # Define which columns we expect to only be in the historic log (columns used
 # for manual verification / record-keeping etc.)
-valid_historic_only <- c("Row Status", "Row Note", "Historic Row Source")
+valid_historic_only <- c("Row Status", "Row Note", "Historic Row Source",
+                         "station_power_dep", "wifi_dep", "wifi_notes_dep")
 
 cols_invalid_historic <- setdiff(cols_only_in_historic, valid_historic_only)
 
@@ -176,6 +177,18 @@ log_complete <- bind_rows(
   log_historic  |> mutate(entry_source = "historic"),
   log_survey123 |> mutate(entry_source = "survey123")
 )
+
+# The historic log never adopted the _departure names - it only has
+# station_power_dep/wifi_dep/wifi_notes_dep. bind_rows() leaves BOTH sets of
+# columns in log_complete, each populated only for its source. Coalesce them
+# into one canonical _departure set and drop the leftovers.
+log_complete <- log_complete |>
+  mutate(
+    station_power_departure = coalesce(station_power_departure, station_power_dep),
+    wifi_departure          = coalesce(wifi_departure, wifi_dep),
+    wifi_notes_departure    = coalesce(wifi_notes_departure, as.character(wifi_notes_dep))
+  ) |>
+  select(-any_of(c("station_power_dep", "wifi_dep", "wifi_notes_dep")))
 
 # ==== Fix Corries Island Naming Error ====
 # Survey123 entries submitted before the form was corrected used "Corries Island"

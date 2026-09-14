@@ -31,6 +31,7 @@
 
 # ==== Load Packages ====
 source(here::here("qmd", "chapter_1", "R", "globals.R"))
+dir_sharepoint <- "C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General"
 
 # ==== Define File Paths ====
 
