@@ -1008,19 +1008,18 @@ raw_wide <- bird_diel_complete %>%
     names_glue = "{tideDiel}_{.value}",
     values_fill = 0
   ) %>%
-  left_join(
-    other_per_bird %>%
-      select(
-        Band.ID,
-        speciesEN,
-        Undetected_rate_use = rate_use
-      ),
-    by = c("Band.ID", "speciesEN")
-  ) %>%
   mutate(
     total_used_h = Diurnal_used_h + Nocturnal_used_h,
     total_available_h = Diurnal_available_h + Nocturnal_available_h,
-    total_rate_use = (Diurnal_rate_use + Nocturnal_rate_use)/2 # because we sum /100  + /100 = /200
+    # time-weighted overall rate of use (NOT a simple average of the two rates,
+    # which would ignore how many hours were available in each period)
+    total_rate_use = if_else(
+      total_available_h > 0,
+      100 * total_used_h / total_available_h,
+      0
+    ),
+    # Undetected is now guaranteed to keep Diurnal + Nocturnal + Undetected = 100%
+    Undetected_rate_use = 100 - total_rate_use
   ) %>%
   select(
     Band.ID,
