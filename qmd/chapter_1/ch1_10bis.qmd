@@ -1,0 +1,57 @@
+---
+title: "Entropy, Eveness & Composition (bis)"
+format: html
+toc-location: left
+---
+  
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+
+
+TO BE COMPLETED
+
+
+:::
+  
+```{r set-up 1, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, include = FALSE, results = 'hide'}
+# Source Station usage - hours (OBP method) script into this environment
+source(knitr::purl(here::here("qmd", "chapter_1", "ch1_12.qmd"),
+                   output = tempfile(fileext = ".R"),
+                   quiet = FALSE))
+```
+
+```{r local packages, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(data.table)
+library(mixtools)
+library(lubridate)
+library(gt)
+library(lubridate)
+library(ggpattern)
+```
+
+## Set-up data
+
+As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_hours_tide, tide_data, data_all, recv, shorebird_class, and available_bird_recv_time*.
+
+::: blockquote-blue
+*visit_hours_tide* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
+:::
+  
+```{r station visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+
+
+```
+
+Now, we pre-fill some **key-values** we need to set-up the workflow.
+
+```{r setup, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
+
+
+```
+
+
+
+
+

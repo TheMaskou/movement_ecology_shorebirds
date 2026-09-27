@@ -7,6 +7,7 @@ dir_tides <- here::here("qmd", "chapter_1", "data", "tides")
 dir_sharepoint <- Sys.getenv("SHOREBIRD_SHAREPOINT_PATH", unset = NA)
 
 ## Inputs / raw data ----
+path_shorebird_number_spreadsheet <- here::here("data", "spreadsheet", "SHOREBIRD NUMBER TRACKING(Birds caught).csv")
 
 ### Receiver Array Maintenance Log ----
 # NOTE: Ensure that both of the below files are up-to-date, i.e., have recently

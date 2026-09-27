@@ -506,11 +506,13 @@ Note that tide data-set must be extracted from [New South Wales government resou
 
 All the **Tide** categories are set for a unique point in Newcastle, easing the complexity of small scale differences for the tide within the estuary.
 
-### Signal strength, Tidal & Circadian periods
+### Signal strength, Solar radiance, Tidal & Circadian periods
 
 **Let's now add our key variables for each bird detection:**
 
 -   Signal strength
+
+-   Solar radiance
 
 -   Circadian period
 
@@ -518,7 +520,7 @@ All the **Tide** categories are set for a unique point in Newcastle, easing the 
 
 ```{r 1 variable, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 
-# Load useful functions from Callum Gapes work
+# Load useful functions from Lily Gapes work
 tidalCurve <- readRDS(here::here("qmd", "chapter_1", "data", "tides", "tidalCurve.rds"))
 tidalCurveFunc <- splinefun(tideData$tideDateTimeAus, tideData$tideHeight, method = "natural")
 get.tideIndex <- function(time){ return(which.min(abs(tideData$tideDateTimeAus-time)))}
@@ -575,6 +577,22 @@ df.alltags.past <- df.alltags.past %>%
 # Combine updated data to new
 df.alltags <- bind_rows(df.alltags, df.alltags.past)
   }
+
+```
+
+
+```{r add solar, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
+# 
+# solarRad <- readRDS(here::here("qmd", "chapter_1", "data", "solar_radiance", "solarRad_h.rds"))
+# data_all <- readRDS(
+#   tail(sort(list.files(
+#     here::here("qmd", "chapter_1", "data", "motus"),
+#     pattern = "-data\\.rds$", full.names = TRUE
+#   )), 1)) 
+# 
+# 
+# data_all <- data_all %>%
+  
 
 ```
 
