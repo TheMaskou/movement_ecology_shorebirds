@@ -163,11 +163,7 @@ out$night_lux[out$is_day]       <- NA
 out$hour_start_local <- format(out$hour_start_local, "%Y-%m-%d %H:%M %Z", tz = TZ)
 out$hour_end_utc     <- format(out$time_utc, "%Y-%m-%d %H:%M", tz = "UTC")
 out$ambiant_lux_log  <- log10(out$ambient_lux + 0.0001)
-keep <- c("hour_start_local", "hour_end_utc", "is_day", "source", "sun_alt_deg",
-          "moon_phase", "moonlight_rel", "tcc", "cloud_factor",
-          "ghi_Wm2", "direct_Wm2", "diffuse_Wm2",
-          "day_lux", "night_clear_lux", "night_lux", "ambient_lux", "ambiant_lux_log")
-write.csv(out[, keep], here::here("qmd", "chapter_1", "data", "solar_radiance", "newcastle_natural_light_hourly.csv"), row.names = FALSE)
+write.csv(out, here::here("qmd", "chapter_1", "data", "solar_radiance", "newcastle_natural_light_hourly.csv"), row.names = FALSE)
 message("Saved ", nrow(out), " rows to ", OUT_CSV,
         " | hours missing ERA5: ", sum(is.na(out$tcc)))
 

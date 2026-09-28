@@ -944,7 +944,7 @@ plots_hourly <- list(
   raw_duration_old                   = list(),
   box_duration                       = list(),
   # duration_pyramid_simple_species    = list(),
-  duration_pyramid_detailed_species  = list(),
+  duration_pyramid_detailed_species  = list()
   # duration_pyramid_simple            = list(),
   # duration_pyramid_detailed          = list()
 )
@@ -1526,17 +1526,114 @@ ggplot(hour_summary, aes(x = n, y = median_duration_h)) +
 
 Now we are convinced the circadian cycle plays a genuine role into the level of activity for shorebirds, and so their movement, **we will model the shorebird activity (i.e., number of visit, the duration of the visits) to assess how dependent it is from (1) the level of natural light and (2) the tide height.**
 
-We need to call dataset which informs us about natural ambiant light, hourly, spanning across the period our birds are tracked in Newcastle, NSW. 
+### Import data
 
-See here how we extracted measured, modeled, collated and formatted data: extract natural light
+::: blockquote-blue
+We need to call data-set which informs us about natural ambient light, hourly, spanning across the period our birds are tracked in Newcastle, NSW.
+
+**See here how we extracted measured, modeled, collated and formatted data for natural light level: [extract natural light](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB9W1LwxqRMQKZ0pqyAs6qQAfIfrbkUypwxUU18rzPnR5o?e=SsylK3)**
+:::
 
 ```{r bring data, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
+light_h <- read.csv(here::here("qmd", "chapter_1", "data", "solar_radiance", "newcastle_natural_light_hourly.csv"))
+```
+
+Let's now add tide height, and light level variables to our `r visit_duration`. 
+
+All based on the time at the **start of the visit.**
+
+```{r bring data 2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
+
+# Avoids daylight-saving problems
+visit_time_col <- "visitStart"   #visit_duration
+tide_time_col  <- "tideDateTimeAus"     #tide_data
+vt <- visit_duration[[visit_time_col]]
+vt_utc <- as.POSIXct(format(vt, tz = "UTC"), tz = "UTC")
+
+# Light values for the hour that contains the visit
+light_cols <- c("ambiant_lux_log", "day_lux", "cloud_factor", "night_lux", "is_day")
+
+light_start_utc <- as.POSIXct(light_h$hour_end_utc, 
+                              format = "%Y-%m-%d %H:%M", 
+                              tz = "UTC") - 3600
+
+visit_hour_utc  <- as.POSIXct(trunc(vt_utc, "hours"))
+
+idx <- match(as.numeric(visit_hour_utc), 
+             as.numeric(light_start_utc))
+
+visit_duration[light_cols] <- light_h[idx, light_cols]
+
+# Tide: height interpolated to the exact visit time
+tide_data <- tide_data[order(tide_data[[tide_time_col]]), ]
+
+visit_duration$tideHeight <- approx(x = as.numeric(tide_data[[tide_time_col]]),
+                                    y = tide_data$tideHeight,
+                                    xout = as.numeric(vt_utc), ties = mean)$y
 
 ```
 
+### Model
+
+Now we can start modelling.
+
+
+1. Number of visits: light explains it, tide doesn't.
+
+More light means fewer visits. Each +1 SD of light (about 3.6 log units, roughly 4,000 times brighter) reduces visits starting per hour by 25% (×0.75, p < 0.001). Birds start more visits in the dark.
+Tide has no effect: ×0.99, p = 0.71.
+AIC agrees. The tide-only model is no better than the null model (25,096 vs 25,096). The light-only model is best (24,870), and adding tide doesn't improve it (24,872).
+
+2. Visit duration: both matter, and equally.
+
+Brighter light at visit start makes visits 42% longer per +1 SD (×1.42, about 3.3 log units).
+Higher tide at visit start makes visits 41% longer per +1 SD (×1.41, about 0.30 m).
+The model with both is clearly best: its AIC is about 100 lower than either single-predictor model, and each predictor is highly significant even with the other included.
+
+Putting it together: a plausible reading, not yet tested, is that nights bring many short visits, while days, especially at high tide, bring fewer but much longer ones. That fits birds shuffling between feeding spots at night and roosting through daytime high tides.
+
+Caveats to state:
+
+Light and tide are taken at the start of each visit, which is crude for visits lasting many hours.
+The date random effect is essentially zero in the count model. That's harmless: it means days don't differ once bird identity is accounted for.
 
 
 
+
+Figure 1 shows both standardised effects side by side for each response. It's the quickest way to see which predictor matters more.
+Figure 2 shows predicted visits per hour against light (x-axis labelled in lux) and against tide, where the flat line shows no effect.
+Figure 3 shows predicted visit duration against light and against tide.
+
+The shaded bands are 95% confidence intervals, and the small ticks along the x-axis show where the data actually lie.
+
+
+
+
+
+OTHER TBC (AI HELP):
+This split works: 0.18 h (11 minutes) sits right in the dip between the two humps. The results now tell a clear and simple story.
+
+(a) Is a visit a long stay (>11 min) or a short pass? Mostly light, and tide a little.
+
+Per +1 SD of light (about 3.3 log units), the odds of a long stay double: ×1.97, z = 17.2.
+Per +1 SD of tide (about 0.30 m), the odds rise about 29%: ×1.29, z = 6.8.
+Both effects are significant, but light is about 2.7 times stronger on the standardised scale.
+
+(b) Once a bird stays, how long does it stay? Only tide matters.
+
+Light has no effect at all: ×1.00, p = 0.997.
+Each +1 SD of tide makes stays about 19% longer: ×1.19, p < 0.001.
+
+Putting it together:
+
+Light decides the type of visit. In the dark, birds make many short passes, which is also why the hourly visit count was higher at night. In daylight, visits are more often real stays.
+Tide decides how long those stays last. Higher tide means longer stays, which fits birds roosting on the site over high tide.
+
+Residuals (the plot you sent, presumably d_len): acceptable. The QQ line is almost straight, and the quantile curves stay close to 0.25 / 0.5 / 0.75. The tests are flagged mainly because n = 2,008 makes DHARMa very sensitive. Some deviation is also expected because the model only sees durations above 11 minutes, so the lower tail is cut off. State that in your methods and it's fine to report. Check that the d_long residual plot looks similar before using that model too.
+
+For your methods, the approach can be summarised in one sentence: visit durations were bimodal, so we modelled (a) the probability that a visit was a long stay (>0.18 h, the trough between the two modes; binomial GLMM) and (b) the log-duration of long stays (Gaussian GLMM), with bird and date as random effects.
+
+The earlier Figure 3 used the Gamma duration model, so it's now out of date. If you'd like, I can adapt the plotting script for these two models: probability of a long stay against light and tide, and predicted stay length against tide.
 
 
 
