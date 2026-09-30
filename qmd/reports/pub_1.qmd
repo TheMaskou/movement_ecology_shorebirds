@@ -45,4 +45,5 @@ toc-location: left
 ## Miscellaneous
 
 -   [Tide_forecasts_for_Newcastle_NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)
+
 -   [Comment and share your feedback directly on the pages of this website!](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQAVHp8sa5GQR6CFw5MkMowEAbkuXNs2usxuEil3dPd_8lU?e=qbBPAe)
