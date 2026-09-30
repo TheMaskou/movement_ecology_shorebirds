@@ -11,7 +11,7 @@ A preliminary manual examination of the raw detection data indicated that most d
 
 **We therefore aim to investigate how birds move within the estuary in relation to time of day; hourly instead of day/night, light conditions, and tidal cycle**. Several environmental variables may be considered, including natural light levels during the day, represented by solar radiation, and at night, represented by moonlight. Tidal cycles obviously also influence bird movements, although it might drive shorebird movements after the circadian cycle.
 
-*An important limitation remains: most birds were detected during the day and around high tide. This pattern must partly reflect the placement of the Motus stations, which were located in areas where birds were known to occur. Consequently, it is difficult to determine whether the observed detection pattern reflects genuine habitat use or is partly a result of station placement.*
+*An important limitation remains: most birds were detected during the day and around high tide. This pattern might partly reflect the placement of the Motus stations, which were located in areas where birds were known to occur. Consequently, it is difficult to determine whether the observed detection pattern reflects genuine site use or is partly a result of station placement.*
 :::
 
 ## Descriptive analysis
@@ -33,6 +33,9 @@ library(lubridate)
 library(gt)
 library(lubridate)
 library(ggpattern)
+library(glmmTMB)
+library(patchwork)  
+library(DHARMa)
 ```
 
 ```{r initialise-htmlwidgets, include=FALSE}
@@ -47,6 +50,13 @@ htmltools::tagList(
   )
 )
 ```
+
+
+As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration and tide_data, data_all*.
+
+::: blockquote-blue
+*visit_duration* is then used onward so, the same rule applies in the data-set: **\< 1 hour gap between two runs are considered as a unique use of the area covered by a Motus station - the bird remained in the area within this hour gap**.
+:::
 
 ```{r station visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
@@ -1420,7 +1430,7 @@ visit_duration_dummy <- runs_dummy %>%
 
 **Finally, we select one particular visit to see exactly what happens in our code, and what output it provides for review.**
 
-This visit has the id (`r visitID`) = *51* and occurring at the station (`r recvDeployName`) of *Curlew point.*
+This visit has the id (`visitID`) = *51* and occurring at the station (`recvDeployName`) of *Curlew point.*
 
 ```{r method review 2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
 
@@ -1434,7 +1444,7 @@ gt(d)
 
 **We compute a count column and a duration column, for each hour of the day.**
 
-This way, we can easily check the duration is associated to a single visit, regardless its values, and to a single hour bin which must be allocated to the start time of the relative `r visitID`.
+This way, we can easily check the duration is associated to a single visit, regardless its values, and to a single hour bin which must be allocated to the start time of the relative `visitID`.
 
 ```{r method review 3, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
 # check manually how duration vs count behave against each other
@@ -1531,27 +1541,27 @@ Now we are convinced the circadian cycle plays a genuine role into the level of 
 ::: blockquote-blue
 We need to call data-set which informs us about natural ambient light, hourly, spanning across the period our birds are tracked in Newcastle, NSW.
 
-**See here how we extracted measured, modeled, collated and formatted data for natural light level: [extract natural light](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB9W1LwxqRMQKZ0pqyAs6qQAfIfrbkUypwxUU18rzPnR5o?e=SsylK3)**
+**See here after how we extracted measured, modelled, collated and formatted data for natural light level: [extract natural  light](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB9W1LwxqRMQKZ0pqyAs6qQAfIfrbkUypwxUU18rzPnR5o?e=SsylK3)**
 :::
 
-```{r bring data, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
+```{r bring data, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
 light_h <- read.csv(here::here("qmd", "chapter_1", "data", "solar_radiance", "newcastle_natural_light_hourly.csv"))
 ```
 
-Let's now add tide height, and light level variables to our `r visit_duration`. 
+Let's now add tide height, and light level variables to our `visit_duration`.
 
 All based on the time at the **start of the visit.**
 
-```{r bring data 2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
+```{r bring data 2, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
 
 # Avoids daylight-saving problems
-visit_time_col <- "visitStart"   #visit_duration
+visit_time_col <- "visitStart"          #visit_duration
 tide_time_col  <- "tideDateTimeAus"     #tide_data
 vt <- visit_duration[[visit_time_col]]
 vt_utc <- as.POSIXct(format(vt, tz = "UTC"), tz = "UTC")
 
-# Light values for the hour that contains the visit
-light_cols <- c("ambiant_lux_log", "day_lux", "cloud_factor", "night_lux", "is_day")
+# Light for the hour that contains the visit
+light_cols <- c("cloud_factor", "ambiant_lux_log", "day_lux", "night_lux", "is_day")
 
 light_start_utc <- as.POSIXct(light_h$hour_end_utc, 
                               format = "%Y-%m-%d %H:%M", 
@@ -1559,12 +1569,12 @@ light_start_utc <- as.POSIXct(light_h$hour_end_utc,
 
 visit_hour_utc  <- as.POSIXct(trunc(vt_utc, "hours"))
 
-idx <- match(as.numeric(visit_hour_utc), 
+idx <- match(as.numeric(visit_hour_utc),  # works as "visit_ %in% light_" 
              as.numeric(light_start_utc))
 
 visit_duration[light_cols] <- light_h[idx, light_cols]
 
-# Tide: height interpolated to the exact visit time
+# Tide
 tide_data <- tide_data[order(tide_data[[tide_time_col]]), ]
 
 visit_duration$tideHeight <- approx(x = as.numeric(tide_data[[tide_time_col]]),
@@ -1573,68 +1583,676 @@ visit_duration$tideHeight <- approx(x = as.numeric(tide_data[[tide_time_col]]),
 
 ```
 
-### Model
+### Model settings
 
-Now we can start modelling.
+Let's start by settings few requirements for building several models.
+
+*Which explains shorebird visits better: natural light or tide?* (1) number of visits per hour (table: *grid*, one row per bird x hour) (2) duration of each visit (table: *vd*, one row per visit) All species and receivers pooled.
+
+Random effects: bird (Band.ID) and local day of visit (date).
+
+**We need to:**
+
+-   **vd**: have the duration of the visits for each visit and not rounded
+
+-   **grid**: have for every bird, take every day it was detected at least once, and create all 24 hours of that day. Hours without a visit get n_visits = 0 (these zeros are essential: they tell the model when birds did NOT come).
+
+-   have to keep only data with both light intensity/tide height predictors so all model run through same number of rows, a requirement to compare models (AIC/likelihood-ratio).
+
+```{r Model settings, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
+
+TZ <- "Australia/Sydney" # set for good
+
+# Get 'vd'(as visit duration) but with one row per visit 
+vd <- visit_duration %>%
+  mutate(
+    date  = factor(as.Date(visitStart, tz = TZ)),                       # to use as random effect
+    dur_h = as.numeric(difftime(visitEnd, visitStart, units = "hours")),# exact duration in hours and not rounded
+    dur_h = pmax(dur_h, 1 / 3600))                                      # at least 1 second (Gamma needs > 0)
+
+# Get 'grid' (as number of visit) but with one row per bird*hour (for the NUMBER OF VISITS model)
+to_utc <- function(x) as.POSIXct(format(x, tz = "UTC"), tz = "UTC")
+
+bird_days <- distinct(vd, Band.ID, date)
+
+make_hours <- function(d) { # get all 24 local hours of one day
+  d <- as.Date(as.character(d))
+  seq(as.POSIXct(paste(d,     "00:00"), tz = TZ),
+      as.POSIXct(paste(d + 1, "00:00"), tz = TZ) - 3600, by = "hour")
+  }
+
+grid <- do.call(rbind, lapply(seq_len(nrow(bird_days)), function(i) # one row per bird x hour
+  data.frame(Band.ID    = bird_days$Band.ID[i],
+             date       = bird_days$date[i],
+             hour_local = make_hours(bird_days$date[i]))))
+grid$hour_utc <- to_utc(grid$hour_local)
+
+# Number of visits STARTING in each bird-hour (0 if none)
+vd$hour_utc <- as.POSIXct(trunc(to_utc(vd$visitStart), "hours"))
+visits_per_hour <- count(vd, Band.ID, hour_utc, name = "n_visits")
+grid <- left_join(grid, visits_per_hour, by = c("Band.ID", "hour_utc"))
+grid$n_visits[is.na(grid$n_visits)] <- 0
+
+# Light for each hour with one row per hour
+light_start_utc <- as.POSIXct(light_h$hour_end_utc, format = "%Y-%m-%d %H:%M",
+                              tz = "UTC") - 3600
+grid$ambiant_lux_log <- light_h$ambiant_lux_log[match(as.numeric(grid$hour_utc),
+                                                      as.numeric(light_start_utc))]
+
+# Tide height at the middle of each hour 
+tide_time_col <- "tideDateTimeAus"
+tide_data <- tide_data[order(tide_data[[tide_time_col]]), ]
+grid$tideHeight <- approx(x = as.numeric(tide_data[[tide_time_col]]), # linear interpolation of tide_data
+                          y = tide_data$tideHeight,
+                          xout = as.numeric(grid$hour_utc) + 1800,
+                          ties = mean)$y
+
+# Tide turning points
+h    <- tide_data$tideHeight
+prev <- c(NA, head(h, -1))                                   # height before
+nxt  <- c(tail(h, -1), NA)                                   # height after
+turn <- ifelse(h > prev & h >= nxt, "High",
+        ifelse(h < prev & h <= nxt, "Low", NA))
+tide_ev <- data.frame(t        = as.numeric(tide_data[[tide_time_col]]),
+                      high_low = turn)[!is.na(turn), ]       # keep only high/low tides
+
+# Diel category per  hour (row)
+ev_hour <- as.numeric(trunc(as.POSIXct(tide_ev$t, origin = "1970-01-01", tz = "UTC"), "hours"))
+tide_ev$day_night <- ifelse(light_h$is_day[match(ev_hour, as.numeric(light_start_utc))],
+                            "Diurnal", "Nocturnal")
+tide_ev$tideCategory <- paste(tide_ev$day_night, tide_ev$high_low, sep = "_")
+
+# Nearest tide for each hour (grid) and each visit (vd)
+nearest <- function(t) {
+  i <- pmax(findInterval(t, tide_ev$t), 1)                   # tide just before
+  j <- pmin(i + 1, nrow(tide_ev))                            # tide just after
+  ifelse(abs(t - tide_ev$t[i]) <= abs(tide_ev$t[j] - t), i, j)
+  }
+lev_cat <- c("Diurnal_High", "Diurnal_Low", "Nocturnal_High", "Nocturnal_Low")
+
+k <- nearest(as.numeric(grid$hour_utc) + 1800)               # grid: middle of each hour
+grid$high_low     <- factor(tide_ev$high_low[k],     levels = c("High", "Low"))
+grid$day_night    <- factor(tide_ev$day_night[k],    levels = c("Diurnal", "Nocturnal"))
+grid$tideCategory <- factor(tide_ev$tideCategory[k], levels = lev_cat)
+
+k <- nearest(as.numeric(vd$visitStart))                      # vd: start of each visit
+vd$high_low     <- factor(tide_ev$high_low[k],     levels = c("High", "Low"))
+vd$day_night    <- factor(tide_ev$day_night[k],    levels = c("Diurnal", "Nocturnal"))
+vd$tideCategory <- factor(tide_ev$tideCategory[k], levels = lev_cat)
+
+# Quick checks
+nrow(grid)                                                  # number of bird-hours
+table(grid$n_visits)                                        # mostly 0
+sum(is.na(grid$ambiant_lux_log))                            # hours without light data (remind Oct 2024 is not here)
+sum(is.na(grid$tideHeight))                                 # hours outside the tide record
+table(tide_ev$high_low)                                     # roughly equal numbers of High and Low
+table(grid$tideCategory, useNA = "ifany")                   # all four categories should appear
+table(vd$tideCategory,   useNA = "ifany")
+
+# Final model data
+grid_m <- subset(grid, !is.na(ambiant_lux_log) & !is.na(tideHeight))
+vd_m   <- subset(vd,   !is.na(ambiant_lux_log) & !is.na(tideHeight))
+
+# Standardise (center and scale), so the larger absolute estimate = the stronger effect
+grid_m$light_z <- as.numeric(scale(grid_m$ambiant_lux_log))
+grid_m$tide_z  <- as.numeric(scale(grid_m$tideHeight))
+vd_m$light_z   <- as.numeric(scale(vd_m$ambiant_lux_log))
+vd_m$tide_z    <- as.numeric(scale(vd_m$tideHeight))
+```
+
+### Model definitions
+
+As suggested above, we want to test the activity of the birds (number of visit as in movements & duration of visits as in site use) and assess whether the tide or the light is first explaining it, including days and individuals as random effects.
+
+We will build four different models and select the one depending its best likelihood ratio and AIC value: - Model null, as in maybe none of our predictors drive the activity of the birds - Model testing the light level only - Model testing the tide only - Model testing both light and tide (additional) - Model testing both light and tide (relation) (this one needs to be developped including two categorical variables for day/night and high/low)
+
+We will repeat this twice, once for number of visits (movements) and once for duration of visit (site use).
+
+```{r Model definitions 1, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
+
+# Model definition
+
+c_null  <- glmmTMB(n_visits ~ 
+                     
+                     1 + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2, 
+                   data = grid_m)
 
 
-1. Number of visits: light explains it, tide doesn't.
-
-More light means fewer visits. Each +1 SD of light (about 3.6 log units, roughly 4,000 times brighter) reduces visits starting per hour by 25% (×0.75, p < 0.001). Birds start more visits in the dark.
-Tide has no effect: ×0.99, p = 0.71.
-AIC agrees. The tide-only model is no better than the null model (25,096 vs 25,096). The light-only model is best (24,870), and adding tide doesn't improve it (24,872).
-
-2. Visit duration: both matter, and equally.
-
-Brighter light at visit start makes visits 42% longer per +1 SD (×1.42, about 3.3 log units).
-Higher tide at visit start makes visits 41% longer per +1 SD (×1.41, about 0.30 m).
-The model with both is clearly best: its AIC is about 100 lower than either single-predictor model, and each predictor is highly significant even with the other included.
-
-Putting it together: a plausible reading, not yet tested, is that nights bring many short visits, while days, especially at high tide, bring fewer but much longer ones. That fits birds shuffling between feeding spots at night and roosting through daytime high tides.
-
-Caveats to state:
-
-Light and tide are taken at the start of each visit, which is crude for visits lasting many hours.
-The date random effect is essentially zero in the count model. That's harmless: it means days don't differ once bird identity is accounted for.
+c_light <- glmmTMB(n_visits ~ 
+                     
+                     light_z + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2, 
+                   data = grid_m)
 
 
+c_tide  <- glmmTMB(n_visits ~ 
+                     
+                     tide_z + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2, 
+                   data = grid_m)
 
 
-Figure 1 shows both standardised effects side by side for each response. It's the quickest way to see which predictor matters more.
-Figure 2 shows predicted visits per hour against light (x-axis labelled in lux) and against tide, where the flat line shows no effect.
-Figure 3 shows predicted visit duration against light and against tide.
+c_both  <- glmmTMB(n_visits ~ 
+                     
+                     light_z + 
+                     tide_z + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2,
+                   data = grid_m)
 
-The shaded bands are 95% confidence intervals, and the small ticks along the x-axis show where the data actually lie.
+
+c_both_inter  <- glmmTMB(n_visits ~
+
+                     light_z*tideCategory +
+                     tide_z*tideCategory  +
+
+                     (1 | date) +
+                     (1 | Band.ID),
+
+                   family = nbinom2,
+                   data = grid_m)
+
+# Model comparison: lowest AIC = best model (a difference > 2 is meaningful)
+gt(AIC(c_null, 
+    c_light, 
+    c_tide, 
+    c_both,
+    c_both_inter), #both_inter selected
+   rownames_to_stub = TRUE) 
+
+# Does each predictor add something once the other is in the model?
+gt(anova(c_tide,  c_both), rownames_to_stub = TRUE) # test of LIGHT (tide already included)
+gt(anova(c_light, c_both), rownames_to_stub = TRUE) # test of TIDE  (light already included)
+gt(anova(c_tide,  c_both_inter), rownames_to_stub = TRUE)
+gt(anova(c_light, c_both_inter), rownames_to_stub = TRUE)
+
+
+```
+
+```{r Model definitions 2, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
+
+# Model definition
+
+d_null  <- glmmTMB(dur_h ~ 
+                     
+                     1 + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2, 
+                   data = vd_m)
+
+
+d_light <- glmmTMB(dur_h ~ 
+                     
+                     light_z + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2, 
+                   data = vd_m)
+
+
+d_tide  <- glmmTMB(dur_h ~ 
+                     
+                     tide_z + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2, 
+                   data = vd_m)
+
+
+d_both  <- glmmTMB(dur_h ~ 
+                     
+                     light_z + 
+                     tide_z + 
+                     
+                     (1 | date) + 
+                     (1 | Band.ID),
+                   
+                   family = nbinom2,
+                   data = vd_m)
+
+
+d_both_inter  <- glmmTMB(dur_h ~
+
+                     light_z*tideCategory +
+                     tide_z*tideCategory  +
+
+                     (1 | date) +
+                     (1 | Band.ID),
+
+                   family = nbinom2,
+                   data = vd_m)
+
+# Model comparison: lowest AIC = best model (a difference > 2 is meaningful)
+gt(AIC(d_null, 
+       d_light, 
+       d_tide, 
+       d_both,
+       d_both_inter), 
+       rownames_to_stub = TRUE) #both_inter selected
+
+# Does each predictor add something once the other is in the model?
+gt(anova(d_tide, d_both), rownames_to_stub = TRUE)
+gt(anova(d_light, d_both), rownames_to_stub = TRUE)   
+gt(anova(d_tide,  d_both_inter), rownames_to_stub = TRUE)
+gt(anova(d_light, d_both_inter), rownames_to_stub = TRUE)
+
+```
+
+So the complete model with interaction is selected based on its AIC, both for number of visit and duration of visit.
+
+### Model results
+
+```{r Model results, message=FALSE, warning=FALSE, echo=TRUE, eval=FALSE, results='asis', fig.height=9.5}
+
+# Summary of selected models
+# summary(c_both)
+# summary(d_both)
+summary(c_both_inter)
+summary(d_both_inter)
+```
+
+```{r Model resultsbis, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.height=9.5}
+broom.mixed::tidy(c_both_inter, effects = "fixed",
+                  conf.int = TRUE, exponentiate = TRUE) |>
+  dplyr::select(term, estimate, conf.low, conf.high, p.value) |>
+  dplyr::mutate(sig = dplyr::case_when(p.value < 0.001 ~ "***",
+                                       p.value < 0.01  ~ "**",
+                                       p.value < 0.05  ~ "*",
+                                       p.value < 0.1   ~ ".",
+                                       TRUE            ~ "")) |>
+  gt() |>
+  tab_header(title = "Number of visits per hour (model c_both_inter)",
+             subtitle = "Multiplicative effects per +1 SD, with 95% CI (1 = no effect)") |>
+  fmt_number(columns = c(estimate, conf.low, conf.high), decimals = 2) |>
+  fmt(columns = p.value,
+      fns = function(p) ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p))) |>
+  cols_label(term = "Term", estimate = "Effect (×)",
+             conf.low = "2.5%", conf.high = "97.5%", p.value = "p", sig = "") |>
+  cols_align(align = "left", columns = sig) |>
+  tab_source_note("Significance: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1")
+
+broom.mixed::tidy(d_both_inter, effects = "fixed",
+                  conf.int = TRUE, exponentiate = TRUE) |>
+  dplyr::select(term, estimate, conf.low, conf.high, p.value) |>
+  dplyr::mutate(sig = dplyr::case_when(p.value < 0.001 ~ "***",
+                                       p.value < 0.01  ~ "**",
+                                       p.value < 0.05  ~ "*",
+                                       p.value < 0.1   ~ ".",
+                                       TRUE            ~ "")) |>
+  gt() |>
+  tab_header(title = "Visit duration (model d_both_inter)",
+             subtitle = "Multiplicative effects per +1 SD, with 95% CI (1 = no effect)") |>
+  fmt_number(columns = c(estimate, conf.low, conf.high), decimals = 2) |>
+  fmt(columns = p.value,
+      fns = function(p) ifelse(p < 0.001, "< 0.001", sprintf("%.3f", p))) |>
+  cols_label(term = "Term", estimate = "Effect (×)",
+             conf.low = "2.5%", conf.high = "97.5%", p.value = "p", sig = "") |>
+  cols_align(align = "left", columns = sig) |>
+  tab_source_note("Significance: *** p < 0.001, ** p < 0.01, * p < 0.05, . p < 0.1")
+
+```
+
+
+```{r Model results3, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
+# Size of 1 SD in real units 
+sd(grid_m$ambiant_lux_log); sd(grid_m$tideHeight)   # count model
+sd(vd_m$ambiant_lux_log);   sd(vd_m$tideHeight)     # duration model
+
+```
+
+```{r Model content helper, message=FALSE, warning=FALSE, include=FALSE, echo=FALSE, eval=TRUE, results='asis'}
+er  <- function(m, v) exp(fixef(m)$cond[[v]])                          # effect per +1 SD
+pv  <- function(m, v) summary(m)$coefficients$cond[v, "Pr(>|z|)"]      # p-value
+fp  <- function(p) ifelse(p < 0.001, "< 0.001", paste("=", signif(p, 2)))
+pct <- function(x) round(abs(x - 1) * 100)                             # % change
+cs  <- function(m, v, cc) {                                            # effect within a tide category
+  b <- fixef(m)$cond; t <- v
+  if (cc != "Diurnal_High")
+    t <- c(v, names(b)[grepl(v, names(b), fixed = TRUE) &
+                       grepl(paste0("tideCategory", cc), names(b), fixed = TRUE)])
+  round(exp(sum(b[t])), 2)
+}
+aic_c <- AIC(c_null, c_light, c_tide, c_both, c_both_inter)$AIC
+aic_d <- AIC(d_null, d_light, d_tide, d_both, d_both_inter)$AIC
+sd_lc <- sd(grid_m$ambiant_lux_log); sd_tc <- sd(grid_m$tideHeight)
+sd_ld <- sd(vd_m$ambiant_lux_log);   sd_td <- sd(vd_m$tideHeight)
+```
+
+**1. Number of visits per hour**
+
+TBD
+
+**2. Visit duration**
+
+TBD
+
+
+```{r fig-setup}
+#| include: false
+theme_set(theme_classic(base_size = 14) +
+  theme(plot.title       = element_text(face = "bold"),
+        strip.text       = element_text(face = "bold"),
+        strip.text.y     = element_text(angle = 0),        # row labels horizontal
+        strip.background = element_rect(fill = "grey92", colour = NA),
+        panel.grid.major = element_line(colour = "grey92"),
+        legend.position  = "bottom"))
+
+stars <- function(p) ifelse(p < 0.001, "***", ifelse(p < 0.01, "**", ifelse(p < 0.05, "*", "")))
+sig_note <- "*** p < 0.001, ** p < 0.01, * p < 0.05"
+
+lev_cat  <- c("Diurnal_High", "Diurnal_Low", "Nocturnal_High", "Nocturnal_Low")
+col_cat  <- c(Diurnal_High = "darkorange3", Diurnal_Low = "goldenrod2",
+              Nocturnal_High = "steelblue4", Nocturnal_Low = "skyblue3")
+cat_labs <- c(Diurnal_High = "Day · high tide",   Diurnal_Low = "Day · low tide",
+              Nocturnal_High = "Night · high tide", Nocturnal_Low = "Night · low tide")
+lux_breaks <- c(-4, -2, 0, 2, 4)
+lux_labels <- c("0.0001", "0.01", "1", "100", "10,000")
+
+# Effect (+1 SD) of light and tide, overall (simple models)
+eff <- function(model, response) {
+  s <- summary(model)$coefficients$cond[c("light_z", "tide_z"), ]
+  data.frame(response, term = c("Light level", "Tide height"),
+             est = exp(s[, 1]), lo = exp(s[, 1] - 1.96 * s[, 2]),
+             hi = exp(s[, 1] + 1.96 * s[, 2]), p = s[, 4])
+}
+
+# Effect (+1 SD) of light and tide within each tide category (interaction models)
+cat_slopes <- function(model, response) {
+  b <- fixef(model)$cond; V <- vcov(model)$cond
+  do.call(rbind, lapply(c("light_z", "tide_z"), function(v) {
+    do.call(rbind, lapply(lev_cat, function(cc) {
+      terms <- c(v, names(b)[grepl(v, names(b), fixed = TRUE) &
+                             grepl(paste0("tideCategory", cc), names(b), fixed = TRUE)])
+      est <- sum(b[terms]); se <- sqrt(sum(V[terms, terms])); p <- 2 * pnorm(-abs(est / se))
+      data.frame(response, predictor = ifelse(v == "light_z", "Light level", "Tide height"),
+                 category = factor(cc, levels = rev(lev_cat)),
+                 est = exp(est), lo = exp(est - 1.96 * se), hi = exp(est + 1.96 * se), p = p)
+    }))
+  }))
+}
+
+# Shared look for Fig 1-2: value + stars printed right of each CI
+forest <- function(g) g +
+  geom_vline(xintercept = 1, linetype = 2, colour = "grey40") +
+  geom_pointrange(aes(xmin = lo, xmax = hi), size = 0.8, linewidth = 1.1) +
+  geom_text(aes(x = hi, label = sprintf("×%.2f%s", est, stars(p))),
+            hjust = -0.15, size = 4.5, show.legend = FALSE) +
+  scale_x_continuous(expand = expansion(mult = c(0.05, 0.35))) +   # room for labels
+  labs(x = "Estimates (1 = no effect)", y = NULL, caption = sig_note)
+
+# Predicted curves per tide category (population level, 95% CI)
+pred_cat <- function(model, dat, var) {
+  raw_all <- if (var == "light") dat$ambiant_lux_log else dat$tideHeight
+  zname   <- if (var == "light") "light_z" else "tide_z"
+  do.call(rbind, lapply(lev_cat, function(cc) {
+    d  <- dat[dat$tideCategory == cc, ]
+    rc <- if (var == "light") d$ambiant_lux_log else d$tideHeight
+    x  <- seq(min(rc), max(rc), length.out = 100)
+    nd <- data.frame(tideCategory = factor(cc, levels = lev_cat),
+                     light_z = mean(d$light_z), tide_z = mean(d$tide_z),
+                     date = NA, Band.ID = NA)[rep(1, 100), ]
+    nd[[zname]] <- (x - mean(raw_all)) / sd(raw_all)
+    p <- predict(model, newdata = nd, re.form = NA, se.fit = TRUE)
+    data.frame(tideCategory = nd$tideCategory, x, fit = exp(p$fit),
+               lo = exp(p$fit - 1.96 * p$se.fit), hi = exp(p$fit + 1.96 * p$se.fit))
+  }))
+}
+
+curves <- function(model, dat, ylab) {
+  one <- function(var, xlab) {
+    g <- ggplot(pred_cat(model, dat, var), aes(x, fit, colour = tideCategory, fill = tideCategory)) +
+      geom_ribbon(aes(ymin = lo, ymax = hi), alpha = 0.12, colour = NA) +
+      geom_line(linewidth = 1.4) +
+      scale_colour_manual(values = col_cat, labels = cat_labs, name = NULL) +
+      scale_fill_manual(values = col_cat, labels = cat_labs, name = NULL) +
+      coord_cartesian(ylim = c(0, NA)) + labs(x = xlab, y = ylab)
+    if (var == "light") g + scale_x_continuous(breaks = lux_breaks, labels = lux_labels) else g
+  }
+  (one("light", "Natural light (lux, log scale)") | one("tide", "Tide height (m)") + labs(y = NULL)) +
+    plot_layout(guides = "collect") & theme(legend.position = "bottom")
+}
+```
+
+```{r fig-overall}
+#| echo: false
+#| fig-width: 10
+#| fig-height: 4
+forest(ggplot(rbind(eff(c_both, "Number of visits per hour"), eff(d_both, "Visit duration")),
+              aes(est, term, colour = term))) +
+  facet_wrap(~ response, scales = "free_x") +
+  scale_colour_manual(values = c(Light = "darkorange3", `Tide height` = "steelblue4"), guide = "none") +
+  labs(title = "Fig 1. Overall effect size of light and tide on shorebird movements",
+       subtitle = "Models: c_both (visits) and d_both (duration)")
+```
+
+```{r fig-by-tide}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 7
+forest(ggplot(rbind(cat_slopes(c_both_inter, "Number of visits per hour"),
+                    cat_slopes(d_both_inter, "Visit duration")),
+              aes(est, category, colour = category))) +
+  facet_grid(predictor ~ response, scales = "free_x") +
+  scale_y_discrete(labels = cat_labs) +
+  scale_colour_manual(values = col_cat, guide = "none") +
+  labs(title = "Fig 2. Effect size of light and tide on shorebird movements by nearest tide",
+       subtitle = "Interaction models: c_both_inter (visits) and d_both_inter (duration)")
+```
+
+```{r fig-visits-curves}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 5.5
+curves(c_both_inter, grid_m, "Visits per hour") +
+  plot_annotation(title = "Fig 3. Predicted visits per hour and by nearest tide (95% CI)",
+                  subtitle = "Interaction model: c_both_inter")
+```
+
+```{r fig-duration-curves}
+#| echo: false
+#| fig-width: 11
+#| fig-height: 5.5
+curves(d_both_inter, vd_m, "Visit duration (h)") +
+  plot_annotation(title = "Fig 4. Predicted visit duration by nearest tide (95% CI)",
+                  subtitle = "Interaction model: c_both_inter")
+```
 
 
 
+**Conclusion**
+
+TBD
+
+**Caveats**
+
+-   Light and tide are measured at the **start** of each visit, which is crude for long visits.
+-   We know missing a lot of detection during nocturnal periods (both high and low tide) which ultimately offer us less data to compare with diurnal period. Maybe improving the nocturnal coverage and detection will help improving this model.
 
 
-OTHER TBC (AI HELP):
-This split works: 0.18 h (11 minutes) sits right in the dip between the two humps. The results now tell a clear and simple story.
+### Model residuals
 
-(a) Is a visit a long stay (>11 min) or a short pass? Mostly light, and tide a little.
+```{r Model residual, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis', fig.height=9.5}
+# -----------------------------------------------------------------------------
+# Residuals
+# -----------------------------------------------------------------------------
 
-Per +1 SD of light (about 3.3 log units), the odds of a long stay double: ×1.97, z = 17.2.
-Per +1 SD of tide (about 0.30 m), the odds rise about 29%: ×1.29, z = 6.8.
-Both effects are significant, but light is about 2.7 times stronger on the standardised scale.
+plot(simulateResiduals(c_both_inter))
+plot(simulateResiduals(d_both_inter))
+
+```
+
+Further investigation to compare long vs short stays below: To Be Continued...
+
+::: {.callout collapse="true" title="Click to unfold and see exploratory models" appearance="simple"}
+
+TBC...
+
+```{r Model long vs short stay models, message=FALSE, warning=FALSE, echo=FALSE, eval=FALSE, results='asis', fig.height=9.5}
+
+
+# histogram shows two humps (short "pass-by" visits and long stays), split the question in two: where the two humps separate on the histogram, 0.18 h (11min) as seen before
+
+hist(log10(vd_m$dur_h), breaks = 60,
+     xlab = "log10(visit duration, in hours)", main = "Visit durations")
+
+vd_m$long_visit <- vd_m$dur_h > 0.18
+
+# (a) Is a visit long rather than short?
+d_long_inter  <- glmmTMB(long_visit ~
+
+                     light_z*tideCategory +
+                     tide_z*tideCategory  +
+
+                     (1 | date) +
+                     (1 | Band.ID),
+
+                   family = binomial,
+                   data = vd_m)
+
+# (b) For long visits only: how long do they last?
+d_len_inter  <- glmmTMB(log(dur_h) ~
+
+                     light_z*tideCategory +
+                     tide_z*tideCategory  +
+
+                     (1 | date) +
+                     (1 | Band.ID),
+
+                   family = gaussian,
+                   data = subset(vd_m, long_visit))
+# Results
+summary(d_long_inter); summary(d_len_inter)
+plot(DHARMa::simulateResiduals(d_long_inter)); plot(simulateResiduals(d_len_inter))
+
+```
+
+```{r Model long vs short stay models plots, message=FALSE, warning=FALSE, echo=FALSE, eval=FALSE, results='asis', fig.height=9.5}
+###############################################################################
+# Plots for the two-part visit-duration models (tide category interactions)
+#   (a) d_long_inter : probability that a visit is a long stay (> 0.18 h)
+#   (b) d_len_inter  : duration of long stays (log hours)
+#
+# Run AFTER light_vs_tide_plots_v2.R (uses lev_cat, col_cat, lux_breaks,
+# lux_labels, cat_slopes() and plot_cat() defined there)
+###############################################################################
+
+vd_long <- subset(vd_m, long_visit)   # data used by d_len_inter
+
+# -----------------------------------------------------------------------------
+# Fig 5: effect of light and tide within each tide category
+#   (a) odds ratio of a long stay per +1 SD
+#   (b) multiplicative change in duration of long stays per +1 SD
+# -----------------------------------------------------------------------------
+slopes_2p <- rbind(cat_slopes(d_long_inter, "(a) Odds of a long stay (> 11 min)"),
+                   cat_slopes(d_len_inter,  "(b) Duration of long stays"))
+
+fig5 <- ggplot(slopes_2p, aes(x = est, y = category, colour = category)) +
+  geom_vline(xintercept = 1, linetype = 2, colour = "grey50") +
+  geom_pointrange(aes(xmin = lo, xmax = hi), size = 0.5) +
+  facet_grid(predictor ~ response, scales = "free_x") +
+  scale_colour_manual(values = col_cat, guide = "none") +
+  labs(x = "Multiplicative effect of +1 SD (1 = no effect)", y = NULL,
+       title = "Visit duration: effect of light and tide per tide category")
+fig5
+
+# -----------------------------------------------------------------------------
+# Helper: predicted curves per tide category, for any link function
+#   dat_scale : data used to standardise light_z / tide_z (always vd_m)
+#   dat_range : data the model was fitted on (for the range of each curve)
+#   inv       : inverse link (plogis for binomial, exp for log-duration)
+# -----------------------------------------------------------------------------
+pred_cat2 <- function(model, dat_scale, dat_range, var, inv) {
+  raw_all <- if (var == "light") dat_scale$ambiant_lux_log else dat_scale$tideHeight
+  zname   <- if (var == "light") "light_z" else "tide_z"
+  do.call(rbind, lapply(lev_cat, function(cc) {
+    d     <- dat_range[dat_range$tideCategory == cc, ]
+    raw_c <- if (var == "light") d$ambiant_lux_log else d$tideHeight
+    x     <- seq(min(raw_c), max(raw_c), length.out = 100)
+    nd <- data.frame(tideCategory = factor(cc, levels = lev_cat),
+                     light_z = mean(d$light_z), tide_z = mean(d$tide_z),
+                     date = NA, Band.ID = NA)[rep(1, 100), ]
+    nd[[zname]] <- (x - mean(raw_all)) / sd(raw_all)
+    p <- predict(model, newdata = nd, re.form = NA, type = "link", se.fit = TRUE)
+    data.frame(tideCategory = factor(cc, levels = lev_cat), x = x,
+               fit = inv(p$fit),
+               lo  = inv(p$fit - 1.96 * p$se.fit),
+               hi  = inv(p$fit + 1.96 * p$se.fit))
+  }))
+}
+
+# -----------------------------------------------------------------------------
+# Fig 6: (a) probability that a visit is a long stay
+# -----------------------------------------------------------------------------
+f6a <- plot_cat(pred_cat2(d_long_inter, vd_m, vd_m, "light", plogis),
+                "Natural light at visit start (lux, log scale)",
+                "Probability of a long stay (> 11 min)", light_axis = TRUE)
+f6b <- plot_cat(pred_cat2(d_long_inter, vd_m, vd_m, "tide", plogis),
+                "Tide height at visit start (m)", NULL)
+fig6 <- (f6a | f6b) + plot_layout(guides = "collect") &
+  coord_cartesian(ylim = c(0, 1)) & theme(legend.position = "bottom")
+fig6 + plot_annotation(title = "(a) Is a visit a long stay?")
+
+# -----------------------------------------------------------------------------
+# Fig 7: (b) duration of long stays (exp of log-duration = median duration)
+# -----------------------------------------------------------------------------
+f7a <- plot_cat(pred_cat2(d_len_inter, vd_m, vd_long, "light", exp),
+                "Natural light at visit start (lux, log scale)",
+                "Median duration of long stays (h)", light_axis = TRUE)
+f7b <- plot_cat(pred_cat2(d_len_inter, vd_m, vd_long, "tide", exp),
+                "Tide height at visit start (m)", NULL)
+fig7 <- (f7a | f7b) + plot_layout(guides = "collect") &
+  coord_cartesian(ylim = c(0, NA)) & theme(legend.position = "bottom")
+fig7 + plot_annotation(title = "(b) How long do long stays last?")
+
+# -----------------------------------------------------------------------------
+# Save
+# -----------------------------------------------------------------------------
+# ggsave("fig5_duration_effects_by_tide.png", fig5, width = 8, height = 5.5, dpi = 300)
+# ggsave("fig6_prob_long_stay_by_tide.png",   fig6, width = 9, height = 4.5, dpi = 300)
+# ggsave("fig7_long_stay_duration_by_tide.png", fig7, width = 9, height = 4.5, dpi = 300)
+
+```
+
+OTHER TBC (AI HELP): This split works: 0.18 h (11 minutes) sits right in the dip between the two humps. The results now tell a clear and simple story.
+
+(a) Is a visit a long stay (\>11 min) or a short pass? Mostly light, and tide a little.
+
+Per +1 SD of light (about 3.3 log units), the odds of a long stay double: ×1.97, z = 17.2. Per +1 SD of tide (about 0.30 m), the odds rise about 29%: ×1.29, z = 6.8. Both effects are significant, but light is about 2.7 times stronger on the standardised scale.
 
 (b) Once a bird stays, how long does it stay? Only tide matters.
 
-Light has no effect at all: ×1.00, p = 0.997.
-Each +1 SD of tide makes stays about 19% longer: ×1.19, p < 0.001.
+Light has no effect at all: ×1.00, p = 0.997. Each +1 SD of tide makes stays about 19% longer: ×1.19, p \< 0.001.
 
 Putting it together:
 
-Light decides the type of visit. In the dark, birds make many short passes, which is also why the hourly visit count was higher at night. In daylight, visits are more often real stays.
-Tide decides how long those stays last. Higher tide means longer stays, which fits birds roosting on the site over high tide.
+Light decides the type of visit. In the dark, birds make many short passes, which is also why the hourly visit count was higher at night. In daylight, visits are more often real stays. Tide decides how long those stays last. Higher tide means longer stays, which fits birds roosting on the site over high tide.
 
 Residuals (the plot you sent, presumably d_len): acceptable. The QQ line is almost straight, and the quantile curves stay close to 0.25 / 0.5 / 0.75. The tests are flagged mainly because n = 2,008 makes DHARMa very sensitive. Some deviation is also expected because the model only sees durations above 11 minutes, so the lower tail is cut off. State that in your methods and it's fine to report. Check that the d_long residual plot looks similar before using that model too.
 
-For your methods, the approach can be summarised in one sentence: visit durations were bimodal, so we modelled (a) the probability that a visit was a long stay (>0.18 h, the trough between the two modes; binomial GLMM) and (b) the log-duration of long stays (Gaussian GLMM), with bird and date as random effects.
+For your methods, the approach can be summarised in one sentence: visit durations were bimodal, so we modelled (a) the probability that a visit was a long stay (\>0.18 h, the trough between the two modes; binomial GLMM) and (b) the log-duration of long stays (Gaussian GLMM), with bird and date as random effects.
 
 The earlier Figure 3 used the Gamma duration model, so it's now out of date. If you'd like, I can adapt the plotting script for these two models: probability of a long stay against light and tide, and predicted stay length against tide.
-
-
-
-
+:::

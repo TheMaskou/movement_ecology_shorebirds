@@ -47,7 +47,6 @@ As **we will be re-using some of the data already loaded from previous workflow 
 
 Now, we pre-fill some **key-values** we need to set-up the workflow.
 
-
 ```{r station visits, message = FALSE, warning = FALSE, eval = TRUE, echo = TRUE, results = 'hide'}
 
 # Real stations, alphabetical

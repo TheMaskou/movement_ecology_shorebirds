@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-09-13">
+<meta name="dcterms.date" content="2026-09-25">
 
 <title>Load &amp; Format – Home</title>
 <style>
@@ -320,7 +320,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#additional-variables" id="toc-additional-variables" class="nav-link" data-scroll-target="#additional-variables">Additional variables</a>
   <ul class="collapse">
   <li><a href="#pre-processing" id="toc-pre-processing" class="nav-link" data-scroll-target="#pre-processing">Pre-processing</a></li>
-  <li><a href="#signal-strength-tidal-circadian-periods" id="toc-signal-strength-tidal-circadian-periods" class="nav-link" data-scroll-target="#signal-strength-tidal-circadian-periods">Signal strength, Tidal &amp; Circadian periods</a></li>
+  <li><a href="#signal-strength-solar-radiance-tidal-circadian-periods" id="toc-signal-strength-solar-radiance-tidal-circadian-periods" class="nav-link" data-scroll-target="#signal-strength-solar-radiance-tidal-circadian-periods">Signal strength, Solar radiance, Tidal &amp; Circadian periods</a></li>
   </ul></li>
   <li><a href="#save" id="toc-save" class="nav-link" data-scroll-target="#save">Save</a></li>
   <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
@@ -347,7 +347,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-09-13</p>
+      <p class="date">2026-09-25</p>
     </div>
   </div>
   
@@ -753,16 +753,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Note that tide data-set must be extracted from <a href="https://www.nsw.gov.au/driving-boating-and-transport/using-waterways-boating-and-transport-information/conditions-weather-and-tides/nsw-tide-tables">New South Wales government resources</a> and formatted into a .csv file - made for you and directly accessible <a href="https://uoneduau-my.sharepoint.com/:x:/g/personal/c3541851_uon_edu_au/IQBIG1rLs3tZT4oH64iNlp-UAX_G5teXcB5f76Uc7Aoe8hs?e=Znl4jf">here</a>.</p>
 <p>All the <strong>Tide</strong> categories are set for a unique point in Newcastle, easing the complexity of small scale differences for the tide within the estuary.</p>
 </section>
-<section id="signal-strength-tidal-circadian-periods" class="level3">
-<h3 class="anchored" data-anchor-id="signal-strength-tidal-circadian-periods">Signal strength, Tidal &amp; Circadian periods</h3>
+<section id="signal-strength-solar-radiance-tidal-circadian-periods" class="level3">
+<h3 class="anchored" data-anchor-id="signal-strength-solar-radiance-tidal-circadian-periods">Signal strength, Solar radiance, Tidal &amp; Circadian periods</h3>
 <p><strong>Let’s now add our key variables for each bird detection:</strong></p>
 <ul>
 <li><p>Signal strength</p></li>
+<li><p>Solar radiance</p></li>
 <li><p>Circadian period</p></li>
 <li><p>Tidal period</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load useful functions from Callum Gapes work</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load useful functions from Lily Gapes work</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>tidalCurve <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"tides"</span>, <span class="st">"tidalCurve.rds"</span>))</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>tidalCurveFunc <span class="ot">&lt;-</span> <span class="fu">splinefun</span>(tideData<span class="sc">$</span>tideDateTimeAus, tideData<span class="sc">$</span>tideHeight, <span class="at">method =</span> <span class="st">"natural"</span>)</span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>get.tideIndex <span class="ot">&lt;-</span> <span class="cf">function</span>(time){ <span class="fu">return</span>(<span class="fu">which.min</span>(<span class="fu">abs</span>(tideData<span class="sc">$</span>tideDateTimeAus<span class="sc">-</span>time)))}</span>
@@ -805,6 +806,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>df.alltags <span class="ot">&lt;-</span> df.alltags <span class="sc">%&gt;%</span> </span>
 <span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Band.ID =</span> <span class="fu">as.factor</span>(Band.ID))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># solarRad &lt;- readRDS(here::here("qmd", "chapter_1", "data", "solar_radiance", "solarRad_h.rds"))</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># data_all &lt;- readRDS(</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   tail(sort(list.files(</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     here::here("qmd", "chapter_1", "data", "motus"),</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#     pattern = "-data\\.rds$", full.names = TRUE</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   )), 1)) </span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># data_all &lt;- data_all %&gt;%</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
 <section id="save" class="level2">
@@ -817,17 +830,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>These are removed from the data-set.</p>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bird detection dqtq</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(df.alltags, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"motus"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(), <span class="st">"-data"</span>, <span class="st">".rds"</span> )))</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Receiver information</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(df.recvDeps, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"motus"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(), <span class="st">"-recv-info"</span>, <span class="st">".rds"</span> )))</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Spreadsheet tracking BandID</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(spreadsheet, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"spreadsheet"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(), <span class="st">"-spreadsheet"</span>, <span class="st">".rds"</span> )))</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Tide tables</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(tideData, <span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"tides"</span>, <span class="st">"tideData.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bird detection dqtq</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(df.alltags, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"motus"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(), <span class="st">"-data"</span>, <span class="st">".rds"</span> )))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Receiver information</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(df.recvDeps, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"motus"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(), <span class="st">"-recv-info"</span>, <span class="st">".rds"</span> )))</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Spreadsheet tracking BandID</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(spreadsheet, here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"spreadsheet"</span>, <span class="fu">paste0</span>(<span class="fu">Sys.Date</span>(), <span class="st">"-spreadsheet"</span>, <span class="st">".rds"</span> )))</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Tide tables</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(tideData, <span class="fu">here</span>(<span class="st">"qmd"</span>, <span class="st">"chapter_1"</span>, <span class="st">"data"</span>, <span class="st">"tides"</span>, <span class="st">"tideData.rds"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Save your formatted data, now ready for analysis!</p>
 </section>
