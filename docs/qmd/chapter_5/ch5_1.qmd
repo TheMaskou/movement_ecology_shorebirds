@@ -480,7 +480,7 @@ save.image(here::here("qmd", "chapter_5", "data", paste0(Sys.Date(),"_power_simu
 
 ```{r load,  message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE}
 
-load(here::here("qmd", "chapter_5", "data", paste0(Sys.Date(), "_power_simulation", "_nsim_", n_sims, "_ranging_", paste(n_range, collapse = "_"), ".RData")))
+load(here::here("qmd", "chapter_5", "data", "2026-03-12_power_simulation_nsim_5_ranging_2_4_6_10_15_20.RData"))
 
 ```
 

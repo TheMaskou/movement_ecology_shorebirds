@@ -1,5 +1,5 @@
 ---
-title: "Maintenance"
+title: "Motus Array Maintenance"
 toc-location: left
 ---
 
@@ -66,22 +66,7 @@ dt_maintenance
 ```
 :::
 
-<br>
-
-**Find below the antennae set up at each station** (the same information shown in the map popups).
-
--   [⬇ Download the antenna log (Excel .xlsx)](downloads/antenna_log.xlsx)
-
-::: {.callout-note collapse="true" title="Click to view the antenna log"}
-```{r Tables antenna}
-#| message: false
-#| warning: false
-#| echo: false
-dt_antenna
-```
-:::
-
-Below is shown the **last 20 tag detections** from the complete array (including noise and test tags), the data is raw and unfiltered.
+Below is shown the \*\*last 20 tag detections\*\* from the complete array (including noise and test tags), the data is raw and unfiltered.
 
 ::: {.callout-note collapse="true" title="Click to view the raw detection data"}
 ```{r Tables rawdata}

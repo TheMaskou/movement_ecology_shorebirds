@@ -695,8 +695,10 @@ popup_data <- tibble::tibble(
   popup      = sapply(station_groups, build_popup),
   fill_color = sapply(station_groups, \(grp) {
     lv <- latest_visit(grp)
-    marker_fill_for(lv$station_power_departure, wifi_display(lv$wifi_departure))
-  })
+    fill_color = sapply(station_groups, \(grp) {
+      lv <- latest_visit(grp)
+      marker_fill_for(lv$station_power_departure, wifi_display(lv$wifi_departure))
+    })  })
 ) |>
   mutate(stroke_color = darken_color(fill_color))
 
@@ -704,8 +706,7 @@ popup_data <- tibble::tibble(
 map_maintenance <- leaflet(popup_data, height = map_height,
                           options = leafletOptions(zoomSnap = map_zoom_snap,
                                         wheelPxPerZoomLevel = map_wheel_px_per_zoom)) |>
-  addProviderTiles("Esri.WorldGrayCanvas", group = "Map",
-                   options = providerTileOptions(maxNativeZoom = 16, maxZoom = 18)) |>
+  addProviderTiles("CartoDB.Positron",  group = "Map") |>
   addProviderTiles("Esri.WorldImagery", group = "Satellite") |>
   addProviderTiles("OpenStreetMap",     group = "Street (OSM)") |>
   addCircleMarkers(
@@ -756,23 +757,6 @@ map_maintenance <- leaflet(popup_data, height = map_height,
         h.textContent = 'Basemap';
         base.parentNode.insertBefore(h, base);
       }
-
-      // Keep the popup's top edge fixed when a <details> section inside it is
-      // expanded/collapsed, by panning the map to absorb the height change
-      // (Leaflet otherwise grows popups upward from the bottom, which can
-      // push the station name off the top of the visible popup).
-      var map = this;
-      map.on('popupopen', function(e) {
-        var popupEl = e.popup.getElement();
-        var height = popupEl.offsetHeight;
-        popupEl.querySelectorAll('details').forEach(function(d) {
-          d.addEventListener('toggle', function() {
-            var newHeight = popupEl.offsetHeight;
-            map.panBy([0, height - newHeight], { animate: false });
-            height = newHeight;
-          });
-        });
-      });
     }
   ")
 
@@ -875,37 +859,3 @@ saveRDS(
   maintenance_log,
   file = file.path(dir_downloads, "receiver_log_complete.rds")
 )
-
-# ==== Antenna Table ====
-# "Label" = "raw_column_name", as in col_labels above. Type.1 is the sheet's second
-# "Type" column (mount type), see the antenna log section.
-antenna_col_labels <- c(
-  "Station"          = "Site",
-  "Install date"     = "Install_Date",
-  "Removal date"     = "Removal_Date",
-  "Port"             = "Port#",
-  "Frequency (MHz)"  = "Frequency",
-  "Antenna type"     = "Type",
-  "Magnetic bearing" = "Magnetic_Bearing",
-  "True bearing"     = "True_Bearing",
-  "Height (m)"       = "Height_m",
-  "Mount type"       = "Type.1",
-  "Latitude"         = "Latitude",
-  "Longitude"        = "Longitude",
-  "Elevation (m)"    = "Elevation"
-)
-
-antenna_table_data <- antenna_raw |>
-  mutate(Site = canonical_station(Site),
-         Magnetic_Bearing = na_if(Magnetic_Bearing, "NA")) |>
-  arrange(Site, `Port#`) |>
-  select(any_of(antenna_col_labels))
-
-dt_antenna <- DT::datatable(
-  antenna_table_data,
-  filter   = "top",
-  rownames = FALSE,
-  options  = list(pageLength = table_page_length, scrollX = TRUE, order = list())
-)
-
-openxlsx2::write_xlsx(antenna_table_data, file = file.path(dir_downloads, "antenna_log.xlsx"))
