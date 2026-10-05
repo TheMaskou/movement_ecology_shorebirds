@@ -44,9 +44,9 @@ toc-location: left
 
 ## Tag programming
 
--   [Concept & Goals](https://uoneduau-my.sharepoint.com/:t:/g/personal/c3541851_uon_edu_au/IQDgHLQVSNYvR4dDNnD9xq1bAZIVwjJ1URZolP7bHAwE5zU?e=PaBsbs)
+-   [Concept & Goals](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQAxZ0v24OXzSarHeaYESY87Ad-yuiryGxLVbYEkTFjSrU8?e=pM7ln9)
 
--   [Druid Nano and Nano M1 Lite](https://uoneduau-my.sharepoint.com/:t:/g/personal/c3541851_uon_edu_au/IQDgHLQVSNYvR4dDNnD9xq1bAZIVwjJ1URZolP7bHAwE5zU?e=PaBsbs)
+-   [Druid Nano and Nano M1 Lite program: shared code](https://uoneduau-my.sharepoint.com/:t:/g/personal/c3541851_uon_edu_au/IQDgHLQVSNYvR4dDNnD9xq1bAZIVwjJ1URZolP7bHAwE5zU?e=PaBsbs)
 
 -   Ornitela Ornitrack-2.8
 
