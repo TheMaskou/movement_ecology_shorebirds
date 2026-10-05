@@ -1,5 +1,5 @@
 ---
-title: "Power analysis"
+title: "Sample size"
 format: html
 toc-location: left
 ---

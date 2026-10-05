@@ -42,6 +42,14 @@ toc-location: left
 
     More refined scheduling for tags and bases.
 
+## Tag programming
+
+-   [Concept & Goals](https://uoneduau-my.sharepoint.com/:t:/g/personal/c3541851_uon_edu_au/IQDgHLQVSNYvR4dDNnD9xq1bAZIVwjJ1URZolP7bHAwE5zU?e=PaBsbs)
+
+-   [Druid Nano and Nano M1 Lite](https://uoneduau-my.sharepoint.com/:t:/g/personal/c3541851_uon_edu_au/IQDgHLQVSNYvR4dDNnD9xq1bAZIVwjJ1URZolP7bHAwE5zU?e=PaBsbs)
+
+-   Ornitela Ornitrack-2.8
+
 ## Miscellaneous
 
 -   [Tide_forecasts_for_Newcastle_NSW](https://www.tide-forecast.com/locations/Newcastle-Australia/tides/latest)

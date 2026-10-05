@@ -23,9 +23,11 @@ A Motus station is made of multiple components:
 Note that you can build any station yourself by simply following the [installation guide](https://docs.motus.org/en/stations/station-installation) freely delivered by Motus.
 :::
 
-![](/material/array.png){fig-align="center" width="100%"}
+# The Hunter
 
-*Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW).*
+![](/material/array1_120000scale.png){fig-align="center" width="100%"}
+
+*Overview on our Motus stations part of our local array located in the Hunter estuary, Newcastle (NSW). Scale 1:120000 meters.*
 
 <br>
 
@@ -35,7 +37,15 @@ source(here::here("qmd", "chapter_1", "R", "ch1_4_motus_array_maintenance.R"))
 
 <br>
 
+# Port Stephens
+
+![](/material/array2_120000scale.png){fig-align="center" width="100%"}
+
+*Overview on our Motus stations part of our local array located in Port Stephens estuary, Nelson Bay (NSW). Scale 1:120000 meters.*
+
 <br>
+
+# Dynamic map
 
 **Find below a dynamic map with the last info concerning the status of each stations part of the local Motus array.**
 
@@ -50,12 +60,11 @@ map_maintenance
 
 <br>
 
-**And retrieve the tables corresponding to each stations with its complete maintenance history.**
+# Tables
 
-Use the filters at the top of each column to search the log. You can also download the complete receiver log:
+**Find below the tables corresponding to each stations with its complete maintenance history.**
 
--   [⬇ Download the full receiver log (Excel .xlsx)](downloads/receiver_log_complete.xlsx)
--   [⬇ Download for R (.rds)](downloads/receiver_log_complete.rds)
+Use the filters at the top of each column to search the log.
 
 ::: {.callout-note collapse="true" title="Click to view the receiver log"}
 ```{r Tables}
@@ -66,11 +75,14 @@ dt_maintenance
 ```
 :::
 
+**You can also download the complete receiver log:**
+
+-   [⬇ Download the full receiver log (Excel .xlsx)](downloads/receiver_log_complete.xlsx)
+-   [⬇ Download for R (.rds)](downloads/receiver_log_complete.rds)
+
 <br>
 
 **Find below the antennae set up at each station** (the same information shown in the map popups).
-
--   [⬇ Download the antenna log (Excel .xlsx)](downloads/antenna_log.xlsx)
 
 ::: {.callout-note collapse="true" title="Click to view the antenna log"}
 ```{r Tables antenna}
@@ -81,7 +93,9 @@ dt_antenna
 ```
 :::
 
-Below is shown the **last 20 tag detections** from the complete array (including noise and test tags), the data is raw and unfiltered.
+**You can also download the complete antenna log:** - [⬇ Download the antenna log (Excel .xlsx)](downloads/antenna_log.xlsx)
+
+**Find below the last 20 tag detections from the complete array (including noise and test tags), the data is raw and unfiltered so you can initiate investigation on towers status.**
 
 ::: {.callout-note collapse="true" title="Click to view the raw detection data"}
 ```{r Tables rawdata}
@@ -135,3 +149,7 @@ df.alltags
 
 ```
 :::
+
+# Pictures
+
+**Find here after all dated pictures for each stations:** [click to see pictures](https://uonstaff.sharepoint.com/:f:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/General/Motus_array_maintenance/Station%20pictures?d=w2e9560a98ca047948fe23d61780c5599&csf=1&web=1&e=6WFgkS)

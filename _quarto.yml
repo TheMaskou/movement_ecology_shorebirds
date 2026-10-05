@@ -100,9 +100,10 @@ website:
       background: light
       collapse-level: 3
       contents:
-        - section: "Prior"
+        - section: "Power analysis"
           contents:
             - qmd/chapter_2/ch2_1.qmd # Prior estimations
+            - qmd/chapter_2/ch2_2.qmd # Prior estimations
             
         - section: "To-do-list"
           contents:
