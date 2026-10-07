@@ -700,7 +700,8 @@ popup_data <- tibble::tibble(
 map_maintenance <- leaflet(popup_data, height = map_height,
                           options = leafletOptions(zoomSnap = map_zoom_snap,
                                         wheelPxPerZoomLevel = map_wheel_px_per_zoom)) |>
-  addProviderTiles("CartoDB.Positron",  group = "Map") |>
+  addProviderTiles("Esri.WorldGrayCanvas", group = "Map",
+                   options = providerTileOptions(maxNativeZoom = 16, maxZoom = 18)) |>
   addProviderTiles("Esri.WorldImagery", group = "Satellite") |>
   addProviderTiles("OpenStreetMap",     group = "Street (OSM)") |>
   addCircleMarkers(
@@ -751,6 +752,23 @@ map_maintenance <- leaflet(popup_data, height = map_height,
         h.textContent = 'Basemap';
         base.parentNode.insertBefore(h, base);
       }
+
+      // Keep the popup's top edge fixed when a <details> section inside it is
+      // expanded/collapsed, by panning the map to absorb the height change
+      // (Leaflet otherwise grows popups upward from the bottom, which can
+      // push the station name off the top of the visible popup).
+      var map = this;
+      map.on('popupopen', function(e) {
+        var popupEl = e.popup.getElement();
+        var height = popupEl.offsetHeight;
+        popupEl.querySelectorAll('details').forEach(function(d) {
+          d.addEventListener('toggle', function() {
+            var newHeight = popupEl.offsetHeight;
+            map.panBy([0, height - newHeight], { animate: false });
+            height = newHeight;
+          });
+        });
+      });
     }
   ")
 
