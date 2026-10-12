@@ -382,7 +382,7 @@ divergence_global %>%
 ```
 :::
 
-A species where Jaccar turnover value (orange box) sits above the Bray-Curtis balanced variation (green box) highlights that individuals are mostly diverging in site use because **they use different (private) sites**. Inversely, individuals **use same (shared/common) sites, use them very much differently (unequal use)**.
+A species where Jaccar turnover value (orange box) sits above the Bray-Curtis balanced variation (green box) highlights that individuals are mostly diverging in site use because **they use different (private) sites**. Inversely, individuals **use same (shared/common) sites, but use them unevenly (unequal use)**.
 
 ## Tide and diel periods
 
