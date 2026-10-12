@@ -1,5 +1,5 @@
 ---
-title: "Accelerometery settings"
+title: "Accelerometery settings (resolution)"
 format: html
 toc: true
 toc-location: left

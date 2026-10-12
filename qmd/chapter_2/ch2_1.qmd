@@ -1,12 +1,10 @@
 ---
-title: "Sample size"
+title: "Accelerometery (sample size)"
 format: html
 toc-location: left
 ---
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-**TO BE IMPROVED - This is preliminary analysis**
-
 This page aims to define the priors required to estimate the number of individuals we need to trap, equip with GPS/accelerometer devices, so we can reliably answer our scientific question. The priors are mainly defined by the size sample.\
 Indeed, the sampling duration will depend on the question (i.e., comparing different periods) and is acknowledged for a minimum of 100 min per individuals; and the sampling interval is set as constant across individual and based by on the literature (i.e., 25 Hz).
 :::

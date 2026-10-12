@@ -6,9 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-10-01">
+<meta name="dcterms.date" content="2026-10-12">
 
-<title>Sample size – Home</title>
+<title>Accelerometery (sample size) – Home</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -218,11 +218,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="dropdown-header">Power analysis</li>
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_2/ch2_1.html">
- <span class="dropdown-text">Sample size</span></a>
+ <span class="dropdown-text">Accelerometery (sample size)</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="../../qmd/chapter_2/ch2_2.html">
- <span class="dropdown-text">Accelerometery settings</span></a>
+ <span class="dropdown-text">Accelerometery settings (resolution)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../qmd/chapter_2/ch2_22.html">
+ <span class="dropdown-text">Accelerometery settings (interval &amp; duration)</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">To-do-list</li>
@@ -328,9 +332,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_2/ch2_1.html">Power analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_2/ch2_1.html">Sample size</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../qmd/chapter_2/ch2_1.html">Power analysis</a></li><li class="breadcrumb-item"><a href="../../qmd/chapter_2/ch2_1.html">Accelerometery (sample size)</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Sample size</h1>
+<h1 class="title">Accelerometery (sample size)</h1>
 </div>
 
 
@@ -341,7 +345,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-10-01</p>
+      <p class="date">2026-10-12</p>
     </div>
   </div>
   
@@ -359,7 +363,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-body-container">
-<p><strong>TO BE IMPROVED - This is preliminary analysis</strong></p>
 <p>This page aims to define the priors required to estimate the number of individuals we need to trap, equip with GPS/accelerometer devices, so we can reliably answer our scientific question. The priors are mainly defined by the size sample.<br>
 Indeed, the sampling duration will depend on the question (i.e., comparing different periods) and is acknowledged for a minimum of 100 min per individuals; and the sampling interval is set as constant across individual and based by on the literature (i.e., 25 Hz).</p>
 </div>
@@ -672,10 +675,10 @@ Indeed, the sampling duration will depend on the question (i.e., comparing diffe
 <pre><code># A tibble: 4 × 7
   behaviour    `N=5` `N=10` `N=15` `N=20` `N=25` `N=30`
   &lt;fct&gt;        &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-1 Foraging     17.0  10.0    7.72   6.56   5.79   5.25 
-2 Long Flight   1.55  0.933  0.740  0.626  0.559  0.505
-3 Roosting     17.6  10.6    8.42   7.03   6.28   5.67 
-4 Short Flight  2.33  1.35   1.07   0.915  0.812  0.734</code></pre>
+1 Foraging     16.6   9.75   7.79   6.56   5.83   5.26 
+2 Long Flight   1.55  0.953  0.738  0.623  0.554  0.502
+3 Roosting     17.9  10.8    8.29   6.95   6.20   5.65 
+4 Short Flight  2.30  1.38   1.06   0.910  0.804  0.726</code></pre>
 </div>
 </div>
 

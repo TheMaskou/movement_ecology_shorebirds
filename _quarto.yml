@@ -104,6 +104,7 @@ website:
           contents:
             - qmd/chapter_2/ch2_1.qmd # Prior estimations
             - qmd/chapter_2/ch2_2.qmd # Prior estimations
+            - qmd/chapter_2/ch2_22.qmd # Accelerometery settings (v2)
             
         - section: "To-do-list"
           contents:
