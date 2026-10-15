@@ -35,7 +35,7 @@ Individual shorebirds vary a lot in how they use their sites in the estuary, so 
 
 There are two questions:
 
-1.   **Do birds of the same species use sites differently?**
+1.  **Do birds of the same species use sites differently?**
 
 2.  **If so, do they use different sites (private sites), or the same sites in different proportions (unequal use of shared sites)?**
 
@@ -87,6 +87,41 @@ n_tags_species %>%
 
 ```
 
+Before going further, simply checking a bit more clearly the period every bird have been monitored.
+
+```{r bird-period, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center', fig.height=9.5, fig.width= 8 }
+library(dplyr)
+library(ggplot2)
+
+# First start / last end per individual
+span_ind <- visit_hours_tide %>%
+  group_by(speciesEN, Band.ID) %>%
+  summarise(first_seen = min(visitStart, na.rm = TRUE),
+            last_seen  = max(visitEnd,   na.rm = TRUE),
+            .groups = "drop") %>%
+  arrange(speciesEN, desc(first_seen)) %>%          # earliest at the top within each species
+  mutate(Band.ID = factor(Band.ID, levels = unique(Band.ID)))
+
+ggplot(span_ind, aes(y = Band.ID, colour = speciesEN)) +
+  geom_segment(aes(x = first_seen, xend = last_seen, yend = Band.ID),
+               linewidth = 2.5, lineend = "butt") +
+  facet_grid(speciesEN ~ ., scales = "free_y", space = "free_y", switch = "y") +
+  scale_x_datetime(date_breaks = "3 months", date_labels = "%b %Y") +
+  labs(title = "Period of detection per individual",
+       x = "Date", y = "") +
+  theme_minimal() +
+  theme(
+    legend.position    = "none",
+    axis.text.x        = element_text(angle = 45, hjust = 1, vjust = 1),
+    axis.text.y        = element_text(size = 7),
+    strip.placement    = "outside",
+    strip.text.y.left  = element_text(angle = 0, hjust = 1),
+    panel.grid.major.y = element_blank(),
+    panel.border       = element_rect(colour = "grey30", fill = NA, linewidth = 0.7),
+    panel.spacing.y    = unit(0.4, "lines")
+  )
+```
+
 # Time budget per site
 
 We use `overlap_h`: the duration (hours) each bird was *confirmed present* at each site in each hourly tide-bin. Summing `overlap_h` per bird x site gives a duration-based "time budget" to assess the question **"how much does this bird rely on this site"**.
@@ -135,8 +170,28 @@ ggplot(site_use_ind_tide,
     panel.spacing.y    = unit(0.4, "lines"))
 ```
 
-::: {.callout collapse="true" title="See population summary plot" appearance="simple"}
+::: {.callout collapse="true" title="See data in table" appearance="simple"}
 ```{r site-use-table-indiv, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
+site_use_ind_tide %>%
+  mutate(effort_h = sprintf("%d:%02d",
+                    floor(effort_h),
+                    round((effort_h - floor(effort_h)) * 60)),
+         p = round(p, 3)) %>%
+  rename(
+    Species      = speciesEN,
+    `Band ID`    = Band.ID,
+    `Tide class` = tideCategory,
+    Site         = recvDeployName,
+    `Hours`      = effort_h,
+    `% of time`  = p ) %>%
+    DT::datatable()
+```
+:::
+
+![](/material/map_colour_site.png){fig-align="center" width="100%"}
+
+::: {.callout collapse="true" title="See population summary plot" appearance="simple"}
+```{r site-use-table-indiv2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
 ggplot(site_use_ind,
          aes(x = fct_reorder(Band.ID, p, .fun = max), y = p, fill = recvDeployName)) +
   geom_col(width = 0.8) +
@@ -161,8 +216,6 @@ ggplot(site_use_ind_tide,
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 :::
-
-![](/material/map_colour_site.png){fig-align="center" width="100%"}
 
 Here, we can already see that for some species, most of individuals use sites in a different manner within the estuary, and for other species, most individuals use site in a similar manner.
 
@@ -189,34 +242,51 @@ calculate_jsd <- function(p, q) {
   0.5 * sum(p * log2(p / m)) + 0.5 * sum(q * log2(q / m))
 }
 
-# Pairwise divergence individuals (rows, named by Band.ID) x sites (cols), rows sum to 100
-compute_divergence <- function(prop_mat) {
-
-  if (nrow(prop_mat) < 2) return(NULL)   # need at least 2 birds to compare
-
-  pa_mat <- (prop_mat > 0) * 1           # presence/absence version, for Jaccard
-
-  # Use Balsega's (2013) package
-  jac  <- betapart::beta.pair(as.data.frame(pa_mat),  index.family = "jaccard")     # Incidence-based pair-wise dissimilarities
-  bray <- betapart::beta.pair.abund(as.data.frame(prop_mat), index.family = "bray") # Abundance-based pair-wise dissimilarities
-
-  ids <- rownames(prop_mat)         
-  pr  <- combn(nrow(prop_mat), 2)   # same pair order as a `dist` object's internal storage
-
-  jsd_vals <- apply(pr, 2, function(ix) calculate_jsd(prop_mat[ix[1], ], prop_mat[ix[2], ]))
-
-  tibble(
-    Band.ID_1     = ids[pr[1, ]],
-    Band.ID_2     = ids[pr[2, ]],
-    JSD           = round(jsd_vals, 3),                          # "overall dissimilarity"
-    jac_total     = round(as.numeric(jac$beta.jac),       3),
-    jac_turnover  = round(as.numeric(jac$beta.jtu),        3),   # "different sites used"
-    jac_nested    = round(as.numeric(jac$beta.jne),        3),   # "subset of sites"
-    bray_total    = round(as.numeric(bray$beta.bray),      3),
-    bray_balanced = round(as.numeric(bray$beta.bray.bal),  3),   # "uneven use of shared sites"
-    bray_gradient = round(as.numeric(bray$beta.bray.gra),  3))
+# Drop sites below min_pct of a bird's time, then rescale rows to 100
+clean_prop <- function(m, min_pct = 0) { # HERE I DECIDE TO NOT CLEAN (0%)
+  m2 <- m
+  m2[m2 < min_pct] <- 0
+  empty <- rowSums(m2) == 0                # bird with no site above threshold: keep original
+  m2[empty, ] <- m[empty, ]
+  m2 / rowSums(m2) * 100
 }
 
+# Bray-Curtis split into "private sites" and "uneven use of shared sites"
+bray_split <- function(p, q) {             # p, q = % time per site, each sums to 100
+  shared  <- p > 0 & q > 0
+  private <- sum(p[!shared], q[!shared]) / 200
+  uneven  <- sum(abs(p[shared] - q[shared])) / 200
+  c(bray_total = private + uneven, bray_private = private, bray_uneven = uneven)
+}
+
+compute_divergence <- function(prop_mat, min_pct = 5) {
+
+  if (nrow(prop_mat) < 2) return(NULL)
+
+  m   <- clean_prop(prop_mat, min_pct)
+  pa  <- as.data.frame((m > 0) * 1)
+  jac <- betapart::beta.pair(pa, index.family = "jaccard")
+
+  ids <- rownames(m)
+  pr  <- combn(nrow(m), 2)                 # same pair order as a `dist` object
+
+  bray <- t(apply(pr, 2, function(ix) bray_split(m[ix[1], ], m[ix[2], ])))
+  jsd  <- apply(pr, 2, function(ix) calculate_jsd(m[ix[1], ], m[ix[2], ]))
+
+  # sanity check (optional): bray_total should equal vegan's Bray-Curtis
+  # all.equal(unname(bray[, "bray_total"]), as.numeric(vegan::vegdist(m, "bray")))
+
+  tibble(
+    Band.ID_1    = ids[pr[1, ]],
+    Band.ID_2    = ids[pr[2, ]],
+    JSD          = round(jsd, 3),
+    bray_total   = round(bray[, "bray_total"],   3),
+    bray_private = round(bray[, "bray_private"], 3),   # different sites used
+    bray_uneven  = round(bray[, "bray_uneven"],  3),   # same sites, unequal time
+    jac_total    = round(as.numeric(jac$beta.jac), 3),
+    jac_turnover = round(as.numeric(jac$beta.jtu), 3),
+    jac_nested   = round(as.numeric(jac$beta.jne), 3))
+}
 # Helper: long-format individual x site proportion matrix -> wide matrix
 to_prop_matrix <- function(df) {
   wide <- df %>%
@@ -229,16 +299,12 @@ to_prop_matrix <- function(df) {
 
 # Results
 divergence_global <- site_use_ind %>%
-  group_by(speciesEN) %>%
-  group_split() %>%
+  group_split(speciesEN) %>%
   map(function(df) {
-    mat <- to_prop_matrix(df)
-    res <- compute_divergence(mat)
+    res <- compute_divergence(to_prop_matrix(df), min_pct = 5)
     if (!is.null(res)) res$speciesEN <- df$speciesEN[1]
     res
-  }) %>%
-  compact() %>%
-  bind_rows()
+  }) %>% compact() %>% bind_rows()
 ```
 
 ## Jensen Shannon Divergence: overall dissimilarity
@@ -303,7 +369,23 @@ jsd_sum %>%
 
 ## Jaccard & Bray-Curtis: dissimilarity decomposition
 
-How much of their overall dissimilarity comes from **not sharing sites** (Jaccard turnover) versus **sharing sites but using them unevenly** (Bray-Curtis balanced variation)?
+How much of the difference between two birds comes from **using different sites** (private sites) *versus* **using the same sites but spending different amounts of time at them** (uneven use of shared sites)?
+
+*A simple example*:
+
+-   Bird A: 80% Site 1, 20% Site 2
+
+-   Bird B: 50% Site 1, 50% Site 3
+
+*Site 1 is shared (80 vs 50, a 30-point gap), so that’s uneven. Sites 2 and 3 each belong to only one bird (20 and 50 points), so that’s private. Total difference = (30 + 20 + 50) / 200 = 0.5. Of that, 0.35 is private and 0.15 is uneven.*
+
+So the values of the pairwise tests are:
+
+-   **Private:** \[0-1\] with 0 when birds share all sites and 1 when only one of the two birds goes to one site.
+
+-   **Uneven: \[0-1\]** with 0 when birds use the same site in the exact same proportion of time, and 1 both birds go to this site, but one spends more time there than the other.
+
+Both values run from **0 to 1**, and together they add up to the total **Bray-Curtis** for one pair of birds.
 
 ```{r plot-decomposition, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis' , fig.align='center'}
 species_lab <- divergence_global %>%
@@ -318,27 +400,27 @@ species_lab <- divergence_global %>%
   select(speciesEN, label)
 
 decomp_long <- divergence_global %>%
-  select(speciesEN, JSD, jac_turnover, bray_balanced) %>%
-  pivot_longer(cols = c(JSD, jac_turnover, bray_balanced),
+  select(speciesEN, JSD, bray_private, bray_uneven) %>%
+  pivot_longer(cols = c(JSD, bray_private, bray_uneven),
                names_to = "metric", values_to = "value") %>%
   left_join(species_lab, by = "speciesEN") %>%
   mutate(metric = dplyr::recode(metric,
-    JSD           = "Overall dissimilarity (JSD)",
-    jac_turnover  = "Different sites used (Jaccard)",
-    bray_balanced = "Uneven use of shared sites (Bray-Curtis)"),
+    JSD          = "Overall dissimilarity (JSD)",
+    bray_private = "Different sites used (private sites)",
+    bray_uneven  = "Uneven use of shared sites"),
     metric = factor(metric, levels = c(
       "Overall dissimilarity (JSD)",
-      "Different sites used (Jaccard)",
-      "Uneven use of shared sites (Bray-Curtis)")))
+      "Different sites used (private sites)",
+      "Uneven use of shared sites")))
 
 plot_decomposition <- decomp_long %>%
   ggplot(aes(x = label, y = value, fill = metric)) +
   geom_boxplot(alpha = 0.75, outlier.shape = 16, outlier.size = 1,
                position = position_dodge(width = 0.8)) +
   scale_fill_manual(values = c(
-    "Overall dissimilarity (JSD)"                = "grey40",
-    "Different sites used (Jaccard)"             = "#D95F02",
-    "Uneven use of shared sites (Bray-Curtis)"   = "#1B9E77")) +
+  "Overall dissimilarity (JSD)"           = "grey40",
+  "Different sites used (private sites)"  = "#D95F02",
+  "Uneven use of shared sites"            = "#1B9E77")) +
   labs(
     title    = "Dissimilarity decomposition: private sites, or uneven use of shared sites?",
     subtitle = "Within-species pairwise comparisons",
@@ -376,7 +458,7 @@ decomp_long %>%
 # Pair-level values (what each box is built from)
 divergence_global %>%
   dplyr::select(speciesEN, Band.ID_1, Band.ID_2,
-                JSD, jac_turnover, bray_balanced) %>%
+                JSD, bray_private, bray_uneven) %>%
   DT::datatable()
 
 ```
@@ -428,18 +510,18 @@ species_lab_tide <- divergence_tide %>%
   select(speciesEN, tideCategory, label)
 
 decomp_long_tide <- divergence_tide %>%
-  select(speciesEN, tideCategory, JSD, jac_turnover, bray_balanced) %>%
-  pivot_longer(cols = c(JSD, jac_turnover, bray_balanced),
+  select(speciesEN, tideCategory, JSD, bray_private, bray_uneven) %>%
+  pivot_longer(cols = c(JSD, bray_private, bray_uneven),
                names_to = "metric", values_to = "value") %>%
   left_join(species_lab_tide, by = c("speciesEN", "tideCategory")) %>%
   mutate(metric = dplyr::recode(metric,
-    JSD           = "Overall dissimilarity (JSD)",
-    jac_turnover  = "Different sites used (Jaccard)",
-    bray_balanced = "Uneven use of shared sites (Bray-Curtis)"),
+    JSD          = "Overall dissimilarity (JSD)",
+    bray_private = "Different sites used (private sites)",
+    bray_uneven  = "Uneven use of shared sites"),
     metric = factor(metric, levels = c(
       "Overall dissimilarity (JSD)",
-      "Different sites used (Jaccard)",
-      "Uneven use of shared sites (Bray-Curtis)")))
+      "Different sites used (private sites)",
+      "Uneven use of shared sites")))
 
 plot_decomposition_tide <- decomp_long_tide %>%
   ggplot(aes(x = label, y = value, fill = metric)) +
@@ -447,9 +529,9 @@ plot_decomposition_tide <- decomp_long_tide %>%
                position = position_dodge(width = 0.8)) +
   facet_wrap(~ tideCategory, ncol = 1, scales = "free_x") +
   scale_fill_manual(values = c(
-    "Overall dissimilarity (JSD)"                = "grey40",
-    "Different sites used (Jaccard)"             = "#D95F02",
-    "Uneven use of shared sites (Bray-Curtis)"   = "#1B9E77")) +
+  "Overall dissimilarity (JSD)"           = "grey40",
+  "Different sites used (private sites)"  = "#D95F02",
+  "Uneven use of shared sites"            = "#1B9E77")) +
   labs(
     title    = "Dissimilarity decomposition: private sites, or uneven use of shared sites?",
     subtitle = "Within-species pairwise comparisons, by tide category",
@@ -498,83 +580,117 @@ For each species we use the four `tideCategory` per bird as replicate observatio
 We pair this with **PERMDISP** (`vegan::betadisper` + `permutest`, [Anderson 2006](https://doi.org/10.1111/j.1541-0420.2005.00440.x); [Anderson & Walsh 2013](https://doi.org/10.1890/12-2010.1)) which tests whether individuals differ in *dispersion* (within-bird consistency) rather than in mean composition. This matters because PERMANOVA can be significant either because individuals truly use different site compositions, **or** because some individuals are simply more variable than others, and PERMDISP tells which one.
 
 ```{r permanova-function, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis' , fig.align='center' }
-run_species_permanova <- function(sp_df, min_indiv = 3) {
-
-  n_indiv <- n_distinct(sp_df$Band.ID)
-
-  if (n_indiv < min_indiv) {
-    return(tibble(n_indiv = n_indiv, n_obs = nrow(sp_df),
-                  F = NA, R2 = NA, p_permanova = NA,
-                  F_disp = NA, p_dispersion = NA,
-                  note = paste0("Skipped: only ", n_indiv, " tagged individuals (need >= ", min_indiv, ")")))
-  }
-
-  # Build one row per Band.ID x tideCategory replicate profile (up to 4 rows per bird), site proportions in the columns:
+build_profiles <- function(sp_df, min_prof = 2) {
   wide <- sp_df %>%
     mutate(row_id = paste(Band.ID, tideCategory, sep = "__")) %>%
-    select(row_id, Band.ID, recvDeployName, p) %>%
+    select(row_id, Band.ID, tideCategory, recvDeployName, p) %>%
     pivot_wider(names_from = recvDeployName, values_from = p, values_fill = 0)
 
-  meta <- wide %>% select(row_id, Band.ID)
-  mat  <- as.matrix(wide %>% select(-row_id, -Band.ID))
+  meta <- wide %>% select(row_id, Band.ID, tideCategory)
+  mat  <- as.matrix(wide %>% select(-row_id, -Band.ID, -tideCategory))
   rownames(mat) <- wide$row_id
 
-  keep <- rowSums(mat) > 0     # drop empty replicate rows
-  mat  <- mat[keep, , drop = FALSE]
-  meta <- meta[keep, ]
+  ok   <- rowSums(mat) > 0
+  mat  <- mat[ok, , drop = FALSE];  meta <- meta[ok, ]
+  ok   <- ave(seq_len(nrow(meta)), meta$Band.ID, FUN = length) >= min_prof
+  list(mat = mat[ok, , drop = FALSE], meta = meta[ok, ])
+}
 
-  if (nrow(mat) < (n_indiv + 1)) {
-    return(tibble(n_indiv = n_indiv, n_obs = nrow(mat),
-                  F = NA, R2 = NA, p_permanova = NA,
-                  F_disp = NA, p_dispersion = NA,
-                  note = "Skipped: not enough replicate profiles per individual"))
+fit_species <- function(sp_df, min_indiv = 3, min_prof = 2, nperm = 999) {
+
+  pr      <- build_profiles(sp_df, min_prof)
+  n_indiv <- n_distinct(pr$meta$Band.ID)
+
+  if (n_indiv < min_indiv) {
+    return(list(summary = tibble(
+      n_indiv = n_indiv, n_obs = nrow(pr$meta),
+      F = NA_real_, R2 = NA_real_, p_permanova = NA_real_,
+      F_disp = NA_real_, p_dispersion = NA_real_,
+      note = paste0("Skipped: ", n_indiv, " individuals with >= ", min_prof,
+                    " tide profiles (need >= ", min_indiv, ")"))))
   }
 
-  d <- vegan::vegdist(mat, method = "bray")
+  d    <- vegan::vegdist(pr$mat, method = "bray")
+  perm <- vegan::adonis2(d ~ Band.ID, data = pr$meta, permutations = nperm)
+  bd   <- vegan::betadisper(d, pr$meta$Band.ID)
+  pd   <- vegan::permutest(bd, permutations = nperm)
 
-  perm <- tryCatch(
-    vegan::adonis2(d ~ Band.ID, data = meta, permutations = 999),
-    error = function(e) NULL)
-
-  disp <- tryCatch({
-    bd <- vegan::betadisper(d, meta$Band.ID)
-    vegan::permutest(bd, permutations = 999)
-  }, error = function(e) NULL)
-
-  tibble(
-    n_indiv      = n_indiv,
-    n_obs        = nrow(mat),
-    F            = if (!is.null(perm)) round(perm$F[1], 2) else NA,
-    R2           = if (!is.null(perm)) round(perm$R2[1], 3) else NA,
-    p_permanova  = if (!is.null(perm)) perm$`Pr(>F)`[1] else NA,
-    F_disp       = if (!is.null(disp)) round(disp$tab$F[1], 2) else NA,
-    p_dispersion = if (!is.null(disp)) disp$tab$`Pr(>F)`[1] else NA,
-    note         = "")
+  list(
+    summary = tibble(
+      n_indiv = n_indiv, n_obs = nrow(pr$meta),
+      F = perm$F[1], R2 = perm$R2[1], p_permanova = perm$`Pr(>F)`[1],
+      F_disp = pd$tab$F[1], p_dispersion = pd$tab$`Pr(>F)`[1], note = ""),
+    dist = tibble(Band.ID = pr$meta$Band.ID, tideCategory = pr$meta$tideCategory,
+                  dist_centroid = bd$distances),
+    scores = tibble(Band.ID = pr$meta$Band.ID, tideCategory = pr$meta$tideCategory,
+                    PCoA1 = bd$vectors[, 1], PCoA2 = bd$vectors[, 2]))
 }
+
+```
+
+
+```{r permanova-run MODEL, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis' , fig.align='center' }
+set.seed(1)
+fits <- site_use_ind_tide %>%
+  group_split(speciesEN) %>%
+  set_names(map_chr(., ~ .x$speciesEN[1])) %>%
+  map(fit_species)
+
+permanova_results <- map_dfr(fits, ~ .x$summary, .id = "speciesEN") %>%
+  mutate(
+    sig_permanova = case_when(
+      is.na(p_permanova)    ~ "",
+      p_permanova < 0.001   ~ "***",
+      p_permanova < 0.01    ~ "**",
+      p_permanova < 0.05    ~ "*",
+      TRUE                  ~ "ns"),
+    interpretation = case_when(
+      is.na(p_permanova) ~ note,
+      p_permanova < 0.05 & (is.na(p_dispersion) | p_dispersion >= 0.05) ~
+        "Individuals differ significantly in mean site-use composition (robust)",
+      p_permanova < 0.05 & p_dispersion < 0.05 ~
+        "Significant, but dispersion also differs - interpret with caution (Anderson & Walsh 2013)",
+      TRUE ~ "No significant individual-level difference detected"))
+
+disp_df <- map_dfr(fits, ~ .x$dist, .id = "speciesEN")
+
+# PCoA
+scores_df <- map_dfr(fits, ~ .x$scores, .id = "speciesEN") %>%
+  group_by(speciesEN, Band.ID) %>%
+  mutate(c1 = mean(PCoA1), c2 = mean(PCoA2)) %>%
+  ungroup()
+
 ```
 
 ## Results
 
-```{r permanova-run, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
-permanova_results <- site_use_ind_tide %>%
-  group_by(speciesEN) %>%
-  group_split() %>%
-  map_dfr(~ run_species_permanova(.x) %>% mutate(speciesEN = .x$speciesEN[1], .before = 1)) %>%
-  mutate(
-    sig_permanova = case_when(
-      is.na(p_permanova)      ~ "",
-      p_permanova   < 0.001   ~ "***",
-      p_permanova   < 0.01    ~ "**",
-      p_permanova   < 0.05    ~ "*",
-      TRUE                    ~ "ns"),
-    interpretation = case_when(
-      is.na(p_permanova)                                ~ note,
-      p_permanova < 0.05 & (is.na(p_dispersion) | p_dispersion >= 0.05) ~
-        "Individuals differ significantly in mean site-use composition (robust)",
-      p_permanova < 0.05 & p_dispersion < 0.05           ~
-        "Significant, but dispersion also differs - interpret with caution (Anderson & Walsh 2013)",
-      TRUE ~ "No significant individual-level difference detected"))
+So far we compared pairs of birds. Here we ask a broader question for each species: **does each bird have its own "signature" way of using sites, or are all birds basically alike?**
 
+Each bird has up to four site-use profiles, one per tide category (Diurnal_High, Diurnal_Low, Nocturnal_High, Nocturnal_Low). Each profile is the share of time the bird spent at each site. We use two complementary tests.
+
+**PERMANOVA: does bird identity matter?**
+It checks whether profiles from the *same bird* are more alike than profiles from *different birds*. The p-value comes from shuffling bird names 999 times and asking how often a random shuffle looks as "bird-specific" as the real data. The **R²** tells us how much: an R² of 0.7 means 70% of the differences in site use are explained by *which bird it is*, and the remaining 30% is the same bird behaving differently across tides.
+
+**PERMDISP: are some birds more variable than others?**
+A significant PERMANOVA can also arise if some birds are simply more erratic than others. PERMDISP measures how far each profile sits from its bird's own average profile, and tests whether birds differ in that spread.
+
+::: {.callout-note title="How to read the results" appearance="simple"}
+- **PERMANOVA significant, PERMDISP not:** birds have their own site-use habits and are about equally consistent. This is the clearest result.
+- **Both significant:** birds differ, but some are also less consistent, so interpret with caution.
+- **PERMANOVA not significant:** no evidence that birds differ from each other.
+- **Species skipped:** too few birds or too few tide profiles per bird.
+:::
+
+::: {.callout-warning title="Keep in mind" appearance="simple"}
+- Differences between tide categories count as *within-bird* variation, so a low R² can mean tide matters, not that the bird is inconsistent.
+- With only 2 to 4 profiles per bird, power is limited. Check the number of profiles (*N profiles*) in the table.
+- Results describe time **detected** by the receivers, not true time spent at each site.
+:::
+
+
+```{r permanova-run2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
+
+# PERMANOVA
 permanova_results %>%
   arrange(p_permanova) %>%
   gt() %>%
@@ -594,4 +710,51 @@ permanova_results %>%
     interpretation = "Interpretation") %>%
   tab_footnote(footnote = md(
     "**PERMANOVA** (`vegan::adonis2`, Bray-Curtis, 999 permutations) tests whether Band.ID explains site-use composition. **PERMDISP** (`betadisper`) tests whether individuals differ in *within-bird* consistency rather than in mean composition - a significant PERMANOVA alongside a significant PERMDISP should be interpreted cautiously (Anderson & Walsh 2013)."))
+
+perm_plot <- permanova_results %>%
+  filter(!is.na(p_permanova)) %>%
+  mutate(
+    stars = case_when(p_permanova < 0.001 ~ "***", p_permanova < 0.01 ~ "**",
+                      p_permanova < 0.05  ~ "*",   TRUE ~ "ns"),
+    disp  = if_else(p_dispersion < 0.05,
+                    "Dispersion differs (interpret with caution)",
+                    "Dispersion similar"),
+    label = fct_reorder(paste0(speciesEN, "\n n = ", n_indiv), R2))
+
+ggplot(perm_plot, aes(x = R2, y = label, fill = disp)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = stars), hjust = -0.3, size = 4) +
+  scale_x_continuous(limits = c(0, 1.05), breaks = seq(0, 1, 0.2)) +
+  scale_fill_manual(values = c("Dispersion similar" = "#1B9E77",
+                               "Dispersion differs (interpret with caution)" = "#D95F02")) +
+  labs(title = "How much of site-use variation is explained by individual identity?",
+       subtitle = "PERMANOVA R² (stars = p-value); colour = PERMDISP result",
+       x = "R² (Bray-Curtis)", y = NULL, fill = NULL) +
+  theme_minimal() +
+  theme(legend.position = "top", panel.grid.major.y = element_blank())
+
+# PERMDISP
+ggplot(disp_df, aes(x = fct_reorder(Band.ID, dist_centroid, .fun = median),
+                    y = dist_centroid)) +
+  stat_summary(fun = median, geom = "crossbar", width = 0.6, colour = "grey40") +
+  geom_point(aes(colour = tideCategory), size = 2) +
+  facet_wrap(~ speciesEN, scales = "free_x") +
+  scale_colour_brewer(palette = "Paired") +
+  labs(title = "Within-bird consistency (PERMDISP)",
+       subtitle = "Distance of each tide profile to its bird's centroid; low = consistent bird",
+       x = "Individual (Band.ID)", y = "Distance to centroid", colour = "Tide") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7))
+
+
+
+# PCoA
+ggplot(scores_df, aes(PCoA1, PCoA2, colour = Band.ID)) +
+  geom_segment(aes(xend = c1, yend = c2), alpha = 0.6) +
+  geom_point(aes(shape = tideCategory), size = 2) +
+  facet_wrap(~ speciesEN, scales = "free") +
+  guides(colour = "none") +
+  labs(title = "Site-use profiles of individuals (PCoA of Bray-Curtis)",
+       shape = "Tide") +
+  theme_bw()
 ```
