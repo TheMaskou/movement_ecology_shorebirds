@@ -94,11 +94,16 @@ history_font_size    <- "12px"
 history_header_bg    <- "#f5f5f5"
 history_header_color <- "#444"
 history_row_border   <- "1px solid #eee"
+history_event_bg     <- "#fff4d6"   # row highlight when a deployment event lands on it
 
 # Field -> column header for the visit-history table. Edit / reorder / remove
 # entries here to change the table — column order follows this vector's order.
+# "event" is not a Survey123/historic log field - it's derived below (see
+# "Deployment Events") from the antenna log and receiver_replacement, so a row
+# can carry an event without being a real logged visit.
 history_fields <- c(
   visit_date                = "Date",
+  event                     = "Event",
   technician                = "Technician",
   data_downloaded           = "Data DL",
   station_power_departure         = "Power (dep)",
@@ -136,7 +141,8 @@ antenna_max_height   <- "160px"  # scrolls beyond this (no station currently nee
 antenna_fields <- c(
   port         = "Port",
   antenna_type = "Type",
-  true_bearing = "Bearing (°T)"
+  true_bearing = "Bearing (°T)",
+  install_date = "Installed"
 )
 
 ## ---- Antenna Range Overlay ----
@@ -251,6 +257,75 @@ antenna_active <- antenna_log |>
 antenna_removed_counts <- antenna_log |>
   filter(!is.na(removal_date)) |>
   count(station_id, name = "n_removed")
+
+# ==== Deployment Events ====
+# Maxime asked (WhatsApp, 2026-10-01) to be able to see deployment/major-
+# modification events (new station, new antennas, receiver swap) on the map.
+# Rather than add a dedicated question back into the Survey123 form, these are
+# derived from data the pipeline already loads: antenna install/removal dates
+# (antenna_log) and the existing receiver_replacement field (maintenance_log).
+# Agreed with Maxime 2026-10-07 ("Yes let's do this without changing the app!").
+#
+# Each event becomes a row in the "Event" column of the visit-history table -
+# merged onto a real visit row if one shares the same station_id + date, or
+# added as its own date-only row (is_event_only = TRUE) if not. Event-only
+# rows are excluded from "latest visit" / marker-colour logic below, so they
+# can't be mistaken for an actual maintenance visit.
+
+## ---- Helper: One Row per Station+Date, Events Joined With "; " ----
+collapse_events <- function(df) {
+  df |>
+    group_by(station_id, visit_date) |>
+    summarise(event = paste(event, collapse = "; "), .groups = "drop")
+}
+
+## ---- Antenna Install / Removal Events ----
+antenna_install_events <- antenna_log |>
+  filter(!is.na(install_date)) |>
+  mutate(action = "installed") |>
+  select(station_id, visit_date = install_date, action, port, antenna_type)
+
+antenna_removal_events <- antenna_log |>
+  filter(!is.na(removal_date)) |>
+  mutate(action = "removed", removal_date = as.Date(removal_date, origin = "1899-12-30")) |>
+  select(station_id, visit_date = removal_date, action, port, antenna_type)
+
+antenna_events <- bind_rows(antenna_install_events, antenna_removal_events) |>
+  arrange(station_id, visit_date, port) |>
+  group_by(station_id, visit_date, action) |>
+  summarise(
+    event = paste0(
+      "Antenna", ifelse(n() > 1, "e", ""), " ", unique(action), ": ",
+      paste0("port ", port, " (", antenna_type, ")", collapse = ", ")
+    ),
+    .groups = "drop"
+  ) |>
+  select(station_id, visit_date, event)
+
+## ---- Receiver Replacement Events ----
+receiver_replacement_events <- maintenance_log |>
+  filter(tolower(trimws(as.character(receiver_replacement))) == "yes") |>
+  mutate(
+    event = paste0(
+      "Receiver replaced → ",
+      ifelse(is.na(receiver_replacement_id) | trimws(receiver_replacement_id) == "",
+             "(new ID not recorded)", receiver_replacement_id)
+    )
+  ) |>
+  select(station_id, visit_date, event)
+
+## ---- Combine, Guard, and Attach to the Maintenance Log ----
+# Only keep events for stations the maintenance log already knows about - an
+# antenna-log-only site is reported by unmatched_antenna_sites above, not
+# turned into a map marker of its own here.
+station_events <- bind_rows(antenna_events, receiver_replacement_events) |>
+  filter(!is.na(visit_date)) |>
+  semi_join(maintenance_log, by = "station_id") |>
+  collapse_events()
+
+maintenance_log <- maintenance_log |>
+  full_join(station_events, by = c("station_id", "visit_date")) |>
+  mutate(is_event_only = is.na(entry_source))
 
 # ==== Load and Attach Station Coordinates ====
 # Coordinates are sourced from receivers.csv for every row (both the
@@ -515,7 +590,11 @@ fmt_antenna_cell <- function(field, value) {
 ## ---- Helper: Latest Visit Row ----
 # Picks the most recent dated visit; if none are dated, falls back to the last row
 # after sorting with NA dates last (matches the ordering used for the history table).
+# Event-only rows (is_event_only, see "Deployment Events" above) are excluded
+# first, so a deployment event can't be mistaken for the station's last real
+# visit or feed the departure-status marker colour.
 latest_visit <- function(rows) {
+  rows <- rows |> filter(!is_event_only)
   rows_dated <- rows |> filter(!is.na(visit_date))
   if (nrow(rows_dated) > 0) {
     rows_dated |> slice_max(visit_date, n = 1, with_ties = FALSE)
@@ -644,7 +723,12 @@ build_popup <- function(rows) {
       cells <- vapply(names(history_fields), function(field) {
         paste0("<td style='", cell_style, "'>", fmt_cell(field, r[[field]]), "</td>")
       }, character(1))
-      paste0("<tr style='border-top:", history_row_border, "'>",
+      # Highlight rows carrying a deployment event (install/removal/receiver
+      # swap) - including event-only rows, which have no real visit data.
+      row_bg <- if (!is.na(r$event) && trimws(r$event) != "") {
+        paste0("background:", history_event_bg, ";")
+      } else ""
+      paste0("<tr style='border-top:", history_row_border, ";", row_bg, "'>",
              paste(cells, collapse = ""), "</tr>")
     }, character(1)),
     collapse = ""
@@ -657,11 +741,14 @@ build_popup <- function(rows) {
     collapse = ""
   )
 
+  # Event-only rows aren't real visits - don't count them in the header.
+  n_real_visits <- sum(!rows_all$is_event_only)
+
   history_html <- paste0(
     "<hr style='margin:8px 0;border:none;border-top:1px solid #ddd'>",
     "<span style='font-size:12px;color:", summary_label_color, "'>",
-      "Visit history (", nrow(rows_all), " visit",
-      ifelse(nrow(rows_all) == 1, "", "s"), ")</span>",
+      "Visit history (", n_real_visits, " visit",
+      ifelse(n_real_visits == 1, "", "s"), ")</span>",
     "<div style='max-height:", history_max_height, ";overflow-y:auto;overflow-x:auto;margin-top:4px'>",
     "<table style='border-collapse:collapse;width:100%;font-size:", history_font_size, "'>",
     "<thead>",
@@ -829,6 +916,13 @@ col_labels <- c(
 
 
 
+
+# Deployment events are map-only (see "Deployment Events") - drop the
+# event-only rows and helper columns so the table and downloads below match
+# the real visit log, not the map's popup history.
+maintenance_log <- maintenance_log |>
+  filter(!is_event_only) |>
+  select(-event, -is_event_only)
 
 # Cleaned, one-row-per-visit table for on-page browsing. station_id + visit_date
 # are moved to the front; the noise columns in table_drop_cols are removed. This
