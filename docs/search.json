@@ -1435,7 +1435,7 @@
     "href": "qmd/reports/pub_1.html#tag-programming",
     "title": "Internal documents",
     "section": "Tag programming",
-    "text": "Tag programming\n\nConcept & Goals\nDruid Nano and Nano M1 Lite program: shared code\nOrnitela Ornitrack-2.8",
+    "text": "Tag programming\n\nConcept & Goals\nDruid Nano and Nano M1 Lite program: settings and urls\nOrnitela Ornitrack-2.8",
     "crumbs": [
       "Internal documents"
     ]
@@ -1718,5 +1718,15 @@
     "title": "Accelerometery settings (v2)",
     "section": "7. Take-home messages",
     "text": "7. Take-home messages\n\nMore behaviours = much more data. Check the table in section 4.\nDuty cycle is not what matters most; the seconds collected per day are. A scheme with a low duty cycle but a long recording window can still collect more data.\nShort, frequent recordings are better than long, rare ones for the same total seconds, because they catch more different moments of each behaviour.\nAssumptions: all behaviours are equally common, and you can label every segment (video/observation). Rare behaviours need extra days.\nSimulated results are optimistic. Real behaviours overlap more. Use them to compare scenarios, then re-run the “how much data” step with your own labelled pilot data in rabc."
+  },
+  {
+    "objectID": "qmd/reports/pub_2.html#partner-reports",
+    "href": "qmd/reports/pub_2.html#partner-reports",
+    "title": "Ethics & Grants",
+    "section": "Partner reports",
+    "text": "Partner reports\n\nMaintenance report of the Motus array (Milestone 7)",
+    "crumbs": [
+      "Ethics & Grants"
+    ]
   }
 ]
