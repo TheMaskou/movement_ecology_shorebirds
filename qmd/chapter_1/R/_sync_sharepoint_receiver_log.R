@@ -31,7 +31,15 @@ source(here::here("qmd", "chapter_1", "R", "globals.R"))
 # HERE !!!!
 
 sharepoint_receiver_log_survey123 <- "arcgis-123survey_output_table_raw-from-app-maxime.xlsx"
-dir_sharepoint <- "C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General"
+
+# Use SHOREBIRD_SHAREPOINT_PATH (read in globals.R) if it is set; otherwise fall
+# back to Maxime's local SharePoint path so nothing changes on his machine.
+if (is.na(dir_sharepoint) || !nzchar(dir_sharepoint)) {
+  dir_sharepoint <- "C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General"
+}
+if (!dir.exists(dir_sharepoint)) {
+  warning("SharePoint folder not found, so nothing will be synced: ", dir_sharepoint)
+}
 
 sharepoint_receiver_log_historic <- "motus_receiver_log_historic_callum.xlsx"
 
