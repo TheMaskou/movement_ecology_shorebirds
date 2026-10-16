@@ -77,6 +77,16 @@ for (col_new in names(cols_renamed_survey123)) {
   }
 }
 
+# Guard: a fresh export may not contain the legacy _dep columns at all (the
+# question was renamed before any data was entered under the old name). Add any
+# missing ones as all-NA so the coalesce() calls below become a harmless no-op.
+add_missing_cols <- function(df, cols) {
+  df[setdiff(cols, names(df))] <- NA_character_
+  df
+}
+
+log_survey123 <- add_missing_cols(log_survey123, unname(cols_renamed_survey123))
+
 log_survey123 <- log_survey123 |>
   mutate(
     station_power_departure = coalesce(station_power_departure, station_power_dep),
@@ -182,6 +192,8 @@ log_complete <- bind_rows(
 # station_power_dep/wifi_dep/wifi_notes_dep. bind_rows() leaves BOTH sets of
 # columns in log_complete, each populated only for its source. Coalesce them
 # into one canonical _departure set and drop the leftovers.
+log_complete <- add_missing_cols(log_complete, unname(cols_renamed_survey123))
+
 log_complete <- log_complete |>
   mutate(
     station_power_departure = coalesce(station_power_departure, station_power_dep),
