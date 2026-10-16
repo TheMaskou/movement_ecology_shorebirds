@@ -435,7 +435,7 @@ plot_decomposition
 ```
 
 ::: {.callout collapse="true" title="See table data" appearance="simple"}
-```{r plot-decomposition-table, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
+```{r plot-decomposition-table, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, fig.align='center' }
 library(DT)
 # Summary per species x metric (the values behind the boxes)
 n_species <- divergence_global %>%
@@ -579,55 +579,104 @@ For each species we use the four `tideCategory` per bird as replicate observatio
 
 We pair this with **PERMDISP** (`vegan::betadisper` + `permutest`, [Anderson 2006](https://doi.org/10.1111/j.1541-0420.2005.00440.x); [Anderson & Walsh 2013](https://doi.org/10.1890/12-2010.1)) which tests whether individuals differ in *dispersion* (within-bird consistency) rather than in mean composition. This matters because PERMANOVA can be significant either because individuals truly use different site compositions, **or** because some individuals are simply more variable than others, and PERMDISP tells which one.
 
+![](/material/perma_test.png){fig-align="center" width="100%"}
+ 
+
 ```{r permanova-function, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis' , fig.align='center' }
+
+# Turn the table (one row = bird x tide x site) for ONE species into a matrix where each row is a "site-use profile" one bird in one tide category) and each column is a site.
+#   sp_df    = data frame of one species
+#   min_prof = minimum number of profiles (tide categories) a bird must have to be kept (need replicates within a bird)
 build_profiles <- function(sp_df, min_prof = 2) {
+
   wide <- sp_df %>%
+    # unique ID for each profile
     mutate(row_id = paste(Band.ID, tideCategory, sep = "__")) %>%
+    
     select(row_id, Band.ID, tideCategory, recvDeployName, p) %>%
+    
+    # one column per site (recvDeployName); cell = proportion of use (p)
+    # sites never used by that bird/tide get 0 instead of NA
     pivot_wider(names_from = recvDeployName, values_from = p, values_fill = 0)
 
   meta <- wide %>% select(row_id, Band.ID, tideCategory)
+  # mat = only the site columns, as a numeric matrix (needed by vegdist)
   mat  <- as.matrix(wide %>% select(-row_id, -Band.ID, -tideCategory))
+  # name the rows
   rownames(mat) <- wide$row_id
 
+  # Remove empty profiles, a row summing to 0 has no detections; Bray-Curtis is undefined for it
   ok   <- rowSums(mat) > 0
-  mat  <- mat[ok, , drop = FALSE];  meta <- meta[ok, ]
-  ok   <- ave(seq_len(nrow(meta)), meta$Band.ID, FUN = length) >= min_prof
+  mat  <- mat[ok, , drop = FALSE];  meta <- meta[ok, ]   # drop = FALSE keeps matrix shape
+
+  # Keep only birds with enough profiles
+  ok   <- ave(seq_len(nrow(meta)), meta$Band.ID, FUN = length) >= min_prof   # counts how many profiles each bird has
+
+  # return the filtered matrix and the matching metadata
   list(mat = mat[ok, , drop = FALSE], meta = meta[ok, ])
 }
 
+
+# Stats
+#   sp_df     = data frame of one species
+#   min_indiv = minimum number of birds needed to run the tests
+#   min_prof  = minimum profiles per bird (passed to build_profiles)
+#   nperm     = number of permutations for the p-values
+
 fit_species <- function(sp_df, min_indiv = 3, min_prof = 2, nperm = 999) {
 
+  # build the profile matrix + metadata
   pr      <- build_profiles(sp_df, min_prof)
+  # number of distinct birds that survived the filtering
   n_indiv <- n_distinct(pr$meta$Band.ID)
 
+  # Helper when not enough birds
   if (n_indiv < min_indiv) {
     return(list(summary = tibble(
       n_indiv = n_indiv, n_obs = nrow(pr$meta),
       F = NA_real_, R2 = NA_real_, p_permanova = NA_real_,
       F_disp = NA_real_, p_dispersion = NA_real_,
+      # explanation
       note = paste0("Skipped: ", n_indiv, " individuals with >= ", min_prof,
                     " tide profiles (need >= ", min_indiv, ")"))))
   }
 
+  # Bray-Curtis dissimilarity between all pairs of profiles 
+  # 0 = identical site use, 1 = no sites in common
   d    <- vegan::vegdist(pr$mat, method = "bray")
+
+  # PERMANOVA
+  # H0: all birds have the same mean (centroid) site-use composition
   perm <- vegan::adonis2(d ~ Band.ID, data = pr$meta, permutations = nperm)
+
+  # PERMDISP
+  # betadisper: distance of each profile to its own bird's centroid
   bd   <- vegan::betadisper(d, pr$meta$Band.ID)
+  # permutest: H0 = all birds have the same within-bird variability
   pd   <- vegan::permutest(bd, permutations = nperm)
 
+  # outputs
   list(
+    # one-row summary of the tests
     summary = tibble(
       n_indiv = n_indiv, n_obs = nrow(pr$meta),
-      F = perm$F[1], R2 = perm$R2[1], p_permanova = perm$`Pr(>F)`[1],
-      F_disp = pd$tab$F[1], p_dispersion = pd$tab$`Pr(>F)`[1], note = ""),
+      F = perm$F[1],                    # PERMANOVA pseudo-F
+      R2 = perm$R2[1],                  # share of variation explained by bird identity
+      p_permanova = perm$`Pr(>F)`[1],   # PERMANOVA p-value
+      F_disp = pd$tab$F[1],             # PERMDISP F
+      p_dispersion = pd$tab$`Pr(>F)`[1],# PERMDISP p-value
+      note = ""),
+
+    # distance of each profile to its bird's centroid (for dispersion boxplots)
     dist = tibble(Band.ID = pr$meta$Band.ID, tideCategory = pr$meta$tideCategory,
                   dist_centroid = bd$distances),
+
+    # coordinates on the first two PCoA axes (for the ordination plot)
     scores = tibble(Band.ID = pr$meta$Band.ID, tideCategory = pr$meta$tideCategory,
                     PCoA1 = bd$vectors[, 1], PCoA2 = bd$vectors[, 2]))
 }
 
 ```
-
 
 ```{r permanova-run MODEL, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis' , fig.align='center' }
 set.seed(1)
@@ -645,12 +694,14 @@ permanova_results <- map_dfr(fits, ~ .x$summary, .id = "speciesEN") %>%
       p_permanova < 0.05    ~ "*",
       TRUE                  ~ "ns"),
     interpretation = case_when(
-      is.na(p_permanova) ~ note,
-      p_permanova < 0.05 & (is.na(p_dispersion) | p_dispersion >= 0.05) ~
-        "Individuals differ significantly in mean site-use composition (robust)",
-      p_permanova < 0.05 & p_dispersion < 0.05 ~
-        "Significant, but dispersion also differs - interpret with caution (Anderson & Walsh 2013)",
-      TRUE ~ "No significant individual-level difference detected"))
+  is.na(p_permanova) ~ note,
+  p_permanova < 0.05 & (is.na(p_dispersion) | p_dispersion >= 0.05) ~
+    "Individuals differ significantly in mean site-use composition (robust)",
+  p_permanova < 0.05 & p_dispersion < 0.05 ~
+    "Significant, but dispersion also differs - interpret with caution (Anderson & Walsh 2013)",
+  p_permanova >= 0.05 & !is.na(p_dispersion) & p_dispersion < 0.05 ~
+    "No difference in mean site use, but birds differ in consistency across tides",
+  TRUE ~ "No evidence of individual-level difference in site use"))
 
 disp_df <- map_dfr(fits, ~ .x$dist, .id = "speciesEN")
 
@@ -668,25 +719,11 @@ So far we compared pairs of birds. Here we ask a broader question for each speci
 
 Each bird has up to four site-use profiles, one per tide category (Diurnal_High, Diurnal_Low, Nocturnal_High, Nocturnal_Low). Each profile is the share of time the bird spent at each site. We use two complementary tests.
 
-**PERMANOVA: does bird identity matter?**
-It checks whether profiles from the *same bird* are more alike than profiles from *different birds*. The p-value comes from shuffling bird names 999 times and asking how often a random shuffle looks as "bird-specific" as the real data. The **R²** tells us how much: an R² of 0.7 means 70% of the differences in site use are explained by *which bird it is*, and the remaining 30% is the same bird behaving differently across tides.
+**PERMANOVA: does bird identity matter?** It checks whether profiles from the *same bird* are more alike than profiles from *different birds*. The p-value comes from shuffling bird names 999 times and asking how often a random shuffle looks as "bird-specific" as the real data. The **R²** tells us how much: an R² of 0.7 means 70% of the differences in site use are explained by *which bird it is*, and the remaining 30% is the same bird behaving differently across tides.
 
-**PERMDISP: are some birds more variable than others?**
-A significant PERMANOVA can also arise if some birds are simply more erratic than others. PERMDISP measures how far each profile sits from its bird's own average profile, and tests whether birds differ in that spread.
+**PERMDISP: are some birds more variable than others?** A significant PERMANOVA can also arise if some birds are simply more erratic than others. PERMDISP measures how far each profile sits from its bird's own average profile, and tests whether birds differ in that spread.
 
-::: {.callout-note title="How to read the results" appearance="simple"}
-- **PERMANOVA significant, PERMDISP not:** birds have their own site-use habits and are about equally consistent. This is the clearest result.
-- **Both significant:** birds differ, but some are also less consistent, so interpret with caution.
-- **PERMANOVA not significant:** no evidence that birds differ from each other.
-- **Species skipped:** too few birds or too few tide profiles per bird.
-:::
-
-::: {.callout-warning title="Keep in mind" appearance="simple"}
-- Differences between tide categories count as *within-bird* variation, so a low R² can mean tide matters, not that the bird is inconsistent.
-- With only 2 to 4 profiles per bird, power is limited. Check the number of profiles (*N profiles*) in the table.
-- Results describe time **detected** by the receivers, not true time spent at each site.
-:::
-
+Find below the results for our population of the PERMANOVA and PERMDISP tests.
 
 ```{r permanova-run2, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
 
@@ -710,7 +747,11 @@ permanova_results %>%
     interpretation = "Interpretation") %>%
   tab_footnote(footnote = md(
     "**PERMANOVA** (`vegan::adonis2`, Bray-Curtis, 999 permutations) tests whether Band.ID explains site-use composition. **PERMDISP** (`betadisper`) tests whether individuals differ in *within-bird* consistency rather than in mean composition - a significant PERMANOVA alongside a significant PERMDISP should be interpreted cautiously (Anderson & Walsh 2013)."))
+```
 
+Find below the results of PERMANOVA by individuals grouped by species. Therefore showing how much individual vary in site use.
+
+```{r permanova-run3, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
 perm_plot <- permanova_results %>%
   filter(!is.na(p_permanova)) %>%
   mutate(
@@ -733,6 +774,12 @@ ggplot(perm_plot, aes(x = R2, y = label, fill = disp)) +
   theme_minimal() +
   theme(legend.position = "top", panel.grid.major.y = element_blank())
 
+```
+
+Find below how much each bird is consistent in site use depending the tides.
+
+```{r permanova-run4, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
+
 # PERMDISP
 ggplot(disp_df, aes(x = fct_reorder(Band.ID, dist_centroid, .fun = median),
                     y = dist_centroid)) +
@@ -746,6 +793,11 @@ ggplot(disp_df, aes(x = fct_reorder(Band.ID, dist_centroid, .fun = median),
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7))
 
+```
+
+Find below, grouped per species, how each birds (species color different shade) is using sites.
+
+```{r permanova-run5, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
 
 
 # PCoA
@@ -758,3 +810,8 @@ ggplot(scores_df, aes(PCoA1, PCoA2, colour = Band.ID)) +
        shape = "Tide") +
   theme_bw()
 ```
+
+::: {.callout-warning title="Keep in mind" appearance="simple"}
+-   With only 2 to 4 profiles per bird, power is limited. Check the number of profiles (*N profiles*) in the table.
+-   Results describe time **detected** by the receivers, not true time spent at each site.
+:::
