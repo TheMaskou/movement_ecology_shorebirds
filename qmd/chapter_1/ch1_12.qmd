@@ -1,5 +1,5 @@
 ---
-title: "Site use - hours (OBP method)"
+title: "Site use - hours"
 format: html
 toc-location: left
 ---
@@ -12,7 +12,7 @@ source(knitr::purl(here::here("qmd", "chapter_1", "ch1_3.qmd"),
 ```
 
 ::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
-This page has the same aims and objectives as [Site use - hours (initial method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html).
+**This page has the same aims and objectives as [Site use - hours (initial method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_7.html), and updated the workflow. This hereafter version is used into the manuscript.**
 
 However, rather than multiplying the number of detections for each bird by the pulse length of its tag, this method collapses multiple detections into a single continuous detection when the intervals between them do not exceed a specified duration: in this case, one hour (1h).
 

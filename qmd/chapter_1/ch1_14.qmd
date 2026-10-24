@@ -1,5 +1,5 @@
 ---
-title: "Movement & Time (Exploratory analysis)"
+title: "Movement & Time"
 format: html
 toc-location: left
 ---
@@ -50,7 +50,6 @@ htmltools::tagList(
   )
 )
 ```
-
 
 As **we will be re-using some of the data already loaded from previous workflow (see [Station usage - hours (OBP method)](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_12.html)**), we will fetch here some of the objects we will re-use including: *visit_duration and tide_data, data_all*.
 
@@ -1541,7 +1540,7 @@ Now we are convinced the circadian cycle plays a genuine role into the level of 
 ::: blockquote-blue
 We need to call data-set which informs us about natural ambient light, hourly, spanning across the period our birds are tracked in Newcastle, NSW.
 
-**See here after how we extracted measured, modelled, collated and formatted data for natural light level: [extract natural  light](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB9W1LwxqRMQKZ0pqyAs6qQAfIfrbkUypwxUU18rzPnR5o?e=SsylK3)**
+**See here after how we extracted measured, modelled, collated and formatted data for natural light level: [extract natural light](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQB9W1LwxqRMQKZ0pqyAs6qQAfIfrbkUypwxUU18rzPnR5o?e=SsylK3)**
 :::
 
 ```{r bring data, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
@@ -1915,7 +1914,6 @@ broom.mixed::tidy(d_both_inter, effects = "fixed",
 
 ```
 
-
 ```{r Model results3, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis', fig.height=9.5}
 # Size of 1 SD in real units 
 sd(grid_m$ambiant_lux_log); sd(grid_m$tideHeight)   # count model
@@ -1948,7 +1946,6 @@ TBD
 **2. Visit duration**
 
 TBD
-
 
 ```{r fig-setup}
 #| include: false
@@ -2080,8 +2077,6 @@ curves(d_both_inter, vd_m, "Visit duration (h)") +
                   subtitle = "Interaction model: c_both_inter")
 ```
 
-
-
 **Conclusion**
 
 TBD
@@ -2090,7 +2085,6 @@ TBD
 
 -   Light and tide are measured at the **start** of each visit, which is crude for long visits.
 -   We know missing a lot of detection during nocturnal periods (both high and low tide) which ultimately offer us less data to compare with diurnal period. Maybe improving the nocturnal coverage and detection will help improving this model.
-
 
 ### Model residuals
 
@@ -2107,7 +2101,6 @@ plot(simulateResiduals(d_both_inter))
 Further investigation to compare long vs short stays below: To Be Continued...
 
 ::: {.callout collapse="true" title="Click to unfold and see exploratory models" appearance="simple"}
-
 TBC...
 
 ```{r Model long vs short stay models, message=FALSE, warning=FALSE, echo=FALSE, eval=FALSE, results='asis', fig.height=9.5}

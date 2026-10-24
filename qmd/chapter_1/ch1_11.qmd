@@ -5,5 +5,3 @@ toc-location: left
 ---
 
 1.  **\[Motus server\]** Clear and clean issues in the Motus project (motus.org). Add photos and good descriptions/information in all stations.
-
-2.  **\[Reports\]** Create an automated script to generate a small report per birds with figures showing graph of rate of use, detection condition, four maps (tide x time) showing with circle size the rate used per station and fetch a typical period with raw data recorded at the four tides across stations within 72H so we can tract the movement of the bird (trajectory with a map).
