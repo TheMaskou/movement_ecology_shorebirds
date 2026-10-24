@@ -64,10 +64,10 @@ recv.act <- tbl(sql.motus, "activity")  %>%
   filter(deviceID %in% unique(recv$deviceID)) %>% 
   # Set the time properly - IMPORTANT
   mutate(date = as_datetime(as.POSIXct(hourBin* 3600,
-                                       origin = "1970-01-06", 
+                                       origin = "1970-01-01", 
                                        tz = "UTC")),
          dateAus = as_datetime(as.POSIXct(hourBin* 3600, 
-                                          origin = "1970-01-06", 
+                                          origin = "1970-01-01", 
                                           tz = "UTC"), 
                                tz = "Australia/Sydney"))   
 
@@ -100,8 +100,8 @@ recv.act <- tbl(sql.motus, "activity")  %>%
   filter(deviceID %in% unique(recv$deviceID)) %>% # keep our deployed antennas only 
   
   # Set the time properly - IMPORTANT
-  mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC")),
-         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-06", tz = "UTC"), 
+  mutate(date = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-01", tz = "UTC")),
+         dateAus = as_datetime(as.POSIXct(hourBin* 3600, origin = "1970-01-01", tz = "UTC"), 
                              tz = "Australia/Sydney")) 
 
 ```

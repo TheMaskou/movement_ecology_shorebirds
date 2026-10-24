@@ -89,11 +89,13 @@ summary_font_size   <- "13px"
 summary_label_color <- "#666"
 
 ## ---- Popup History Table ----
+history_section_open <- TRUE      # TRUE = section expanded when the popup opens
 history_max_height   <- "180px"
 history_font_size    <- "12px"
 history_header_bg    <- "#f5f5f5"
 history_header_color <- "#444"
 history_row_border   <- "1px solid #eee"
+history_receiver_change_bg <- "#fff4d6"   # row highlight when the receiver ID differs from the previous visit's
 
 # Field -> column header for the visit-history table. Edit / reorder / remove
 # entries here to change the table — column order follows this vector's order.
@@ -136,7 +138,19 @@ antenna_max_height   <- "160px"  # scrolls beyond this (no station currently nee
 antenna_fields <- c(
   port         = "Port",
   antenna_type = "Type",
-  true_bearing = "Bearing (°T)"
+  true_bearing = "Bearing (°T)",
+  install_date = "Installed"
+)
+
+## ---- Popup Events Table ----
+events_section_open <- FALSE     # TRUE = section expanded when the popup opens
+events_font_size    <- "12px"
+events_max_height   <- "160px"   # scrolls beyond this
+
+# Field -> column header for the events table (derived, see "Station Events").
+events_fields <- c(
+  visit_date = "Date",
+  event      = "Event"
 )
 
 ## ---- Antenna Range Overlay ----
@@ -164,8 +178,8 @@ antenna_range_border_opacity <- 0.6
 #                 lobe 180 degrees opposite (e.g. a bidirectional H antenna)
 antenna_range_spec <- tibble::tribble(
   ~antenna_type,    ~shape,  ~range_m, ~beamwidth_deg, ~n_lobes,
-  "monopole",       "omni",      100,              NA,       NA,
-  "H antenna",      "lobe",      2500,             90,        2,
+  "monopole",       "omni",      500,              NA,       NA,
+  "H antenna",      "lobe",      2500,             90,        1,
   "3-element Yagi", "lobe",      3000,             70,        1,
   "6-element Yagi", "lobe",      6000,             45,        1
 )
@@ -251,6 +265,135 @@ antenna_active <- antenna_log |>
 antenna_removed_counts <- antenna_log |>
   filter(!is.na(removal_date)) |>
   count(station_id, name = "n_removed")
+
+# ==== Station Events ====
+# Maxime asked (WhatsApp, 2026-10-01) to be able to see deployment/major-
+# modification events (new antennas, receiver swaps) on the map. Agreed with him
+# 2026-10-16: no new hand-kept spreadsheet - the events are derived from data the
+# pipeline already loads: antenna install/removal dates (antenna_log) and changes
+# in the recorded receiver ID between visits (maintenance_log).
+#
+# They feed the popup's collapsible "Events" table. The visit-history table
+# stays real visits only; the one link back is that the visit row where the
+# receiver ID changes is highlighted (see receiver_changes).
+
+## ---- Helper: One Row per Station+Date, Events Joined With "; " ----
+collapse_events <- function(df) {
+  df |>
+    group_by(station_id, visit_date) |>
+    summarise(event = paste(event, collapse = "; "), .groups = "drop")
+}
+
+## ---- Helper: "Antenna(e) <label>: port N (type), ..." per Station+Date ----
+antenna_event_text <- function(df, label) {
+  df |>
+    arrange(station_id, visit_date, port) |>
+    group_by(station_id, visit_date) |>
+    summarise(
+      event = paste0(
+        "Antenna", ifelse(n() > 1, "e", ""), " ", label, ": ",
+        paste0("port ", port, " (", antenna_type, ")", collapse = ", ")
+      ),
+      .groups = "drop"
+    )
+}
+
+## ---- Antenna Install / Removal / Replacement Events ----
+antenna_install_events <- antenna_log |>
+  filter(!is.na(install_date)) |>
+  select(station_id, visit_date = install_date, port, antenna_type)
+
+antenna_removal_events <- antenna_log |>
+  filter(!is.na(removal_date)) |>
+  mutate(removal_date = as.Date(removal_date, origin = "1899-12-30")) |>
+  select(station_id, visit_date = removal_date, port, antenna_type)
+
+# A removal and an install on the same station, port and date is how the
+# antenna log records a swap (or re-pointing) - show it as one "replaced" row
+# rather than a separate removed + installed pair.
+antenna_replaced <- inner_join(
+  antenna_removal_events, antenna_install_events,
+  by = c("station_id", "visit_date", "port"), suffix = c("_old", "_new")
+)
+
+antenna_events <- bind_rows(
+  antenna_install_events |>
+    anti_join(antenna_replaced, by = c("station_id", "visit_date", "port")) |>
+    antenna_event_text("installed"),
+  antenna_removal_events |>
+    anti_join(antenna_replaced, by = c("station_id", "visit_date", "port")) |>
+    antenna_event_text("removed"),
+  antenna_replaced |>
+    arrange(station_id, visit_date, port) |>
+    transmute(
+      station_id, visit_date,
+      event = paste0("Antenna replaced: port ", port, " (",
+                     antenna_type_old, " → ", antenna_type_new, ")")
+    )
+)
+
+## ---- Receiver Change Events ----
+# Also drives the highlighted row in the visit history table (see
+# history_section_html()). A blank ID is carried forward from the last known
+# one, so an unrecorded ID isn't counted as a swap, and a station's first visit
+# is never flagged. A change is flagged on a visit when either:
+#   - the visit records a replacement (receiver_replacement == "yes"): sg_id is
+#     the receiver the technician arrived to, receiver_replacement_id the one
+#     they left, so the change lands on this visit; or
+#   - the receiver ID on arrival differs from the one the previous visit left
+#     behind (a swap that was never logged as a replacement).
+receiver_visits <- maintenance_log |>
+  filter(!is.na(visit_date)) |>
+  mutate(
+    sg_arrival = na_if(trimws(as.character(sg_id)), ""),
+    sg_replaced_with = if_else(
+      tolower(trimws(as.character(receiver_replacement))) %in% "yes",
+      na_if(trimws(as.character(receiver_replacement_id)), ""),
+      NA_character_
+    ),
+    sg_departure = coalesce(sg_replaced_with, sg_arrival)
+  ) |>
+  arrange(station_id, visit_date) |>
+  group_by(station_id) |>
+  mutate(sg_last_departure = sg_departure) |>
+  tidyr::fill(sg_last_departure, .direction = "down") |>
+  mutate(sg_prev = lag(sg_last_departure)) |>
+  ungroup()
+
+receiver_changes <- bind_rows(
+  # Logged replacement on this visit
+  receiver_visits |>
+    mutate(sg_from = coalesce(sg_arrival, sg_prev)) |>
+    filter(!is.na(sg_replaced_with), !is.na(sg_from), sg_from != sg_replaced_with) |>
+    transmute(station_id, visit_date, sg_prev = sg_from, sg_new = sg_replaced_with),
+  # Different ID on arrival than the previous visit left
+  receiver_visits |>
+    filter(!is.na(sg_arrival), !is.na(sg_prev), sg_arrival != sg_prev) |>
+    transmute(station_id, visit_date, sg_prev, sg_new = sg_arrival)
+) |>
+  arrange(station_id, visit_date)
+
+# "NONE" is how the log records no receiver at the station, so a change to or
+# from it reads as a removal / installation rather than a swap.
+receiver_change_events <- receiver_changes |>
+  transmute(
+    station_id, visit_date,
+    event = case_when(
+      toupper(sg_new)  == "NONE" ~ paste0("Receiver removed: ", sg_prev),
+      toupper(sg_prev) == "NONE" ~ paste0("Receiver installed: ", sg_new),
+      TRUE                       ~ paste0("Receiver changed: ", sg_prev, " → ", sg_new)
+    )
+  )
+
+## ---- Combine and Guard ----
+# Only keep events for stations the maintenance log already knows about - an
+# antenna-log-only site is reported by unmatched_antenna_sites above, not
+# turned into a map marker of its own here.
+station_events <- bind_rows(antenna_events, receiver_change_events) |>
+  filter(!is.na(visit_date)) |>
+  semi_join(maintenance_log, by = "station_id") |>
+  collapse_events() |>
+  arrange(station_id, desc(visit_date))
 
 # ==== Load and Attach Station Coordinates ====
 # Coordinates are sourced from receivers.csv for every row (both the
@@ -583,9 +726,120 @@ antenna_section_html <- function(sid) {
   )
 }
 
+## ---- Build Events Section for One Station ----
+# Collapsible <details> block listing that station's derived events (antenna
+# installs / removals / replacements, receiver changes - see "Station Events"),
+# newest first. Same pattern as antenna_section_html().
+events_section_html <- function(sid) {
+  rows <- station_events |> filter(station_id == sid) |> arrange(desc(visit_date))
+
+  if (nrow(rows) == 0) {
+    return(paste0(
+      "<div style='font-size:12px;color:", summary_label_color, ";margin:6px 0'>",
+      "Events — none recorded</div>"
+    ))
+  }
+
+  cell_style <- "padding:3px 6px;vertical-align:top"
+
+  header_cells <- paste0(
+    vapply(events_fields, function(label) {
+      paste0("<th style='padding:4px 6px;text-align:left'>", htmlEscape(label), "</th>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  body_rows <- paste0(
+    vapply(seq_len(nrow(rows)), function(i) {
+      r <- rows[i, ]
+      cells <- vapply(names(events_fields), function(field) {
+        paste0("<td style='", cell_style, if (field == "visit_date") ";white-space:nowrap", "'>",
+               .fmt(r[[field]]), "</td>")
+      }, character(1))
+      paste0("<tr style='border-top:", history_row_border, "'>",
+             paste(cells, collapse = ""), "</tr>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  paste0(
+    "<details", if (events_section_open) " open" else "",
+    " style='margin:6px 0;font-size:", events_font_size, "'>",
+    "<summary style='cursor:pointer;color:", summary_label_color, ";font-size:12px'>",
+    "Events (", nrow(rows), ")</summary>",
+    "<div style='max-height:", events_max_height, ";overflow-y:auto;overflow-x:auto;margin-top:4px'>",
+    "<table style='border-collapse:collapse;width:100%;font-size:", events_font_size, "'>",
+    "<thead><tr style='background:", history_header_bg, ";color:", history_header_color,
+    ";font-size:11px'>", header_cells, "</tr></thead>",
+    "<tbody>", body_rows, "</tbody></table></div>",
+    "</details>"
+  )
+}
+
+## ---- Build Visit History Section for One Station ----
+# Collapsible <details> block with every logged visit, newest first. Columns
+# are driven entirely by history_fields (settings, top of script) - edit that
+# vector to add/remove/reorder columns. Rows where the receiver ID changed
+# (receiver_changes, see "Station Events") are highlighted.
+history_section_html <- function(rows_all) {
+  changes <- receiver_changes |> filter(station_id == rows_all$station_id[1])
+
+  cell_style <- paste0(
+    "padding:3px 6px;vertical-align:top;min-width:", history_cell_min_width,
+    ";max-width:", history_cell_max_width, ";white-space:normal;word-wrap:break-word"
+  )
+
+  history_rows_html <- paste0(
+    vapply(seq_len(nrow(rows_all)), function(i) {
+      r <- rows_all[i, ]
+      cells <- vapply(names(history_fields), function(field) {
+        paste0("<td style='", cell_style, "'>", fmt_cell(field, r[[field]]), "</td>")
+      }, character(1))
+      change <- changes |> filter(visit_date == r$visit_date)
+      # One style attribute only - a second one on the same tag is ignored.
+      row_bg <- if (nrow(change) > 0) {
+        paste0("background:", history_receiver_change_bg, ";")
+      } else ""
+      row_title <- if (nrow(change) > 0) {
+        paste0(" title='Receiver changed from ", htmlEscape(change$sg_prev[1]), "'")
+      } else ""
+      paste0("<tr style='border-top:", history_row_border, ";", row_bg, "'", row_title, ">",
+             paste(cells, collapse = ""), "</tr>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  header_cells <- paste0(
+    vapply(history_fields, function(label) {
+      paste0("<th style='padding:4px 6px;text-align:left'>", htmlEscape(label), "</th>")
+    }, character(1)),
+    collapse = ""
+  )
+
+  paste0(
+    "<details", if (history_section_open) " open" else "",
+    " style='margin:6px 0;font-size:", history_font_size, "'>",
+    "<summary style='cursor:pointer;color:", summary_label_color, ";font-size:12px'>",
+    "Visit history (", nrow(rows_all), " visit", ifelse(nrow(rows_all) == 1, "", "s"), ")</summary>",
+    "<div style='max-height:", history_max_height, ";overflow-y:auto;overflow-x:auto;margin-top:4px'>",
+    "<table style='border-collapse:collapse;width:100%;font-size:", history_font_size, "'>",
+    "<thead>",
+    "<tr style='background:", history_header_bg, ";color:", history_header_color,
+    ";font-size:11px;position:sticky;top:0'>",
+    header_cells,
+    "</tr>",
+    "</thead>",
+    "<tbody>", history_rows_html, "</tbody>",
+    "</table>",
+    "</div>",
+    "</details>"
+  )
+}
+
 ## ---- Build Popup for One Station ----
 # Takes all visit rows for a single station and returns a self-contained HTML
-# string with a summary header and a scrollable full visit history table.
+# string: summary header, then three collapsible tables - antennae, visit
+# history and derived events.
 # Uses the display-settings variables defined at the top of the script.
 build_popup <- function(rows) {
   # NA dates sort last, so the history table still shows undated rows.
@@ -630,53 +884,15 @@ build_popup <- function(rows) {
     "</table>"
   )
 
-  # Scrollable visit history table (all visits, newest first). Columns are
-  # driven entirely by history_fields (settings, top of script) — edit that
-  # vector to add/remove/reorder columns.
-  cell_style <- paste0(
-    "padding:3px 6px;vertical-align:top;min-width:", history_cell_min_width,
-    ";max-width:", history_cell_max_width, ";white-space:normal;word-wrap:break-word"
-  )
-
-  history_rows_html <- paste0(
-    vapply(seq_len(nrow(rows_all)), function(i) {
-      r <- rows_all[i, ]
-      cells <- vapply(names(history_fields), function(field) {
-        paste0("<td style='", cell_style, "'>", fmt_cell(field, r[[field]]), "</td>")
-      }, character(1))
-      paste0("<tr style='border-top:", history_row_border, "'>",
-             paste(cells, collapse = ""), "</tr>")
-    }, character(1)),
-    collapse = ""
-  )
-
-  header_cells <- paste0(
-    vapply(history_fields, function(label) {
-      paste0("<th style='padding:4px 6px;text-align:left'>", htmlEscape(label), "</th>")
-    }, character(1)),
-    collapse = ""
-  )
-
-  history_html <- paste0(
+  # Order: antennae, visit history, events. Each is its own <details> block.
+  paste0(
+    summary_html,
     "<hr style='margin:8px 0;border:none;border-top:1px solid #ddd'>",
-    "<span style='font-size:12px;color:", summary_label_color, "'>",
-      "Visit history (", nrow(rows_all), " visit",
-      ifelse(nrow(rows_all) == 1, "", "s"), ")</span>",
-    "<div style='max-height:", history_max_height, ";overflow-y:auto;overflow-x:auto;margin-top:4px'>",
-    "<table style='border-collapse:collapse;width:100%;font-size:", history_font_size, "'>",
-    "<thead>",
-    "<tr style='background:", history_header_bg, ";color:", history_header_color,
-    ";font-size:11px;position:sticky;top:0'>",
-    header_cells,
-    "</tr>",
-    "</thead>",
-    "<tbody>", history_rows_html, "</tbody>",
-    "</table>",
-    "</div>",
-    "</div>"   # close outer div
+    antenna_section_html(latest$station_id),
+    history_section_html(rows_all),
+    events_section_html(latest$station_id),
+    "</div>"   # close outer div opened in summary_html
   )
-
-  paste0(summary_html, antenna_section_html(latest$station_id), history_html)
 }
 
 # ==== Build Per-station Data for Mapping ====

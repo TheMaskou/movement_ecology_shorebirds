@@ -458,10 +458,10 @@ window.Quarto = {
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(deviceID <span class="sc">%in%</span> <span class="fu">unique</span>(recv<span class="sc">$</span>deviceID)) <span class="sc">%&gt;%</span> </span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set the time properly - IMPORTANT</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as_datetime</span>(<span class="fu">as.POSIXct</span>(hourBin<span class="sc">*</span> <span class="dv">3600</span>,</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">origin =</span> <span class="st">"1970-01-06"</span>, </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">origin =</span> <span class="st">"1970-01-01"</span>, </span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">tz =</span> <span class="st">"UTC"</span>)),</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>         <span class="at">dateAus =</span> <span class="fu">as_datetime</span>(<span class="fu">as.POSIXct</span>(hourBin<span class="sc">*</span> <span class="dv">3600</span>, </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">origin =</span> <span class="st">"1970-01-06"</span>, </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">origin =</span> <span class="st">"1970-01-01"</span>, </span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">tz =</span> <span class="st">"UTC"</span>), </span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>                               <span class="at">tz =</span> <span class="st">"Australia/Sydney"</span>))   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -772,23 +772,23 @@ window.Quarto = {
 <br></p>
 <div class="cell">
 <div class="cell-output-display">
-<div id="kposmoisfg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kposmoisfg table {
+<div id="acyigxytax" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#acyigxytax table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kposmoisfg thead, #kposmoisfg tbody, #kposmoisfg tfoot, #kposmoisfg tr, #kposmoisfg td, #kposmoisfg th {
+#acyigxytax thead, #acyigxytax tbody, #acyigxytax tfoot, #acyigxytax tr, #acyigxytax td, #acyigxytax th {
   border-style: none;
 }
 
-#kposmoisfg p {
+#acyigxytax p {
   margin: 0;
   padding: 0;
 }
 
-#kposmoisfg .gt_table {
+#acyigxytax .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -814,12 +814,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_caption {
+#acyigxytax .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kposmoisfg .gt_title {
+#acyigxytax .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -831,7 +831,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#kposmoisfg .gt_subtitle {
+#acyigxytax .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -843,7 +843,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#kposmoisfg .gt_heading {
+#acyigxytax .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -855,13 +855,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_bottom_border {
+#acyigxytax .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_col_headings {
+#acyigxytax .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -876,7 +876,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_col_heading {
+#acyigxytax .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -896,7 +896,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#kposmoisfg .gt_column_spanner_outer {
+#acyigxytax .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -908,15 +908,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#kposmoisfg .gt_column_spanner_outer:first-child {
+#acyigxytax .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kposmoisfg .gt_column_spanner_outer:last-child {
+#acyigxytax .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kposmoisfg .gt_column_spanner {
+#acyigxytax .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -928,11 +928,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#kposmoisfg .gt_spanner_row {
+#acyigxytax .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kposmoisfg .gt_group_heading {
+#acyigxytax .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -958,7 +958,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#kposmoisfg .gt_empty_group_heading {
+#acyigxytax .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -973,15 +973,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#kposmoisfg .gt_from_md > :first-child {
+#acyigxytax .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kposmoisfg .gt_from_md > :last-child {
+#acyigxytax .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kposmoisfg .gt_row {
+#acyigxytax .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1000,7 +1000,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#kposmoisfg .gt_stub {
+#acyigxytax .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1013,7 +1013,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#kposmoisfg .gt_stub_row_group {
+#acyigxytax .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1027,15 +1027,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#kposmoisfg .gt_row_group_first td {
+#acyigxytax .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kposmoisfg .gt_row_group_first th {
+#acyigxytax .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kposmoisfg .gt_summary_row {
+#acyigxytax .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1045,16 +1045,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#kposmoisfg .gt_first_summary_row {
+#acyigxytax .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_first_summary_row.thick {
+#acyigxytax .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kposmoisfg .gt_last_summary_row {
+#acyigxytax .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1064,7 +1064,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_grand_summary_row {
+#acyigxytax .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1074,7 +1074,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#kposmoisfg .gt_first_grand_summary_row {
+#acyigxytax .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1084,7 +1084,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_last_grand_summary_row_top {
+#acyigxytax .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1094,11 +1094,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_striped {
+#acyigxytax .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kposmoisfg .gt_table_body {
+#acyigxytax .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1107,7 +1107,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_footnotes {
+#acyigxytax .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1121,7 +1121,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_footnote {
+#acyigxytax .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1130,7 +1130,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#kposmoisfg .gt_sourcenotes {
+#acyigxytax .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1144,7 +1144,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#kposmoisfg .gt_sourcenote {
+#acyigxytax .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1152,72 +1152,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#kposmoisfg .gt_left {
+#acyigxytax .gt_left {
   text-align: left;
 }
 
-#kposmoisfg .gt_center {
+#acyigxytax .gt_center {
   text-align: center;
 }
 
-#kposmoisfg .gt_right {
+#acyigxytax .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kposmoisfg .gt_font_normal {
+#acyigxytax .gt_font_normal {
   font-weight: normal;
 }
 
-#kposmoisfg .gt_font_bold {
+#acyigxytax .gt_font_bold {
   font-weight: bold;
 }
 
-#kposmoisfg .gt_font_italic {
+#acyigxytax .gt_font_italic {
   font-style: italic;
 }
 
-#kposmoisfg .gt_super {
+#acyigxytax .gt_super {
   font-size: 65%;
 }
 
-#kposmoisfg .gt_footnote_marks {
+#acyigxytax .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kposmoisfg .gt_asterisk {
+#acyigxytax .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kposmoisfg .gt_indent_1 {
+#acyigxytax .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kposmoisfg .gt_indent_2 {
+#acyigxytax .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kposmoisfg .gt_indent_3 {
+#acyigxytax .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kposmoisfg .gt_indent_4 {
+#acyigxytax .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kposmoisfg .gt_indent_5 {
+#acyigxytax .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kposmoisfg .katex-display {
+#acyigxytax .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kposmoisfg div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#acyigxytax div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1321,7 +1321,7 @@ window.Quarto = {
 </div>
 </div>
 <div class="blockquote-yellow">
-<p><strong>Note:</strong> We decided to force <strong>n = 5</strong> out of 1460 cases where the <em>rate used</em> was between 100 and 140 % to equal 100 %.<br>
+<p><strong>Note:</strong> We decided to force <strong>n = 5</strong> out of 1468 cases where the <em>rate used</em> was between 100 and 140 % to equal 100 %.<br>
 And we decided to remove <strong>n = 2</strong> cases where the <em>rate used</em> was over 140 %, considering the tag might simply have fell of the bird within the vicinity of the station.<br>
 Reminder: one case is made of the combination from an individual recorded at a Motus station for a specific tide condition. <em>- See table above.</em></p>
 </div>
@@ -1447,23 +1447,23 @@ High Tide Resident birds
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="hctinlanln" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#hctinlanln table {
+<div id="sjevqaijaa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sjevqaijaa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#hctinlanln thead, #hctinlanln tbody, #hctinlanln tfoot, #hctinlanln tr, #hctinlanln td, #hctinlanln th {
+#sjevqaijaa thead, #sjevqaijaa tbody, #sjevqaijaa tfoot, #sjevqaijaa tr, #sjevqaijaa td, #sjevqaijaa th {
   border-style: none;
 }
 
-#hctinlanln p {
+#sjevqaijaa p {
   margin: 0;
   padding: 0;
 }
 
-#hctinlanln .gt_table {
+#sjevqaijaa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1489,12 +1489,12 @@ High Tide Resident birds
   border-left-color: #D3D3D3;
 }
 
-#hctinlanln .gt_caption {
+#sjevqaijaa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#hctinlanln .gt_title {
+#sjevqaijaa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1506,7 +1506,7 @@ High Tide Resident birds
   border-bottom-width: 0;
 }
 
-#hctinlanln .gt_subtitle {
+#sjevqaijaa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1518,7 +1518,7 @@ High Tide Resident birds
   border-top-width: 0;
 }
 
-#hctinlanln .gt_heading {
+#sjevqaijaa .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -1530,13 +1530,13 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#hctinlanln .gt_bottom_border {
+#sjevqaijaa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#hctinlanln .gt_col_headings {
+#sjevqaijaa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1551,7 +1551,7 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#hctinlanln .gt_col_heading {
+#sjevqaijaa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1571,7 +1571,7 @@ High Tide Resident birds
   overflow-x: hidden;
 }
 
-#hctinlanln .gt_column_spanner_outer {
+#sjevqaijaa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1583,15 +1583,15 @@ High Tide Resident birds
   padding-right: 4px;
 }
 
-#hctinlanln .gt_column_spanner_outer:first-child {
+#sjevqaijaa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#hctinlanln .gt_column_spanner_outer:last-child {
+#sjevqaijaa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#hctinlanln .gt_column_spanner {
+#sjevqaijaa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1603,11 +1603,11 @@ High Tide Resident birds
   width: 100%;
 }
 
-#hctinlanln .gt_spanner_row {
+#sjevqaijaa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#hctinlanln .gt_group_heading {
+#sjevqaijaa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1633,7 +1633,7 @@ High Tide Resident birds
   text-align: left;
 }
 
-#hctinlanln .gt_empty_group_heading {
+#sjevqaijaa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1648,15 +1648,15 @@ High Tide Resident birds
   vertical-align: middle;
 }
 
-#hctinlanln .gt_from_md > :first-child {
+#sjevqaijaa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#hctinlanln .gt_from_md > :last-child {
+#sjevqaijaa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#hctinlanln .gt_row {
+#sjevqaijaa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1675,7 +1675,7 @@ High Tide Resident birds
   overflow-x: hidden;
 }
 
-#hctinlanln .gt_stub {
+#sjevqaijaa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1688,7 +1688,7 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#hctinlanln .gt_stub_row_group {
+#sjevqaijaa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1702,15 +1702,15 @@ High Tide Resident birds
   vertical-align: top;
 }
 
-#hctinlanln .gt_row_group_first td {
+#sjevqaijaa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#hctinlanln .gt_row_group_first th {
+#sjevqaijaa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#hctinlanln .gt_summary_row {
+#sjevqaijaa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1720,16 +1720,16 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#hctinlanln .gt_first_summary_row {
+#sjevqaijaa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#hctinlanln .gt_first_summary_row.thick {
+#sjevqaijaa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#hctinlanln .gt_last_summary_row {
+#sjevqaijaa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1739,7 +1739,7 @@ High Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#hctinlanln .gt_grand_summary_row {
+#sjevqaijaa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1749,7 +1749,7 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#hctinlanln .gt_first_grand_summary_row {
+#sjevqaijaa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1759,7 +1759,7 @@ High Tide Resident birds
   border-top-color: #D3D3D3;
 }
 
-#hctinlanln .gt_last_grand_summary_row_top {
+#sjevqaijaa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1769,11 +1769,11 @@ High Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#hctinlanln .gt_striped {
+#sjevqaijaa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#hctinlanln .gt_table_body {
+#sjevqaijaa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1782,7 +1782,7 @@ High Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#hctinlanln .gt_footnotes {
+#sjevqaijaa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1796,7 +1796,7 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#hctinlanln .gt_footnote {
+#sjevqaijaa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1805,7 +1805,7 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#hctinlanln .gt_sourcenotes {
+#sjevqaijaa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1819,7 +1819,7 @@ High Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#hctinlanln .gt_sourcenote {
+#sjevqaijaa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1827,72 +1827,72 @@ High Tide Resident birds
   padding-right: 5px;
 }
 
-#hctinlanln .gt_left {
+#sjevqaijaa .gt_left {
   text-align: left;
 }
 
-#hctinlanln .gt_center {
+#sjevqaijaa .gt_center {
   text-align: center;
 }
 
-#hctinlanln .gt_right {
+#sjevqaijaa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#hctinlanln .gt_font_normal {
+#sjevqaijaa .gt_font_normal {
   font-weight: normal;
 }
 
-#hctinlanln .gt_font_bold {
+#sjevqaijaa .gt_font_bold {
   font-weight: bold;
 }
 
-#hctinlanln .gt_font_italic {
+#sjevqaijaa .gt_font_italic {
   font-style: italic;
 }
 
-#hctinlanln .gt_super {
+#sjevqaijaa .gt_super {
   font-size: 65%;
 }
 
-#hctinlanln .gt_footnote_marks {
+#sjevqaijaa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#hctinlanln .gt_asterisk {
+#sjevqaijaa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#hctinlanln .gt_indent_1 {
+#sjevqaijaa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#hctinlanln .gt_indent_2 {
+#sjevqaijaa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#hctinlanln .gt_indent_3 {
+#sjevqaijaa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#hctinlanln .gt_indent_4 {
+#sjevqaijaa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#hctinlanln .gt_indent_5 {
+#sjevqaijaa .gt_indent_5 {
   text-indent: 25px;
 }
 
-#hctinlanln .katex-display {
+#sjevqaijaa .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#hctinlanln div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#sjevqaijaa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1947,27 +1947,27 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">4</td>
-<td class="gt_row gt_right" headers="min">6.1</td>
-<td class="gt_row gt_right" headers="q1">6.3</td>
-<td class="gt_row gt_right" headers="median">6.5</td>
-<td class="gt_row gt_right" headers="q3">6.7</td>
-<td class="gt_row gt_right" headers="max">6.9</td>
-<td class="gt_row gt_right" headers="mean">6.5</td>
-<td class="gt_row gt_right" headers="sd">0.6</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
+<td class="gt_row gt_right" headers="min">3.4</td>
+<td class="gt_row gt_right" headers="q1">4.3</td>
+<td class="gt_row gt_right" headers="median">5.2</td>
+<td class="gt_row gt_right" headers="q3">5.9</td>
+<td class="gt_row gt_right" headers="max">6.5</td>
+<td class="gt_row gt_right" headers="mean">5.1</td>
+<td class="gt_row gt_right" headers="sd">1.6</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">4</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.5</td>
-<td class="gt_row gt_right" headers="q1">0.5</td>
-<td class="gt_row gt_right" headers="median">0.5</td>
-<td class="gt_row gt_right" headers="q3">0.5</td>
-<td class="gt_row gt_right" headers="max">0.5</td>
-<td class="gt_row gt_right" headers="mean">0.5</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="q1">1.3</td>
+<td class="gt_row gt_right" headers="median">2.1</td>
+<td class="gt_row gt_right" headers="q3">2.9</td>
+<td class="gt_row gt_right" headers="max">3.7</td>
+<td class="gt_row gt_right" headers="mean">2.1</td>
+<td class="gt_row gt_right" headers="sd">2.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2005,7 +2005,7 @@ High Tide Resident birds
 <td class="gt_row gt_right" headers="median">35.7</td>
 <td class="gt_row gt_right" headers="q3">41.7</td>
 <td class="gt_row gt_right" headers="max">52.1</td>
-<td class="gt_row gt_right" headers="mean">27.0</td>
+<td class="gt_row gt_right" headers="mean">26.9</td>
 <td class="gt_row gt_right" headers="sd">23.0</td>
 </tr>
 <tr class="even">
@@ -2097,7 +2097,7 @@ High Tide Resident birds
 <td class="gt_row gt_right" headers="q3">3.0</td>
 <td class="gt_row gt_right" headers="max">4.0</td>
 <td class="gt_row gt_right" headers="mean">2.0</td>
-<td class="gt_row gt_right" headers="sd">2.9</td>
+<td class="gt_row gt_right" headers="sd">2.8</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2117,7 +2117,7 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
-<td class="gt_row gt_right" headers="min">0.3</td>
+<td class="gt_row gt_right" headers="min">0.2</td>
 <td class="gt_row gt_right" headers="q1">0.6</td>
 <td class="gt_row gt_right" headers="median">1.0</td>
 <td class="gt_row gt_right" headers="q3">1.3</td>
@@ -2433,23 +2433,23 @@ Low Tide Resident birds
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="pivemtsjyy" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pivemtsjyy table {
+<div id="zsvvrjuaoa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zsvvrjuaoa table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pivemtsjyy thead, #pivemtsjyy tbody, #pivemtsjyy tfoot, #pivemtsjyy tr, #pivemtsjyy td, #pivemtsjyy th {
+#zsvvrjuaoa thead, #zsvvrjuaoa tbody, #zsvvrjuaoa tfoot, #zsvvrjuaoa tr, #zsvvrjuaoa td, #zsvvrjuaoa th {
   border-style: none;
 }
 
-#pivemtsjyy p {
+#zsvvrjuaoa p {
   margin: 0;
   padding: 0;
 }
 
-#pivemtsjyy .gt_table {
+#zsvvrjuaoa .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -2475,12 +2475,12 @@ Low Tide Resident birds
   border-left-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_caption {
+#zsvvrjuaoa .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pivemtsjyy .gt_title {
+#zsvvrjuaoa .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -2492,7 +2492,7 @@ Low Tide Resident birds
   border-bottom-width: 0;
 }
 
-#pivemtsjyy .gt_subtitle {
+#zsvvrjuaoa .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -2504,7 +2504,7 @@ Low Tide Resident birds
   border-top-width: 0;
 }
 
-#pivemtsjyy .gt_heading {
+#zsvvrjuaoa .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -2516,13 +2516,13 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_bottom_border {
+#zsvvrjuaoa .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_col_headings {
+#zsvvrjuaoa .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2537,7 +2537,7 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_col_heading {
+#zsvvrjuaoa .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2557,7 +2557,7 @@ Low Tide Resident birds
   overflow-x: hidden;
 }
 
-#pivemtsjyy .gt_column_spanner_outer {
+#zsvvrjuaoa .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2569,15 +2569,15 @@ Low Tide Resident birds
   padding-right: 4px;
 }
 
-#pivemtsjyy .gt_column_spanner_outer:first-child {
+#zsvvrjuaoa .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pivemtsjyy .gt_column_spanner_outer:last-child {
+#zsvvrjuaoa .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pivemtsjyy .gt_column_spanner {
+#zsvvrjuaoa .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -2589,11 +2589,11 @@ Low Tide Resident birds
   width: 100%;
 }
 
-#pivemtsjyy .gt_spanner_row {
+#zsvvrjuaoa .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pivemtsjyy .gt_group_heading {
+#zsvvrjuaoa .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2619,7 +2619,7 @@ Low Tide Resident birds
   text-align: left;
 }
 
-#pivemtsjyy .gt_empty_group_heading {
+#zsvvrjuaoa .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -2634,15 +2634,15 @@ Low Tide Resident birds
   vertical-align: middle;
 }
 
-#pivemtsjyy .gt_from_md > :first-child {
+#zsvvrjuaoa .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pivemtsjyy .gt_from_md > :last-child {
+#zsvvrjuaoa .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pivemtsjyy .gt_row {
+#zsvvrjuaoa .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2661,7 +2661,7 @@ Low Tide Resident birds
   overflow-x: hidden;
 }
 
-#pivemtsjyy .gt_stub {
+#zsvvrjuaoa .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2674,7 +2674,7 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#pivemtsjyy .gt_stub_row_group {
+#zsvvrjuaoa .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -2688,15 +2688,15 @@ Low Tide Resident birds
   vertical-align: top;
 }
 
-#pivemtsjyy .gt_row_group_first td {
+#zsvvrjuaoa .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pivemtsjyy .gt_row_group_first th {
+#zsvvrjuaoa .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pivemtsjyy .gt_summary_row {
+#zsvvrjuaoa .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2706,16 +2706,16 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#pivemtsjyy .gt_first_summary_row {
+#zsvvrjuaoa .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_first_summary_row.thick {
+#zsvvrjuaoa .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pivemtsjyy .gt_last_summary_row {
+#zsvvrjuaoa .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2725,7 +2725,7 @@ Low Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_grand_summary_row {
+#zsvvrjuaoa .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2735,7 +2735,7 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#pivemtsjyy .gt_first_grand_summary_row {
+#zsvvrjuaoa .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2745,7 +2745,7 @@ Low Tide Resident birds
   border-top-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_last_grand_summary_row_top {
+#zsvvrjuaoa .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2755,11 +2755,11 @@ Low Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_striped {
+#zsvvrjuaoa .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pivemtsjyy .gt_table_body {
+#zsvvrjuaoa .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2768,7 +2768,7 @@ Low Tide Resident birds
   border-bottom-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_footnotes {
+#zsvvrjuaoa .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2782,7 +2782,7 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_footnote {
+#zsvvrjuaoa .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2791,7 +2791,7 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#pivemtsjyy .gt_sourcenotes {
+#zsvvrjuaoa .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2805,7 +2805,7 @@ Low Tide Resident birds
   border-right-color: #D3D3D3;
 }
 
-#pivemtsjyy .gt_sourcenote {
+#zsvvrjuaoa .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2813,72 +2813,72 @@ Low Tide Resident birds
   padding-right: 5px;
 }
 
-#pivemtsjyy .gt_left {
+#zsvvrjuaoa .gt_left {
   text-align: left;
 }
 
-#pivemtsjyy .gt_center {
+#zsvvrjuaoa .gt_center {
   text-align: center;
 }
 
-#pivemtsjyy .gt_right {
+#zsvvrjuaoa .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pivemtsjyy .gt_font_normal {
+#zsvvrjuaoa .gt_font_normal {
   font-weight: normal;
 }
 
-#pivemtsjyy .gt_font_bold {
+#zsvvrjuaoa .gt_font_bold {
   font-weight: bold;
 }
 
-#pivemtsjyy .gt_font_italic {
+#zsvvrjuaoa .gt_font_italic {
   font-style: italic;
 }
 
-#pivemtsjyy .gt_super {
+#zsvvrjuaoa .gt_super {
   font-size: 65%;
 }
 
-#pivemtsjyy .gt_footnote_marks {
+#zsvvrjuaoa .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pivemtsjyy .gt_asterisk {
+#zsvvrjuaoa .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pivemtsjyy .gt_indent_1 {
+#zsvvrjuaoa .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pivemtsjyy .gt_indent_2 {
+#zsvvrjuaoa .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pivemtsjyy .gt_indent_3 {
+#zsvvrjuaoa .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pivemtsjyy .gt_indent_4 {
+#zsvvrjuaoa .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pivemtsjyy .gt_indent_5 {
+#zsvvrjuaoa .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pivemtsjyy .katex-display {
+#zsvvrjuaoa .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pivemtsjyy div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zsvvrjuaoa div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -2933,7 +2933,7 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">4</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.2</td>
@@ -2946,14 +2946,14 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">4</td>
-<td class="gt_row gt_right" headers="min">0.7</td>
-<td class="gt_row gt_right" headers="q1">0.8</td>
-<td class="gt_row gt_right" headers="median">1.0</td>
-<td class="gt_row gt_right" headers="q3">1.1</td>
-<td class="gt_row gt_right" headers="max">1.3</td>
-<td class="gt_row gt_right" headers="mean">1.0</td>
-<td class="gt_row gt_right" headers="sd">0.4</td>
+<td class="gt_row gt_right" headers="n_individual">5</td>
+<td class="gt_row gt_right" headers="min">0.6</td>
+<td class="gt_row gt_right" headers="q1">0.7</td>
+<td class="gt_row gt_right" headers="median">0.9</td>
+<td class="gt_row gt_right" headers="q3">1.0</td>
+<td class="gt_row gt_right" headers="max">1.1</td>
+<td class="gt_row gt_right" headers="mean">0.9</td>
+<td class="gt_row gt_right" headers="sd">0.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2987,12 +2987,12 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">3.4</td>
-<td class="gt_row gt_right" headers="q1">3.8</td>
+<td class="gt_row gt_right" headers="q1">3.7</td>
 <td class="gt_row gt_right" headers="median">12.2</td>
 <td class="gt_row gt_right" headers="q3">25.0</td>
 <td class="gt_row gt_right" headers="max">31.7</td>
 <td class="gt_row gt_right" headers="mean">15.2</td>
-<td class="gt_row gt_right" headers="sd">12.7</td>
+<td class="gt_row gt_right" headers="sd">12.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -3000,7 +3000,7 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">1.8</td>
-<td class="gt_row gt_right" headers="q1">3.3</td>
+<td class="gt_row gt_right" headers="q1">3.2</td>
 <td class="gt_row gt_right" headers="median">6.2</td>
 <td class="gt_row gt_right" headers="q3">16.7</td>
 <td class="gt_row gt_right" headers="max">21.3</td>
@@ -3070,7 +3070,7 @@ Low Tide Resident birds
 <td class="gt_row gt_right" headers="q3">3.2</td>
 <td class="gt_row gt_right" headers="max">3.9</td>
 <td class="gt_row gt_right" headers="mean">2.4</td>
-<td class="gt_row gt_right" headers="sd">2.2</td>
+<td class="gt_row gt_right" headers="sd">2.1</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -3079,10 +3079,10 @@ Low Tide Resident birds
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.8</td>
-<td class="gt_row gt_right" headers="median">1.7</td>
+<td class="gt_row gt_right" headers="median">1.6</td>
 <td class="gt_row gt_right" headers="q3">2.5</td>
 <td class="gt_row gt_right" headers="max">3.3</td>
-<td class="gt_row gt_right" headers="mean">1.7</td>
+<td class="gt_row gt_right" headers="mean">1.6</td>
 <td class="gt_row gt_right" headers="sd">2.3</td>
 </tr>
 <tr class="odd">
@@ -3427,23 +3427,23 @@ High Tide Migratory birds
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="jxjwzmjhkx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jxjwzmjhkx table {
+<div id="knrfmnfrbn" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#knrfmnfrbn table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jxjwzmjhkx thead, #jxjwzmjhkx tbody, #jxjwzmjhkx tfoot, #jxjwzmjhkx tr, #jxjwzmjhkx td, #jxjwzmjhkx th {
+#knrfmnfrbn thead, #knrfmnfrbn tbody, #knrfmnfrbn tfoot, #knrfmnfrbn tr, #knrfmnfrbn td, #knrfmnfrbn th {
   border-style: none;
 }
 
-#jxjwzmjhkx p {
+#knrfmnfrbn p {
   margin: 0;
   padding: 0;
 }
 
-#jxjwzmjhkx .gt_table {
+#knrfmnfrbn .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -3469,12 +3469,12 @@ High Tide Migratory birds
   border-left-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_caption {
+#knrfmnfrbn .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jxjwzmjhkx .gt_title {
+#knrfmnfrbn .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -3486,7 +3486,7 @@ High Tide Migratory birds
   border-bottom-width: 0;
 }
 
-#jxjwzmjhkx .gt_subtitle {
+#knrfmnfrbn .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -3498,7 +3498,7 @@ High Tide Migratory birds
   border-top-width: 0;
 }
 
-#jxjwzmjhkx .gt_heading {
+#knrfmnfrbn .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -3510,13 +3510,13 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_bottom_border {
+#knrfmnfrbn .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_col_headings {
+#knrfmnfrbn .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3531,7 +3531,7 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_col_heading {
+#knrfmnfrbn .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3551,7 +3551,7 @@ High Tide Migratory birds
   overflow-x: hidden;
 }
 
-#jxjwzmjhkx .gt_column_spanner_outer {
+#knrfmnfrbn .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3563,15 +3563,15 @@ High Tide Migratory birds
   padding-right: 4px;
 }
 
-#jxjwzmjhkx .gt_column_spanner_outer:first-child {
+#knrfmnfrbn .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jxjwzmjhkx .gt_column_spanner_outer:last-child {
+#knrfmnfrbn .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jxjwzmjhkx .gt_column_spanner {
+#knrfmnfrbn .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -3583,11 +3583,11 @@ High Tide Migratory birds
   width: 100%;
 }
 
-#jxjwzmjhkx .gt_spanner_row {
+#knrfmnfrbn .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jxjwzmjhkx .gt_group_heading {
+#knrfmnfrbn .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3613,7 +3613,7 @@ High Tide Migratory birds
   text-align: left;
 }
 
-#jxjwzmjhkx .gt_empty_group_heading {
+#knrfmnfrbn .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -3628,15 +3628,15 @@ High Tide Migratory birds
   vertical-align: middle;
 }
 
-#jxjwzmjhkx .gt_from_md > :first-child {
+#knrfmnfrbn .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jxjwzmjhkx .gt_from_md > :last-child {
+#knrfmnfrbn .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jxjwzmjhkx .gt_row {
+#knrfmnfrbn .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3655,7 +3655,7 @@ High Tide Migratory birds
   overflow-x: hidden;
 }
 
-#jxjwzmjhkx .gt_stub {
+#knrfmnfrbn .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3668,7 +3668,7 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#jxjwzmjhkx .gt_stub_row_group {
+#knrfmnfrbn .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -3682,15 +3682,15 @@ High Tide Migratory birds
   vertical-align: top;
 }
 
-#jxjwzmjhkx .gt_row_group_first td {
+#knrfmnfrbn .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jxjwzmjhkx .gt_row_group_first th {
+#knrfmnfrbn .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jxjwzmjhkx .gt_summary_row {
+#knrfmnfrbn .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3700,16 +3700,16 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#jxjwzmjhkx .gt_first_summary_row {
+#knrfmnfrbn .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_first_summary_row.thick {
+#knrfmnfrbn .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jxjwzmjhkx .gt_last_summary_row {
+#knrfmnfrbn .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3719,7 +3719,7 @@ High Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_grand_summary_row {
+#knrfmnfrbn .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -3729,7 +3729,7 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#jxjwzmjhkx .gt_first_grand_summary_row {
+#knrfmnfrbn .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3739,7 +3739,7 @@ High Tide Migratory birds
   border-top-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_last_grand_summary_row_top {
+#knrfmnfrbn .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -3749,11 +3749,11 @@ High Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_striped {
+#knrfmnfrbn .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jxjwzmjhkx .gt_table_body {
+#knrfmnfrbn .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -3762,7 +3762,7 @@ High Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_footnotes {
+#knrfmnfrbn .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3776,7 +3776,7 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_footnote {
+#knrfmnfrbn .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -3785,7 +3785,7 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#jxjwzmjhkx .gt_sourcenotes {
+#knrfmnfrbn .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -3799,7 +3799,7 @@ High Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#jxjwzmjhkx .gt_sourcenote {
+#knrfmnfrbn .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -3807,72 +3807,72 @@ High Tide Migratory birds
   padding-right: 5px;
 }
 
-#jxjwzmjhkx .gt_left {
+#knrfmnfrbn .gt_left {
   text-align: left;
 }
 
-#jxjwzmjhkx .gt_center {
+#knrfmnfrbn .gt_center {
   text-align: center;
 }
 
-#jxjwzmjhkx .gt_right {
+#knrfmnfrbn .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jxjwzmjhkx .gt_font_normal {
+#knrfmnfrbn .gt_font_normal {
   font-weight: normal;
 }
 
-#jxjwzmjhkx .gt_font_bold {
+#knrfmnfrbn .gt_font_bold {
   font-weight: bold;
 }
 
-#jxjwzmjhkx .gt_font_italic {
+#knrfmnfrbn .gt_font_italic {
   font-style: italic;
 }
 
-#jxjwzmjhkx .gt_super {
+#knrfmnfrbn .gt_super {
   font-size: 65%;
 }
 
-#jxjwzmjhkx .gt_footnote_marks {
+#knrfmnfrbn .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jxjwzmjhkx .gt_asterisk {
+#knrfmnfrbn .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jxjwzmjhkx .gt_indent_1 {
+#knrfmnfrbn .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jxjwzmjhkx .gt_indent_2 {
+#knrfmnfrbn .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jxjwzmjhkx .gt_indent_3 {
+#knrfmnfrbn .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jxjwzmjhkx .gt_indent_4 {
+#knrfmnfrbn .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jxjwzmjhkx .gt_indent_5 {
+#knrfmnfrbn .gt_indent_5 {
   text-indent: 25px;
 }
 
-#jxjwzmjhkx .katex-display {
+#knrfmnfrbn .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#jxjwzmjhkx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#knrfmnfrbn div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -3979,7 +3979,7 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">9</td>
+<td class="gt_row gt_right" headers="n_individual">10</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
@@ -3992,7 +3992,7 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">9</td>
+<td class="gt_row gt_right" headers="n_individual">10</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
@@ -4005,7 +4005,7 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">7</td>
+<td class="gt_row gt_right" headers="n_individual">8</td>
 <td class="gt_row gt_right" headers="min">Inf</td>
 <td class="gt_row gt_right" headers="q1">NA</td>
 <td class="gt_row gt_right" headers="median">NA</td>
@@ -4018,7 +4018,7 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">7</td>
+<td class="gt_row gt_right" headers="n_individual">8</td>
 <td class="gt_row gt_right" headers="min">Inf</td>
 <td class="gt_row gt_right" headers="q1">NA</td>
 <td class="gt_row gt_right" headers="median">NA</td>
@@ -4190,11 +4190,11 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">12.2</td>
 <td class="gt_row gt_right" headers="q1">22.7</td>
-<td class="gt_row gt_right" headers="median">39.8</td>
+<td class="gt_row gt_right" headers="median">41.6</td>
 <td class="gt_row gt_right" headers="q3">42.8</td>
-<td class="gt_row gt_right" headers="max">43.0</td>
-<td class="gt_row gt_right" headers="mean">32.1</td>
-<td class="gt_row gt_right" headers="sd">13.9</td>
+<td class="gt_row gt_right" headers="max">45.0</td>
+<td class="gt_row gt_right" headers="mean">32.9</td>
+<td class="gt_row gt_right" headers="sd">14.6</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -4202,11 +4202,11 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">2.0</td>
-<td class="gt_row gt_right" headers="q1">9.8</td>
-<td class="gt_row gt_right" headers="median">10.2</td>
+<td class="gt_row gt_right" headers="q1">10.3</td>
+<td class="gt_row gt_right" headers="median">10.7</td>
 <td class="gt_row gt_right" headers="q3">11.3</td>
 <td class="gt_row gt_right" headers="max">15.7</td>
-<td class="gt_row gt_right" headers="mean">9.8</td>
+<td class="gt_row gt_right" headers="mean">10.0</td>
 <td class="gt_row gt_right" headers="sd">5.0</td>
 </tr>
 <tr class="odd">
@@ -4653,32 +4653,6 @@ High Tide Migratory birds
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">2.9</td>
-<td class="gt_row gt_right" headers="q1">2.9</td>
-<td class="gt_row gt_right" headers="median">2.9</td>
-<td class="gt_row gt_right" headers="q3">2.9</td>
-<td class="gt_row gt_right" headers="max">2.9</td>
-<td class="gt_row gt_right" headers="mean">2.9</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">Inf</td>
-<td class="gt_row gt_right" headers="q1">NA</td>
-<td class="gt_row gt_right" headers="median">NA</td>
-<td class="gt_row gt_right" headers="q3">NA</td>
-<td class="gt_row gt_right" headers="max">-Inf</td>
-<td class="gt_row gt_right" headers="mean">NaN</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_left" headers="Station">Davies Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
@@ -4760,12 +4734,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">18.0</td>
-<td class="gt_row gt_right" headers="q1">18.0</td>
-<td class="gt_row gt_right" headers="median">18.0</td>
-<td class="gt_row gt_right" headers="q3">18.0</td>
-<td class="gt_row gt_right" headers="max">18.0</td>
-<td class="gt_row gt_right" headers="mean">18.0</td>
+<td class="gt_row gt_right" headers="min">14.7</td>
+<td class="gt_row gt_right" headers="q1">14.7</td>
+<td class="gt_row gt_right" headers="median">14.7</td>
+<td class="gt_row gt_right" headers="q3">14.7</td>
+<td class="gt_row gt_right" headers="max">14.7</td>
+<td class="gt_row gt_right" headers="mean">14.7</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
@@ -4773,12 +4747,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">8.5</td>
-<td class="gt_row gt_right" headers="q1">8.5</td>
-<td class="gt_row gt_right" headers="median">8.5</td>
-<td class="gt_row gt_right" headers="q3">8.5</td>
-<td class="gt_row gt_right" headers="max">8.5</td>
-<td class="gt_row gt_right" headers="mean">8.5</td>
+<td class="gt_row gt_right" headers="min">7.3</td>
+<td class="gt_row gt_right" headers="q1">7.3</td>
+<td class="gt_row gt_right" headers="median">7.3</td>
+<td class="gt_row gt_right" headers="q3">7.3</td>
+<td class="gt_row gt_right" headers="max">7.3</td>
+<td class="gt_row gt_right" headers="mean">7.3</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -5141,23 +5115,23 @@ Low Tide Migratory birds
 </div>
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div id="glnyetakxj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#glnyetakxj table {
+<div id="zjamwrgtca" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#zjamwrgtca table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#glnyetakxj thead, #glnyetakxj tbody, #glnyetakxj tfoot, #glnyetakxj tr, #glnyetakxj td, #glnyetakxj th {
+#zjamwrgtca thead, #zjamwrgtca tbody, #zjamwrgtca tfoot, #zjamwrgtca tr, #zjamwrgtca td, #zjamwrgtca th {
   border-style: none;
 }
 
-#glnyetakxj p {
+#zjamwrgtca p {
   margin: 0;
   padding: 0;
 }
 
-#glnyetakxj .gt_table {
+#zjamwrgtca .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -5183,12 +5157,12 @@ Low Tide Migratory birds
   border-left-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_caption {
+#zjamwrgtca .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#glnyetakxj .gt_title {
+#zjamwrgtca .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -5200,7 +5174,7 @@ Low Tide Migratory birds
   border-bottom-width: 0;
 }
 
-#glnyetakxj .gt_subtitle {
+#zjamwrgtca .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -5212,7 +5186,7 @@ Low Tide Migratory birds
   border-top-width: 0;
 }
 
-#glnyetakxj .gt_heading {
+#zjamwrgtca .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -5224,13 +5198,13 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_bottom_border {
+#zjamwrgtca .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_col_headings {
+#zjamwrgtca .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5245,7 +5219,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_col_heading {
+#zjamwrgtca .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5265,7 +5239,7 @@ Low Tide Migratory birds
   overflow-x: hidden;
 }
 
-#glnyetakxj .gt_column_spanner_outer {
+#zjamwrgtca .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5277,15 +5251,15 @@ Low Tide Migratory birds
   padding-right: 4px;
 }
 
-#glnyetakxj .gt_column_spanner_outer:first-child {
+#zjamwrgtca .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#glnyetakxj .gt_column_spanner_outer:last-child {
+#zjamwrgtca .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#glnyetakxj .gt_column_spanner {
+#zjamwrgtca .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -5297,11 +5271,11 @@ Low Tide Migratory birds
   width: 100%;
 }
 
-#glnyetakxj .gt_spanner_row {
+#zjamwrgtca .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#glnyetakxj .gt_group_heading {
+#zjamwrgtca .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5327,7 +5301,7 @@ Low Tide Migratory birds
   text-align: left;
 }
 
-#glnyetakxj .gt_empty_group_heading {
+#zjamwrgtca .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5342,15 +5316,15 @@ Low Tide Migratory birds
   vertical-align: middle;
 }
 
-#glnyetakxj .gt_from_md > :first-child {
+#zjamwrgtca .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#glnyetakxj .gt_from_md > :last-child {
+#zjamwrgtca .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#glnyetakxj .gt_row {
+#zjamwrgtca .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5369,7 +5343,7 @@ Low Tide Migratory birds
   overflow-x: hidden;
 }
 
-#glnyetakxj .gt_stub {
+#zjamwrgtca .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5382,7 +5356,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#glnyetakxj .gt_stub_row_group {
+#zjamwrgtca .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5396,15 +5370,15 @@ Low Tide Migratory birds
   vertical-align: top;
 }
 
-#glnyetakxj .gt_row_group_first td {
+#zjamwrgtca .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#glnyetakxj .gt_row_group_first th {
+#zjamwrgtca .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#glnyetakxj .gt_summary_row {
+#zjamwrgtca .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5414,16 +5388,16 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#glnyetakxj .gt_first_summary_row {
+#zjamwrgtca .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_first_summary_row.thick {
+#zjamwrgtca .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#glnyetakxj .gt_last_summary_row {
+#zjamwrgtca .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5433,7 +5407,7 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_grand_summary_row {
+#zjamwrgtca .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5443,7 +5417,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#glnyetakxj .gt_first_grand_summary_row {
+#zjamwrgtca .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5453,7 +5427,7 @@ Low Tide Migratory birds
   border-top-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_last_grand_summary_row_top {
+#zjamwrgtca .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5463,11 +5437,11 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_striped {
+#zjamwrgtca .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#glnyetakxj .gt_table_body {
+#zjamwrgtca .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5476,7 +5450,7 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_footnotes {
+#zjamwrgtca .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5490,7 +5464,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_footnote {
+#zjamwrgtca .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -5499,7 +5473,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#glnyetakxj .gt_sourcenotes {
+#zjamwrgtca .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5513,7 +5487,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#glnyetakxj .gt_sourcenote {
+#zjamwrgtca .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -5521,72 +5495,72 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#glnyetakxj .gt_left {
+#zjamwrgtca .gt_left {
   text-align: left;
 }
 
-#glnyetakxj .gt_center {
+#zjamwrgtca .gt_center {
   text-align: center;
 }
 
-#glnyetakxj .gt_right {
+#zjamwrgtca .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#glnyetakxj .gt_font_normal {
+#zjamwrgtca .gt_font_normal {
   font-weight: normal;
 }
 
-#glnyetakxj .gt_font_bold {
+#zjamwrgtca .gt_font_bold {
   font-weight: bold;
 }
 
-#glnyetakxj .gt_font_italic {
+#zjamwrgtca .gt_font_italic {
   font-style: italic;
 }
 
-#glnyetakxj .gt_super {
+#zjamwrgtca .gt_super {
   font-size: 65%;
 }
 
-#glnyetakxj .gt_footnote_marks {
+#zjamwrgtca .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#glnyetakxj .gt_asterisk {
+#zjamwrgtca .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#glnyetakxj .gt_indent_1 {
+#zjamwrgtca .gt_indent_1 {
   text-indent: 5px;
 }
 
-#glnyetakxj .gt_indent_2 {
+#zjamwrgtca .gt_indent_2 {
   text-indent: 10px;
 }
 
-#glnyetakxj .gt_indent_3 {
+#zjamwrgtca .gt_indent_3 {
   text-indent: 15px;
 }
 
-#glnyetakxj .gt_indent_4 {
+#zjamwrgtca .gt_indent_4 {
   text-indent: 20px;
 }
 
-#glnyetakxj .gt_indent_5 {
+#zjamwrgtca .gt_indent_5 {
   text-indent: 25px;
 }
 
-#glnyetakxj .katex-display {
+#zjamwrgtca .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#glnyetakxj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#zjamwrgtca div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -5693,7 +5667,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">9</td>
+<td class="gt_row gt_right" headers="n_individual">10</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
@@ -5706,7 +5680,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Fullerton Entrance</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">9</td>
+<td class="gt_row gt_right" headers="n_individual">10</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.4</td>
@@ -5719,7 +5693,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">7</td>
+<td class="gt_row gt_right" headers="n_individual">8</td>
 <td class="gt_row gt_right" headers="min">Inf</td>
 <td class="gt_row gt_right" headers="q1">NA</td>
 <td class="gt_row gt_right" headers="median">NA</td>
@@ -5732,7 +5706,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Hexham Swamp</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">7</td>
+<td class="gt_row gt_right" headers="n_individual">8</td>
 <td class="gt_row gt_right" headers="min">Inf</td>
 <td class="gt_row gt_right" headers="q1">NA</td>
 <td class="gt_row gt_right" headers="median">NA</td>
@@ -5904,11 +5878,11 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">10.4</td>
 <td class="gt_row gt_right" headers="q1">24.3</td>
-<td class="gt_row gt_right" headers="median">30.7</td>
-<td class="gt_row gt_right" headers="q3">30.9</td>
+<td class="gt_row gt_right" headers="median">32.0</td>
+<td class="gt_row gt_right" headers="q3">32.2</td>
 <td class="gt_row gt_right" headers="max">34.0</td>
-<td class="gt_row gt_right" headers="mean">26.0</td>
-<td class="gt_row gt_right" headers="sd">9.5</td>
+<td class="gt_row gt_right" headers="mean">26.6</td>
+<td class="gt_row gt_right" headers="sd">9.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -5916,11 +5890,11 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">3.2</td>
-<td class="gt_row gt_right" headers="q1">9.2</td>
+<td class="gt_row gt_right" headers="q1">9.7</td>
 <td class="gt_row gt_right" headers="median">11.0</td>
-<td class="gt_row gt_right" headers="q3">11.6</td>
+<td class="gt_row gt_right" headers="q3">12.2</td>
 <td class="gt_row gt_right" headers="max">14.3</td>
-<td class="gt_row gt_right" headers="mean">9.8</td>
+<td class="gt_row gt_right" headers="mean">10.1</td>
 <td class="gt_row gt_right" headers="sd">4.2</td>
 </tr>
 <tr class="odd">
@@ -6367,32 +6341,6 @@ Low Tide Migratory birds
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Diurnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">Inf</td>
-<td class="gt_row gt_right" headers="q1">NA</td>
-<td class="gt_row gt_right" headers="median">NA</td>
-<td class="gt_row gt_right" headers="q3">NA</td>
-<td class="gt_row gt_right" headers="max">-Inf</td>
-<td class="gt_row gt_right" headers="mean">NaN</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
-<td class="gt_row gt_left" headers="Station">Curlew Point</td>
-<td class="gt_row gt_left" headers="condition">Nocturnal</td>
-<td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">Inf</td>
-<td class="gt_row gt_right" headers="q1">NA</td>
-<td class="gt_row gt_right" headers="median">NA</td>
-<td class="gt_row gt_right" headers="q3">NA</td>
-<td class="gt_row gt_right" headers="max">-Inf</td>
-<td class="gt_row gt_right" headers="mean">NaN</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_left" headers="Species" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_left" headers="Station">Davies Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
@@ -6474,12 +6422,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">19.6</td>
-<td class="gt_row gt_right" headers="q1">19.6</td>
-<td class="gt_row gt_right" headers="median">19.6</td>
-<td class="gt_row gt_right" headers="q3">19.6</td>
-<td class="gt_row gt_right" headers="max">19.6</td>
-<td class="gt_row gt_right" headers="mean">19.6</td>
+<td class="gt_row gt_right" headers="min">16.3</td>
+<td class="gt_row gt_right" headers="q1">16.3</td>
+<td class="gt_row gt_right" headers="median">16.3</td>
+<td class="gt_row gt_right" headers="q3">16.3</td>
+<td class="gt_row gt_right" headers="max">16.3</td>
+<td class="gt_row gt_right" headers="mean">16.3</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
@@ -6487,12 +6435,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">44.7</td>
-<td class="gt_row gt_right" headers="q1">44.7</td>
-<td class="gt_row gt_right" headers="median">44.7</td>
-<td class="gt_row gt_right" headers="q3">44.7</td>
-<td class="gt_row gt_right" headers="max">44.7</td>
-<td class="gt_row gt_right" headers="mean">44.7</td>
+<td class="gt_row gt_right" headers="min">38.2</td>
+<td class="gt_row gt_right" headers="q1">38.2</td>
+<td class="gt_row gt_right" headers="median">38.2</td>
+<td class="gt_row gt_right" headers="q3">38.2</td>
+<td class="gt_row gt_right" headers="max">38.2</td>
+<td class="gt_row gt_right" headers="mean">38.2</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -6949,24 +6897,24 @@ Low Tide Migratory birds
 <section id="sites" class="level3">
 <h3 class="anchored" data-anchor-id="sites">SITES</h3>
 <p><strong>TOTAL DETECTED</strong> (hours) <em>- TOTAL USED -</em></p>
-<div id="iodguwioov" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="mcwgoynzny" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#iodguwioov table {
+#mcwgoynzny table {
   font-family: 'Source Sans Pro', 'Source Sans Pro, Arial, sans-serif';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#iodguwioov thead, #iodguwioov tbody, #iodguwioov tfoot, #iodguwioov tr, #iodguwioov td, #iodguwioov th {
+#mcwgoynzny thead, #mcwgoynzny tbody, #mcwgoynzny tfoot, #mcwgoynzny tr, #mcwgoynzny td, #mcwgoynzny th {
   border-style: none;
 }
 
-#iodguwioov p {
+#mcwgoynzny p {
   margin: 0;
   padding: 0;
 }
 
-#iodguwioov .gt_table {
+#mcwgoynzny .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -6992,12 +6940,12 @@ Low Tide Migratory birds
   border-left-color: #D3D3D3;
 }
 
-#iodguwioov .gt_caption {
+#mcwgoynzny .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#iodguwioov .gt_title {
+#mcwgoynzny .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -7009,7 +6957,7 @@ Low Tide Migratory birds
   border-bottom-width: 0;
 }
 
-#iodguwioov .gt_subtitle {
+#mcwgoynzny .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -7021,7 +6969,7 @@ Low Tide Migratory birds
   border-top-width: 0;
 }
 
-#iodguwioov .gt_heading {
+#mcwgoynzny .gt_heading {
   background-color: #FAFAFA;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -7033,13 +6981,13 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#iodguwioov .gt_bottom_border {
+#mcwgoynzny .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #2C3E50;
 }
 
-#iodguwioov .gt_col_headings {
+#mcwgoynzny .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: rgba(255, 255, 255, 0);
@@ -7054,7 +7002,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#iodguwioov .gt_col_heading {
+#mcwgoynzny .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -7074,7 +7022,7 @@ Low Tide Migratory birds
   overflow-x: hidden;
 }
 
-#iodguwioov .gt_column_spanner_outer {
+#mcwgoynzny .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -7086,15 +7034,15 @@ Low Tide Migratory birds
   padding-right: 4px;
 }
 
-#iodguwioov .gt_column_spanner_outer:first-child {
+#mcwgoynzny .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#iodguwioov .gt_column_spanner_outer:last-child {
+#mcwgoynzny .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#iodguwioov .gt_column_spanner {
+#mcwgoynzny .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #2C3E50;
@@ -7106,11 +7054,11 @@ Low Tide Migratory birds
   width: 100%;
 }
 
-#iodguwioov .gt_spanner_row {
+#mcwgoynzny .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#iodguwioov .gt_group_heading {
+#mcwgoynzny .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -7136,7 +7084,7 @@ Low Tide Migratory birds
   text-align: left;
 }
 
-#iodguwioov .gt_empty_group_heading {
+#mcwgoynzny .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -7151,15 +7099,15 @@ Low Tide Migratory birds
   vertical-align: middle;
 }
 
-#iodguwioov .gt_from_md > :first-child {
+#mcwgoynzny .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#iodguwioov .gt_from_md > :last-child {
+#mcwgoynzny .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#iodguwioov .gt_row {
+#mcwgoynzny .gt_row {
   padding-top: 5px;
   padding-bottom: 5px;
   padding-left: 5px;
@@ -7178,7 +7126,7 @@ Low Tide Migratory birds
   overflow-x: hidden;
 }
 
-#iodguwioov .gt_stub {
+#mcwgoynzny .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -7191,7 +7139,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#iodguwioov .gt_stub_row_group {
+#mcwgoynzny .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -7205,15 +7153,15 @@ Low Tide Migratory birds
   vertical-align: top;
 }
 
-#iodguwioov .gt_row_group_first td {
+#mcwgoynzny .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#iodguwioov .gt_row_group_first th {
+#mcwgoynzny .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#iodguwioov .gt_summary_row {
+#mcwgoynzny .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -7223,16 +7171,16 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#iodguwioov .gt_first_summary_row {
+#mcwgoynzny .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#iodguwioov .gt_first_summary_row.thick {
+#mcwgoynzny .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#iodguwioov .gt_last_summary_row {
+#mcwgoynzny .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -7242,7 +7190,7 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#iodguwioov .gt_grand_summary_row {
+#mcwgoynzny .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -7252,7 +7200,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#iodguwioov .gt_first_grand_summary_row {
+#mcwgoynzny .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -7262,7 +7210,7 @@ Low Tide Migratory birds
   border-top-color: #D3D3D3;
 }
 
-#iodguwioov .gt_last_grand_summary_row_top {
+#mcwgoynzny .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -7272,11 +7220,11 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#iodguwioov .gt_striped {
+#mcwgoynzny .gt_striped {
   background-color: #FAFAFA;
 }
 
-#iodguwioov .gt_table_body {
+#mcwgoynzny .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -7285,7 +7233,7 @@ Low Tide Migratory birds
   border-bottom-color: #D3D3D3;
 }
 
-#iodguwioov .gt_footnotes {
+#mcwgoynzny .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -7299,7 +7247,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#iodguwioov .gt_footnote {
+#mcwgoynzny .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -7308,7 +7256,7 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#iodguwioov .gt_sourcenotes {
+#mcwgoynzny .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -7322,7 +7270,7 @@ Low Tide Migratory birds
   border-right-color: #D3D3D3;
 }
 
-#iodguwioov .gt_sourcenote {
+#mcwgoynzny .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -7330,72 +7278,72 @@ Low Tide Migratory birds
   padding-right: 5px;
 }
 
-#iodguwioov .gt_left {
+#mcwgoynzny .gt_left {
   text-align: left;
 }
 
-#iodguwioov .gt_center {
+#mcwgoynzny .gt_center {
   text-align: center;
 }
 
-#iodguwioov .gt_right {
+#mcwgoynzny .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#iodguwioov .gt_font_normal {
+#mcwgoynzny .gt_font_normal {
   font-weight: normal;
 }
 
-#iodguwioov .gt_font_bold {
+#mcwgoynzny .gt_font_bold {
   font-weight: bold;
 }
 
-#iodguwioov .gt_font_italic {
+#mcwgoynzny .gt_font_italic {
   font-style: italic;
 }
 
-#iodguwioov .gt_super {
+#mcwgoynzny .gt_super {
   font-size: 65%;
 }
 
-#iodguwioov .gt_footnote_marks {
+#mcwgoynzny .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#iodguwioov .gt_asterisk {
+#mcwgoynzny .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#iodguwioov .gt_indent_1 {
+#mcwgoynzny .gt_indent_1 {
   text-indent: 5px;
 }
 
-#iodguwioov .gt_indent_2 {
+#mcwgoynzny .gt_indent_2 {
   text-indent: 10px;
 }
 
-#iodguwioov .gt_indent_3 {
+#mcwgoynzny .gt_indent_3 {
   text-indent: 15px;
 }
 
-#iodguwioov .gt_indent_4 {
+#mcwgoynzny .gt_indent_4 {
   text-indent: 20px;
 }
 
-#iodguwioov .gt_indent_5 {
+#mcwgoynzny .gt_indent_5 {
   text-indent: 25px;
 }
 
-#iodguwioov .katex-display {
+#mcwgoynzny .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#iodguwioov div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#mcwgoynzny div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -7450,11 +7398,11 @@ Detection per Tide Category (%)
 <tr class="gt_row_group_first even">
 <td id="stub_1_1" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="background-color: #E8E8E8; font-weight: bold; color: #555555; font-size: 11px">Total</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 n_birds_used" style="background-color: #E8E8E8; font-weight: bold">10</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 total_hours" style="background-color: #E8E8E8; font-weight: bold">508 / 72875 (0.7 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">69 / 18152 (0.4 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">198 / 18171 (1.1 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">22 / 18252 (0.1 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">219 / 18300 (1.2 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 total_hours" style="background-color: #E8E8E8; font-weight: bold">508 / 74153 (0.7 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">69 / 18457 (0.4 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">198 / 18500 (1.1 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">22 / 18577 (0.1 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">219 / 18619 (1.2 %)</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 pct_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">13.6</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 pct_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold; color: #1A6FA3">39</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_1 pct_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">4.3</td>
@@ -7463,11 +7411,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_2" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Curlew Point</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 n_birds_used">6</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 total_hours">316 / 14445 (2.2 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Nocturnal_Low">35 / 3525 (1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Nocturnal_High">52 / 3409 (1.5 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Diurnal_Low">22 / 3684 (0.6 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Diurnal_High">207 / 3827 (5.4 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 total_hours">316 / 14665 (2.2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Nocturnal_Low">35 / 3583 (1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Nocturnal_High">52 / 3463 (1.5 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Diurnal_Low">22 / 3734 (0.6 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 hours_Diurnal_High">207 / 3885 (5.3 %)</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 pct_Nocturnal_Low">11.1</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 pct_Nocturnal_High">16.5</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_2 pct_Diurnal_Low">7</td>
@@ -7476,11 +7424,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_3" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Fullerton Entrance</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 n_birds_used">9</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 total_hours">6 / 22641 (0 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Nocturnal_Low">2 / 5723 (0 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Nocturnal_High">1 / 5819 (0 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Diurnal_Low">&lt; 1 / 5589 (0 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Diurnal_High">3 / 5510 (0.1 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 total_hours">6 / 23063 (0 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Nocturnal_Low">2 / 5825 (0 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Nocturnal_High">1 / 5935 (0 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Diurnal_Low">&lt; 1 / 5694 (0 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 hours_Diurnal_High">3 / 5609 (0.1 %)</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 pct_Nocturnal_Low" style="color: #1A6FA3; font-weight: bold">33.3</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 pct_Nocturnal_High">16.7</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_3 pct_Diurnal_Low">0</td>
@@ -7489,11 +7437,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_4" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Milhams Pond</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 n_birds_used">2</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 total_hours">0 / 22943 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Nocturnal_Low">&lt; 1 / 5801 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Nocturnal_High">&lt; 1 / 5899 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Diurnal_Low">&lt; 1 / 5658 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Diurnal_High">&lt; 1 / 5585 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 total_hours">0 / 23435 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Nocturnal_Low">&lt; 1 / 5905 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Nocturnal_High">&lt; 1 / 6027 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Diurnal_Low">&lt; 1 / 5798 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 hours_Diurnal_High">&lt; 1 / 5705 (0 %)</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 pct_Nocturnal_Low">NaN</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 pct_Nocturnal_High">NaN</td>
 <td class="gt_row gt_right gt_striped" headers="BAR-TAILED GODWIT stub_1_4 pct_Diurnal_Low">NaN</td>
@@ -7502,11 +7450,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_5" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Tomago</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 n_birds_used">5</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 total_hours">186 / 12846 (1.4 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Nocturnal_Low">32 / 3103 (1 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Nocturnal_High">145 / 3044 (4.8 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Diurnal_Low">&lt; 1 / 3321 (0 %)</td>
-<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Diurnal_High">9 / 3378 (0.3 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 total_hours">186 / 12990 (1.4 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Nocturnal_Low">32 / 3144 (1 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Nocturnal_High">145 / 3075 (4.7 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Diurnal_Low">&lt; 1 / 3351 (0 %)</td>
+<td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 hours_Diurnal_High">9 / 3420 (0.3 %)</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 pct_Nocturnal_Low">17.2</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 pct_Nocturnal_High" style="color: #1A6FA3; font-weight: bold">78</td>
 <td class="gt_row gt_right" headers="BAR-TAILED GODWIT stub_1_5 pct_Diurnal_Low">0</td>
@@ -7518,11 +7466,11 @@ Detection per Tide Category (%)
 <tr class="gt_row_group_first even">
 <td id="stub_1_6" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="background-color: #E8E8E8; font-weight: bold; color: #555555; font-size: 11px">Total</td>
 <td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 n_birds_used" style="background-color: #E8E8E8; font-weight: bold">5</td>
-<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 total_hours" style="background-color: #E8E8E8; font-weight: bold">2429 / 60936 (4 %)</td>
-<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">255 / 13620 (1.9 %)</td>
-<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">215 / 11701 (1.8 %)</td>
-<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">815 / 16720 (4.9 %)</td>
-<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">1144 / 18895 (6.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 total_hours" style="background-color: #E8E8E8; font-weight: bold">2429 / 60230 (4 %)</td>
+<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">255 / 13440 (1.9 %)</td>
+<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">215 / 11561 (1.9 %)</td>
+<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">815 / 16536 (4.9 %)</td>
+<td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">1144 / 18693 (6.1 %)</td>
 <td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 pct_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">10.5</td>
 <td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 pct_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">8.9</td>
 <td class="gt_row gt_right gt_striped" headers="CURLEW SANDPIPER stub_1_6 pct_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold; color: #1A6FA3">33.6</td>
@@ -7531,11 +7479,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_7" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Curlew Point</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 n_birds_used">5</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 total_hours">2402 / 10599 (22.7 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Nocturnal_Low">240 / 2359 (10.2 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Nocturnal_High">208 / 2041 (10.2 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Diurnal_Low">814 / 2921 (27.9 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Diurnal_High">1140 / 3278 (34.8 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 total_hours">2402 / 10365 (23.2 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Nocturnal_Low">240 / 2299 (10.4 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Nocturnal_High">208 / 1997 (10.4 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Diurnal_Low">814 / 2861 (28.5 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 hours_Diurnal_High">1140 / 3208 (35.5 %)</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 pct_Nocturnal_Low">10</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 pct_Nocturnal_High">8.7</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_7 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">33.9</td>
@@ -7557,11 +7505,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_9" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Milhams Pond</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 n_birds_used">3</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 total_hours">0 / 7885 (0 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Nocturnal_Low">&lt; 1 / 1825 (0 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Nocturnal_High">&lt; 1 / 1456 (0 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Diurnal_Low">&lt; 1 / 2099 (0 %)</td>
-<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Diurnal_High">&lt; 1 / 2505 (0 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 total_hours">0 / 7413 (0 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Nocturnal_Low">&lt; 1 / 1705 (0 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Nocturnal_High">&lt; 1 / 1360 (0 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Diurnal_Low">&lt; 1 / 1975 (0 %)</td>
+<td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 hours_Diurnal_High">&lt; 1 / 2373 (0 %)</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 pct_Nocturnal_Low">NaN</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 pct_Nocturnal_High">NaN</td>
 <td class="gt_row gt_right" headers="CURLEW SANDPIPER stub_1_9 pct_Diurnal_Low">NaN</td>
@@ -7667,11 +7615,11 @@ Detection per Tide Category (%)
 <tr class="gt_row_group_first odd">
 <td id="stub_1_17" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="background-color: #E8E8E8; font-weight: bold; color: #555555; font-size: 11px">Total</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 n_birds_used" style="background-color: #E8E8E8; font-weight: bold">2</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 total_hours" style="background-color: #E8E8E8; font-weight: bold">144 / 1927 (7.5 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">69 / 444 (15.5 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">17 / 520 (3.3 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">33 / 520 (6.3 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">25 / 443 (5.6 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 total_hours" style="background-color: #E8E8E8; font-weight: bold">144 / 2061 (7 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">69 / 472 (14.6 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">17 / 565 (3 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">33 / 556 (5.9 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">25 / 468 (5.3 %)</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 pct_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold; color: #1A6FA3">47.9</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 pct_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">11.8</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_17 pct_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold; color: #1A6FA3">22.9</td>
@@ -7680,11 +7628,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_18" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Curlew Point</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 n_birds_used">1</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 total_hours">1 / 114 (0.9 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Nocturnal_Low">&lt; 1 / 28 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Nocturnal_High">&lt; 1 / 22 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Diurnal_Low">&lt; 1 / 30 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Diurnal_High">1 / 34 (2.9 %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 total_hours">1 / NA (NA %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Nocturnal_Low">&lt; 1 / NA (NA %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Nocturnal_High">&lt; 1 / NA (NA %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Diurnal_Low">&lt; 1 / NA (NA %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 hours_Diurnal_High">1 / NA (NA %)</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 pct_Nocturnal_Low">0</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 pct_Nocturnal_High">0</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_18 pct_Diurnal_Low">0</td>
@@ -7693,11 +7641,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_19" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Fullerton Entrance</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 n_birds_used">2</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 total_hours">0 / 859 (0 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Nocturnal_Low">&lt; 1 / 196 (0 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Nocturnal_High">&lt; 1 / 236 (0 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Diurnal_Low">&lt; 1 / 234 (0 %)</td>
-<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Diurnal_High">&lt; 1 / 193 (0 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 total_hours">0 / 984 (0 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Nocturnal_Low">&lt; 1 / 226 (0 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Nocturnal_High">&lt; 1 / 271 (0 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Diurnal_Low">&lt; 1 / 265 (0 %)</td>
+<td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 hours_Diurnal_High">&lt; 1 / 222 (0 %)</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 pct_Nocturnal_Low">NaN</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 pct_Nocturnal_High">NaN</td>
 <td class="gt_row gt_right" headers="FAR EASTERN CURLEW stub_1_19 pct_Diurnal_Low">NaN</td>
@@ -7706,11 +7654,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_20" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Milhams Pond</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 n_birds_used">1</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 total_hours">141 / 641 (22 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Nocturnal_Low">68 / 152 (44.7 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Nocturnal_High">16 / 188 (8.5 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Diurnal_Low">33 / 168 (19.6 %)</td>
-<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Diurnal_High">24 / 133 (18 %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 total_hours">141 / 764 (18.5 %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Nocturnal_Low">68 / 178 (38.2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Nocturnal_High">16 / 220 (7.3 %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Diurnal_Low">33 / 203 (16.3 %)</td>
+<td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 hours_Diurnal_High">24 / 163 (14.7 %)</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 pct_Nocturnal_Low" style="color: #1A6FA3; font-weight: bold">48.2</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 pct_Nocturnal_High">11.3</td>
 <td class="gt_row gt_right gt_striped" headers="FAR EASTERN CURLEW stub_1_20 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">23.4</td>
@@ -7764,11 +7712,11 @@ Detection per Tide Category (%)
 <tr class="gt_row_group_first even">
 <td id="stub_1_24" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="background-color: #E8E8E8; font-weight: bold; color: #555555; font-size: 11px">Total</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 n_birds_used" style="background-color: #E8E8E8; font-weight: bold">14</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 total_hours" style="background-color: #E8E8E8; font-weight: bold">4819 / 146233 (3.3 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">633 / 32553 (1.9 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">498 / 32023 (1.6 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">1797 / 40026 (4.5 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">1891 / 41631 (4.5 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 total_hours" style="background-color: #E8E8E8; font-weight: bold">4819 / 145881 (3.3 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">633 / 32461 (2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">498 / 31951 (1.6 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">1797 / 39929 (4.5 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">1891 / 41540 (4.6 %)</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 pct_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">13.1</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 pct_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">10.3</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_24 pct_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold; color: #1A6FA3">37.3</td>
@@ -7816,11 +7764,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_28" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Milhams Pond</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 n_birds_used">8</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 total_hours">1346 / 18969 (7.1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Nocturnal_Low">255 / 4246 (6 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Nocturnal_High">248 / 4135 (6 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Diurnal_Low">439 / 5172 (8.5 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Diurnal_High">404 / 5416 (7.5 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 total_hours">1346 / 18851 (7.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Nocturnal_Low">255 / 4216 (6 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Nocturnal_High">248 / 4111 (6 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Diurnal_Low">439 / 5141 (8.5 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 hours_Diurnal_High">404 / 5383 (7.5 %)</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 pct_Nocturnal_Low">18.9</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 pct_Nocturnal_High">18.4</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_28 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">32.6</td>
@@ -7868,11 +7816,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_32" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Windeyers</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 n_birds_used">7</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 total_hours">3 / 11842 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Nocturnal_Low">1 / 2537 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Nocturnal_High">2 / 2754 (0.1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Diurnal_Low">&lt; 1 / 3336 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Diurnal_High">&lt; 1 / 3215 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 total_hours">3 / 11608 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Nocturnal_Low">1 / 2475 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Nocturnal_High">2 / 2706 (0.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Diurnal_Low">&lt; 1 / 3270 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 hours_Diurnal_High">&lt; 1 / 3157 (0 %)</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 pct_Nocturnal_Low" style="color: #1A6FA3; font-weight: bold">33.3</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 pct_Nocturnal_High" style="color: #1A6FA3; font-weight: bold">66.7</td>
 <td class="gt_row gt_right gt_striped" headers="PACIFIC GOLDEN-PLOVER stub_1_32 pct_Diurnal_Low">0</td>
@@ -7884,11 +7832,11 @@ Detection per Tide Category (%)
 <tr class="gt_row_group_first even">
 <td id="stub_1_33" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="background-color: #E8E8E8; font-weight: bold; color: #555555; font-size: 11px">Total</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_33 n_birds_used" style="background-color: #E8E8E8; font-weight: bold">6</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_33 total_hours" style="background-color: #E8E8E8; font-weight: bold">1746 / 114107 (1.5 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">333 / 29164 (1.1 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">314 / 28625 (1.1 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">441 / 27789 (1.6 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">658 / 28529 (2.3 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_33 total_hours" style="background-color: #E8E8E8; font-weight: bold">1746 / 115620 (1.5 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">333 / 29530 (1.1 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">314 / 29028 (1.1 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold">441 / 28172 (1.6 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_33 hours_Diurnal_High" style="background-color: #E8E8E8; font-weight: bold">658 / 28890 (2.3 %)</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_33 pct_Nocturnal_Low" style="background-color: #E8E8E8; font-weight: bold">19.1</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_33 pct_Nocturnal_High" style="background-color: #E8E8E8; font-weight: bold">18</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_33 pct_Diurnal_Low" style="background-color: #E8E8E8; font-weight: bold; color: #1A6FA3">25.3</td>
@@ -7897,11 +7845,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_34" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Curlew Point</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 n_birds_used">4</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 total_hours">58 / 15271 (0.4 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Nocturnal_Low">5 / 3792 (0.1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Nocturnal_High">3 / 3561 (0.1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Diurnal_Low">2 / 3823 (0.1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Diurnal_High">48 / 4095 (1.2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 total_hours">58 / 15818 (0.4 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Nocturnal_Low">5 / 3934 (0.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Nocturnal_High">3 / 3696 (0.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Diurnal_Low">2 / 3948 (0.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 hours_Diurnal_High">48 / 4240 (1.1 %)</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 pct_Nocturnal_Low">8.6</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 pct_Nocturnal_High">5.2</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_34 pct_Diurnal_Low">3.4</td>
@@ -7910,11 +7858,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_35" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Fullerton Entrance</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_35 n_birds_used">5</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_35 total_hours">1031 / 24611 (4.2 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Nocturnal_Low">187 / 6320 (3 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Nocturnal_High">137 / 6241 (2.2 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Diurnal_Low">250 / 5968 (4.2 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Diurnal_High">457 / 6082 (7.5 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_35 total_hours">1031 / 24861 (4.1 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Nocturnal_Low">187 / 6380 (2.9 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Nocturnal_High">137 / 6311 (2.2 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Diurnal_Low">250 / 6030 (4.1 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_35 hours_Diurnal_High">457 / 6140 (7.4 %)</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_35 pct_Nocturnal_Low">18.1</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_35 pct_Nocturnal_High">13.3</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_35 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">24.2</td>
@@ -7923,11 +7871,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_36" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Milhams Pond</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 n_birds_used">1</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 total_hours">20 / 24801 (0.1 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Nocturnal_Low">&lt; 1 / 6368 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Nocturnal_High">1 / 6293 (0 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Diurnal_Low">12 / 6012 (0.2 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Diurnal_High">7 / 6128 (0.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 total_hours">20 / 25047 (0.1 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Nocturnal_Low">&lt; 1 / 6420 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Nocturnal_High">1 / 6357 (0 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Diurnal_Low">12 / 6082 (0.2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 hours_Diurnal_High">7 / 6188 (0.1 %)</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 pct_Nocturnal_Low">0</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 pct_Nocturnal_High">5</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_36 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">60</td>
@@ -7936,11 +7884,11 @@ Detection per Tide Category (%)
 <tr class="even">
 <td id="stub_1_37" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Ramsar Road</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_37 n_birds_used">2</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_37 total_hours">566 / 24525 (2.3 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Nocturnal_Low">130 / 6300 (2.1 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Nocturnal_High">159 / 6211 (2.6 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Diurnal_Low">154 / 5942 (2.6 %)</td>
-<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Diurnal_High">123 / 6072 (2 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_37 total_hours">566 / 24761 (2.3 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Nocturnal_Low">130 / 6356 (2 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Nocturnal_High">159 / 6283 (2.5 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Diurnal_Low">154 / 6006 (2.6 %)</td>
+<td class="gt_row gt_right" headers="PIED STILT stub_1_37 hours_Diurnal_High">123 / 6116 (2 %)</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_37 pct_Nocturnal_Low" style="color: #1A6FA3; font-weight: bold">23</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_37 pct_Nocturnal_High" style="color: #1A6FA3; font-weight: bold">28.1</td>
 <td class="gt_row gt_right" headers="PIED STILT stub_1_37 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">27.2</td>
@@ -7949,11 +7897,11 @@ Detection per Tide Category (%)
 <tr class="odd">
 <td id="stub_1_38" class="gt_row gt_left gt_stub" data-quarto-table-cell-role="th" scope="row" style="color: #555555; font-size: 11px">Swan Pond</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 n_birds_used">2</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 total_hours">71 / 24899 (0.3 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Nocturnal_Low">11 / 6384 (0.2 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Nocturnal_High">14 / 6319 (0.2 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Diurnal_Low">23 / 6044 (0.4 %)</td>
-<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Diurnal_High">23 / 6152 (0.4 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 total_hours">71 / 25133 (0.3 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Nocturnal_Low">11 / 6440 (0.2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Nocturnal_High">14 / 6381 (0.2 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Diurnal_Low">23 / 6106 (0.4 %)</td>
+<td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 hours_Diurnal_High">23 / 6206 (0.4 %)</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 pct_Nocturnal_Low">15.5</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 pct_Nocturnal_High">19.7</td>
 <td class="gt_row gt_right gt_striped" headers="PIED STILT stub_1_38 pct_Diurnal_Low" style="color: #1A6FA3; font-weight: bold">32.4</td>

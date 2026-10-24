@@ -77,6 +77,18 @@ for (col_new in names(cols_renamed_survey123)) {
   }
 }
 
+# Guard: a fresh export may not contain the legacy _dep columns at all (the
+# question was renamed before any data was entered under the old name). Add any
+# missing ones as all-NA so the coalesce() calls all work
+# Lily note: Claude did this because the file wouldn't run / the coalesce
+# step gave an error.
+add_missing_cols <- function(df, cols) {
+  df[setdiff(cols, names(df))] <- NA_character_
+  df
+}
+
+log_survey123 <- add_missing_cols(log_survey123, unname(cols_renamed_survey123))
+
 log_survey123 <- log_survey123 |>
   mutate(
     station_power_departure = coalesce(station_power_departure, station_power_dep),
@@ -182,6 +194,8 @@ log_complete <- bind_rows(
 # station_power_dep/wifi_dep/wifi_notes_dep. bind_rows() leaves BOTH sets of
 # columns in log_complete, each populated only for its source. Coalesce them
 # into one canonical _departure set and drop the leftovers.
+log_complete <- add_missing_cols(log_complete, unname(cols_renamed_survey123))
+
 log_complete <- log_complete |>
   mutate(
     station_power_departure = coalesce(station_power_departure, station_power_dep),
@@ -211,7 +225,7 @@ log_complete <- log_complete |>
 log_complete <- log_complete |>
   mutate(visit_date_str = visit_date) |>
   mutate(visit_datetime = as.POSIXct(as.numeric(visit_date) * 86400,
-                                      origin = "1899-12-30", tz = "UTC")) |>
+                                     origin = "1899-12-30", tz = "UTC")) |>
   mutate(visit_date = as.Date(visit_datetime, tz = "Australia/Sydney"))
 
 # Check for NA dates
@@ -240,6 +254,39 @@ log_complete <- log_complete |>
   filter(station_id != "TBC")
 
 message(nrow(log_tbc), " entries with station_id = 'TBC' excluded from log_complete (retained in log_tbc)")
+
+# ==== Manual Corrections ====
+# Survey123 entries are hard to edit after submission, so known-wrong values are
+# corrected here instead - one row per value, with the reason, so every change
+# to the raw data is visible in one place. Applied on every run, so a fresh
+# export doesn't undo them.
+#
+# value is always character; only use this for character fields.
+corrections <- tibble::tribble(
+  ~station_id,   ~visit_date,  ~field,  ~value,            ~reason,
+  "Ramsar Road", "2026-05-03", "sg_id", "SG-E3E4RPI4CED5", "Typo (CE25); Motus recvDeps: CED5 deployed 2025-03-16",
+  "Ramsar Road", "2026-06-26", "sg_id", "SG-E3E4RPI4CED5", "Auto-filled old v1 ID from stale receivers.csv",
+  "Ramsar Road", "2026-10-04", "sg_id", "SG-E3E4RPI4CED5", "Auto-filled old v1 ID from stale receivers.csv",
+  "Windeyers",   "2026-10-10", "sg_id", "SG-7F7ERPI31522", "receivers.csv had letter I (3I522); 2026-01-25 replacement entry has 31522"
+) |>
+  mutate(visit_date = ymd(visit_date))
+
+## This section just helps to identify errors, doesn't change any values or anything.
+for (i in seq_len(nrow(corrections))) {
+  fix <- corrections[i, ]
+  hit <- log_complete$station_id == fix$station_id & log_complete$visit_date == fix$visit_date
+  hit <- !is.na(hit) & hit
+  # Guard: a correction that matches nothing (date edited, row removed) or
+  # several rows should be noticed, not silently skipped / over-applied.
+  if (sum(hit) != 1) {
+    warning("Correction for ", fix$station_id, " ", fix$visit_date, " (", fix$field,
+            ") matched ", sum(hit), " rows - expected 1. Check the corrections table.",
+            immediate. = TRUE)
+    next
+  }
+  log_complete[[fix$field]][hit] <- fix$value
+}
+message(nrow(corrections), " manual correction(s) checked")
 
 # ==== Fix Entries With Deprecated Field Names ====
 # The issue is that some of the Survey123 entries were completed before
@@ -274,7 +321,7 @@ log_complete <- log_complete |>
     .ssl = tolower(trimws(as.character(station_status_left))),
     .ssa = tolower(trimws(as.character(station_status_arrival))),
     .sid = tolower(trimws(as.character(station_id))),
-
+    
     ## Departure (feeds the map)
     station_power_departure = case_when(
       !is.na(station_power_departure) ~ station_power_departure,
@@ -288,7 +335,7 @@ log_complete <- log_complete |>
       .ssl == "removed" ~ "no",
       TRUE              ~ wifi_departure
     ),
-
+    
     ## Arrival
     station_power_arrival = case_when(
       !is.na(station_power_arrival) ~ station_power_arrival,
@@ -340,7 +387,7 @@ log_deprecated_fields |> select(
 # a value for wifi_departure and station_power_departure (feeds the map, so most important).
 n_dep_unfilled <- log_deprecated_fields |>
   filter(!is.na(station_status_left) &
-         (is.na(wifi_departure) | is.na(station_power_departure))) |>
+           (is.na(wifi_departure) | is.na(station_power_departure))) |>
   nrow()
 
 if (n_dep_unfilled > 0) {
@@ -373,7 +420,7 @@ duplicates <- log_complete |>
   filter(!is.na(visit_date)) |> 
   count(station_id, visit_date, name = "n_entries") |>
   filter(n_entries != 1)
-  
+
 if (nrow(duplicates) > 0) {
   message("There are ", nrow(duplicates), " combinations of station_id and visit_date that have multiple entries.")
   print(duplicates)

@@ -841,12 +841,12 @@ loglik at estimate:  -4821.678 </code></pre>
 <span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Band.ID, speciesEN, recvDeployName, tideCategory, tideDiel, tideHighLow, used_h, available_h, rate_use)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="blockquote-yellow">
-<p><strong>Note</strong>: A very few cases (n = 2 / 498) where the <em>time used</em> was over the <em>time</em> <em>available</em> has been re-allocated the value 100%. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated. In average, the difference of time between available and used is 1.47 hours (32.925 % of rate of use difference).</p>
+<p><strong>Note</strong>: A very few cases (n = 2 / 498) where the <em>time used</em> was over the <em>time</em> <em>available</em> has been re-allocated the value 100%. Reasons might be the tag fell off within range of the antenna. Due to the negligible number of such cases, we have not further investigated. In average, the difference of time between available and used is 0.47 hours (7.81 % of rate of use difference).</p>
 </div>
 <div class="cell">
 <div class="cell-output-display">
 <div class="datatables html-widget html-fill-item" id="htmlwidget-7598595affc4f25ab85b" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-7598595affc4f25ab85b">{"x":{"filter":"none","vertical":false,"data":[["1","2"],["7176824","7394040"],["Bar-tailed Godwit","Bar-tailed Godwit"],["Curlew Point","Curlew Point"],["Nocturnal_High","Diurnal_High"],["Nocturnal","Diurnal"],["High","High"],[6.03,6.91],[4,6],[150.7,115.15],[50.69999999999999,15.15000000000001],[2.03,0.91]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Band.ID<\/th>\n      <th>speciesEN<\/th>\n      <th>recvDeployName<\/th>\n      <th>tideCategory<\/th>\n      <th>tideDiel<\/th>\n      <th>tideHighLow<\/th>\n      <th>used_h<\/th>\n      <th>available_h<\/th>\n      <th>rate_use<\/th>\n      <th>diff_perc<\/th>\n      <th>diff_h<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[7,8,9,10,11]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Band.ID","targets":1},{"name":"speciesEN","targets":2},{"name":"recvDeployName","targets":3},{"name":"tideCategory","targets":4},{"name":"tideDiel","targets":5},{"name":"tideHighLow","targets":6},{"name":"used_h","targets":7},{"name":"available_h","targets":8},{"name":"rate_use","targets":9},{"name":"diff_perc","targets":10},{"name":"diff_h","targets":11}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-7598595affc4f25ab85b">{"x":{"filter":"none","vertical":false,"data":[["1","2"],["7176824","7394040"],["Bar-tailed Godwit","Bar-tailed Godwit"],["Curlew Point","Curlew Point"],["Nocturnal_High","Diurnal_High"],["Nocturnal","Diurnal"],["High","High"],[6.03,6.91],[6,6],[100.47,115.15],[0.4699999999999989,15.15000000000001],[0.03,0.91]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Band.ID<\/th>\n      <th>speciesEN<\/th>\n      <th>recvDeployName<\/th>\n      <th>tideCategory<\/th>\n      <th>tideDiel<\/th>\n      <th>tideHighLow<\/th>\n      <th>used_h<\/th>\n      <th>available_h<\/th>\n      <th>rate_use<\/th>\n      <th>diff_perc<\/th>\n      <th>diff_h<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[7,8,9,10,11]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"Band.ID","targets":1},{"name":"speciesEN","targets":2},{"name":"recvDeployName","targets":3},{"name":"tideCategory","targets":4},{"name":"tideDiel","targets":5},{"name":"tideHighLow","targets":6},{"name":"used_h","targets":7},{"name":"available_h","targets":8},{"name":"rate_use","targets":9},{"name":"diff_perc","targets":10},{"name":"diff_h","targets":11}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div class="cell">
@@ -881,7 +881,7 @@ See statistics, proportion
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="datatables html-widget html-fill-item" id="htmlwidget-f888dc62471906a988fd" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-f888dc62471906a988fd">{"x":{"filter":"none","vertical":false,"data":[["Bar-tailed Godwit","Curlew Sandpiper","Eurasian Whimbrel","Far Eastern Curlew","Pacific Golden-Plover","Pied Stilt","Red-necked Avocet"],[68.10405979642984,89.69594195832967,96.18423386813544,73.89409743980747,87.72016145681205,73.669952934137,84.24204034870996],[16.74514829625149,7.499456232141737,1.651200358770537,12.48456427822999,9.579848258417989,13.02234194592994,8.515988653023506],[15.15079190731867,2.804601809528588,2.164565773094033,13.62133828196253,2.699990284769965,13.30770511993306,7.241970998266536],[31.89594020357016,10.30405804167033,3.81576613186457,26.10590256019252,12.27983854318795,26.330047065863,15.75795965129004]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Species<\/th>\n      <th>Undetected (%)<\/th>\n      <th>Diurnal (%)<\/th>\n      <th>Nocturnal (%)<\/th>\n      <th>Total detected (%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"dom":"t","ordering":false,"autoWidth":true,"columnDefs":[{"targets":1,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[1,2,3,4]},{"name":"speciesEN","targets":0},{"name":"Undetected","targets":1},{"name":"Diurnal","targets":2},{"name":"Nocturnal","targets":3},{"name":"Total","targets":4}],"order":[],"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-f888dc62471906a988fd">{"x":{"filter":"none","vertical":false,"data":[["Bar-tailed Godwit","Curlew Sandpiper","Eurasian Whimbrel","Far Eastern Curlew","Pacific Golden-Plover","Pied Stilt","Red-necked Avocet"],[73.65397863536238,89.71334834161138,96.32333260800948,80.38320978423519,87.99172408655328,81.97572251142165,85.99981899599361],[14.46865607916464,7.482853392357236,1.583831609965697,8.510314801282689,9.371971664331848,12.2185248670302,7.439491906334386],[11.87736528547297,2.80379826603139,2.092835782024828,11.10647541448213,2.636304249114874,5.805752621548144,6.560689097672006],[26.34602136463762,10.28665165838863,3.676667391990526,19.61679021576482,12.00827591344672,18.02427748857834,14.00018100400639]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Species<\/th>\n      <th>Undetected (%)<\/th>\n      <th>Diurnal (%)<\/th>\n      <th>Nocturnal (%)<\/th>\n      <th>Total detected (%)<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"dom":"t","ordering":false,"autoWidth":true,"columnDefs":[{"targets":1,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":2,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":3,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"targets":4,"render":"function(data, type, row, meta) {\n    return type !== 'display' ? data : DTWidget.formatRound(data, 1, 3, \",\", \".\", null);\n  }"},{"className":"dt-right","targets":[1,2,3,4]},{"name":"speciesEN","targets":0},{"name":"Undetected","targets":1},{"name":"Diurnal","targets":2},{"name":"Nocturnal","targets":3},{"name":"Total","targets":4}],"order":[],"orderClasses":false}},"evals":["options.columnDefs.0.render","options.columnDefs.1.render","options.columnDefs.2.render","options.columnDefs.3.render"],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
@@ -1370,232 +1370,232 @@ See statistics, summary
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_center" headers="tideDiel">Undetected</td>
 <td class="gt_row gt_right" headers="n">10</td>
-<td class="gt_row gt_right" headers="max_rate">99.981671</td>
-<td class="gt_row gt_right" headers="min_rate">-40.3294024</td>
-<td class="gt_row gt_right" headers="median_rate">90.388852</td>
-<td class="gt_row gt_right" headers="sd_rate">49.23</td>
-<td class="gt_row gt_right" headers="mean_rate">68.10</td>
-<td class="gt_row gt_right" headers="se">15.57</td>
+<td class="gt_row gt_right" headers="max_rate">99.982387</td>
+<td class="gt_row gt_right" headers="min_rate">-40.329402447</td>
+<td class="gt_row gt_right" headers="median_rate">93.047505</td>
+<td class="gt_row gt_right" headers="sd_rate">44.22</td>
+<td class="gt_row gt_right" headers="mean_rate">73.65</td>
+<td class="gt_row gt_right" headers="se">13.98</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">10</td>
 <td class="gt_row gt_right" headers="max_rate">83.979738</td>
-<td class="gt_row gt_right" headers="min_rate">0.0000000</td>
-<td class="gt_row gt_right" headers="median_rate">7.041905</td>
-<td class="gt_row gt_right" headers="sd_rate">27.01</td>
-<td class="gt_row gt_right" headers="mean_rate">16.75</td>
-<td class="gt_row gt_right" headers="se">8.54</td>
+<td class="gt_row gt_right" headers="min_rate">0.009814953</td>
+<td class="gt_row gt_right" headers="median_rate">5.060268</td>
+<td class="gt_row gt_right" headers="sd_rate">25.94</td>
+<td class="gt_row gt_right" headers="mean_rate">14.47</td>
+<td class="gt_row gt_right" headers="se">8.20</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">10</td>
-<td class="gt_row gt_right" headers="max_rate">59.404029</td>
-<td class="gt_row gt_right" headers="min_rate">0.0000000</td>
-<td class="gt_row gt_right" headers="median_rate">2.569243</td>
-<td class="gt_row gt_right" headers="sd_rate">23.25</td>
-<td class="gt_row gt_right" headers="mean_rate">15.15</td>
-<td class="gt_row gt_right" headers="se">7.35</td>
+<td class="gt_row gt_right" headers="max_rate">56.349664</td>
+<td class="gt_row gt_right" headers="min_rate">0.000000000</td>
+<td class="gt_row gt_right" headers="median_rate">1.892227</td>
+<td class="gt_row gt_right" headers="sd_rate">18.62</td>
+<td class="gt_row gt_right" headers="mean_rate">11.88</td>
+<td class="gt_row gt_right" headers="se">5.89</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Sandpiper</td>
 <td class="gt_row gt_center" headers="tideDiel" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Undetected</td>
 <td class="gt_row gt_right" headers="n" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5</td>
-<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.157731</td>
-<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">87.2410901</td>
-<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">88.253063</td>
-<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.66</td>
-<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">89.70</td>
-<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.64</td>
+<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.234739</td>
+<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">87.295981116</td>
+<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">88.258155</td>
+<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.69</td>
+<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">89.71</td>
+<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.65</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">5</td>
-<td class="gt_row gt_right" headers="max_rate">9.604743</td>
-<td class="gt_row gt_right" headers="min_rate">2.9266294</td>
-<td class="gt_row gt_right" headers="median_rate">8.930082</td>
-<td class="gt_row gt_right" headers="sd_rate">2.73</td>
-<td class="gt_row gt_right" headers="mean_rate">7.50</td>
-<td class="gt_row gt_right" headers="se">1.22</td>
+<td class="gt_row gt_right" headers="max_rate">9.555835</td>
+<td class="gt_row gt_right" headers="min_rate">2.865389377</td>
+<td class="gt_row gt_right" headers="median_rate">8.963373</td>
+<td class="gt_row gt_right" headers="sd_rate">2.75</td>
+<td class="gt_row gt_right" headers="mean_rate">7.48</td>
+<td class="gt_row gt_right" headers="se">1.23</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Curlew Sandpiper</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">5</td>
 <td class="gt_row gt_right" headers="max_rate">4.115159</td>
-<td class="gt_row gt_right" headers="min_rate">0.9156400</td>
-<td class="gt_row gt_right" headers="median_rate">3.067996</td>
-<td class="gt_row gt_right" headers="sd_rate">1.17</td>
+<td class="gt_row gt_right" headers="min_rate">0.899871662</td>
+<td class="gt_row gt_right" headers="median_rate">3.084664</td>
+<td class="gt_row gt_right" headers="sd_rate">1.18</td>
 <td class="gt_row gt_right" headers="mean_rate">2.80</td>
-<td class="gt_row gt_right" headers="se">0.52</td>
+<td class="gt_row gt_right" headers="se">0.53</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Eurasian Whimbrel</td>
 <td class="gt_row gt_center" headers="tideDiel" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Undetected</td>
 <td class="gt_row gt_right" headers="n" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
-<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">98.259993</td>
-<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">94.1084742</td>
-<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.184234</td>
-<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.94</td>
-<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.18</td>
-<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.08</td>
+<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">98.351544</td>
+<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">94.295120866</td>
+<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.323333</td>
+<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.87</td>
+<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.32</td>
+<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.03</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">2</td>
-<td class="gt_row gt_right" headers="max_rate">2.401193</td>
-<td class="gt_row gt_right" headers="min_rate">0.9012072</td>
-<td class="gt_row gt_right" headers="median_rate">1.651200</td>
-<td class="gt_row gt_right" headers="sd_rate">1.06</td>
-<td class="gt_row gt_right" headers="mean_rate">1.65</td>
-<td class="gt_row gt_right" headers="se">0.75</td>
+<td class="gt_row gt_right" headers="max_rate">2.317135</td>
+<td class="gt_row gt_right" headers="min_rate">0.850528090</td>
+<td class="gt_row gt_right" headers="median_rate">1.583832</td>
+<td class="gt_row gt_right" headers="sd_rate">1.04</td>
+<td class="gt_row gt_right" headers="mean_rate">1.58</td>
+<td class="gt_row gt_right" headers="se">0.73</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">2</td>
-<td class="gt_row gt_right" headers="max_rate">3.490332</td>
-<td class="gt_row gt_right" headers="min_rate">0.8387993</td>
-<td class="gt_row gt_right" headers="median_rate">2.164566</td>
-<td class="gt_row gt_right" headers="sd_rate">1.87</td>
-<td class="gt_row gt_right" headers="mean_rate">2.16</td>
-<td class="gt_row gt_right" headers="se">1.33</td>
+<td class="gt_row gt_right" headers="max_rate">3.387744</td>
+<td class="gt_row gt_right" headers="min_rate">0.797927559</td>
+<td class="gt_row gt_right" headers="median_rate">2.092836</td>
+<td class="gt_row gt_right" headers="sd_rate">1.83</td>
+<td class="gt_row gt_right" headers="mean_rate">2.09</td>
+<td class="gt_row gt_right" headers="se">1.29</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Far Eastern Curlew</td>
 <td class="gt_row gt_center" headers="tideDiel" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Undetected</td>
 <td class="gt_row gt_right" headers="n" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
-<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">97.823383</td>
-<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">49.9648121</td>
-<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">73.894097</td>
-<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">33.84</td>
-<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">73.89</td>
-<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">23.93</td>
+<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">98.786828</td>
+<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">61.979591800</td>
+<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">80.383210</td>
+<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">26.03</td>
+<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">80.38</td>
+<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">18.40</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">2</td>
-<td class="gt_row gt_right" headers="max_rate">23.629128</td>
-<td class="gt_row gt_right" headers="min_rate">1.3400008</td>
-<td class="gt_row gt_right" headers="median_rate">12.484564</td>
-<td class="gt_row gt_right" headers="sd_rate">15.76</td>
-<td class="gt_row gt_right" headers="mean_rate">12.48</td>
-<td class="gt_row gt_right" headers="se">11.14</td>
+<td class="gt_row gt_right" headers="max_rate">16.644074</td>
+<td class="gt_row gt_right" headers="min_rate">0.376555777</td>
+<td class="gt_row gt_right" headers="median_rate">8.510315</td>
+<td class="gt_row gt_right" headers="sd_rate">11.50</td>
+<td class="gt_row gt_right" headers="mean_rate">8.51</td>
+<td class="gt_row gt_right" headers="se">8.13</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Far Eastern Curlew</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">2</td>
-<td class="gt_row gt_right" headers="max_rate">26.406060</td>
-<td class="gt_row gt_right" headers="min_rate">0.8366165</td>
-<td class="gt_row gt_right" headers="median_rate">13.621338</td>
-<td class="gt_row gt_right" headers="sd_rate">18.08</td>
-<td class="gt_row gt_right" headers="mean_rate">13.62</td>
-<td class="gt_row gt_right" headers="se">12.78</td>
+<td class="gt_row gt_right" headers="max_rate">21.376334</td>
+<td class="gt_row gt_right" headers="min_rate">0.836616455</td>
+<td class="gt_row gt_right" headers="median_rate">11.106475</td>
+<td class="gt_row gt_right" headers="sd_rate">14.52</td>
+<td class="gt_row gt_right" headers="mean_rate">11.11</td>
+<td class="gt_row gt_right" headers="se">10.27</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Pacific Golden-Plover</td>
 <td class="gt_row gt_center" headers="tideDiel" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Undetected</td>
 <td class="gt_row gt_right" headers="n" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">14</td>
-<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">98.102469</td>
-<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">59.7647805</td>
-<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">92.758074</td>
-<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">12.29</td>
-<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">87.72</td>
-<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.28</td>
+<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">98.076114</td>
+<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">59.277021715</td>
+<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">93.124326</td>
+<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">12.11</td>
+<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">87.99</td>
+<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.24</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">14</td>
-<td class="gt_row gt_right" headers="max_rate">35.473979</td>
-<td class="gt_row gt_right" headers="min_rate">1.5827375</td>
-<td class="gt_row gt_right" headers="median_rate">5.737750</td>
-<td class="gt_row gt_right" headers="sd_rate">10.01</td>
-<td class="gt_row gt_right" headers="mean_rate">9.58</td>
-<td class="gt_row gt_right" headers="se">2.68</td>
+<td class="gt_row gt_right" headers="max_rate">35.937691</td>
+<td class="gt_row gt_right" headers="min_rate">1.603903413</td>
+<td class="gt_row gt_right" headers="median_rate">5.450170</td>
+<td class="gt_row gt_right" headers="sd_rate">9.94</td>
+<td class="gt_row gt_right" headers="mean_rate">9.37</td>
+<td class="gt_row gt_right" headers="se">2.66</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Pacific Golden-Plover</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">14</td>
-<td class="gt_row gt_right" headers="max_rate">9.349161</td>
-<td class="gt_row gt_right" headers="min_rate">0.2132006</td>
-<td class="gt_row gt_right" headers="median_rate">1.504177</td>
-<td class="gt_row gt_right" headers="sd_rate">2.78</td>
-<td class="gt_row gt_right" headers="mean_rate">2.70</td>
-<td class="gt_row gt_right" headers="se">0.74</td>
+<td class="gt_row gt_right" headers="max_rate">8.819054</td>
+<td class="gt_row gt_right" headers="min_rate">0.212376952</td>
+<td class="gt_row gt_right" headers="median_rate">1.425503</td>
+<td class="gt_row gt_right" headers="sd_rate">2.69</td>
+<td class="gt_row gt_right" headers="mean_rate">2.64</td>
+<td class="gt_row gt_right" headers="se">0.72</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Pied Stilt</td>
 <td class="gt_row gt_center" headers="tideDiel" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Undetected</td>
 <td class="gt_row gt_right" headers="n" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">6</td>
-<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">95.992457</td>
-<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">16.6607836</td>
-<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">89.020789</td>
-<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">30.95</td>
-<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">73.67</td>
-<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">12.63</td>
+<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">96.029315</td>
+<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">60.523067226</td>
+<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">89.735459</td>
+<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">16.30</td>
+<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">81.98</td>
+<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">6.65</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">6</td>
-<td class="gt_row gt_right" headers="max_rate">27.926503</td>
-<td class="gt_row gt_right" headers="min_rate">2.1202899</td>
-<td class="gt_row gt_right" headers="median_rate">7.765234</td>
-<td class="gt_row gt_right" headers="sd_rate">11.47</td>
-<td class="gt_row gt_right" headers="mean_rate">13.02</td>
-<td class="gt_row gt_right" headers="se">4.68</td>
+<td class="gt_row gt_right" headers="max_rate">26.865419</td>
+<td class="gt_row gt_right" headers="min_rate">2.101381376</td>
+<td class="gt_row gt_right" headers="median_rate">7.269236</td>
+<td class="gt_row gt_right" headers="sd_rate">11.24</td>
+<td class="gt_row gt_right" headers="mean_rate">12.22</td>
+<td class="gt_row gt_right" headers="se">4.59</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">6</td>
-<td class="gt_row gt_right" headers="max_rate">56.278354</td>
-<td class="gt_row gt_right" headers="min_rate">1.8872534</td>
-<td class="gt_row gt_right" headers="median_rate">3.213977</td>
-<td class="gt_row gt_right" headers="sd_rate">21.48</td>
-<td class="gt_row gt_right" headers="mean_rate">13.31</td>
-<td class="gt_row gt_right" headers="se">8.77</td>
+<td class="gt_row gt_right" headers="max_rate">12.611514</td>
+<td class="gt_row gt_right" headers="min_rate">1.869303586</td>
+<td class="gt_row gt_right" headers="median_rate">2.995305</td>
+<td class="gt_row gt_right" headers="sd_rate">5.15</td>
+<td class="gt_row gt_right" headers="mean_rate">5.81</td>
+<td class="gt_row gt_right" headers="se">2.10</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Red-necked Avocet</td>
 <td class="gt_row gt_center" headers="tideDiel" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Undetected</td>
 <td class="gt_row gt_right" headers="n" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3</td>
-<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">91.034379</td>
-<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">72.3367382</td>
-<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">89.355004</td>
-<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">10.34</td>
-<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">84.24</td>
-<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5.97</td>
+<td class="gt_row gt_right" headers="max_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">91.215730</td>
+<td class="gt_row gt_right" headers="min_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">77.179405743</td>
+<td class="gt_row gt_right" headers="median_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">89.604321</td>
+<td class="gt_row gt_right" headers="sd_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">7.68</td>
+<td class="gt_row gt_right" headers="mean_rate" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">86.00</td>
+<td class="gt_row gt_right" headers="se" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.43</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_center" headers="tideDiel">Diurnal</td>
 <td class="gt_row gt_right" headers="n">3</td>
-<td class="gt_row gt_right" headers="max_rate">15.003036</td>
-<td class="gt_row gt_right" headers="min_rate">4.5372670</td>
-<td class="gt_row gt_right" headers="median_rate">6.007663</td>
-<td class="gt_row gt_right" headers="sd_rate">5.67</td>
-<td class="gt_row gt_right" headers="mean_rate">8.52</td>
-<td class="gt_row gt_right" headers="se">3.27</td>
+<td class="gt_row gt_right" headers="max_rate">12.059403</td>
+<td class="gt_row gt_right" headers="min_rate">4.414268794</td>
+<td class="gt_row gt_right" headers="median_rate">5.844804</td>
+<td class="gt_row gt_right" headers="sd_rate">4.06</td>
+<td class="gt_row gt_right" headers="mean_rate">7.44</td>
+<td class="gt_row gt_right" headers="se">2.35</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="speciesEN" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_center" headers="tideDiel">Nocturnal</td>
 <td class="gt_row gt_right" headers="n">3</td>
-<td class="gt_row gt_right" headers="max_rate">12.660225</td>
-<td class="gt_row gt_right" headers="min_rate">4.4283544</td>
-<td class="gt_row gt_right" headers="median_rate">4.637333</td>
-<td class="gt_row gt_right" headers="sd_rate">4.69</td>
-<td class="gt_row gt_right" headers="mean_rate">7.24</td>
-<td class="gt_row gt_right" headers="se">2.71</td>
+<td class="gt_row gt_right" headers="max_rate">10.761192</td>
+<td class="gt_row gt_right" headers="min_rate">4.370001273</td>
+<td class="gt_row gt_right" headers="median_rate">4.550874</td>
+<td class="gt_row gt_right" headers="sd_rate">3.64</td>
+<td class="gt_row gt_right" headers="mean_rate">6.56</td>
+<td class="gt_row gt_right" headers="se">2.10</td>
 </tr>
 </tbody>
 </table>
@@ -1617,7 +1617,7 @@ See statistics, per bird
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="datatables html-widget html-fill-item" id="htmlwidget-d2a34d502a66744b8e1f" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-d2a34d502a66744b8e1f">{"x":{"filter":"none","vertical":false,"data":[["7176824","7394014","7394017","7394018","7394019","7394026","7394027","7394032","7394040","8345053","4281407","4281408","4281409","4281410","4281420","8345054","8345055","10118806","10121744","6318617","6318618","6318619","6318620","6318621","6318624","6318625","6318626","6318627","6318629","6318630","6318633","6318635","6318799","8295770","8295772","8295773","8295774","8295775","8295776","8295778","8295780","8295781"],["Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Curlew Sandpiper","Curlew Sandpiper","Curlew Sandpiper","Curlew Sandpiper","Curlew Sandpiper","Eurasian Whimbrel","Eurasian Whimbrel","Far Eastern Curlew","Far Eastern Curlew","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pied Stilt","Pied Stilt","Pied Stilt","Pied Stilt","Pied Stilt","Pied Stilt","Red-necked Avocet","Red-necked Avocet","Red-necked Avocet"],[49.94,0.02,0.43,3.62,0.02,0.5600000000000001,14.4,6.16,67.40000000000001,12.88,6.92,2.09,6.39,5.77,6.49,0.87,2.85,25.16,0.99,10.56,1.06,18.21,8.58,1.68,1.32,1.01,3.42,7.06,8.380000000000001,2.14,3.76,18.21,1.73,2.01,4.83,3.67,6.36,35.41,21.2,13.96,4.48,5.36],[20.97,0.09,0,0.87,0.24,63.75,91.17,82.03,23.59,91.70999999999999,787.42,127.06,798.0599999999999,458.56,867.6,14.16,101.02,170.83,3.94,602.39,47.21,128.92,333.69,192.62,158.51,12.54,92.72,191.9,888.84,45.44,88.68000000000001,322.57,66.52,567.3200000000001,137.16,8.380000000000001,198.17,2.48,678.1799999999999,31.97,118.32,131.32],[42,517,1,24,1304,11406,633,1331,35,712,11379,6067,12487,7947,13360,1631,3548,679,398,5703,4464,708,3890,11437,11982,1237,2712,2718,10609,2121,2357,1771,3838,28222,2840,228,3117,7,3199,229,2640,2450],[50.06,99.98,99.56999999999999,96.38,99.98,99.44,85.59999999999999,93.84,32.6,87.12,93.08,97.91,93.61,94.23,93.51000000000001,99.13,97.15000000000001,74.84,99.01000000000001,89.44,98.94,81.79000000000001,91.42,98.31999999999999,98.68000000000001,98.98999999999999,96.58,92.94,91.62,97.86,96.23999999999999,81.79000000000001,98.27,97.98999999999999,95.17,96.33,93.64,64.59,78.8,86.04000000000001,95.52,94.64],[10.87,0.09,0,0.6,0.07000000000000001,31.86,46.29,63.73,11.76,43.97,638.04,104.07,653.97,315.39,697.26,6.96,50.31,72.06999999999999,1.63,468.75,38.56,109.97,264.98,161.74,133.59,10.79,77.97,156.37,570.3099999999999,41.46,71.61,254.14,62.67,315.75,77.2,5.72,162.96,1.35,487.88,19.05,58.62,77.62],[25,517,0,11,579,4814,346,741,14,372,6643,3556,7285,4468,7808,772,2095,305,122,2802,2356,310,2147,6373,6556,682,1147,1687,5399,1416,1531,1039,2033,14892,1340,104,1668,5,1747,127,1292,1292],[43.5,0.02,0,5.48,0.01,0.66,13.38,8.6,83.98,11.82,9.6,2.93,8.98,7.06,8.93,0.9,2.4,23.63,1.34,16.73,1.64,35.47,12.34,2.54,2.04,1.58,6.8,9.27,10.56,2.93,4.68,24.46,3.08,2.12,5.76,5.5,9.77,27.06,27.93,15,4.54,6.01],[10.1,0,0,0.26,0.18,31.9,44.88,18.29,11.83,47.73,149.38,22.99,144.1,143.17,170.34,7.21,50.71,98.76000000000001,2.31,133.64,8.65,18.95,68.70999999999999,30.88,24.92,1.75,14.75,35.53,318.53,3.98,17.06,68.44,3.85,251.57,59.97,2.66,35.21,1.13,190.31,12.91,59.69,53.7],[17,0,1,13,725,6592,287,590,21,340,4736,2511,5202,3479,5552,859,1453,374,276,2901,2108,398,1743,5064,5426,555,1565,1031,5210,705,826,732,1805,13330,1500,124,1449,2,1452,102,1348,1158],[59.4,0,0.43,2.04,0.02,0.48,15.64,3.1,56.35,14.04,3.15,0.92,2.77,4.12,3.07,0.84,3.49,26.41,0.84,4.61,0.41,4.76,3.94,0.61,0.46,0.31,0.9399999999999999,3.45,6.11,0.5600000000000001,2.07,9.35,0.21,1.89,4,2.15,2.43,56.28,13.11,12.66,4.43,4.64]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Band.ID<\/th>\n      <th>speciesEN<\/th>\n      <th>total_rate_use<\/th>\n      <th>total_used_h<\/th>\n      <th>total_available_h<\/th>\n      <th>Undetected_rate_use<\/th>\n      <th>Diurnal_used_h<\/th>\n      <th>Diurnal_available_h<\/th>\n      <th>Diurnal_rate_use<\/th>\n      <th>Nocturnal_used_h<\/th>\n      <th>Nocturnal_available_h<\/th>\n      <th>Nocturnal_rate_use<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7,8,9,10,11]},{"name":"Band.ID","targets":0},{"name":"speciesEN","targets":1},{"name":"total_rate_use","targets":2},{"name":"total_used_h","targets":3},{"name":"total_available_h","targets":4},{"name":"Undetected_rate_use","targets":5},{"name":"Diurnal_used_h","targets":6},{"name":"Diurnal_available_h","targets":7},{"name":"Diurnal_rate_use","targets":8},{"name":"Nocturnal_used_h","targets":9},{"name":"Nocturnal_available_h","targets":10},{"name":"Nocturnal_rate_use","targets":11}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-d2a34d502a66744b8e1f">{"x":{"filter":"none","vertical":false,"data":[["7176824","7394014","7394017","7394018","7394019","7394026","7394027","7394032","7394040","8345053","4281407","4281408","4281409","4281410","4281420","8345054","8345055","10118806","10121744","6318617","6318618","6318619","6318620","6318621","6318624","6318625","6318626","6318627","6318629","6318630","6318633","6318635","6318799","8295770","8295772","8295773","8295774","8295775","8295776","8295778","8295780","8295781"],["Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Bar-tailed Godwit","Curlew Sandpiper","Curlew Sandpiper","Curlew Sandpiper","Curlew Sandpiper","Curlew Sandpiper","Eurasian Whimbrel","Eurasian Whimbrel","Far Eastern Curlew","Far Eastern Curlew","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pacific Golden-Plover","Pied Stilt","Pied Stilt","Pied Stilt","Pied Stilt","Pied Stilt","Pied Stilt","Red-necked Avocet","Red-necked Avocet","Red-necked Avocet"],[29.54,0.02,0.17,1.06,0.02,0.5600000000000001,12.93,6.21,67.40000000000001,11.02,6.89,2.05,6.39,5.77,6.52,0.82,2.75,19.09,0.73,10.57,1.05,18.36,8.35,1.67,1.35,1.03,3.23,6.6,8.449999999999999,2.04,3.58,17.06,1.72,1.99,4.5,3.04,5.94,20.52,20.4,11.5,4.39,5.24],[20.97,0.09,0.15,0.87,0.24,63.75,91.17,82.03,23.59,91.70999999999999,787.42,127.06,798.0599999999999,458.56,867.6,14.16,101.02,170.83,2.64,602.39,47.21,128.92,333.69,192.62,158.51,12.54,92.72,191.9,888.84,45.44,88.68000000000001,322.57,66.52,567.3200000000001,137.16,9.4,198.17,6.77,678.1799999999999,31.97,118.32,131.32],[71,538,86,82,1435,11387,705,1320,35,832,11422,6187,12490,7947,13301,1721,3668,895,364,5699,4476,702,3998,11524,11783,1219,2868,2909,10522,2231,2477,1891,3870,28484,3050,309,3334,33,3325,278,2694,2508],[70.45999999999999,99.98,99.83,98.94,99.98,99.44,87.06999999999999,93.79000000000001,32.6,88.98,93.11,97.95,93.61,94.23,93.48,99.18000000000001,97.25,80.91,99.27,89.43000000000001,98.95,81.64,91.65000000000001,98.33,98.65000000000001,98.97,96.77,93.40000000000001,91.55,97.95999999999999,96.42,82.94,98.28,98.01000000000001,95.5,96.95999999999999,94.06,79.48,79.59999999999999,88.5,95.61,94.76000000000001],[10.87,0.09,0.04,0.6,0.07000000000000001,31.86,46.29,63.73,11.76,43.97,638.04,104.07,653.97,315.39,697.26,6.96,50.31,72.06999999999999,0.33,468.75,38.56,109.97,264.98,161.74,133.59,10.79,77.97,156.37,570.3099999999999,41.46,71.61,254.14,62.67,315.75,77.2,6.11,162.96,5.19,487.88,19.05,58.62,77.62],[39,538,33,40,663,4811,383,740,14,448,6677,3632,7290,4468,7779,818,2171,433,88,2800,2355,306,2222,6422,6450,673,1210,1813,5375,1481,1607,1115,2058,15026,1445,158,1772,20,1816,158,1328,1328],[27.88,0.02,0.11,1.51,0.01,0.66,12.09,8.609999999999999,83.98,9.82,9.56,2.87,8.970000000000001,7.06,8.960000000000001,0.85,2.32,16.64,0.38,16.74,1.64,35.94,11.93,2.52,2.07,1.6,6.44,8.619999999999999,10.61,2.8,4.46,22.79,3.05,2.1,5.34,3.87,9.199999999999999,25.94,26.87,12.06,4.41,5.84],[10.1,0,0.11,0.26,0.18,31.9,44.88,18.29,11.83,47.73,149.38,22.99,144.1,143.17,170.34,7.21,50.71,98.76000000000001,2.31,133.64,8.65,18.95,68.70999999999999,30.88,24.92,1.75,14.75,35.53,318.53,3.98,17.06,68.44,3.85,251.57,59.97,3.29,35.21,1.58,190.31,12.91,59.69,53.7],[32,0,53,42,772,6576,322,580,21,384,4745,2555,5200,3479,5522,903,1497,462,276,2899,2121,396,1776,5102,5333,546,1658,1096,5147,750,870,776,1812,13458,1605,151,1562,13,1509,120,1366,1180],[31.56,0,0.2,0.63,0.02,0.49,13.94,3.15,56.35,12.43,3.15,0.9,2.77,4.12,3.08,0.8,3.39,21.38,0.84,4.61,0.41,4.79,3.87,0.61,0.47,0.32,0.89,3.24,6.19,0.53,1.96,8.82,0.21,1.87,3.74,2.18,2.25,12.19,12.61,10.76,4.37,4.55]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>Band.ID<\/th>\n      <th>speciesEN<\/th>\n      <th>total_rate_use<\/th>\n      <th>total_used_h<\/th>\n      <th>total_available_h<\/th>\n      <th>Undetected_rate_use<\/th>\n      <th>Diurnal_used_h<\/th>\n      <th>Diurnal_available_h<\/th>\n      <th>Diurnal_rate_use<\/th>\n      <th>Nocturnal_used_h<\/th>\n      <th>Nocturnal_available_h<\/th>\n      <th>Nocturnal_rate_use<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7,8,9,10,11]},{"name":"Band.ID","targets":0},{"name":"speciesEN","targets":1},{"name":"total_rate_use","targets":2},{"name":"total_used_h","targets":3},{"name":"total_available_h","targets":4},{"name":"Undetected_rate_use","targets":5},{"name":"Diurnal_used_h","targets":6},{"name":"Diurnal_available_h","targets":7},{"name":"Diurnal_rate_use","targets":8},{"name":"Nocturnal_used_h","targets":9},{"name":"Nocturnal_available_h","targets":10},{"name":"Nocturnal_rate_use","targets":11}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
@@ -2115,13 +2115,13 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
-<td class="gt_row gt_right" headers="min">4.1</td>
-<td class="gt_row gt_right" headers="q1">5.8</td>
-<td class="gt_row gt_right" headers="median">7.6</td>
-<td class="gt_row gt_right" headers="q3">9.3</td>
-<td class="gt_row gt_right" headers="max">11.0</td>
-<td class="gt_row gt_right" headers="mean">7.6</td>
-<td class="gt_row gt_right" headers="sd">4.9</td>
+<td class="gt_row gt_right" headers="min">1.5</td>
+<td class="gt_row gt_right" headers="q1">2.5</td>
+<td class="gt_row gt_right" headers="median">3.6</td>
+<td class="gt_row gt_right" headers="q3">7.1</td>
+<td class="gt_row gt_right" headers="max">10.7</td>
+<td class="gt_row gt_right" headers="mean">5.2</td>
+<td class="gt_row gt_right" headers="sd">4.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2129,12 +2129,12 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">1.9</td>
-<td class="gt_row gt_right" headers="q1">1.9</td>
-<td class="gt_row gt_right" headers="median">1.9</td>
-<td class="gt_row gt_right" headers="q3">1.9</td>
-<td class="gt_row gt_right" headers="max">1.9</td>
-<td class="gt_row gt_right" headers="mean">1.9</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="q1">2.0</td>
+<td class="gt_row gt_right" headers="median">2.1</td>
+<td class="gt_row gt_right" headers="q3">2.2</td>
+<td class="gt_row gt_right" headers="max">2.3</td>
+<td class="gt_row gt_right" headers="mean">2.1</td>
+<td class="gt_row gt_right" headers="sd">0.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2184,7 +2184,7 @@ High Tide Resident birds
 <td class="gt_row gt_right" headers="q1">1.5</td>
 <td class="gt_row gt_right" headers="median">1.8</td>
 <td class="gt_row gt_right" headers="q3">2.1</td>
-<td class="gt_row gt_right" headers="max">2.5</td>
+<td class="gt_row gt_right" headers="max">2.4</td>
 <td class="gt_row gt_right" headers="mean">1.8</td>
 <td class="gt_row gt_right" headers="sd">0.9</td>
 </tr>
@@ -2194,50 +2194,50 @@ High Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">1.2</td>
-<td class="gt_row gt_right" headers="q1">4.2</td>
-<td class="gt_row gt_right" headers="median">7.2</td>
-<td class="gt_row gt_right" headers="q3">10.2</td>
-<td class="gt_row gt_right" headers="max">13.2</td>
-<td class="gt_row gt_right" headers="mean">7.2</td>
-<td class="gt_row gt_right" headers="sd">8.4</td>
+<td class="gt_row gt_right" headers="q1">3.6</td>
+<td class="gt_row gt_right" headers="median">6.0</td>
+<td class="gt_row gt_right" headers="q3">8.4</td>
+<td class="gt_row gt_right" headers="max">10.8</td>
+<td class="gt_row gt_right" headers="mean">6.0</td>
+<td class="gt_row gt_right" headers="sd">6.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.8</td>
-<td class="gt_row gt_right" headers="q1">3.5</td>
-<td class="gt_row gt_right" headers="median">6.3</td>
-<td class="gt_row gt_right" headers="q3">9.1</td>
-<td class="gt_row gt_right" headers="max">11.8</td>
-<td class="gt_row gt_right" headers="mean">6.3</td>
-<td class="gt_row gt_right" headers="sd">7.8</td>
+<td class="gt_row gt_right" headers="min">0.7</td>
+<td class="gt_row gt_right" headers="q1">2.9</td>
+<td class="gt_row gt_right" headers="median">5.0</td>
+<td class="gt_row gt_right" headers="q3">7.1</td>
+<td class="gt_row gt_right" headers="max">9.2</td>
+<td class="gt_row gt_right" headers="mean">5.0</td>
+<td class="gt_row gt_right" headers="sd">6.0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.1</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.1</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.2</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.9</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">11.7</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.3</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">6.3</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">7.1</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.0</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.7</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">11.4</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.6</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">1.4</td>
-<td class="gt_row gt_right" headers="q1">1.4</td>
-<td class="gt_row gt_right" headers="median">1.4</td>
-<td class="gt_row gt_right" headers="q3">1.4</td>
-<td class="gt_row gt_right" headers="max">1.4</td>
-<td class="gt_row gt_right" headers="mean">1.4</td>
+<td class="gt_row gt_right" headers="min">1.3</td>
+<td class="gt_row gt_right" headers="q1">1.3</td>
+<td class="gt_row gt_right" headers="median">1.3</td>
+<td class="gt_row gt_right" headers="q3">1.3</td>
+<td class="gt_row gt_right" headers="max">1.3</td>
+<td class="gt_row gt_right" headers="mean">1.3</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -2816,12 +2816,12 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">3</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.3</td>
-<td class="gt_row gt_right" headers="median">0.5</td>
-<td class="gt_row gt_right" headers="q3">0.8</td>
-<td class="gt_row gt_right" headers="max">1.1</td>
-<td class="gt_row gt_right" headers="mean">0.5</td>
-<td class="gt_row gt_right" headers="sd">0.7</td>
+<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="median">0.1</td>
+<td class="gt_row gt_right" headers="q3">0.5</td>
+<td class="gt_row gt_right" headers="max">1.0</td>
+<td class="gt_row gt_right" headers="mean">0.4</td>
+<td class="gt_row gt_right" headers="sd">0.6</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2830,10 +2830,10 @@ Low Tide Resident birds
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.3</td>
 <td class="gt_row gt_right" headers="q1">0.5</td>
-<td class="gt_row gt_right" headers="median">0.8</td>
-<td class="gt_row gt_right" headers="q3">1.0</td>
-<td class="gt_row gt_right" headers="max">1.2</td>
-<td class="gt_row gt_right" headers="mean">0.8</td>
+<td class="gt_row gt_right" headers="median">0.7</td>
+<td class="gt_row gt_right" headers="q3">0.9</td>
+<td class="gt_row gt_right" headers="max">1.1</td>
+<td class="gt_row gt_right" headers="mean">0.7</td>
 <td class="gt_row gt_right" headers="sd">0.6</td>
 </tr>
 <tr class="odd">
@@ -2869,10 +2869,10 @@ Low Tide Resident birds
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">1.0</td>
-<td class="gt_row gt_right" headers="median">2.1</td>
-<td class="gt_row gt_right" headers="q3">3.1</td>
+<td class="gt_row gt_right" headers="median">2.0</td>
+<td class="gt_row gt_right" headers="q3">3.0</td>
 <td class="gt_row gt_right" headers="max">4.1</td>
-<td class="gt_row gt_right" headers="mean">2.1</td>
+<td class="gt_row gt_right" headers="mean">2.0</td>
 <td class="gt_row gt_right" headers="sd">2.9</td>
 </tr>
 <tr class="even">
@@ -2880,13 +2880,13 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="Station">Swan Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.6</td>
-<td class="gt_row gt_right" headers="q1">7.7</td>
-<td class="gt_row gt_right" headers="median">13.8</td>
-<td class="gt_row gt_right" headers="q3">19.9</td>
-<td class="gt_row gt_right" headers="max">26.1</td>
-<td class="gt_row gt_right" headers="mean">13.8</td>
-<td class="gt_row gt_right" headers="sd">17.3</td>
+<td class="gt_row gt_right" headers="min">1.5</td>
+<td class="gt_row gt_right" headers="q1">6.2</td>
+<td class="gt_row gt_right" headers="median">10.9</td>
+<td class="gt_row gt_right" headers="q3">15.6</td>
+<td class="gt_row gt_right" headers="max">20.3</td>
+<td class="gt_row gt_right" headers="mean">10.9</td>
+<td class="gt_row gt_right" headers="sd">13.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pied Stilt</td>
@@ -2894,35 +2894,35 @@ Low Tide Resident birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
 <td class="gt_row gt_right" headers="min">0.5</td>
-<td class="gt_row gt_right" headers="q1">1.6</td>
-<td class="gt_row gt_right" headers="median">2.6</td>
-<td class="gt_row gt_right" headers="q3">3.6</td>
-<td class="gt_row gt_right" headers="max">4.6</td>
-<td class="gt_row gt_right" headers="mean">2.6</td>
-<td class="gt_row gt_right" headers="sd">2.9</td>
+<td class="gt_row gt_right" headers="q1">1.3</td>
+<td class="gt_row gt_right" headers="median">2.1</td>
+<td class="gt_row gt_right" headers="q3">2.9</td>
+<td class="gt_row gt_right" headers="max">3.7</td>
+<td class="gt_row gt_right" headers="mean">2.1</td>
+<td class="gt_row gt_right" headers="sd">2.3</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic; border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.2</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.1</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.0</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.7</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.0</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.5</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.1</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.9</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.8</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.6</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.4</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.8</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Red-necked Avocet</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.5</td>
+<td class="gt_row gt_right" headers="min">0.4</td>
 <td class="gt_row gt_right" headers="q1">0.5</td>
 <td class="gt_row gt_right" headers="median">0.6</td>
-<td class="gt_row gt_right" headers="q3">0.7</td>
+<td class="gt_row gt_right" headers="q3">0.6</td>
 <td class="gt_row gt_right" headers="max">0.7</td>
 <td class="gt_row gt_right" headers="mean">0.6</td>
 <td class="gt_row gt_right" headers="sd">0.2</td>
@@ -3498,12 +3498,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">1.6</td>
-<td class="gt_row gt_right" headers="q1">46.9</td>
-<td class="gt_row gt_right" headers="median">58.0</td>
-<td class="gt_row gt_right" headers="q3">66.8</td>
+<td class="gt_row gt_right" headers="q1">36.7</td>
+<td class="gt_row gt_right" headers="median">42.6</td>
+<td class="gt_row gt_right" headers="q3">55.4</td>
 <td class="gt_row gt_right" headers="max">100.0</td>
-<td class="gt_row gt_right" headers="mean">55.1</td>
-<td class="gt_row gt_right" headers="sd">32.3</td>
+<td class="gt_row gt_right" headers="mean">46.9</td>
+<td class="gt_row gt_right" headers="sd">32.2</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
@@ -3512,23 +3512,23 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.7</td>
 <td class="gt_row gt_right" headers="q1">8.3</td>
-<td class="gt_row gt_right" headers="median">12.7</td>
-<td class="gt_row gt_right" headers="q3">30.8</td>
+<td class="gt_row gt_right" headers="median">10.5</td>
+<td class="gt_row gt_right" headers="q3">29.8</td>
 <td class="gt_row gt_right" headers="max">100.0</td>
-<td class="gt_row gt_right" headers="mean">28.3</td>
-<td class="gt_row gt_right" headers="sd">37.1</td>
+<td class="gt_row gt_right" headers="mean">27.6</td>
+<td class="gt_row gt_right" headers="sd">37.4</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">Inf</td>
-<td class="gt_row gt_right" headers="q1">NA</td>
-<td class="gt_row gt_right" headers="median">NA</td>
-<td class="gt_row gt_right" headers="q3">NA</td>
-<td class="gt_row gt_right" headers="max">-Inf</td>
-<td class="gt_row gt_right" headers="mean">NaN</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="median">0.0</td>
+<td class="gt_row gt_right" headers="q3">0.0</td>
+<td class="gt_row gt_right" headers="max">0.0</td>
+<td class="gt_row gt_right" headers="mean">0.0</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
@@ -3549,7 +3549,7 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Tomago</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">1.3</td>
 <td class="gt_row gt_right" headers="median">56.4</td>
 <td class="gt_row gt_right" headers="q3">57.3</td>
@@ -3562,12 +3562,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">15.1</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">33.2</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">48.9</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">53.4</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">54.4</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">41.0</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13.5</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">30.4</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">48.1</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">50.9</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">52.5</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">39.1</td>
 <td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">16.8</td>
 </tr>
 <tr class="odd">
@@ -3575,13 +3575,13 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">2.2</td>
-<td class="gt_row gt_right" headers="q1">12.7</td>
-<td class="gt_row gt_right" headers="median">13.0</td>
-<td class="gt_row gt_right" headers="q3">14.9</td>
-<td class="gt_row gt_right" headers="max">21.9</td>
-<td class="gt_row gt_right" headers="mean">12.9</td>
-<td class="gt_row gt_right" headers="sd">7.1</td>
+<td class="gt_row gt_right" headers="min">2.1</td>
+<td class="gt_row gt_right" headers="q1">13.0</td>
+<td class="gt_row gt_right" headers="median">13.3</td>
+<td class="gt_row gt_right" headers="q3">14.5</td>
+<td class="gt_row gt_right" headers="max">21.1</td>
+<td class="gt_row gt_right" headers="mean">12.8</td>
+<td class="gt_row gt_right" headers="sd">6.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -3667,7 +3667,7 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.1</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
 <td class="gt_row gt_right" headers="max">0.1</td>
@@ -3693,25 +3693,25 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2</td>
 <td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.2</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.8</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.4</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.0</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.6</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.4</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.7</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">0.7</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.3</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.9</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.4</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.3</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1.6</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">1.2</td>
-<td class="gt_row gt_right" headers="q1">1.9</td>
-<td class="gt_row gt_right" headers="median">2.6</td>
-<td class="gt_row gt_right" headers="q3">3.2</td>
-<td class="gt_row gt_right" headers="max">3.9</td>
-<td class="gt_row gt_right" headers="mean">2.6</td>
-<td class="gt_row gt_right" headers="sd">2.0</td>
+<td class="gt_row gt_right" headers="min">1.1</td>
+<td class="gt_row gt_right" headers="q1">1.7</td>
+<td class="gt_row gt_right" headers="median">2.4</td>
+<td class="gt_row gt_right" headers="q3">3.1</td>
+<td class="gt_row gt_right" headers="max">3.8</td>
+<td class="gt_row gt_right" headers="mean">2.4</td>
+<td class="gt_row gt_right" headers="sd">1.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
@@ -3731,12 +3731,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">3.8</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Inf</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">-Inf</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NaN</td>
 <td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
 </tr>
 <tr class="even">
@@ -3744,12 +3744,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">40.6</td>
-<td class="gt_row gt_right" headers="q1">40.6</td>
-<td class="gt_row gt_right" headers="median">40.6</td>
-<td class="gt_row gt_right" headers="q3">40.6</td>
-<td class="gt_row gt_right" headers="max">40.6</td>
-<td class="gt_row gt_right" headers="mean">40.6</td>
+<td class="gt_row gt_right" headers="min">30.4</td>
+<td class="gt_row gt_right" headers="q1">30.4</td>
+<td class="gt_row gt_right" headers="median">30.4</td>
+<td class="gt_row gt_right" headers="q3">30.4</td>
+<td class="gt_row gt_right" headers="max">30.4</td>
+<td class="gt_row gt_right" headers="mean">30.4</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -3757,12 +3757,12 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">11.0</td>
-<td class="gt_row gt_right" headers="q1">11.0</td>
-<td class="gt_row gt_right" headers="median">11.0</td>
-<td class="gt_row gt_right" headers="q3">11.0</td>
-<td class="gt_row gt_right" headers="max">11.0</td>
-<td class="gt_row gt_right" headers="mean">11.0</td>
+<td class="gt_row gt_right" headers="min">11.4</td>
+<td class="gt_row gt_right" headers="q1">11.4</td>
+<td class="gt_row gt_right" headers="median">11.4</td>
+<td class="gt_row gt_right" headers="q3">11.4</td>
+<td class="gt_row gt_right" headers="max">11.4</td>
+<td class="gt_row gt_right" headers="mean">11.4</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="even">
@@ -3783,13 +3783,13 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.5</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5.1</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.5</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">38.4</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">71.1</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">23.6</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">22.1</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">2.7</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5.3</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.1</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">39.1</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">69.5</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">23.3</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">21.7</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3797,10 +3797,10 @@ High Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">12</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">1.5</td>
+<td class="gt_row gt_right" headers="q1">1.6</td>
 <td class="gt_row gt_right" headers="median">3.5</td>
-<td class="gt_row gt_right" headers="q3">10.1</td>
-<td class="gt_row gt_right" headers="max">16.8</td>
+<td class="gt_row gt_right" headers="q3">9.9</td>
+<td class="gt_row gt_right" headers="max">16.7</td>
 <td class="gt_row gt_right" headers="mean">5.9</td>
 <td class="gt_row gt_right" headers="sd">5.7</td>
 </tr>
@@ -3811,11 +3811,11 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">8</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">1.3</td>
-<td class="gt_row gt_right" headers="q3">4.6</td>
-<td class="gt_row gt_right" headers="max">9.4</td>
-<td class="gt_row gt_right" headers="mean">2.8</td>
-<td class="gt_row gt_right" headers="sd">3.4</td>
+<td class="gt_row gt_right" headers="median">1.2</td>
+<td class="gt_row gt_right" headers="q3">4.2</td>
+<td class="gt_row gt_right" headers="max">9.2</td>
+<td class="gt_row gt_right" headers="mean">2.6</td>
+<td class="gt_row gt_right" headers="sd">3.3</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3826,7 +3826,7 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.1</td>
 <td class="gt_row gt_right" headers="median">0.6</td>
 <td class="gt_row gt_right" headers="q3">1.3</td>
-<td class="gt_row gt_right" headers="max">2.6</td>
+<td class="gt_row gt_right" headers="max">2.7</td>
 <td class="gt_row gt_right" headers="mean">0.8</td>
 <td class="gt_row gt_right" headers="sd">0.9</td>
 </tr>
@@ -3838,10 +3838,10 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.3</td>
-<td class="gt_row gt_right" headers="q3">10.2</td>
-<td class="gt_row gt_right" headers="max">38.8</td>
-<td class="gt_row gt_right" headers="mean">9.9</td>
-<td class="gt_row gt_right" headers="sd">19.3</td>
+<td class="gt_row gt_right" headers="q3">10.6</td>
+<td class="gt_row gt_right" headers="max">40.4</td>
+<td class="gt_row gt_right" headers="mean">10.3</td>
+<td class="gt_row gt_right" headers="sd">20.1</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3851,10 +3851,10 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
-<td class="gt_row gt_right" headers="q3">4.9</td>
-<td class="gt_row gt_right" headers="max">19.5</td>
-<td class="gt_row gt_right" headers="mean">4.9</td>
-<td class="gt_row gt_right" headers="sd">9.7</td>
+<td class="gt_row gt_right" headers="q3">5.1</td>
+<td class="gt_row gt_right" headers="max">20.2</td>
+<td class="gt_row gt_right" headers="mean">5.1</td>
+<td class="gt_row gt_right" headers="sd">10.1</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -3865,7 +3865,7 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
 <td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">0.8</td>
+<td class="gt_row gt_right" headers="max">0.9</td>
 <td class="gt_row gt_right" headers="mean">0.2</td>
 <td class="gt_row gt_right" headers="sd">0.4</td>
 </tr>
@@ -3878,9 +3878,9 @@ High Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
 <td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">4.1</td>
-<td class="gt_row gt_right" headers="mean">0.7</td>
-<td class="gt_row gt_right" headers="sd">1.7</td>
+<td class="gt_row gt_right" headers="max">4.6</td>
+<td class="gt_row gt_right" headers="mean">0.8</td>
+<td class="gt_row gt_right" headers="sd">1.9</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4432,12 +4432,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">0.3</td>
-<td class="gt_row gt_right" headers="q1">2.1</td>
-<td class="gt_row gt_right" headers="median">7.6</td>
-<td class="gt_row gt_right" headers="q3">14.1</td>
+<td class="gt_row gt_right" headers="q1">1.5</td>
+<td class="gt_row gt_right" headers="median">5.1</td>
+<td class="gt_row gt_right" headers="q3">7.0</td>
 <td class="gt_row gt_right" headers="max">60.6</td>
-<td class="gt_row gt_right" headers="mean">15.4</td>
-<td class="gt_row gt_right" headers="sd">22.8</td>
+<td class="gt_row gt_right" headers="mean">13.2</td>
+<td class="gt_row gt_right" headers="sd">23.4</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
@@ -4445,37 +4445,37 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">6</td>
 <td class="gt_row gt_right" headers="min">1.0</td>
-<td class="gt_row gt_right" headers="q1">3.6</td>
-<td class="gt_row gt_right" headers="median">7.6</td>
-<td class="gt_row gt_right" headers="q3">12.2</td>
+<td class="gt_row gt_right" headers="q1">3.1</td>
+<td class="gt_row gt_right" headers="median">4.7</td>
+<td class="gt_row gt_right" headers="q3">4.8</td>
 <td class="gt_row gt_right" headers="max">97.5</td>
-<td class="gt_row gt_right" headers="mean">21.6</td>
-<td class="gt_row gt_right" headers="sd">37.5</td>
+<td class="gt_row gt_right" headers="mean">19.2</td>
+<td class="gt_row gt_right" headers="sd">38.4</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.4</td>
-<td class="gt_row gt_right" headers="q1">0.4</td>
-<td class="gt_row gt_right" headers="median">0.4</td>
+<td class="gt_row gt_right" headers="min">0.1</td>
+<td class="gt_row gt_right" headers="q1">0.2</td>
+<td class="gt_row gt_right" headers="median">0.3</td>
 <td class="gt_row gt_right" headers="q3">0.4</td>
 <td class="gt_row gt_right" headers="max">0.4</td>
-<td class="gt_row gt_right" headers="mean">0.4</td>
-<td class="gt_row gt_right" headers="sd">NA</td>
+<td class="gt_row gt_right" headers="mean">0.3</td>
+<td class="gt_row gt_right" headers="sd">0.2</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Bar-tailed Godwit</td>
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">0.4</td>
-<td class="gt_row gt_right" headers="q1">0.4</td>
-<td class="gt_row gt_right" headers="median">0.4</td>
-<td class="gt_row gt_right" headers="q3">0.4</td>
-<td class="gt_row gt_right" headers="max">0.4</td>
-<td class="gt_row gt_right" headers="mean">0.4</td>
+<td class="gt_row gt_right" headers="min">0.0</td>
+<td class="gt_row gt_right" headers="q1">0.0</td>
+<td class="gt_row gt_right" headers="median">0.0</td>
+<td class="gt_row gt_right" headers="q3">0.0</td>
+<td class="gt_row gt_right" headers="max">0.0</td>
+<td class="gt_row gt_right" headers="mean">0.0</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -4509,12 +4509,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">5</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13.0</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.7</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">39.8</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">41.2</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">47.4</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">35.2</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">12.0</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">32.5</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">39.9</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">41.3</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">45.1</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.2</td>
 <td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13.2</td>
 </tr>
 <tr class="even">
@@ -4522,13 +4522,13 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">5</td>
-<td class="gt_row gt_right" headers="min">5.5</td>
+<td class="gt_row gt_right" headers="min">4.9</td>
 <td class="gt_row gt_right" headers="q1">13.4</td>
-<td class="gt_row gt_right" headers="median">17.5</td>
+<td class="gt_row gt_right" headers="median">16.4</td>
 <td class="gt_row gt_right" headers="q3">18.0</td>
-<td class="gt_row gt_right" headers="max">20.7</td>
-<td class="gt_row gt_right" headers="mean">15.0</td>
-<td class="gt_row gt_right" headers="sd">5.9</td>
+<td class="gt_row gt_right" headers="max">19.0</td>
+<td class="gt_row gt_right" headers="mean">14.3</td>
+<td class="gt_row gt_right" headers="sd">5.7</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Curlew Sandpiper</td>
@@ -4639,12 +4639,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.8</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.5</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.5</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.5</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.5</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.5</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.5</td>
 <td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
 </tr>
 <tr class="even">
@@ -4652,13 +4652,13 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Curlew Point</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">2</td>
-<td class="gt_row gt_right" headers="min">0.9</td>
-<td class="gt_row gt_right" headers="q1">3.2</td>
-<td class="gt_row gt_right" headers="median">5.5</td>
-<td class="gt_row gt_right" headers="q3">7.7</td>
-<td class="gt_row gt_right" headers="max">10.0</td>
-<td class="gt_row gt_right" headers="mean">5.5</td>
-<td class="gt_row gt_right" headers="sd">6.5</td>
+<td class="gt_row gt_right" headers="min">0.7</td>
+<td class="gt_row gt_right" headers="q1">2.9</td>
+<td class="gt_row gt_right" headers="median">5.0</td>
+<td class="gt_row gt_right" headers="q3">7.1</td>
+<td class="gt_row gt_right" headers="max">9.2</td>
+<td class="gt_row gt_right" headers="mean">5.0</td>
+<td class="gt_row gt_right" headers="sd">6.0</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Eurasian Whimbrel</td>
@@ -4691,12 +4691,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">1</td>
-<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.8</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.8</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.8</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.8</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.8</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">34.8</td>
+<td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">28.0</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">28.0</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">28.0</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">28.0</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">28.0</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">28.0</td>
 <td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">NA</td>
 </tr>
 <tr class="even">
@@ -4704,12 +4704,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="Station">Milhams Pond</td>
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">1</td>
-<td class="gt_row gt_right" headers="min">73.5</td>
-<td class="gt_row gt_right" headers="q1">73.5</td>
-<td class="gt_row gt_right" headers="median">73.5</td>
-<td class="gt_row gt_right" headers="q3">73.5</td>
-<td class="gt_row gt_right" headers="max">73.5</td>
-<td class="gt_row gt_right" headers="mean">73.5</td>
+<td class="gt_row gt_right" headers="min">63.6</td>
+<td class="gt_row gt_right" headers="q1">63.6</td>
+<td class="gt_row gt_right" headers="median">63.6</td>
+<td class="gt_row gt_right" headers="q3">63.6</td>
+<td class="gt_row gt_right" headers="max">63.6</td>
+<td class="gt_row gt_right" headers="mean">63.6</td>
 <td class="gt_row gt_right" headers="sd">NA</td>
 </tr>
 <tr class="odd">
@@ -4744,12 +4744,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="condition" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">Diurnal</td>
 <td class="gt_row gt_right" headers="n_individual" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">13</td>
 <td class="gt_row gt_right" headers="min" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">4.2</td>
-<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">9.7</td>
-<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.1</td>
-<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">36.3</td>
-<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">67.9</td>
-<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">24.7</td>
-<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.6</td>
+<td class="gt_row gt_right" headers="q1" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">8.9</td>
+<td class="gt_row gt_right" headers="median" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.0</td>
+<td class="gt_row gt_right" headers="q3" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">35.8</td>
+<td class="gt_row gt_right" headers="max" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">69.0</td>
+<td class="gt_row gt_right" headers="mean" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">24.4</td>
+<td class="gt_row gt_right" headers="sd" style="border-top-width: 2px; border-top-style: solid; border-top-color: darkgrey">20.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4757,12 +4757,12 @@ Low Tide Migratory birds
 <td class="gt_row gt_left" headers="condition">Nocturnal</td>
 <td class="gt_row gt_right" headers="n_individual">12</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
-<td class="gt_row gt_right" headers="q1">1.9</td>
-<td class="gt_row gt_right" headers="median">5.4</td>
-<td class="gt_row gt_right" headers="q3">14.6</td>
-<td class="gt_row gt_right" headers="max">29.5</td>
-<td class="gt_row gt_right" headers="mean">8.6</td>
-<td class="gt_row gt_right" headers="sd">8.8</td>
+<td class="gt_row gt_right" headers="q1">1.8</td>
+<td class="gt_row gt_right" headers="median">5.3</td>
+<td class="gt_row gt_right" headers="q3">14.2</td>
+<td class="gt_row gt_right" headers="max">29.0</td>
+<td class="gt_row gt_right" headers="mean">8.3</td>
+<td class="gt_row gt_right" headers="sd">8.6</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4771,10 +4771,10 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">5</td>
 <td class="gt_row gt_right" headers="min">1.8</td>
 <td class="gt_row gt_right" headers="q1">2.3</td>
-<td class="gt_row gt_right" headers="median">4.4</td>
-<td class="gt_row gt_right" headers="q3">5.2</td>
-<td class="gt_row gt_right" headers="max">8.8</td>
-<td class="gt_row gt_right" headers="mean">4.5</td>
+<td class="gt_row gt_right" headers="median">3.8</td>
+<td class="gt_row gt_right" headers="q3">4.9</td>
+<td class="gt_row gt_right" headers="max">8.9</td>
+<td class="gt_row gt_right" headers="mean">4.3</td>
 <td class="gt_row gt_right" headers="sd">2.8</td>
 </tr>
 <tr class="even">
@@ -4799,9 +4799,9 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
 <td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">37.9</td>
-<td class="gt_row gt_right" headers="mean">7.6</td>
-<td class="gt_row gt_right" headers="sd">16.9</td>
+<td class="gt_row gt_right" headers="max">38.9</td>
+<td class="gt_row gt_right" headers="mean">7.8</td>
+<td class="gt_row gt_right" headers="sd">17.4</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4811,10 +4811,10 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.3</td>
 <td class="gt_row gt_right" headers="median">0.5</td>
-<td class="gt_row gt_right" headers="q3">15.7</td>
-<td class="gt_row gt_right" headers="max">30.9</td>
-<td class="gt_row gt_right" headers="mean">10.5</td>
-<td class="gt_row gt_right" headers="sd">17.7</td>
+<td class="gt_row gt_right" headers="q3">16.4</td>
+<td class="gt_row gt_right" headers="max">32.3</td>
+<td class="gt_row gt_right" headers="mean">11.0</td>
+<td class="gt_row gt_right" headers="sd">18.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4825,9 +4825,9 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
 <td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">1.9</td>
-<td class="gt_row gt_right" headers="mean">0.3</td>
-<td class="gt_row gt_right" headers="sd">0.7</td>
+<td class="gt_row gt_right" headers="max">2.1</td>
+<td class="gt_row gt_right" headers="mean">0.4</td>
+<td class="gt_row gt_right" headers="sd">0.8</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4838,9 +4838,9 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="q1">0.0</td>
 <td class="gt_row gt_right" headers="median">0.0</td>
 <td class="gt_row gt_right" headers="q3">0.0</td>
-<td class="gt_row gt_right" headers="max">10.0</td>
-<td class="gt_row gt_right" headers="mean">1.2</td>
-<td class="gt_row gt_right" headers="sd">3.3</td>
+<td class="gt_row gt_right" headers="max">10.7</td>
+<td class="gt_row gt_right" headers="mean">1.3</td>
+<td class="gt_row gt_right" headers="sd">3.5</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="Species" style="font-style: italic">Pacific Golden-Plover</td>
@@ -4901,7 +4901,7 @@ Low Tide Migratory birds
 <td class="gt_row gt_right" headers="n_individual">4</td>
 <td class="gt_row gt_right" headers="min">0.0</td>
 <td class="gt_row gt_right" headers="q1">0.0</td>
-<td class="gt_row gt_right" headers="median">0.1</td>
+<td class="gt_row gt_right" headers="median">0.0</td>
 <td class="gt_row gt_right" headers="q3">0.1</td>
 <td class="gt_row gt_right" headers="max">0.2</td>
 <td class="gt_row gt_right" headers="mean">0.1</td>
