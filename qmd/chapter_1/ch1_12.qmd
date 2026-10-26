@@ -131,7 +131,9 @@ gaps <- runs %>%
 
 **3. Truncate gaps** (hours) for mixture model fitting.
 
-::: blockquote-yellow **NOTE:** Below are values you should choose based on your own data and on the ecological plausibility of your system. :::
+::: blockquote-yellow
+**NOTE:** Below are values you should choose based on your own data and on the ecological plausibility of your system. 
+:::
 
 ```{r gap selection, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
 
@@ -202,7 +204,7 @@ summary(mix_model)
 
 ```
 
-**6. Find the threshold value,** the cut-point: the gap value where classification switches from "Non-independent" to an "Independent" class (i.e. where posterior prob of the non-independent component drops below 0.5 as gap duration increases). We will first classify each gap to the component with highest posterior probability, and order components by their mean, so component 1 = shortest-gap (non-independent), 2 = medium, 3 = long (independent).
+**5. Find the threshold value,** the cut-point: the gap value where classification switches from "Non-independent" to an "Independent" class (i.e. where posterior prob of the non-independent component drops below 0.5 as gap duration increases). We will first classify each gap to the component with highest posterior probability, and order components by their mean, so component 1 = shortest-gap (non-independent), 2 = medium, 3 = long (independent).
 
 ```{r gap selection 3, message = FALSE, warning = FALSE, eval = TRUE, echo = FALSE, results = 'hide', include = TRUE}
 posteriors <- mix_model$posterior
@@ -352,10 +354,11 @@ tide_dt <- as.data.table(tide_data)[, .(tideDateTimeAus, tideCategory)]
 setkey(tide_dt, tideDateTimeAus)
 
 vh_dt <- as.data.table(visit_hours)
-setkey(vh_dt, hour_dt)
+vh_dt[, bin_mid := hour_dt + 1800]  ## /!\ rather match tide at bin midpoint
+setkey(vh_dt, bin_mid)                                            
 
-visit_hours_tide <- tide_dt[vh_dt, on = .(tideDateTimeAus = hour_dt), roll = "nearest"]
-setnames(visit_hours_tide, "tideDateTimeAus", "hour_dt")
+visit_hours_tide <- tide_dt[vh_dt, on = .(tideDateTimeAus = bin_mid), roll = "nearest"]   
+visit_hours_tide[, tideDateTimeAus := NULL]   
 
 ```
 
@@ -474,10 +477,11 @@ tide_dt <- as.data.table(tide_data)[, .(tideDateTimeAus, tideCategory)]
 setkey(tide_dt, tideDateTimeAus)
 
 vsh_dt <- as.data.table(valid_station_hours)
-setkey(vsh_dt, hour_dt)
-
-valid_station_hours_tide <- tide_dt[vsh_dt, on = .(tideDateTimeAus = hour_dt), roll = "nearest"]
-setnames(valid_station_hours_tide, "tideDateTimeAus", "hour_dt")
+vsh_dt[, bin_mid := hour_dt + 1800]                               
+setkey(vsh_dt, bin_mid)                                         
+ 
+valid_station_hours_tide <- tide_dt[vsh_dt, on = .(tideDateTimeAus = bin_mid), roll = "nearest"] 
+valid_station_hours_tide[, tideDateTimeAus := NULL]   
 
 ```
 
@@ -502,8 +506,8 @@ period_sp <- data_all  %>%
 bird_hours <- period_sp %>%
   group_by(Band.ID) %>%
   rowwise() %>%
-  mutate(hour_dt = list(seq(from = as.POSIXct(ymd(DateAUS.Trap), tz = "UTC"),
-                            to = as.POSIXct(last_dateAus, tz = "UTC"),
+   mutate(hour_dt = list(seq(from = as.POSIXct(format(ymd(DateAUS.Trap)), tz = "Australia/Sydney"), 
+                            to = last_dateAus,                                                       
                             by = "hour"))) %>%
   unnest(cols = c(hour_dt)) %>%
   ungroup() 
@@ -526,7 +530,7 @@ for(name in recv_names) {
 
 # # FINALISE AVAILABLE TIME 
 available_bird_recv_time <- bind_rows(bird_data_list) %>%
-  mutate(hour_dt = force_tz(hour_dt, "Australia/Sydney")) %>%
+  # mutate(hour_dt = force_tz(hour_dt, "Australia/Sydney")) %>%
   filter(if_all(everything(), ~ !is.na(.))) %>%
   rename(recvDeployName = name) %>%
   left_join(valid_station_hours_tide, by = c("recvDeployName", "hour_dt")) %>%

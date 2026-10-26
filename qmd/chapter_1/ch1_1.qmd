@@ -182,8 +182,8 @@ df.alltags <- df.alltags %>%
     # site not any longer used
       recvDeployName != c("Throsby Creek Test Site"),
     # test sensor gnome
-      recv != c("SG-C621RPI3E17F",       
-                "SG-62A5RPI36710") ) %>% 
+      !recv %in% c("SG-C621RPI3E17F", 
+                   "SG-62A5RPI36710")) %>% 
     # Windeyers
   mutate(recvDeployName = ifelse(is.na(recvDeployName) & recv == "SG-D5BBRPI3E2F7",
                                  "Windeyers", 
@@ -329,8 +329,8 @@ df.recvDeps <- df.recvDeps %>%
 df.recvDeps <- df.recvDeps %>% 
   filter(!is.na(latitude),   
          recvDeployName != c("Throsby Creek Test Site"),    
-         serno != c("SG-C621RPI3E17F",   # test station
-                    "SG-62A5RPI36710") ) # test station
+         !serno %in% c("SG-C621RPI3E17F", 
+                       "SG-62A5RPI36710"))  # test station
 
 ```
 
@@ -579,7 +579,6 @@ df.alltags <- bind_rows(df.alltags, df.alltags.past)
   }
 
 ```
-
 
 ```{r add solar, message = FALSE, warning = FALSE, eval = run_analysis, echo = TRUE}
 # 

@@ -385,7 +385,6 @@ gtsave(
 )
 ```
 
-
 ## Captures
 
 ### SUMMARY
@@ -613,7 +612,6 @@ ggplot(tide_hourly, aes(x = hour_bin, y = mean_height)) +
 
 ```
 
-
 ## Detection in time
 
 ```{r detection timing, message = FALSE, include = FALSE, warning = FALSE, echo = FALSE, eval = TRUE}
@@ -788,8 +786,7 @@ p6 <- days_month %>%
 
 ### Overall
 
-::::: panel-tabset
-
+::: panel-tabset
 ##### Total days (distinct)
 
 ```{r}
@@ -837,18 +834,15 @@ p3
 #| fig-height: 6
 p4
 ```
-
-:::::
+:::
 
 ::: {.callout-tip collapse="true" title="See data in table"}
-
 ```{r}
 #| label: detection-timing5
 #| echo: false
 DT::datatable(bird_summary, rownames = FALSE,
               options = list(pageLength = 10, scrollX = TRUE))
 ```
-
 :::
 
 ### Per bird
@@ -896,18 +890,15 @@ p6
 ```
 
 ::: {.callout-tip collapse="true" title="Birds detected in 2+ seasons (list)"}
-
 ```{r}
 #| label: detection-timing7
 #| echo: false
 DT::datatable(multi_season, rownames = FALSE,
               options = list(pageLength = 10, scrollX = TRUE))
 ```
-
 :::
 
 ::: {.callout-tip collapse="true" title="Birds detected in 2+ seasons (sites)"}
-
 ```{r}
 #| label: detection-timing9
 #| echo: false
@@ -915,17 +906,13 @@ data_second_sub %>%
   count(Band.ID, speciesEN, recvDeployName, name = "n_detections") %>%
   DT::datatable(rownames = FALSE, options = list(pageLength = 10, scrollX = TRUE))
 ```
-
 :::
 
 ::: {.callout-tip collapse="true" title="Birds detected in 2+ seasons (dates)"}
-
 ```{r}
 #| label: detection-timing8b
 #| echo: false
 DT::datatable(table_wide, rownames = FALSE,
               options = list(pageLength = 10, scrollX = TRUE))
 ```
-
 :::
-

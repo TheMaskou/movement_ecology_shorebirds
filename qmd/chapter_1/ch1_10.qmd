@@ -39,7 +39,7 @@ There are two questions:
 
 2.  **If so, do they use different sites (private sites), or the same sites in different proportions (unequal use of shared sites)?**
 
-A few metrics will help us answering these questions, and below is a conceptual diagram in which metric to employ depending the question. *Most of the analysis is derivative of the work of Balsega ([2009](https://onlinelibrary.wiley.com/doi/10.1111/j.1466-8238.2009.00490.x), [2012](https://onlinelibrary.wiley.com/doi/10.1111/j.1466-8238.2011.00756.x) & [2013](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12029)))*
+A few metrics will help us answering these questions, and below is a conceptual diagram in which metric to employ depending the question. *Most of the analysis is derivative of the work of Baselga ([2009](https://onlinelibrary.wiley.com/doi/10.1111/j.1466-8238.2009.00490.x), [2012](https://onlinelibrary.wiley.com/doi/10.1111/j.1466-8238.2011.00756.x) & [2013](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12029)))*
 :::
 
 ![](/material/site_use_metric.png){fig-align="center" width="100%"}
@@ -173,10 +173,12 @@ ggplot(site_use_ind_tide,
 ::: {.callout collapse="true" title="See data in table" appearance="simple"}
 ```{r site-use-table-indiv, message=FALSE, warning=FALSE, echo=FALSE, eval=TRUE, results='asis' , fig.align='center' }
 site_use_ind_tide %>%
-  mutate(effort_h = sprintf("%d:%02d",
-                    floor(effort_h),
-                    round((effort_h - floor(effort_h)) * 60)),
+  mutate(effort_min = round(effort_h * 60),                                 
+         effort_h = sprintf("%d:%02d",
+                    effort_min %/% 60,
+                    effort_min %% 60),
          p = round(p, 3)) %>%
+  select(-effort_min) %>%                                                   
   rename(
     Species      = speciesEN,
     `Band ID`    = Band.ID,
@@ -227,7 +229,7 @@ And going deeper, we ask whether birds **(1) use their sites differently, and if
 
 ## Definition
 
-We need to first manually build function to compute **Jensen-Shannon Divergence** metric (JSD), and store results in a matrix. Then we can use `betapart` package ([Balsega et Orme - 2012](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210X.2012.00224.x)) to extract Jaccard and Bray-Curtis metrics.
+We need to first manually build function to compute **Jensen-Shannon Divergence** metric (JSD), and store results in a matrix. Then we can use `betapart` package ([Baselga et Orme - 2012](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210X.2012.00224.x)) to extract Jaccard and Bray-Curtis metrics.
 
 ![](/material/jsd_definition.png){fig-align="center" width="100%"}
 
@@ -259,7 +261,7 @@ bray_split <- function(p, q) {             # p, q = % time per site, each sums t
   c(bray_total = private + uneven, bray_private = private, bray_uneven = uneven)
 }
 
-compute_divergence <- function(prop_mat, min_pct = 5) {
+compute_divergence <- function(prop_mat, min_pct = 0) {
 
   if (nrow(prop_mat) < 2) return(NULL)
 
@@ -301,7 +303,7 @@ to_prop_matrix <- function(df) {
 divergence_global <- site_use_ind %>%
   group_split(speciesEN) %>%
   map(function(df) {
-    res <- compute_divergence(to_prop_matrix(df), min_pct = 5)
+    res <- compute_divergence(to_prop_matrix(df), min_pct = 0)
     if (!is.null(res)) res$speciesEN <- df$speciesEN[1]
     res
   }) %>% compact() %>% bind_rows()
@@ -580,7 +582,6 @@ For each species we use the four `tideCategory` per bird as replicate observatio
 We pair this with **PERMDISP** (`vegan::betadisper` + `permutest`, [Anderson 2006](https://doi.org/10.1111/j.1541-0420.2005.00440.x); [Anderson & Walsh 2013](https://doi.org/10.1890/12-2010.1)) which tests whether individuals differ in *dispersion* (within-bird consistency) rather than in mean composition. This matters because PERMANOVA can be significant either because individuals truly use different site compositions, **or** because some individuals are simply more variable than others, and PERMDISP tells which one.
 
 ![](/material/perma_test.png){fig-align="center" width="100%"}
- 
 
 ```{r permanova-function, message=FALSE, warning=FALSE, echo=TRUE, eval=TRUE, results='asis' , fig.align='center' }
 

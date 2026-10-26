@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="dcterms.date" content="2026-09-25">
+<meta name="dcterms.date" content="2026-10-25">
 
 <title>Load &amp; Format – Home</title>
 <style>
@@ -359,7 +359,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">2026-09-25</p>
+      <p class="date">2026-10-25</p>
     </div>
   </div>
   
@@ -516,8 +516,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="co"># site not any longer used</span></span>
 <span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      recvDeployName <span class="sc">!=</span> <span class="fu">c</span>(<span class="st">"Throsby Creek Test Site"</span>),</span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># test sensor gnome</span></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>      recv <span class="sc">!=</span> <span class="fu">c</span>(<span class="st">"SG-C621RPI3E17F"</span>,       </span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>                <span class="st">"SG-62A5RPI36710"</span>) ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span>recv <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"SG-C621RPI3E17F"</span>, </span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"SG-62A5RPI36710"</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Windeyers</span></span>
 <span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">recvDeployName =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(recvDeployName) <span class="sc">&amp;</span> recv <span class="sc">==</span> <span class="st">"SG-D5BBRPI3E2F7"</span>,</span>
 <span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"Windeyers"</span>, </span>
@@ -655,8 +655,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>df.recvDeps <span class="ot">&lt;-</span> df.recvDeps <span class="sc">%&gt;%</span> </span>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(latitude),   </span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>         recvDeployName <span class="sc">!=</span> <span class="fu">c</span>(<span class="st">"Throsby Creek Test Site"</span>),    </span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>         serno <span class="sc">!=</span> <span class="fu">c</span>(<span class="st">"SG-C621RPI3E17F"</span>,   <span class="co"># test station</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"SG-62A5RPI36710"</span>) ) <span class="co"># test station</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span>serno <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"SG-C621RPI3E17F"</span>, </span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>                       <span class="st">"SG-62A5RPI36710"</span>))  <span class="co"># test station</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply corrections</span></span>
