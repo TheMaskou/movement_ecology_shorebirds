@@ -1,4 +1,5 @@
 ---
+title: "Project"
 title-block-banner: false
 format:
   html:
@@ -83,4 +84,221 @@ Tidal cycles primarily drive shorebird movements between foraging and roosting s
 *I am from France and a curious man, interested on movement and spatial ecology of wildlife and population demographics.*
 
 *My attention is caught by animal interactions, behaviours, choices, and I hope to participate at generating useful datasets, easy to read and implement, so it can inform conservation action while considering socio-economic and ecological priorities.*
+:::
+
+
+::: {style="background: linear-gradient(135deg, rgba(120,120,120,0.95), rgba(25,25,25,0.95)); color: white; padding: 3rem 2rem; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.3); margin-bottom: 2rem; max-width: 1200px; margin-left: auto; margin-right: auto;"}
+
+**Progress (16 November 2026)**
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE, fig.align = 'center'}
+
+#| label: radar-charts
+#| echo: false
+#| message: false
+#| warning: false
+#| fig-width: 6.8
+#| fig-height: 8.9
+#| fig-align: center
+
+library(dplyr)
+
+# ---- Palette -----------------------------------------------------------------
+COL_HIGH <- "#2FA36B"
+COL_MID  <- "#F2A541"
+COL_LOW  <- "#E04F5F"
+COL_BG   <- "white"
+INK      <- "#1F2937"   # main text
+MUTED    <- "#6B7280"   # secondary text
+FAINT    <- "#9AA3B2"   # overlines
+
+# Status badge colours (fill and text)
+status_fill <- c(
+  "Submitted"        = "#2FA36B",   # green
+  "Published"        = "#E0A100",   # gold
+  "Drafted"          = "#2FA36B",   # silver blue
+  "Work in progress" = "#A9BFD6"    # grey
+)
+status_text <- c(
+  "Submitted"        = "white",
+  "Published"        = "gold",
+  "Drafted"          = "#2B2B2B",
+  "Work in progress" = "white"
+)
+
+# ---- Data --------------------------------------------------------------------
+df <- data.frame(
+  chapter                    = 1:5,
+  acquired_data              = c(5, 2, 5, 4, 0),
+  ethics_approvement         = c(5, 5, 5, 5, 2),
+  legal_approvement          = c(5, 5, 5, 5, 2),
+  safety_approvement         = c(5, 5, 5, 5, 1),
+  fundings                   = c(5, 5, 5, 0, 5),
+  data_collection_confidence = c(5, 3, 5, 5, 2),
+  delivery_date              = c(2026, 2027, 2027, 2028, 2028),
+  # EDIT: "Submitted", "Published", "Drafted" or "Work in progress"
+  status                     = c("Drafted",           # ch 1
+                                 "Work in progress",  # ch 2
+                                 "Work in progress",  # ch 3
+                                 "Work in progress",  # ch 4
+                                 "Work in progress")  # ch 5
+) %>%
+  mutate(rate = rowMeans(across(acquired_data:data_collection_confidence)))
+
+stopifnot(all(df$status %in% names(status_fill)))
+
+# ---- Editable labels ---------------------------------------------------------
+chart_titles <- c(
+  "Movements and site use",
+  "Behaviour classification",
+  "Habitat distribution",
+  "Foraging niche partitioning",
+  "Predation risk"
+)
+
+# "\n" = manual line break (drawn as is, no automatic wrapping)
+chart_desc <- c(
+  "VHF data (Motus) reveals site preference\ndepending tide and circadian cycles",
+  "GPS-accelerometer data (Druid) identifies\nbehaviours depending space and time",
+  "Remote-sensing data (DEA) maps\nAustralian shorebirds habitats since 2016",
+  "Stable isotopes (δ13C, δ15N, δ34S)\ntrace basal source of foraging habitats",
+  "Pest predator (Vulpes vulpes) shapes\nshorebird movements in space and time"
+)
+
+chart_collab <- c(
+  "",
+  "",
+  "Digital Earth Australia",
+  "Griffith University",
+  "NSW DCCEEW"
+)
+
+var_labels <- c(
+  "Acquired\ndata", "Ethics", "Legal", "Safety", "Funding",
+  "Data\ncollection\nconfidence"
+)
+
+vars <- c("acquired_data", "ethics_approvement", "legal_approvement",
+          "safety_approvement", "fundings", "data_collection_confidence")
+
+# ---- Helpers -----------------------------------------------------------------
+rate_colour <- function(x) if (x >= 4) COL_HIGH else if (x >= 2) COL_MID else COL_LOW
+rate_label  <- function(x) if (x >= 4) "High"   else if (x >= 2) "Moderate" else "Low"
+
+spaced <- function(s) paste(strsplit(toupper(s), "")[[1]], collapse = " ")
+
+# Rounded rectangle (also makes pills when r = half the height)
+rrect <- function(x0, y0, x1, y1, r, col = NA, border = NA, lwd = 1) {
+  arc <- function(cx, cy, a0, a1) {
+    t <- seq(a0, a1, length.out = 14)
+    cbind(cx + r * cos(t), cy + r * sin(t))
+  }
+  p <- rbind(arc(x1 - r, y1 - r, 0,           pi / 2),
+             arc(x0 + r, y1 - r, pi / 2,      pi),
+             arc(x0 + r, y0 + r, pi,          3 * pi / 2),
+             arc(x1 - r, y0 + r, 3 * pi / 2,  2 * pi))
+  polygon(p[, 1], p[, 2], col = col, border = border, lwd = lwd)
+}
+
+circ <- function(x, y, r, col = NA, border = NA, lwd = 1) {
+  t <- seq(0, 2 * pi, length.out = 60)
+  polygon(x + r * cos(t), y + r * sin(t), col = col, border = border, lwd = lwd)
+}
+
+draw_chart <- function(i) {
+  rate <- df$rate[i]
+  rc   <- rate_colour(rate)
+  vals <- as.numeric(df[i, vars])
+  st   <- df$status[i]
+
+  par(mar = c(0, 0, 0, 0), bg = COL_BG, family = "sans", xpd = NA)
+  plot.new()
+  plot.window(xlim = c(-1.7, 1.7), ylim = c(-2.3, 2.15), asp = 1)
+
+  xl <- -1.52   # left content edge
+  xr <-  1.52   # right content edge
+
+  # ---- Card ----
+  rrect(-1.68, -2.26, 1.68, 2.12, r = 0.10, col = "#FBFCFD", border = "#E5E9F0", lwd = 1.5)
+
+  # ---- Header ----
+  rect(xl, 2.04, xl + 0.16, 2.06, col = rc, border = NA)                  # accent dash
+  text(xl, 1.93, spaced(paste("Chapter", df$chapter[i])),
+       adj = c(0, 0.5), cex = 0.62, font = 2, col = FAINT)
+  text(xl, 1.75, chart_titles[i], adj = c(0, 0.5), cex = 1.3, font = 2, col = INK)
+  text(xl, 1.60, chart_desc[i], adj = c(0, 1), cex = 0.74, col = MUTED)
+  if (nzchar(chart_collab[i])) {
+    text(xl, 1.19, paste("Collaboration:", chart_collab[i]),
+         adj = c(0, 0.5), cex = 0.68, font = 3, col = FAINT)
+  }
+
+  # ---- Status badge (top right) ----
+  lab <- toupper(st)
+  w   <- strwidth(lab, cex = 0.66, font = 2)
+  bx0 <- xr - (w + 0.32)
+  rrect(bx0, 1.855, xr, 2.005, r = 0.075, col = status_fill[[st]])
+  circ(bx0 + 0.10, 1.93, 0.024, col = status_text[[st]])
+  text(bx0 + 0.19, 1.93, lab, adj = c(0, 0.5), cex = 0.66, font = 2, col = status_text[[st]])
+
+  segments(xl, 1.06, xr, 1.06, col = "#E8ECF2", lwd = 1)
+
+  # ---- Radar geometry ----
+  cy  <- -0.30
+  R   <- 0.82                                   # radar size
+  ang <- pi / 2 - (0:5) * 2 * pi / 6
+  ring <- function(k) cbind(R * cos(ang) * k / 5, cy + R * sin(ang) * k / 5)
+
+  polygon(ring(5), col = "#F3F6FA", border = "#D5DBE5", lwd = 1.4)
+  for (k in 1:4) polygon(ring(k), col = NA, border = "#DDE3EC", lty = 3, lwd = 1)
+  segments(0, cy, R * cos(ang), cy + R * sin(ang), col = "#E1E6EE", lwd = 1)
+
+  # Data shape
+  pd <- cbind(R * cos(ang) * vals / 5, cy + R * sin(ang) * vals / 5)
+  polygon(pd, col = adjustcolor(rc, alpha.f = 0.22), border = rc, lwd = 3)
+
+  # Score bubbles at each vertex
+  for (j in 1:6) {
+    circ(pd[j, 1], pd[j, 2], 0.075, col = "white", border = rc, lwd = 2.5)
+    text(pd[j, 1], pd[j, 2], format(vals[j]), cex = 0.62, font = 2, col = INK)
+  }
+
+  # Axis labels
+  ca <- cos(ang); sa <- sin(ang)
+  adjx <- ifelse(abs(ca) < 0.1, 0.5, ifelse(ca > 0, 0, 1))
+  adjy <- ifelse(sa > 0.9, 0, ifelse(sa < -0.9, 1, 0.5))
+  for (j in 1:6) {
+    text(1.17 * R * ca[j], cy + 1.17 * R * sa[j], var_labels[j],
+         adj = c(adjx[j], adjy[j]), cex = 0.72, font = 2, col = "#4B5563")
+  }
+
+  # ---- Score block ----
+  segments(xl, -1.56, xr, -1.56, col = "#E8ECF2", lwd = 1)
+
+  text(xl, -1.68, spaced("Feasibility"), adj = c(0, 0.5), cex = 0.58, font = 2, col = FAINT)
+  text(xr, -1.68, spaced("Target delivery"), adj = c(1, 0.5), cex = 0.58, font = 2, col = FAINT)
+
+  score <- sprintf("%.1f", rate)
+  text(xl, -1.89, score, adj = c(0, 0.5), cex = 2.4, font = 2, col = rc)
+  sx <- xl + strwidth(score, cex = 2.4, font = 2) + 0.04
+  text(sx, -1.91, "/5", adj = c(0, 0.5), cex = 1.1, col = FAINT)
+  cx0 <- sx + strwidth("/5", cex = 1.1) + 0.10
+  rl  <- toupper(rate_label(rate))
+  cw  <- strwidth(rl, cex = 0.6, font = 2) + 0.18
+  rrect(cx0, -1.955, cx0 + cw, -1.825, r = 0.065, col = rc)
+  text(cx0 + cw / 2, -1.89, rl, cex = 0.6, font = 2, col = "white")
+
+  text(xr, -1.89, df$delivery_date[i], adj = c(1, 0.5), cex = 1.5, font = 2, col = INK)
+
+  # Progress bar
+  rrect(xl, -2.145, xr, -2.095, r = 0.025, col = "#E6EAF0")
+  fw <- max((xr - xl) * rate / 5, 0.05)
+  rrect(xl, -2.145, xl + fw, -2.095, r = 0.025, col = rc)
+}
+
+# ---- Print each diagram, one after the other ----------------------------------
+for (i in seq_len(nrow(df))) {
+  draw_chart(i)
+}
+```
+
 :::

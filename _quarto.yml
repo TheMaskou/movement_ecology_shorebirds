@@ -44,9 +44,7 @@ website:
     logo: logo.png
         
     right:     
-      - text: "Project"
-        href: qmd/myphd.qmd
-        
+      - sidebar:project
       - sidebar:chapter1
       - sidebar:chapter2
       - sidebar:chapter3
@@ -59,6 +57,15 @@ website:
         
   # Define multiple sidebars as a LIST
   sidebar:
+    - id: project
+      title: "Project"
+      style: docked
+      background: light
+      collapse-level: 3
+      contents:
+        - qmd/myphd.qmd     # Project in five chapters
+        - qmd/trapping.qmd  # Trapping report
+            
     - id: chapter1
       title: "Chapter 1"
       style: docked

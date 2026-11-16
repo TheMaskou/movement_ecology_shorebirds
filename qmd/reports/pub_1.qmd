@@ -6,23 +6,29 @@ toc-location: left
 
 ## Protocols
 
--   [Basics_for_Motus_Array\_&\_Tags, 2026](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQC0S_P_l1ENSK_RHL_2PhpxAahaHAgEHkv0UgN3ezw8ejE?e=n6lHst)
+-   [Basic_procedure_for_Motus_array_maintnance\_&\_tags_deployment, 2026](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQC0S_P_l1ENSK_RHL_2PhpxAahaHAgEHkv0UgN3ezw8ejE?e=n6lHst)
 
-    *Handy protocol that describe how to connect to your SG receivers with a local Wi-Fi or GSM network, so you can check current time tag detections, but also download raw data from your receivers. How to activate/deactivate a Lotek nano-tags. Tips on tracker model decision related to ratio bird weight/tag weight so you remain under the 3% of individual body mass for equipment.*
+    *Handy protocol that describes how to connect to SG receivers with a local Wi-Fi or GSM network, so you can check current time tag detection, download raw data from receivers, activate/deactivate Lotek nano-tags.*
 
--   [Motus_tag_specs_and_species_list, 2026](https://docs.google.com/spreadsheets/d/1snJpWUXllw9LFXxo-GxCXkQ45V_f5z_WSXP79ntncRA/edit?pli=1&gid=0#gid=0)
+    *Tips on tracker model decision related to ratio bird weight/tag weight so you remain under the 3% of individual body mass for equipment.*
 
-    *See what Motus Lotek tag you can use depending the species of shorebird you aim to equip. Find also a dynamic table for pricing.*
+-   [Tag_specs_and_weight_against_species_2026](https://docs.google.com/spreadsheets/d/1snJpWUXllw9LFXxo-GxCXkQ45V_f5z_WSXP79ntncRA/edit?pli=1&gid=0#gid=0)
+
+    *See what Motus Lotek , Druid or Ornitela tag you can use depending the species of shorebird you aim to equip. Find also a dynamic table for pricing and double tagging.*
 
 ## Log-books
 
--   [Trapping_records](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385)
+-   [Trapping_records_spreadsheet](https://uonstaff.sharepoint.com/:x:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/_layouts/15/Doc2.aspx?action=edit&sourcedoc=%7Ba23e66f0-c551-4ba4-acd0-de0d5e83ca42%7D&wdOrigin=TEAMS-MAGLEV.teamsSdk_ns.rwc&wdExp=TEAMS-TREATMENT&wdhostclicktime=175385)
 
-    Keep tracking the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding)
+    *Keep track on the number of individuals trapped and against what protocols. Other details on the birds too (biometry and banding).*
 
--   [MOTUS_Tag_records](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQDjSf_9maEVQraUIrYpDu5NAQLrHe15pg2NDOwKBC03W0c?e=7oohiZ)
+-   [MOTUS_Tag_records](https://uonstaff.sharepoint.com/:w:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/General/Motus_trapping/MOTUS%20Tag%20records.docx?d=wa9465d79cb784f258e388cdd429626f7&csf=1&web=1&e=PHAQ5P)
 
-    Keep tracking what Motus tag has been deployed. Bird flag and capture date detailed.
+    Keep tracking what **Motus** tag has been deployed. Bird flag and capture date detailed.
+
+-   [Druid_Tag_records](https://uonstaff.sharepoint.com/:w:/r/sites/StudentGroupPhD-LouiseWilliamsandMatteaTaylor/Shared%20Documents/General/Motus_trapping/DRUID%20Tag%20records.docx?d=wd8181076330f485aa8207cccb34aec26&csf=1&web=1&e=ExzKR3)
+
+    Keep tracking what **Druid** tag has been deployed. Bird flag and capture date detailed.
 
 ## Workshop notes
 
@@ -40,15 +46,19 @@ toc-location: left
 
 -   [Cluster management](https://uoneduau-my.sharepoint.com/:b:/g/personal/c3541851_uon_edu_au/IQCf1iNg-STQSKHae76fs66eAScnBgIxvDeHyNxxFh_ZKpU?e=5i9qFl)
 
-    More refined scheduling for tags and bases.
+## Ornitela & Ornitrack
+
+-   [OrniTrack & data fees](https://uoneduau-my.sharepoint.com/:b:/r/personal/c3541851_uon_edu_au/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fc3541851%5Fuon%5Fedu%5Fau%2FDocuments%2FDocuments%2F6%2DPHD%5FUON%2F11%2DPhD%20project%2FChapters%2FChapter%202%20%2D%20Behaviour%2FOrnitela%2FManual%5Fdata%5Fservice%5Fsubscription%5F2025%2Epdf&parent=%2Fpersonal%2Fc3541851%5Fuon%5Fedu%5Fau%2FDocuments%2FDocuments%2F6%2DPHD%5FUON%2F11%2DPhD%20project%2FChapters%2FChapter%202%20%2D%20Behaviour%2FOrnitela&share=cQrQGUi01o0TSZBxrXAoQbAZEgUCE1m274cqAmseHMvOOmsS%2DQ)
+
+-   [OrniTrack manual](https://uoneduau-my.sharepoint.com/:b:/r/personal/c3541851_uon_edu_au/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fc3541851%5Fuon%5Fedu%5Fau%2FDocuments%2FDocuments%2F6%2DPHD%5FUON%2F11%2DPhD%20project%2FChapters%2FChapter%202%20%2D%20Behaviour%2FOrnitela%2FOrniTrack%5Fuser%5Fmanual%5Fv3%2Epdf&parent=%2Fpersonal%2Fc3541851%5Fuon%5Fedu%5Fau%2FDocuments%2FDocuments%2F6%2DPHD%5FUON%2F11%2DPhD%20project%2FChapters%2FChapter%202%20%2D%20Behaviour%2FOrnitela&share=cQpTadIM21HeRbIfGY9y9xMAEgUC2wStsIpZ5viwGjOHV70cMQ)
 
 ## Tag programming
 
 -   [Concept & Goals](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQAxZ0v24OXzSarHeaYESY87Ad-yuiryGxLVbYEkTFjSrU8?e=pM7ln9)
 
--   [Druid Nano and Nano M1 Lite program: settings and urls](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQDuDt3qUGN5Tocix9rqkNBGAUcdVUcp_k8pl4LJ7EuMc1Q?e=7OVqFBs)
+-   [DRUID Nano and Nano M1 Lite program: settings and urls](https://uoneduau-my.sharepoint.com/:w:/g/personal/c3541851_uon_edu_au/IQDuDt3qUGN5Tocix9rqkNBGAUcdVUcp_k8pl4LJ7EuMc1Q?e=7OVqFBs)
 
--   Ornitela Ornitrack-2.8
+-   *ORNITELA Ornitrack-2.8 (soon in cinemas...)*
 
 ## Miscellaneous
 

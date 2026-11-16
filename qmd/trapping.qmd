@@ -1,0 +1,225 @@
+---
+title: "Trapping report"
+format: html
+toc-location: left
+---
+
+::: {.callout style="border-left: 6px solid #D99B8F; --bs-callout-border: #D99B8F; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;"}
+Find here a **report on trapping success** depending on species, trapping site and over time.
+
+*May be continued...*
+:::
+
+For more details on Motus tags see [Chapter 1 \> Explore \> Motus table](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_2.html#motus-table)
+
+*For more details on GPS tags see Chapter 3 > Explore > GPS table (soon in cinemas...)*
+
+```{r trapping-report, message = FALSE, warning = FALSE, echo = FALSE, fig.align = 'center'}
+# Shorebird Trapping report
+library(dplyr)
+library(tidyr)
+library(readxl)
+library(ggplot2)
+library(gt)
+library(stringr)
+library(lubridate)   # needed for year()
+
+# Load data
+df <- readRDS(
+  tail(sort(list.files(
+    here::here("qmd", "chapter_1", "data", "spreadsheet"),
+    pattern = "-spreadsheet\\.rds$", full.names = TRUE
+  )), 1))
+
+
+# Clean and keep relevant columns
+df <- df %>%
+  rename(
+    Species   = speciesEN,
+    Date      = DateAUS.Trap,
+    radio_tag = Radio.tag.
+  ) %>%
+  select(Band.ID, Species, Date, radio_tag) %>%
+  filter(!is.na(Species), !is.na(Date)) %>%
+  mutate(
+    Date      = as.Date(Date),
+    radio_tag = toupper(trimws(radio_tag))
+  )
+
+
+# TABLE 1: Observations per species (rows) x date (columns)
+
+table1 <- df %>%
+  count(Species, Date) %>%
+  arrange(Date) %>%                      # keeps columns in chronological order
+  mutate(Date = paste(year(Date), format(Date, "%b-%d"), sep = " ")) %>%
+  pivot_wider(names_from = Date, values_from = n, values_fill = 0) %>%
+  mutate(across(-Species, ~ifelse(. == 0, NA, .)))
+
+# One spanner per year present in the data (2021 to 2026)
+years <- sort(unique(year(df$Date)))
+
+gt_table1 <- table1 %>%
+  gt(rowname_col = "Species") %>%
+  tab_header(title = md("**Catches per Species per Date**"))
+
+for (y in years) {
+  gt_table1 <- gt_table1 %>%
+    tab_spanner(label = as.character(y), columns = starts_with(as.character(y)))
+}
+
+gt_table1 <- gt_table1 %>%
+  cols_label_with(fn = function(x) str_replace(x, "^\\d{4} ", "")) %>%
+  tab_style(cell_text(weight = "bold"), cells_stub()) %>%
+  tab_style(cell_text(weight = "bold"), cells_column_spanners()) %>%
+  sub_missing(missing_text = "") %>%
+  data_color(
+    columns = -Species,
+    fn = scales::col_numeric(c("white", "#1A6FA3"), domain = c(0, 50),
+                                 na.color = "#E0E0E0")) %>%
+  cols_align(align = "center", columns = -Species)
+
+gt_table1
+
+# gtsave(gt_table1, here::here("catches_per_species.png"), vwidth = 1600, vheight = 800)
+
+
+
+# TABLE 2: Summary per species
+
+total_dates <- n_distinct(df$Date)
+
+table2 <- df %>%
+  group_by(Species) %>%
+  summarise(
+    total_trap   = n(),
+    total_tagged = sum(radio_tag == "Y", na.rm = TRUE),
+    n_dates_seen = n_distinct(Date),
+    .groups = "drop") %>%
+  mutate(
+    pct_trap        = round(total_trap / sum(total_trap) * 100, 1),
+    trapping_avg    = round(total_trap / total_dates, 2),
+    trapping_rate_d = round(n_dates_seen / total_dates, 2)) %>%
+  select(Species, pct_trap, total_trap, n_dates_seen, trapping_avg,
+         trapping_rate_d, total_tagged) %>%
+  arrange(desc(trapping_rate_d))
+
+gt_table2 <- table2 %>%
+  gt(rowname_col = "Species") %>%
+  tab_header(
+    title    = "Shorebird Trapping Summary",
+    subtitle = paste("Based on", total_dates, "unique trapping dates and",
+                     nrow(df), "birds caught between",
+                     format(min(df$Date), "%b %Y"), "and",
+                     format(max(df$Date), "%b %Y"))) %>%
+  cols_label(
+    pct_trap        = "Proportion (%)",
+    total_trap      = "Individual trapped",
+    n_dates_seen    = "Day trapped",
+    total_tagged    = "Total Tagged",
+    trapping_avg    = "Average trapped",
+    trapping_rate_d = "Chance to catch") %>%
+  cols_align(align = "center", columns = -Species) %>%
+  fmt_number(columns = trapping_avg, decimals = 2) %>%
+  fmt_number(columns = c(pct_trap, trapping_rate_d), decimals = 1) %>%
+  tab_footnote(
+    footnote = "Chance (1 = 100%) to catch at least one individual of the species per trapping event (calculated over the complete timeline).",
+    locations = cells_column_labels(columns = trapping_rate_d)) %>%
+  tab_footnote(
+    footnote = "Average number of individuals trapped per event within the relative species group.",
+    locations = cells_column_labels(columns = trapping_avg)) %>%
+  tab_footnote(
+    footnote = "Proportion (%) of individuals trapped within the relative species group versus the total number of birds trapped in all species groups",
+    locations = cells_column_labels(columns = pct_trap)) %>%
+  tab_footnote(
+    footnote = "Number of days at least one individual of the relative species group has been trapped.",
+    locations = cells_column_labels(columns = n_dates_seen)) %>%
+  tab_style(cell_text(weight = "bold"), cells_stub()) %>%
+  tab_style(cell_text(weight = "bold"), cells_column_labels()) %>%
+  tab_style(
+    style = cell_text(color = "grey50"),
+    locations = cells_column_labels(columns = total_tagged)) %>%
+  sub_missing(missing_text = "") %>%
+  data_color(
+    columns = trapping_rate_d,
+    colors = scales::col_numeric(c("white", "#1A6FA3"), domain = c(0, 1),
+                                 na.color = "#E0E0E0"))
+
+gt_table2
+
+# gtsave(gt_table2, here::here("trapping_summary.png"), vwidth = 1000, vheight = 800)
+
+
+
+# PLOT 1: Bar graph, tagged catches by month (ignoring year)
+
+mig_period <- data.frame(xmin = 3.5, xmax = 9.5, ymin = -Inf, ymax = Inf)
+no_trap_1  <- data.frame(xmin = 2.5, xmax = 3.5, ymin = -Inf, ymax = Inf)
+no_trap_2  <- data.frame(xmin = 9.5, xmax = 10.5, ymin = -Inf, ymax = Inf)
+
+all_months <- data.frame(
+  Month     = sprintf("%02d", 1:12),
+  MonthNum  = 1:12,
+  MonthName = factor(month.abb, levels = month.abb)
+)
+
+# Month order (Jul -> Jun)
+month_order <- c("Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+                 "Jan", "Feb", "Mar", "Apr", "May", "Jun")
+
+plot1_data <- df %>%
+  filter(radio_tag == "Y") %>%
+  mutate(Month = format(Date, "%m")) %>%
+  count(Species, Month) %>%
+  complete(Species, Month = sprintf("%02d", 1:12), fill = list(n = 0)) %>%
+  left_join(all_months, by = "Month") %>%
+  mutate(MonthName = factor(MonthName, levels = month_order))
+
+p1 <- ggplot(plot1_data, aes(x = MonthName, y = n, fill = Species)) +
+  geom_rect(data = mig_period, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+            inherit.aes = FALSE, fill = "grey80", alpha = 0.4) +
+  geom_rect(data = no_trap_1, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+            inherit.aes = FALSE, fill = "red", alpha = 0.05) +
+  geom_rect(data = no_trap_2, aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+            inherit.aes = FALSE, fill = "red", alpha = 0.05) +
+  geom_bar(stat = "identity", position = "dodge", color = "white", linewidth = 0.3) +
+  labs(title = "Number of catches with tagging during a typical year (summer centered)",
+       x = "Month", y = "Number of catches") +
+  theme_minimal() +
+  theme(legend.position = "bottom", legend.text = element_text(size = 7))
+p1
+
+# ggsave(here::here("plot1_obs_by_month.png"), plot = p1, width = 11, height = 6, dpi = 600)
+
+
+
+# PLOT 2: Trapping ratio per species by month
+
+month_levels <- month.abb[c(6:12, 1:5)]   # Jun -> May
+
+monthly_data <- df %>%
+  mutate(Month_num = month(Date)) %>%
+  count(Species, Month_num) %>%
+  complete(Species, Month_num = c(6:12, 1:5), fill = list(n = 0)) %>%
+  mutate(
+    Month           = factor(month.abb[Month_num], levels = month_levels),
+    trapping_rate_d = n / total_dates) %>%
+  select(-Month_num) %>%
+  filter(Species %in% table2$Species)
+
+p3 <- ggplot(monthly_data, aes(x = Month, y = trapping_rate_d)) +
+  geom_col(aes(fill = trapping_rate_d), color = "white", linewidth = 0.3) +
+  facet_wrap(~Species, scales = "free_y", ncol = 3) +
+  scale_y_continuous(labels = scales::percent_format(), limits = c(0, 2)) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", guide = "none") +
+  labs(title = "Trapping ratio per species (summer centered)", y = "Trapping Ratio") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.text  = element_text(face = "bold")
+  )
+
+p3
+
+# ggsave(here::here("trapping_rate_by_month.png"), plot = p3, width = 8, height = 8, dpi = 600)
+```
