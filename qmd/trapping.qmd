@@ -23,13 +23,41 @@ library(ggplot2)
 library(gt)
 library(stringr)
 library(lubridate)   # needed for year()
+library(tidyverse)
+library(lubridate)
 
-# Load data
-df <- readRDS(
-  tail(sort(list.files(
-    here::here("qmd", "chapter_1", "data", "spreadsheet"),
-    pattern = "-spreadsheet\\.rds$", full.names = TRUE
-  )), 1))
+sheet_paths <- c(
+  "C:/Users/c3541851/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General/SHOREBIRD NUMBER TRACKING.xlsx",
+  "C:/Users/marin/The University of Newcastle/StudentGroupPhD - Louise Williams and Mattea Taylor - General/SHOREBIRD NUMBER TRACKING.xlsx"
+)
+
+sheet_path <- sheet_paths[file.exists(sheet_paths)][1]
+
+df <- readxl::read_excel(sheet_path, .name_repair = make.names) %>%
+
+  # Keep only theMOTUS  tagged ones
+  # filter(Radio.tag. == "Y") %>%
+
+  # Variable names
+  rename(DateAUS.Trap = "Date",
+         motusTagID   = "Motus.tag.ID",
+         speciesEN    = "Species") %>%
+
+  # Value names
+  mutate(speciesEN = case_when(
+    speciesEN == "Eastern Curlew"       ~ "Far Eastern Curlew",
+    speciesEN == "Black-winged Stilt"   ~ "Pied Stilt",
+    speciesEN == "Pacific Golden Plover" ~ "Pacific Golden-Plover",
+    speciesEN == "Whimbrel"             ~ "Eurasian Whimbrel",
+    TRUE ~ speciesEN)) %>%
+
+  # Format
+  mutate(motusTagID  = as.factor(motusTagID),
+         DateAUS.Trap = as.Date(DateAUS.Trap),
+         Band.ID      = as.factor(Band.ID)) %>%
+  select(Band.ID, motusTagID, speciesEN, DateAUS.Trap, everything())
+
+
 
 
 # Clean and keep relevant columns
@@ -49,39 +77,39 @@ df <- df %>%
 
 # TABLE 1: Observations per species (rows) x date (columns)
 
-table1 <- df %>%
+plot_df <- df %>%
   count(Species, Date) %>%
-  arrange(Date) %>%                      # keeps columns in chronological order
-  mutate(Date = paste(year(Date), format(Date, "%b-%d"), sep = " ")) %>%
-  pivot_wider(names_from = Date, values_from = n, values_fill = 0) %>%
-  mutate(across(-Species, ~ifelse(. == 0, NA, .)))
+  complete(Species, Date) %>%                 # missing combos become NA (grey tiles)
+  mutate(
+    year    = year(Date),
+    Species = fct_rev(factor(Species)),       # alphabetical, first species at top
+    Date_f  = factor(Date)                    # one equal-width column per catch date
+  )
 
-# One spanner per year present in the data (2021 to 2026)
-years <- sort(unique(year(df$Date)))
+fig_table1 <- ggplot(plot_df, aes(Date_f, Species, fill = n)) +
+  geom_tile(colour = "white", linewidth = 0.6) +
+  geom_text(aes(label = ifelse(is.na(n), "", n)), size = 3) +
+  scale_fill_gradient(
+    low = "white", high = "#1A6FA3",
+    limits = c(0, 50), oob = scales::squish,
+    na.value = "#E0E0E0", guide = "none"
+  ) +
+  scale_x_discrete(labels = function(x) format(as.Date(x), "%b-%d")) +
+  facet_grid(. ~ year, scales = "free_x", space = "free_x") +   # replaces the year spanners
+  labs(title = "Catches per Species per Date", x = NULL, y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title      = element_text(face = "bold"),
+    panel.grid      = element_blank(),
+    panel.spacing.x = unit(4, "pt"),
+    strip.text      = element_text(face = "bold"),
+    axis.text.y     = element_text(face = "bold", hjust = 1),
+    axis.text.x     = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 8)
+  )
 
-gt_table1 <- table1 %>%
-  gt(rowname_col = "Species") %>%
-  tab_header(title = md("**Catches per Species per Date**"))
+fig_table1
 
-for (y in years) {
-  gt_table1 <- gt_table1 %>%
-    tab_spanner(label = as.character(y), columns = starts_with(as.character(y)))
-}
-
-gt_table1 <- gt_table1 %>%
-  cols_label_with(fn = function(x) str_replace(x, "^\\d{4} ", "")) %>%
-  tab_style(cell_text(weight = "bold"), cells_stub()) %>%
-  tab_style(cell_text(weight = "bold"), cells_column_spanners()) %>%
-  sub_missing(missing_text = "") %>%
-  data_color(
-    columns = -Species,
-    fn = scales::col_numeric(c("white", "#1A6FA3"), domain = c(0, 50),
-                                 na.color = "#E0E0E0")) %>%
-  cols_align(align = "center", columns = -Species)
-
-gt_table1
-
-# gtsave(gt_table1, here::here("catches_per_species.png"), vwidth = 1600, vheight = 800)
+# gtsave(fig_table1, here::here("catches_per_species.png"), vwidth = 1600, vheight = 800)
 
 
 
