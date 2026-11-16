@@ -12,7 +12,7 @@ Find here a **report on trapping success** depending on species, trapping site a
 
 For more details on Motus tags see [Chapter 1 \> Explore \> Motus table](https://themaskou.github.io/movement_ecology_shorebirds/qmd/chapter_1/ch1_2.html#motus-table)
 
-*For more details on GPS tags see Chapter 3 > Explore > GPS table (soon in cinemas...)*
+*For more details on GPS tags see Chapter 3 \> Explore \> GPS table (soon in cinemas...)*
 
 ```{r trapping-report, message = FALSE, warning = FALSE, echo = FALSE, fig.align = 'center'}
 # Shorebird Trapping report
