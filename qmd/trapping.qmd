@@ -250,4 +250,36 @@ p3 <- ggplot(monthly_data, aes(x = Month, y = trapping_rate_d)) +
 p3
 
 # ggsave(here::here("trapping_rate_by_month.png"), plot = p3, width = 8, height = 8, dpi = 600)
+
+# PLOT 3: Barplot traping dates vs number
+
+
+trapping_plot <- df %>%
+  distinct(Date) %>%                                   # one row per trapping day
+  count(month = floor_date(Date, "month")) %>%
+  complete(
+    month = seq(min(month), max(month), by = "month"), # show months with no trapping as 0
+    fill = list(n = 0)
+  ) %>%
+  ggplot(aes(month, n)) +
+  geom_col(fill = "#1A6FA3") +
+  scale_x_date(
+    date_breaks = "1 month", date_labels = "%b %y",
+    expand = expansion(mult = 0.01)
+  ) +
+  scale_y_continuous(
+    breaks = function(x) seq(0, ceiling(x[2]), by = 1), # whole-number ticks, step of 1
+    expand = expansion(mult = c(0, 0.1))
+  ) +
+  labs(x = NULL, y = "Trapping events", title = "Trapping events per month") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 7),
+    panel.grid.minor = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.title = element_text(face = "bold")
+  )
+
+trapping_plot
+
 ```
